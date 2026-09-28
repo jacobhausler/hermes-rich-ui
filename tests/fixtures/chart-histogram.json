@@ -1,0 +1,29 @@
+{
+ "kind": "histogram",
+ "title": "Response time distribution",
+ "xLabel": "ms",
+ "yLabel": "Requests",
+ "caveat": "Bins supplied by the load tool.",
+ "series": [
+  {
+   "label": "requests",
+   "data": [
+    {
+     "low": 0,
+     "high": 50,
+     "count": 12
+    },
+    {
+     "low": 50,
+     "high": 100,
+     "count": 30
+    },
+    {
+     "low": 100,
+     "high": 200,
+     "count": 7
+    }
+   ]
+  }
+ ]
+}

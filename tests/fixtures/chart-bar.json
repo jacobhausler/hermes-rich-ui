@@ -1,0 +1,43 @@
+{
+ "kind": "bar",
+ "title": "Median rent by city",
+ "yLabel": "Rent",
+ "unit": "USD",
+ "caveat": "Median of advertised listings, not signed leases.",
+ "series": [
+  {
+   "label": "2025",
+   "data": [
+    {
+     "label": "Austin",
+     "value": 1750
+    },
+    {
+     "label": "Denver",
+     "value": 1900
+    },
+    {
+     "label": "Boise",
+     "value": null
+    }
+   ]
+  },
+  {
+   "label": "2026",
+   "data": [
+    {
+     "label": "Austin",
+     "value": 1820
+    },
+    {
+     "label": "Denver",
+     "value": 1880
+    },
+    {
+     "label": "Boise",
+     "value": 1500
+    }
+   ]
+  }
+ ]
+}

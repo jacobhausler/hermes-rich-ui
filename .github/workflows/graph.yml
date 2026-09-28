@@ -1,0 +1,85 @@
+# Rebuild the committed knowledge graph on main.
+#   - graphify parses the tree (AST only, no LLM, no API key) via uvx — no pip install needed.
+#   - ONLY graphify-out/graph.json + graphify-out/GRAPH_REPORT.md are committed
+#     (the rest of graphify-out/ — cache, backups, html — is gitignored).
+#   - No-op guard: if the fresh graph.json minus its `built_at_commit` field equals the
+#     committed one, the commit step is skipped entirely (no churn commits on no-op rebuilds).
+#
+# Local equivalent:
+#   uvx --from graphifyy graphify update . --no-cluster
+#   git add graphify-out/graph.json graphify-out/GRAPH_REPORT.md && git commit
+name: graph
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  graphify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Rebuild knowledge graph (AST only)
+        run: uvx --from graphifyy graphify update . --no-cluster
+
+      - name: Commit only if the graph actually changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          NEW=graphify-out/graph.json
+          if [ ! -f "$NEW" ]; then
+            echo "::error::graphify did not produce $NEW"
+            exit 1
+          fi
+          # Strip volatile built_at_commit from the fresh copy for the comparison
+          python3 - "$NEW" <<'PYEOF'
+          import json, sys
+          p = sys.argv[1]
+          d = json.load(open(p))
+          def drop(o):
+              if isinstance(o, dict):
+                  o.pop('built_at_commit', None)
+                  [drop(v) for v in o.values()]
+              elif isinstance(o, list):
+                  [drop(v) for v in o]
+          drop(d)
+          json.dump(d, open(p + '.cmp', 'w'), sort_keys=True)
+          PYEOF
+          if git cat-file -e "HEAD:graphify-out/graph.json" 2>/dev/null; then
+            git show "HEAD:graphify-out/graph.json" > /tmp/head-graph.json
+            python3 - /tmp/head-graph.json <<'PYEOF'
+          import json, sys
+          p = sys.argv[1]
+          d = json.load(open(p))
+          def drop(o):
+              if isinstance(o, dict):
+                  o.pop('built_at_commit', None)
+                  [drop(v) for v in o.values()]
+              elif isinstance(o, list):
+                  [drop(v) for v in o]
+          drop(d)
+          json.dump(d, open(p + '.cmp', 'w'), sort_keys=True)
+          PYEOF
+            if cmp -s /tmp/head-graph.json.cmp "$NEW.cmp"; then
+              echo "graph.json minus built_at_commit == HEAD — no-op, nothing to commit"
+              exit 0
+            fi
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add graphify-out/graph.json graphify-out/GRAPH_REPORT.md
+          if git diff --cached --quiet; then
+            echo "no staged graph changes — no-op"
+            exit 0
+          fi
+          git commit -m "chore(graph): rebuild graphify knowledge graph [skip ci]"
+          git push

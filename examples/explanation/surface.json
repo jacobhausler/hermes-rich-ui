@@ -1,0 +1,105 @@
+{
+  "version": "v1.0",
+  "createSurface": {
+    "surfaceId": "ru-synthetic-explain00",
+    "catalogId": "hermes-rich-ui/1",
+    "components": [
+      {
+        "id": "root",
+        "component": "Card",
+        "title": "From question to visual answer",
+        "subtitle": "A communication channel, not a separate application (synthetic example)",
+        "children": [
+          "intro",
+          "steps",
+          "point",
+          "evidence"
+        ]
+      },
+      {
+        "id": "intro",
+        "component": "Text",
+        "text": "The agent chooses the structure that conveys the answer. A complete explanation needs no live data."
+      },
+      {
+        "id": "steps",
+        "component": "Timeline",
+        "title": "Four steps, one coherent answer",
+        "items": {
+          "path": "/data/steps"
+        },
+        "sourceIds": [
+          "design"
+        ]
+      },
+      {
+        "id": "point",
+        "component": "Callout",
+        "title": "Small grammar. Rich expression.",
+        "text": "Fixed elements, typed data and local interaction. No source registration, job or monitoring deadline.",
+        "tone": "info"
+      },
+      {
+        "id": "evidence",
+        "component": "SourceList",
+        "title": "Sources"
+      }
+    ],
+    "dataModel": {
+      "data": {
+        "steps": [
+          {
+            "label": "Understand the question",
+            "date": "01",
+            "text": "Decide whether prose, a comparison, or a visual explanation best serves the answer.",
+            "status": "done"
+          },
+          {
+            "label": "Gather and prepare evidence",
+            "date": "02",
+            "text": "Use ordinary research and analysis tools. Preserve what is known, missing and calculated.",
+            "status": "done"
+          },
+          {
+            "label": "Compose a small visual answer",
+            "date": "03",
+            "text": "Pick typed elements. Bind data. Let the renderer handle typography, layout and inspection.",
+            "status": "done"
+          },
+          {
+            "label": "Publish into the conversation",
+            "date": "04",
+            "text": "The answer is complete. Reading a source or polling is optional, never required.",
+            "status": "done"
+          }
+        ]
+      },
+      "meta": {
+        "summary": "SYNTHETIC illustrative example: a four-step timeline explaining how an answer becomes a rich card. Data and content are synthetic.",
+        "authored_at": "2026-09-25T12:00:00Z",
+        "dataset": {
+          "id": "synthetic-explanation",
+          "revision": 1,
+          "observed_at": null,
+          "published_at": "2026-09-25T12:00:00Z"
+        },
+        "sources": [
+          {
+            "id": "design",
+            "kind": "derived",
+            "label": "SYNTHETIC illustrative process explanation",
+            "url": null,
+            "accessed_at": null,
+            "note": "Authored for demonstration; no external source."
+          }
+        ],
+        "derivations": []
+      }
+    },
+    "metadata": {
+      "extensions": {
+        "hermes_policy": "embedded"
+      }
+    }
+  }
+}

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hermes-rich-ui — card lifecycle (archify)</title>
+<!-- Self-contained: no external assets (no webfonts, no CDN). --ui-* style vars mirror the
+     plugin's own styling law (desktop/src/components/_shared.mjs:5). Sources:
+     docs/ARCHITECTURE.md §2-3; every box cites file:line or catalog key. -->
+<style>
+  :root{
+    --ui-bg-primary:#020617; --ui-bg-elevated:#0f172a; --ui-bg-tertiary:#1e293b;
+    --ui-text-primary:#e2e8f0; --ui-text-secondary:#94a3b8; --ui-text-tertiary:#64748b;
+    --ui-stroke-secondary:#334155; --ui-stroke-tertiary:#1e293b;
+    --ui-accent:#38bdf8; --ui-green:#34d399; --ui-red:#fb7185; --ui-yellow:#fbbf24;
+    --ui-purple:#a78bfa; --ui-orange:#fb923c;
+    --ui-font:ui-monospace,"JetBrains Mono","SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  html,body{margin:0;padding:0;background:var(--ui-bg-primary);color:var(--ui-text-primary);font-family:var(--ui-font)}
+  .wrap{max-width:1240px;margin:0 auto;padding:28px 20px 40px}
+  header{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  header h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.3px}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--ui-green);
+       box-shadow:0 0 8px var(--ui-green);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .subtitle{color:var(--ui-text-secondary);font-size:11.5px;margin:0 0 18px 19px}
+  .board{border:1px solid var(--ui-stroke-secondary);border-radius:12px;background:var(--ui-bg-primary);padding:6px}
+  svg{width:100%;height:auto;display:block}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  .card{border:1px solid var(--ui-stroke-secondary);border-radius:10px;background:var(--ui-bg-elevated);padding:14px 16px}
+  .card-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .card-header h3{margin:0;font-size:12.5px;font-weight:600}
+  .card-dot{width:8px;height:8px;border-radius:50%}
+  .card-dot.green{background:var(--ui-green)} .card-dot.cyan{background:var(--ui-accent)} .card-dot.rose{background:var(--ui-red)}
+  .card ul{margin:0;padding:0;list-style:none}
+  .card li{font-size:11px;color:var(--ui-text-secondary);line-height:1.55}
+  .card li b{color:var(--ui-text-primary);font-weight:600}
+  footer{margin-top:20px;color:var(--ui-text-tertiary);font-size:10px}
+  .fn{margin-top:14px;border-top:1px dashed var(--ui-stroke-secondary);padding-top:10px}
+  .fn p{margin:2px 0;font-size:10px;color:var(--ui-text-tertiary)}
+  .fn b{color:var(--ui-text-secondary)}
+  text{font-family:var(--ui-font)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><span class="dot"></span><h1>hermes-rich-ui — one card, two halves</h1></header>
+  <p class="subtitle">rich_present call → admission vs the frozen catalog → card store JSON → ::richui directive → bundle render · sources cited in docs/ARCHITECTURE.md</p>
+
+  <div class="board">
+  <svg viewBox="0 0 1200 1000" role="img" aria-label="Card lifecycle from rich_present call to desktop render, gateway half and desktop half">
+    <defs>
+      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+      </pattern>
+      <marker id="ah-slate" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#94a3b8"/></marker>
+      <marker id="ah-green" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#34d399"/></marker>
+      <marker id="ah-cyan" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#38bdf8"/></marker>
+      <marker id="ah-violet" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#a78bfa"/></marker>
+      <marker id="ah-rose" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#fb7185"/></marker>
+      <marker id="ah-orange" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#fb923c"/></marker>
+    </defs>
+
+    <rect x="0" y="0" width="1200" height="1000" fill="#020617"/>
+    <rect x="0" y="0" width="1200" height="1000" fill="url(#grid)"/>
+
+    <!-- ================= arrows (drawn early: boxes mask them) ================= -->
+    <!-- agent -> gateway door -->
+    <path d="M600,88 C600,132 210,118 210,170" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+    <!-- agent reply -> directive match -->
+    <path d="M600,88 C600,132 810,118 810,170" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah-slate)"/>
+    <!-- gateway verticals -->
+    <line x1="210" y1="228" x2="210" y2="262" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah-green)"/>
+    <line x1="210" y1="320" x2="210" y2="384" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah-green)"/>
+    <line x1="210" y1="464" x2="210" y2="504" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah-green)"/>
+    <line x1="210" y1="566" x2="210" y2="606" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah-green)"/>
+    <!-- admit -> reject (refusal branch) -->
+    <line x1="350" y1="408" x2="398" y2="408" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-rose)"/>
+    <!-- catalog -> admit (validation source of truth) -->
+    <path d="M398,547 L372,547 L372,440 L350,440" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah-violet)"/>
+    <!-- REST reads store -->
+    <line x1="110" y1="694" x2="110" y2="566" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah-slate)"/>
+    <!-- desktop fetch -> REST (crosses both halves) -->
+    <path d="M660,291 L600,291 L600,725 L350,725" fill="none" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#ah-orange)"/>
+    <!-- desktop verticals -->
+    <line x1="810" y1="228" x2="810" y2="262" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ah-cyan)"/>
+    <line x1="810" y1="320" x2="810" y2="354" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ah-cyan)"/>
+    <line x1="810" y1="412" x2="810" y2="444" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ah-cyan)"/>
+    <line x1="810" y1="520" x2="810" y2="552" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#ah-cyan)"/>
+
+    <!-- ================= boundaries ================= -->
+    <rect x="40" y="120" width="530" height="670" rx="12" fill="none" stroke="#34d399" stroke-width="1.2" stroke-dasharray="8,4" opacity="0.7"/>
+    <text x="56" y="142" font-size="10" fill="#34d399">GATEWAY HALF — Python, stdlib only (gateway profile)</text>
+    <rect x="630" y="120" width="530" height="670" rx="12" fill="none" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="8,4" opacity="0.7"/>
+    <text x="646" y="142" font-size="10" fill="#38bdf8">DESKTOP HALF — one committed ESM bundle (desktop/plugin.js)</text>
+    <!-- trust boundary: admission gate + what it protects -->
+    <rect x="58" y="360" width="494" height="232" rx="8" fill="none" stroke="#fb7185" stroke-width="1.1" stroke-dasharray="4,4" opacity="0.85"/>
+    <text x="66" y="377" font-size="8" fill="#fb7185">TRUST BOUNDARY — admission is the security boundary; nothing persists unadmitted (D11)</text>
+
+    <!-- ================= external: agent ================= -->
+    <rect x="460" y="30" width="280" height="58" rx="6" fill="#0f172a"/>
+    <rect x="460" y="30" width="280" height="58" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="600" y="53" font-size="12" fill="#e2e8f0" text-anchor="middle">AGENT (model seat)</text>
+    <text x="600" y="71" font-size="9" fill="#94a3b8" text-anchor="middle">calls rich_present · pastes the directive line</text>
+
+    <!-- ================= gateway boxes ================= -->
+    <!-- 1 rich_present door -->
+    <rect x="70" y="170" width="280" height="58" rx="6" fill="#0f172a"/>
+    <rect x="70" y="170" width="280" height="58" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+    <text x="210" y="192" font-size="12" fill="#e2e8f0" text-anchor="middle">① rich_present(args)</text>
+    <text x="210" y="211" font-size="9" fill="#94a3b8" text-anchor="middle">__init__.py:126 → engine/tool.py:108</text>
+
+    <!-- 2 build_record -->
+    <rect x="70" y="262" width="280" height="58" rx="6" fill="#0f172a"/>
+    <rect x="70" y="262" width="280" height="58" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+    <text x="210" y="284" font-size="12" fill="#e2e8f0" text-anchor="middle">② build_record — §1 A2UI v1.0</text>
+    <text x="210" y="303" font-size="9" fill="#94a3b8" text-anchor="middle">engine/tool.py:63 · envelope + dataModel{data,meta}</text>
+
+    <!-- 3 ADMIT -->
+    <rect x="70" y="384" width="280" height="80" rx="6" fill="#0f172a"/>
+    <rect x="70" y="384" width="280" height="80" rx="6" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1.5"/>
+    <text x="210" y="406" font-size="12" fill="#e2e8f0" text-anchor="middle">③ ADMIT — admit(components, dataModel)</text>
+    <text x="210" y="424" font-size="9" fill="#94a3b8" text-anchor="middle">engine/admission.py:818 · stdlib mini-JSON-Schema (D11)</text>
+    <text x="210" y="439" font-size="9" fill="#94a3b8" text-anchor="middle">graph + budgets + URL + closed meta shapes</text>
+    <text x="210" y="454" font-size="8" fill="#64748b" text-anchor="middle">rejects, never truncates (CONTRACTS §3)</text>
+
+    <!-- reject branch -->
+    <rect x="398" y="384" width="148" height="80" rx="6" fill="#0f172a"/>
+    <rect x="398" y="384" width="148" height="80" rx="6" fill="rgba(136,19,55,0.3)" stroke="#fb7185" stroke-width="1.2"/>
+    <text x="472" y="410" font-size="11" fill="#fb7185" text-anchor="middle">REJECT</text>
+    <text x="472" y="428" font-size="9" fill="#94a3b8" text-anchor="middle">{ok:false, errors[]}</text>
+    <text x="472" y="443" font-size="9" fill="#94a3b8" text-anchor="middle">“id: reason” per error</text>
+    <text x="472" y="456" font-size="8" fill="#64748b" text-anchor="middle">nothing is written</text>
+
+    <!-- 4 store -->
+    <rect x="70" y="504" width="280" height="62" rx="6" fill="#0f172a"/>
+    <rect x="70" y="504" width="280" height="62" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+    <text x="210" y="527" font-size="12" fill="#e2e8f0" text-anchor="middle">④ card store — write_card</text>
+    <text x="210" y="545" font-size="9" fill="#94a3b8" text-anchor="middle">$HERMES_HOME/rich-ui/cards/&lt;card_id&gt;.json</text>
+    <text x="210" y="558" font-size="8" fill="#64748b" text-anchor="middle">atomic tmp+rename · quota refuses, never deletes (store.py:103)</text>
+
+    <!-- catalog (frozen) -->
+    <rect x="398" y="504" width="148" height="86" rx="6" fill="#0f172a"/>
+    <rect x="398" y="504" width="148" height="86" rx="6" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1.5"/>
+    <text x="472" y="527" font-size="11" fill="#fbbf24" text-anchor="middle">FROZEN CATALOG</text>
+    <text x="472" y="544" font-size="9" fill="#94a3b8" text-anchor="middle">hermes-rich-ui/1</text>
+    <text x="472" y="558" font-size="9" fill="#94a3b8" text-anchor="middle">18 types · functions {}</text>
+    <text x="472" y="573" font-size="8" fill="#64748b" text-anchor="middle">catalog/hermes-rich-ui</text>
+    <text x="472" y="583" font-size="8" fill="#64748b" text-anchor="middle">.catalog.json — single</text>
+    <text x="472" y="593" font-size="8" fill="#64748b" text-anchor="middle">source of truth</text>
+
+    <!-- 5 return -->
+    <rect x="70" y="606" width="280" height="58" rx="6" fill="#0f172a"/>
+    <rect x="70" y="606" width="280" height="58" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+    <text x="210" y="628" font-size="12" fill="#e2e8f0" text-anchor="middle">⑤ {ok, card_id, directive}</text>
+    <text x="210" y="647" font-size="9" fill="#94a3b8" text-anchor="middle">engine/tool.py:187 · directive() tool.py:59</text>
+
+    <!-- REST -->
+    <rect x="70" y="694" width="280" height="62" rx="6" fill="#0f172a"/>
+    <rect x="70" y="694" width="280" height="62" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+    <text x="210" y="716" font-size="12" fill="#e2e8f0" text-anchor="middle">REST — GET /cards/{card_id} · /health</text>
+    <text x="210" y="733" font-size="9" fill="#94a3b8" text-anchor="middle">/api/plugins/hermes-rich-ui · read-only</text>
+    <text x="210" y="748" font-size="8" fill="#64748b" text-anchor="middle">dashboard/plugin_api.py:51,64 (CONTRACTS §5)</text>
+
+    <!-- arrow labels -->
+    <text x="330" y="112" font-size="8" fill="#94a3b8">tool call</text>
+    <text x="820" y="112" font-size="8" fill="#94a3b8">reply prose carries the directive line</text>
+    <text x="218" y="490" font-size="8" fill="#34d399">pass → normalized components</text>
+    <text x="608" y="520" font-size="8" fill="#fb923c">GET /api/plugins/…/cards/&lt;id&gt; over the host plugin API</text>
+    <text x="118" y="640" font-size="8" fill="#94a3b8">read record</text>
+
+    <!-- ================= desktop boxes ================= -->
+    <!-- 6 directive -->
+    <rect x="660" y="170" width="300" height="58" rx="6" fill="#0f172a"/>
+    <rect x="660" y="170" width="300" height="58" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="810" y="192" font-size="12" fill="#e2e8f0" text-anchor="middle">⑥ ::richui{id="…"} matches</text>
+    <text x="810" y="211" font-size="9" fill="#94a3b8" text-anchor="middle">desktop/src/index.mjs:47 — TRANSCRIPT_DIRECTIVE_AREA</text>
+
+    <!-- 7 RichCard fetch -->
+    <rect x="660" y="262" width="300" height="58" rx="6" fill="#0f172a"/>
+    <rect x="660" y="262" width="300" height="58" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="810" y="284" font-size="12" fill="#e2e8f0" text-anchor="middle">⑦ RichCard — useQuery('/cards/'+id)</text>
+    <text x="810" y="303" font-size="9" fill="#94a3b8" text-anchor="middle">desktop/src/card.mjs:154 · id checked before fetch (card.mjs:9)</text>
+
+    <!-- 8 lower -->
+    <rect x="660" y="354" width="300" height="58" rx="6" fill="#0f172a"/>
+    <rect x="660" y="354" width="300" height="58" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="810" y="376" font-size="12" fill="#e2e8f0" text-anchor="middle">⑧ lower() — deterministic lowering</text>
+    <text x="810" y="395" font-size="9" fill="#94a3b8" text-anchor="middle">lower.mjs:53 · component→type · {path}→{$state}</text>
+
+    <!-- 9 Renderer -->
+    <rect x="660" y="444" width="300" height="76" rx="6" fill="#0f172a"/>
+    <rect x="660" y="444" width="300" height="76" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="810" y="467" font-size="12" fill="#e2e8f0" text-anchor="middle">⑨ Renderer</text>
+    <text x="810" y="485" font-size="9" fill="#94a3b8" text-anchor="middle">JSONUIProvider + @json-render/react Renderer</text>
+    <text x="810" y="500" font-size="9" fill="#94a3b8" text-anchor="middle">zod stubbed (D4) · uPlot 1.6.32 charts (D5)</text>
+    <text x="810" y="513" font-size="8" fill="#64748b" text-anchor="middle">card.mjs:138 · chart.mjs:12 — inline styles, --ui-* only</text>
+
+    <!-- 10 rendered card -->
+    <rect x="660" y="552" width="300" height="62" rx="6" fill="#0f172a"/>
+    <rect x="660" y="552" width="300" height="62" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+    <text x="810" y="575" font-size="12" fill="#e2e8f0" text-anchor="middle">inline card in the transcript</text>
+    <text x="810" y="592" font-size="9" fill="#94a3b8" text-anchor="middle">summary above body · 480 px cap + Show more</text>
+    <text x="810" y="606" font-size="8" fill="#64748b" text-anchor="middle">CardBoundary → InlineError, never a dead message (card.mjs:58)</text>
+
+    <!-- trust note on fetch -->
+    <text x="810" y="646" font-size="8" fill="#64748b" text-anchor="middle">the renderer trusts admitted records (D11):</text>
+    <text x="810" y="658" font-size="8" fill="#64748b" text-anchor="middle">unlowerable(cs) red-reasons instead of a body (lower.mjs:77)</text>
+
+    <!-- ================= legend ================= -->
+    <g font-size="9" fill="#94a3b8">
+      <rect x="40" y="816" width="14" height="10" rx="2" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1"/>
+      <text x="60" y="825">gateway half (Python, stdlib)</text>
+      <rect x="270" y="816" width="14" height="10" rx="2" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1"/>
+      <text x="290" y="825">desktop half (bundled ESM)</text>
+      <rect x="500" y="816" width="14" height="10" rx="2" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1"/>
+      <text x="520" y="825">persisted state</text>
+      <rect x="680" y="816" width="14" height="10" rx="2" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1"/>
+      <text x="700" y="825">trust boundary / admission</text>
+      <rect x="905" y="816" width="14" height="10" rx="2" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1"/>
+      <text x="925" y="825">frozen artifact</text>
+      <line x1="40" y1="846" x2="70" y2="846" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <text x="78" y="849">cross-half fetch</text>
+      <rect x="270" y="840" width="14" height="10" rx="2" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1"/>
+      <text x="290" y="849">agent / external</text>
+    </g>
+
+    <!-- footnotes (D-numbers → docs/DECISIONS.md) -->
+    <g font-size="8.5" fill="#64748b">
+      <text x="40" y="890">[D1] canonical record = A2UI v1.0 createSurface, our catalog hermes-rich-ui/1, json-render Renderer as engine.</text>
+      <text x="40" y="906">[D4] zod-stubbed Renderer shipped (≈88 KB, not the 660 KB build) — proven by jsdom render test; stub lives in scripts/build.mjs:33.</text>
+      <text x="40" y="922">[D5] chart engine = uPlot 1.6.32 (94.5 KB, validate 0 hits); recharts rejected (727 KB, 10 prototype-patching hits).</text>
+      <text x="40" y="938">[D11] admission runs in Python on the gateway over the catalog JSON; the desktop trusts admitted records.</text>
+      <text x="40" y="954">[D12] prose-reset CSS is cited in desktop/src/card.mjs:15 — DECISIONS.md as committed lists D1–D11.</text>
+    </g>
+  </svg>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-header"><span class="card-dot green"></span><h3>Gateway half (Python, stdlib)</h3></div>
+      <ul>
+        <li>• one tool: rich_present (__init__.py:126-129)</li>
+        <li>• engine/admission.py — stdlib mini-JSON-Schema over the frozen catalog (D11)</li>
+        <li>• engine/store.py — atomic tmp+rename, 32 MiB quota, refuse-never-delete</li>
+        <li>• dashboard/plugin_api.py — read-only REST projection</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-dot cyan"></span><h3>Desktop half (one ESM bundle)</h3></div>
+      <ul>
+        <li>• registers ONE contribution: ::richui in TRANSCRIPT_DIRECTIVE_AREA (index.mjs:47-54)</li>
+        <li>• imports only @hermes/plugin-sdk, react, react/jsx-runtime</li>
+        <li>• lower.mjs: deterministic A2UI → json-render, null-prototype elements</li>
+        <li>• committed desktop/plugin.js must equal a fresh build (scripts/build.mjs)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-dot rose"></span><h3>Trust model in one line</h3></div>
+      <ul>
+        <li>• model-authored specs are untrusted input</li>
+        <li>• admission is the security boundary: reject, never truncate</li>
+        <li>• read-only fence: functions {} (catalog:1025), no actions</li>
+        <li>• second boundary: bundle banned-surface scan (scripts/build.mjs:15-30)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="fn">
+    <p><b>Read first:</b> docs/CONTRACTS.md (FROZEN — never edit; raise an objection), docs/DECISIONS.md (D1–D11), docs/ARCHITECTURE.md (this diagram's twin), AGENTS.md laws.</p>
+  </div>
+
+  <footer>hermes-rich-ui 0.1.0 · card lifecycle map · generated 2026-09-27 from the sources cited above · dark theme via --ui-* style vars · no external assets</footer>
+</div>
+</body>
+</html>

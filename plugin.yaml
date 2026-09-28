@@ -1,0 +1,23 @@
+name: hermes-rich-ui
+version: 0.1.0
+description: Rich, evidence-backed answer cards — tables, charts, metrics, timelines, sources — rendered inline in the desktop transcript
+description_long: |
+  Adds a `rich_present` tool: the agent publishes an A2UI v1.0 `createSurface`
+  record against the read-only `hermes-rich-ui/1` catalog (18 components), with
+  the data model, sources and derivations persisted as one card. Admission
+  rejects anything outside the catalog before a byte is written. Ships a desktop
+  transcript renderer (json-render + uPlot) for the ::richui{id} directive,
+  a read-only card API, and the authoring skill.
+author: "Jacob Hausler"
+license: MIT
+homepage: https://github.com/jacobhausler/hermes-rich-ui
+requires_hermes: ">=v2026.9.24"
+provides_tools:
+  - rich_present
+provides_hooks: []
+requires_env: []
+dashboard:
+  menu:
+    - id: rich-ui
+      label: Rich UI
+      icon: layout

@@ -1,0 +1,338 @@
+{
+  "title": "Truck offers, compared",
+  "summary": "SYNTHETIC illustrative example: 8 authored truck offers compared (median 43,975 USD, spread 5,050 USD). Data and content are synthetic; no market research was performed.",
+  "components": [
+    {
+      "id": "root",
+      "component": "Card",
+      "title": "Truck offers, compared",
+      "subtitle": "SYNTHETIC illustrative dataset \u00b7 8 example listings \u00b7 USD",
+      "children": [
+        "takeaway",
+        "metrics",
+        "offers",
+        "visuals",
+        "caveat",
+        "evidence"
+      ]
+    },
+    {
+      "id": "takeaway",
+      "component": "Callout",
+      "title": {
+        "path": "/data/takeaway_title"
+      },
+      "text": {
+        "path": "/data/takeaway_text"
+      },
+      "tone": "info",
+      "sourceIds": [
+        "demo-offers"
+      ]
+    },
+    {
+      "id": "metrics",
+      "component": "Grid",
+      "columns": 3,
+      "gap": "md",
+      "children": [
+        "count",
+        "median",
+        "spread"
+      ]
+    },
+    {
+      "id": "count",
+      "component": "Metric",
+      "label": "Offers compared",
+      "value": {
+        "path": "/data/offer_count"
+      }
+    },
+    {
+      "id": "median",
+      "component": "Metric",
+      "label": "Median advertised",
+      "value": {
+        "path": "/data/median"
+      },
+      "unit": "USD",
+      "precision": 0,
+      "format": "currency"
+    },
+    {
+      "id": "spread",
+      "component": "Metric",
+      "label": "Observed spread",
+      "value": {
+        "path": "/data/spread"
+      },
+      "unit": "USD",
+      "precision": 0,
+      "format": "currency"
+    },
+    {
+      "id": "offers",
+      "component": "DataTable",
+      "title": "Compare the supplied offers",
+      "columns": [
+        {
+          "key": "dealer",
+          "label": "Dealer",
+          "type": "text"
+        },
+        {
+          "key": "price",
+          "label": "Advertised price",
+          "type": "currency",
+          "unit": "USD",
+          "precision": 0
+        },
+        {
+          "key": "basis",
+          "label": "Price basis",
+          "type": "text"
+        },
+        {
+          "key": "sourceIds",
+          "label": "Evidence",
+          "type": "sources"
+        }
+      ],
+      "rows": {
+        "path": "/data/offers"
+      },
+      "sourceIds": [
+        "demo-offers"
+      ]
+    },
+    {
+      "id": "visuals",
+      "component": "Grid",
+      "columns": 2,
+      "gap": "lg",
+      "children": [
+        "comparison",
+        "distribution"
+      ]
+    },
+    {
+      "id": "comparison",
+      "component": "Chart",
+      "kind": "bar",
+      "title": "Advertised price by dealer",
+      "xLabel": "Dealer",
+      "yLabel": "Advertised USD",
+      "unit": "USD",
+      "series": [
+        {
+          "label": "Advertised price",
+          "data": {
+            "path": "/data/bars"
+          }
+        }
+      ],
+      "sourceIds": [
+        "demo-offers"
+      ]
+    },
+    {
+      "id": "distribution",
+      "component": "Chart",
+      "kind": "histogram",
+      "title": "Where the prices cluster",
+      "xLabel": "Advertised USD",
+      "yLabel": "Offers",
+      "series": [
+        {
+          "label": "Offers per USD 2,000 bin",
+          "data": {
+            "path": "/data/bins"
+          }
+        }
+      ],
+      "caveat": "[low, high), final high inclusive; 8 supplied offers, all included.",
+      "sourceIds": [
+        "demo-offers"
+      ]
+    },
+    {
+      "id": "caveat",
+      "component": "Callout",
+      "title": "No price-history claims",
+      "text": "This sample contains no dated price history. Taxes, fees and conditional incentives are not normalized. A trend would require additional observations.",
+      "tone": "caution"
+    },
+    {
+      "id": "evidence",
+      "component": "SourceList",
+      "title": "Evidence and method",
+      "sourceIds": [
+        "demo-offers"
+      ]
+    }
+  ],
+  "data": {
+    "takeaway_title": "A $5,050 spread in advertised prices",
+    "takeaway_text": "Start with like-for-like quotes. The least expensive listing is not necessarily the lowest all-in offer.",
+    "offers": [
+      {
+        "dealer": "Example North",
+        "price": 41900,
+        "basis": "Advertised",
+        "sourceIds": [
+          "demo-offers"
+        ]
+      },
+      {
+        "dealer": "Example West",
+        "price": 42500,
+        "basis": "Advertised",
+        "sourceIds": [
+          "demo-offers"
+        ]
+      },
+      {
+        "dealer": "Example Park",
+        "price": 42990,
+        "basis": "Advertised",
+        "sourceIds": [
+          "demo-offers"
+        ]
+      },
+      {
+        "dealer": "Example Lake",
+        "price": 43850,
+        "basis": "Advertised",
+        "sourceIds": [
+          "demo-offers"
+        ]
+      },
+      {
+        "dealer": "Example South",
+        "price": 44100,
+        "basis": "Advertised",
+        "sourceIds": [
+          "demo-offers"
+        ]
+      },
+      {
+        "dealer": "Example Ridge",
+        "price": 44700,
+        "basis": "Advertised",
+        "sourceIds": [
+          "demo-offers"
+        ]
+      },
+      {
+        "dealer": "Example East",
+        "price": 45500,
+        "basis": "Advertised",
+        "sourceIds": [
+          "demo-offers"
+        ]
+      },
+      {
+        "dealer": "Example Central",
+        "price": 46950,
+        "basis": "Advertised",
+        "sourceIds": [
+          "demo-offers"
+        ]
+      }
+    ],
+    "offer_count": 8,
+    "median": 43975,
+    "spread": 5050,
+    "bars": [
+      {
+        "label": "Example North",
+        "value": 41900
+      },
+      {
+        "label": "Example West",
+        "value": 42500
+      },
+      {
+        "label": "Example Park",
+        "value": 42990
+      },
+      {
+        "label": "Example Lake",
+        "value": 43850
+      },
+      {
+        "label": "Example South",
+        "value": 44100
+      },
+      {
+        "label": "Example Ridge",
+        "value": 44700
+      },
+      {
+        "label": "Example East",
+        "value": 45500
+      },
+      {
+        "label": "Example Central",
+        "value": 46950
+      }
+    ],
+    "bins": [
+      {
+        "low": 41000,
+        "high": 43000,
+        "count": 3
+      },
+      {
+        "low": 43000,
+        "high": 45000,
+        "count": 3
+      },
+      {
+        "low": 45000,
+        "high": 47000,
+        "count": 2
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "demo-offers",
+      "kind": "derived",
+      "label": "SYNTHETIC authored example offers \u2014 not current prices or real dealerships",
+      "url": null,
+      "accessed_at": null,
+      "note": "Used solely to demonstrate rich static communication. No market research was performed."
+    }
+  ],
+  "derivations": [
+    {
+      "id": "bin-counts",
+      "output_path": "/data/bins",
+      "input_paths": [
+        "/data/offers"
+      ],
+      "method": "Count the 8 supplied prices into fixed USD 2,000 bins; [low,high), final high inclusive.",
+      "caveat": "Illustrative; synthetic inputs."
+    },
+    {
+      "id": "median",
+      "output_path": "/data/median",
+      "input_paths": [
+        "/data/offers"
+      ],
+      "method": "Arithmetic midpoint of sorted fourth and fifth sample prices.",
+      "caveat": "Illustrative; synthetic inputs."
+    },
+    {
+      "id": "spread",
+      "output_path": "/data/spread",
+      "input_paths": [
+        "/data/offers"
+      ],
+      "method": "max(price) - min(price) over the 8 supplied offers.",
+      "caveat": "Illustrative; synthetic inputs."
+    }
+  ]
+}
