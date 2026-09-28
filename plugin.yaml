@@ -11,7 +11,7 @@ description_long: |
 author: "Jacob Hausler"
 license: MIT
 homepage: https://github.com/jacobhausler/hermes-rich-ui
-requires_hermes: ">=v2026.9.24"
+requires_hermes: ">=0.21.5"  # v2026.9.24 release; core compares semver, never date tags
 provides_tools:
   - rich_present
 provides_hooks: []

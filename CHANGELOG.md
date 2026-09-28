@@ -2,6 +2,11 @@
 
 All notable changes to hermes-rich-ui are documented here.
 
+## Unreleased
+
+- requires_hermes now uses the semver release (>=0.21.5); the date-tag form
+  blocked every install on 0.21.5.
+
 ## v0.1.2 — 2026-09-28
 
 - Tool description parity with the v0.1.1 catalog: the 8 new types, Chart kinds
