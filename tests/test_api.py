@@ -68,7 +68,7 @@ def test_register_wires_tool_and_skill():
     assert all(p.get("description") for p in props.values())
     for c in door.COMPONENTS:
         assert c in schema["description"], c
-    assert len(door.COMPONENTS) == 18
+    assert len(door.COMPONENTS) == 26
     assert '"path": "/data/' in props["components"]["description"]
     assert 'id "root"' in props["components"]["description"]
     assert "hermes-rich-ui/1" in props["components"]["description"]
