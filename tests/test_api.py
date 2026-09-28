@@ -21,9 +21,9 @@ def publish():
 
 
 def test_health_counts_cards():
-    assert api.health_view() == {"ok": True, "cards": 0, "version": "0.1.1"}
+    assert api.health_view() == {"ok": True, "cards": 0, "version": "0.1.2"}
     publish(); publish()
-    assert api.health_view() == {"ok": True, "cards": 2, "version": "0.1.1"}
+    assert api.health_view() == {"ok": True, "cards": 2, "version": "0.1.2"}
 
 
 def test_get_card_found_and_not_found():

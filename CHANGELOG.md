@@ -2,6 +2,17 @@
 
 All notable changes to hermes-rich-ui are documented here.
 
+## v0.1.2 — 2026-09-28
+
+- Tool description parity with the v0.1.1 catalog: the 8 new types, Chart kinds
+  area/waterfall/range with point shapes, and new enum values are now in the
+  `rich_present` description (#9, #10).
+- HeatMap cells reference declared row/col LABELS (strings), not indices; documented.
+- Chart `series` is always a literal array; bind per-series `data` instead (tool
+  description + skill).
+- New test `tests/test_tool_description.py`: catalog-to-description parity plus
+  admission-level checks of the documented examples.
+
 ## v0.1.1 — 2026-09-28 (counsel-ratified expansion)
 
 26 component types (was 18), all additive; catalog id stays `hermes-rich-ui/1`.
@@ -59,7 +70,7 @@ Measured on the Mac dev instance (10-card gallery, `scripts/screenshots/round.sh
 - `scripts/screenshots/`: gallery seeder (every card through the real `rich_present` door), CDP
   card shooter with settle + overlap guards, `round.sh` push/shoot/pull loop.
 
-## 0.1.0 (Unreleased)
+## v0.1.0
 
 First public-shaped release (C0–C3 scope; public repo/catalog PR held per D8).
 

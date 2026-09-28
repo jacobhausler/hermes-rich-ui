@@ -1,6 +1,6 @@
 {
   "name": "hermes-rich-ui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "description": "Rich, evidence-backed answer cards for the Hermes desktop (A2UI v1.0 catalog + json-render engine)",
