@@ -117,6 +117,7 @@
     "tests/test_synth_text_enums.mjs",
     "tests/test_table.mjs",
     "tests/test_tool.py",
+    "tests/test_tool_description.py",
     ".github/ISSUE_TEMPLATE/bug_report.md",
     ".github/ISSUE_TEMPLATE/feature_request.md",
     ".github/pull_request_template.md",
@@ -164,7 +165,7 @@
       "label": "register()",
       "file_type": "code",
       "source_file": "__init__.py",
-      "source_location": "L126",
+      "source_location": "L140",
       "_callable": true,
       "_origin": "ast"
     },
@@ -8558,6 +8559,121 @@
       "_origin": "ast"
     },
     {
+      "id": "tests_test_tool_description",
+      "label": "test_tool_description.py",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_enum",
+      "label": "_enum()",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L35",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_test_every_catalog_component_type_named",
+      "label": "test_every_catalog_component_type_named()",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L42",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_test_chart_kind_enums",
+      "label": "test_chart_kind_enums()",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L47",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_test_callout_tone_enums",
+      "label": "test_callout_tone_enums()",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L52",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_test_badge_tone_enums",
+      "label": "test_badge_tone_enums()",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L57",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_test_timeline_item_status_enums",
+      "label": "test_timeline_item_status_enums()",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L62",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_test_heading_level_enums",
+      "label": "test_heading_level_enums()",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L68",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_root",
+      "label": "_root()",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L77",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_test_admit_heatmap_label_refs",
+      "label": "test_admit_heatmap_label_refs()",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L81",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_test_admit_chart_bound_series_data",
+      "label": "test_admit_chart_bound_series_data()",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L92",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_test_reject_chart_bound_series",
+      "label": "test_reject_chart_bound_series()",
+      "file_type": "code",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L102",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_description_rationale_1",
+      "label": "R6: the rich_present tool description must admit every catalog component type.…",
+      "file_type": "rationale",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
       "id": "github_issue_template_bug_report",
       "label": "bug_report.md",
       "file_type": "document",
@@ -10098,7 +10214,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/SKILL.md",
-      "source_location": "L69",
+      "source_location": "L71",
       "_origin": "ast"
     },
     {
@@ -10107,7 +10223,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/SKILL.md",
-      "source_location": "L79",
+      "source_location": "L81",
       "_origin": "ast"
     },
     {
@@ -10116,7 +10232,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/SKILL.md",
-      "source_location": "L85",
+      "source_location": "L87",
       "_origin": "ast"
     },
     {
@@ -10125,7 +10241,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/SKILL.md",
-      "source_location": "L90",
+      "source_location": "L92",
       "_origin": "ast"
     },
     {
@@ -10785,7 +10901,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "__init__.py",
-      "source_location": "L126",
+      "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -30756,6 +30872,366 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_tool_description",
+      "target": "json",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "sys",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_lane_backend",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "engine_admission",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_enum",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_every_catalog_component_type_named",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_chart_kind_enums",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_callout_tone_enums",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_badge_tone_enums",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_timeline_item_status_enums",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_heading_level_enums",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_root",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_admit_heatmap_label_refs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_admit_chart_bound_series_data",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_reject_chart_bound_series",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description_test_chart_kind_enums",
+      "target": "tests_test_tool_description_enum",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description_test_callout_tone_enums",
+      "target": "tests_test_tool_description_enum",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description_test_badge_tone_enums",
+      "target": "tests_test_tool_description_enum",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description_test_heading_level_enums",
+      "target": "tests_test_tool_description_enum",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L69",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description_test_admit_heatmap_label_refs",
+      "target": "tests_test_tool_description_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L83",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description_test_admit_chart_bound_series_data",
+      "target": "tests_test_tool_description_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description_test_reject_chart_bound_series",
+      "target": "tests_test_tool_description_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_every_catalog_component_type_named",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L115",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_chart_kind_enums",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L115",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_callout_tone_enums",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_badge_tone_enums",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_timeline_item_status_enums",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_heading_level_enums",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_admit_heatmap_label_refs",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_admit_chart_bound_series_data",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_test_tool_description_test_reject_chart_bound_series",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description_rationale_1",
+      "target": "tests_test_tool_description",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "github_issue_template_bug_report",
       "target": "github_issue_template_bug_report_environment",
       "relation": "contains",
@@ -32341,7 +32817,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/SKILL.md",
-      "source_location": "L69",
+      "source_location": "L71",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -32351,7 +32827,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/SKILL.md",
-      "source_location": "L79",
+      "source_location": "L81",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -32361,7 +32837,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/SKILL.md",
-      "source_location": "L85",
+      "source_location": "L87",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -32371,7 +32847,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/SKILL.md",
-      "source_location": "L90",
+      "source_location": "L92",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -33258,6 +33734,39 @@
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
       "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_lane_backend_runner",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "tests_lane_backend_load",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description",
+      "target": "engine_admission_admit",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -34593,6 +35102,39 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_tool_description_test_admit_heatmap_label_refs",
+      "target": "engine_admission_admit",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description_test_admit_chart_bound_series_data",
+      "target": "engine_admission_admit",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_description_test_reject_chart_bound_series",
+      "target": "engine_admission_admit",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool_description.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "init_register",
       "target": "engine_tool_handle_present",
       "relation": "indirect_call",
@@ -34600,7 +35142,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "__init__.py",
-      "source_location": "L128",
+      "source_location": "L142",
       "weight": 1.0,
       "_origin": "ast"
     },
