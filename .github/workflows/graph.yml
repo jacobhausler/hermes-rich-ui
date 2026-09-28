@@ -30,6 +30,13 @@ jobs:
       - name: Rebuild knowledge graph (AST only)
         run: uvx --from graphifyy graphify update . --no-cluster
 
+      - name: De-absolutize paths (runner workspace paths must never be committed)
+        run: |
+          set -euo pipefail
+          [ -f graphify-out/graph.json ] || exit 0
+          sed -i "s|$GITHUB_WORKSPACE/||g" graphify-out/graph.json
+          grep -q "/home/runner" graphify-out/graph.json && { echo "::error::absolute runner paths survived"; exit 1; } || true
+
       - name: Commit only if the graph actually changed
         env:
           GH_TOKEN: ${{ github.token }}
