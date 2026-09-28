@@ -14,7 +14,7 @@ from pathlib import Path
 _PLUGIN_ROOT = Path(__file__).resolve().parent.parent
 _STORE_MODULE = "_hermes_rich_ui_store_" + hashlib.sha256(
     str(_PLUGIN_ROOT / "engine").encode("utf-8")).hexdigest()[:16]
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 
 
 def _store():
