@@ -42,31 +42,45 @@ handle_present = _tool.handle_present
 
 COMPONENTS = ["Card", "Stack", "Grid", "Divider", "Tabs", "Accordion", "Heading", "Text",
               "Callout", "Badge", "Metric", "Progress", "KeyValueList", "Image", "DataTable",
-              "Chart", "Timeline", "SourceList"]
+              "Chart", "Timeline", "SourceList", "Checklist", "ChipSet", "CodeBlock",
+              "ImageGallery", "AsOf", "Sparkline", "BarList", "HeatMap"]
 
 _COMPONENT_DOC = (
     "A2UI `hermes-rich-ui/1` adjacency list. Every item is FLAT: {\"id\", \"component\", ...props at "
     "the top level} — there is NO `props` wrapper. EXACTLY ONE item has id \"root\" (usually a Card). "
     "Containers reference children by id: Card/Stack/Grid `children: [ids]`, Tabs `tabs:[{title, "
-    "child}]`, Accordion `items:[{title, child, open?}]`. The 18 components: " + ", ".join(COMPONENTS) + ". "
+    "child}]`, Accordion `items:[{title, child, open?}]`. The 26 components: " + ", ".join(COMPONENTS) + ". "
     "Any dynamic prop is a literal OR a binding {\"path\": \"/data/...\"} (RFC 6901 pointer into "
     "`data`; `/meta/...` also allowed). Enums (exact strings): Stack.direction vertical|horizontal, "
     "gap none|sm|md|lg; DataTable column.type text|number|currency|percent|date|sources (required "
     "per column); Metric.format number|currency|percent (value MUST be a number or null — never a "
-    "string like \"233 KB\"; put units in `unit`); Chart.kind bar|line|scatter|histogram; "
-    "Callout.tone info|caution|success; Badge/Timeline tone/status neutral|info|success|caution / "
-    "done|active|pending; Heading.level 1|2|3. DENSE by default: put related short blocks side by "
+    "string like \"233 KB\"; put units in `unit`); Chart.kind bar|line|scatter|histogram|area|waterfall|range; "
+    "Callout.tone info|caution|success|error; Badge.tone neutral|info|success|caution|error|outline; "
+    "Timeline item status done|active|pending|failed; Heading.level 1|2|3|4. DENSE by default: put related short blocks side by "
     "side (`Stack horizontal` or `Grid` columns 2..4), never a full-width vertical run of 1-2-line "
     "items; a summary card reads as TWO columns (timeline left, facts+notes right). Only charts and "
     "wide tables earn full width. Read-only: no actions, no functions. Budgets: <=64 "
     "components, depth <=8, table <=100x12, chart series <=4x512 points, timeline <=30, kv <=32, "
     "sources <=32, image src https:// only. Metric value null renders 'unavailable', never 0. "
-    "Chart: REQUIRED prop series:[{label, data}] (1..4 series); each series.data is "
+    "Chart: REQUIRED prop series:[{label, data}] (1..4 series); series is ALWAYS a literal "
+    "array (never a binding); to bind, bind each series' data: {label, data:{\"path\": "
+    "\"/data/...\"}}; each series.data is "
     "points shaped per kind: bar [{label,value}], line [{x,y}] (x finite number OR "
     "ISO-8601 string, never mixed in one series), scatter [{x,y,label?}], histogram "
-    "[{low,high,count}] (bins supplied, never computed); there is NO top-level Chart "
+    "[{low,high,count}] (bins supplied, never computed), area [{x,y}] (like line), "
+    "waterfall [{label,value,total?}], range [{label,low,high}]; there is NO top-level Chart "
     "'data' prop. Timeline items are {label, date?, text?, status?} — the text key is "
-    "'label' (not 'title'); Grid columns is 1..4. Minimal valid example: "
+    "'label' (not 'title'); Grid columns is 1..4. New types (required props + caps): "
+    "Checklist items (<=32) {label, done? true|false|null}, showTally?; ChipSet labels "
+    "(<=24 strings), tone? neutral|info|success|caution; CodeBlock code (<=4 KiB literal "
+    "text), caption?, language? (label only, never parsed); ImageGallery items (<=8) "
+    "{src https:// only, alt required}, columns? 1..4; AsOf observedAt?/publishedAt? "
+    "ISO-8601 (only timestamps actually observed, absent if unknown); Sparkline values? "
+    "(<=512 number|null, null=gap), direction? line|bar, tone? default|success|danger; "
+    "BarList items (<=30) {label, value number|null}, format? number|currency|percent, "
+    "sort? desc|asc|none; HeatMap rows (<=12 {label}) x cols (<=12 {label}) x cells "
+    "(<=144) {row: <declared row label string>, col: <declared col label string>, value "
+    "number|null} — one cell per (row, col) pair; row/col are LABELS not indices. Minimal valid example: "
     "[{\"id\":\"root\",\"component\":\"Card\",\"title\":\"T\",\"children\":[\"m\"]},"
     "{\"id\":\"m\",\"component\":\"Metric\",\"label\":\"Suite\",\"value\":{\"path\":\"/data/n\"}}]"
 )

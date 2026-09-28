@@ -64,7 +64,9 @@ steps, renderer owns the baseline); line/area `[{x: ISO-8601|number, y}]` (null 
 line; all `x` in one series numbers OR ISO-8601, never mixed — "yesterday" is rejected);
 scatter `[{x, y, label?}]`; histogram `[{low, high, count}]` — bins supplied, never
 computed, `low < high`, sorted, non-overlapping; range `[{label, low, high}]` — endpoints
-both present or both null (never a midpoint), `low <= high` (equality valid).
+both present or both null (never a midpoint), `low <= high` (equality valid). `series` is
+ALWAYS a literal array (never a binding); to bind, bind each series' data:
+`{label, data: {"path": "/data/..."}}`.
 
 ## Recipes (favorites, not templates — see skill/references/recipes.md)
 
