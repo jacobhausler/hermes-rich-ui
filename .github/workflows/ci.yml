@@ -6,9 +6,9 @@ on:
   pull_request:
 
 env:
-  # Floor: v2026.9.24 (requires_hermes in plugin.yaml). Release scheme is date
-  # tags; v0.21.x exists only as abandoned rc/canary tags, so the measured floor
-  # is the date tag the plugin was verified against.
+  # Floor: 0.21.5 (requires_hermes in plugin.yaml) = the v2026.9.24 release;
+  # core's version gate compares semver base versions, so the pin below is the
+  # commit of that release and the manifest floor is its semver, not the date tag.
   HERMES_PIN: f97608f178d1ffeca59860195ab7da295f7c8e5f
 
 jobs:
