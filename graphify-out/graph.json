@@ -8864,12 +8864,21 @@
       "_origin": "ast"
     },
     {
+      "id": "changelog_v0_1_2_2026_09_28",
+      "label": "v0.1.2 — 2026-09-28",
+      "file_type": "document",
+      "node_kind": "heading",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
       "id": "changelog_v0_1_1_2026_09_28_counsel_ratified_expansion",
       "label": "v0.1.1 — 2026-09-28 (counsel-ratified expansion)",
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L5",
+      "source_location": "L16",
       "_origin": "ast"
     },
     {
@@ -8878,7 +8887,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L30",
+      "source_location": "L41",
       "_origin": "ast"
     },
     {
@@ -8887,16 +8896,16 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L41",
+      "source_location": "L52",
       "_origin": "ast"
     },
     {
-      "id": "changelog_0_1_0_unreleased",
-      "label": "0.1.0 (Unreleased)",
+      "id": "changelog_v0_1_0",
+      "label": "v0.1.0",
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L62",
+      "source_location": "L73",
       "_origin": "ast"
     },
     {
@@ -8905,7 +8914,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L83",
+      "source_location": "L94",
       "_origin": "ast"
     },
     {
@@ -10254,7 +10263,7 @@
       "frontmatter": {
         "name": "rich-ui-debugging",
         "description": "Use when a card is rejected, blank, or mis-rendered. Symptom -&gt; where to look -&gt; exact command, every command real.",
-        "version": "0.1.1"
+        "version": "0.1.2"
       },
       "_origin": "ast"
     },
@@ -10340,7 +10349,7 @@
       "frontmatter": {
         "name": "rich-ui-maintaining",
         "description": "Use when triaging an issue or PR on this repo. Repro on a fresh clone, blast-classify, walk R1-R10, rule merge|changes|decision, GitHub is the ledger.",
-        "version": "0.1.1"
+        "version": "0.1.2"
       },
       "_origin": "ast"
     },
@@ -31383,7 +31392,7 @@
     },
     {
       "source": "changelog_changelog",
-      "target": "changelog_v0_1_1_2026_09_28_counsel_ratified_expansion",
+      "target": "changelog_v0_1_2_2026_09_28",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
@@ -31393,17 +31402,17 @@
     },
     {
       "source": "changelog_changelog",
-      "target": "changelog_publish_prep_2026_09_27",
+      "target": "changelog_v0_1_1_2026_09_28_counsel_ratified_expansion",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L30",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "changelog_changelog",
-      "target": "changelog_c1_polish_2026_09_25",
+      "target": "changelog_publish_prep_2026_09_27",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
@@ -31413,21 +31422,31 @@
     },
     {
       "source": "changelog_changelog",
-      "target": "changelog_0_1_0_unreleased",
+      "target": "changelog_c1_polish_2026_09_25",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L62",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "changelog_0_1_0_unreleased",
+      "source": "changelog_changelog",
+      "target": "changelog_v0_1_0",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L73",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "changelog_v0_1_0",
       "target": "changelog_c0_review_2026_09_25",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L83",
+      "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35879,6 +35898,18 @@
       "_origin": "ast"
     },
     {
+      "source": "changelog_v0_1_2_2026_09_28",
+      "target": "engine_tool_rich_present",
+      "relation": "references",
+      "context": "rich_present",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "CHANGELOG.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "changelog_v0_1_1_2026_09_28_counsel_ratified_expansion",
       "target": "desktop_src_components_shared_unavailable",
       "relation": "references",
@@ -35886,7 +35917,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L14",
+      "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35898,19 +35929,19 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L59",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "changelog_0_1_0_unreleased",
+      "source": "changelog_v0_1_0",
       "target": "engine_tool_rich_present",
       "relation": "references",
       "context": "rich_present",
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L68",
+      "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35922,7 +35953,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L90",
+      "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35934,7 +35965,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L109",
+      "source_location": "L120",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35946,7 +35977,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L120",
+      "source_location": "L131",
       "weight": 1.0,
       "_origin": "ast"
     },
