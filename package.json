@@ -14,7 +14,7 @@
     "uplot": "1.6.32"
   },
   "devDependencies": {
-    "esbuild": "0.25.10",
+    "esbuild": "0.28.2",
     "jsdom": "27.0.0",
     "react": "19.2.7",
     "react-dom": "19.2.7"
