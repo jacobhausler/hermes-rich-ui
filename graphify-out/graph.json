@@ -98,6 +98,7 @@
     "tests/test_placeholder.py",
     "tests/test_public_strings.py",
     "tests/test_render_smoke.mjs",
+    "tests/test_requires_hermes.py",
     "tests/test_skill_docs.py",
     "tests/test_store.py",
     "tests/test_synth_admission.py",
@@ -7551,6 +7552,58 @@
       "_origin": "ast"
     },
     {
+      "id": "tests_test_requires_hermes",
+      "label": "test_requires_hermes.py",
+      "file_type": "code",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_requires_hermes_check",
+      "label": "check()",
+      "file_type": "code",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L30",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_requires_hermes_read_requires_hermes",
+      "label": "read_requires_hermes()",
+      "file_type": "code",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L37",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_requires_hermes_local_version_tuple",
+      "label": "_local_version_tuple()",
+      "file_type": "code",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L50",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_requires_hermes_local_version_satisfies",
+      "label": "_local_version_satisfies()",
+      "file_type": "code",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L64",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_requires_hermes_rationale_2",
+      "label": "Gate the plugin.yaml requires_hermes spec against core's real comparator. Core…",
+      "file_type": "rationale",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L2",
+      "_origin": "ast"
+    },
+    {
       "id": "tests_test_skill_docs",
       "label": "test_skill_docs.py",
       "file_type": "code",
@@ -8864,12 +8917,21 @@
       "_origin": "ast"
     },
     {
+      "id": "changelog_unreleased",
+      "label": "Unreleased",
+      "file_type": "document",
+      "node_kind": "heading",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
       "id": "changelog_v0_1_2_2026_09_28",
       "label": "v0.1.2 — 2026-09-28",
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L5",
+      "source_location": "L10",
       "_origin": "ast"
     },
     {
@@ -8878,7 +8940,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L16",
+      "source_location": "L21",
       "_origin": "ast"
     },
     {
@@ -8887,7 +8949,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L41",
+      "source_location": "L46",
       "_origin": "ast"
     },
     {
@@ -8896,7 +8958,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L52",
+      "source_location": "L57",
       "_origin": "ast"
     },
     {
@@ -8905,7 +8967,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L73",
+      "source_location": "L78",
       "_origin": "ast"
     },
     {
@@ -8914,7 +8976,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "CHANGELOG.md",
-      "source_location": "L94",
+      "source_location": "L99",
       "_origin": "ast"
     },
     {
@@ -10808,6 +10870,14 @@
     {
       "id": "ref_node_os",
       "label": "ref_node_os",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "hermes_cli_plugins_manifest",
+      "label": "hermes_cli_plugins_manifest",
       "file_type": "concept",
       "type": "external",
       "external": true,
@@ -27832,6 +27902,145 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_requires_hermes",
+      "target": "re",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes",
+      "target": "sys",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes",
+      "target": "tests_test_requires_hermes_check",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes",
+      "target": "tests_test_requires_hermes_read_requires_hermes",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes",
+      "target": "tests_test_requires_hermes_local_version_tuple",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes",
+      "target": "tests_test_requires_hermes_local_version_satisfies",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes",
+      "target": "hermes_cli_plugins_manifest",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes",
+      "target": "os",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes",
+      "target": "shutil",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L91",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes_local_version_satisfies",
+      "target": "tests_test_requires_hermes_local_version_tuple",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes",
+      "target": "tests_test_requires_hermes_local_version_satisfies",
+      "relation": "indirect_call",
+      "context": "assignment",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_requires_hermes_rationale_2",
+      "target": "tests_test_requires_hermes",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_requires_hermes.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_skill_docs",
       "target": "json",
       "relation": "imports",
@@ -31392,7 +31601,7 @@
     },
     {
       "source": "changelog_changelog",
-      "target": "changelog_v0_1_2_2026_09_28",
+      "target": "changelog_unreleased",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
@@ -31402,11 +31611,21 @@
     },
     {
       "source": "changelog_changelog",
+      "target": "changelog_v0_1_2_2026_09_28",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CHANGELOG.md",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "changelog_changelog",
       "target": "changelog_v0_1_1_2026_09_28_counsel_ratified_expansion",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L16",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -31416,7 +31635,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L41",
+      "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -31426,7 +31645,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L52",
+      "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -31436,7 +31655,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L73",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -31446,7 +31665,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CHANGELOG.md",
-      "source_location": "L94",
+      "source_location": "L99",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35905,7 +36124,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L9",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35917,7 +36136,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L25",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35929,7 +36148,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L70",
+      "source_location": "L75",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35941,7 +36160,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L79",
+      "source_location": "L84",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35953,7 +36172,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L101",
+      "source_location": "L106",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35965,7 +36184,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L120",
+      "source_location": "L125",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -35977,7 +36196,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "CHANGELOG.md",
-      "source_location": "L131",
+      "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast"
     },
