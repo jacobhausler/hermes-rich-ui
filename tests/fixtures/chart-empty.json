@@ -1,0 +1,11 @@
+{
+ "kind": "line",
+ "title": "Nothing here",
+ "caveat": "Feed returned no rows.",
+ "series": [
+  {
+   "label": "x",
+   "data": []
+  }
+ ]
+}

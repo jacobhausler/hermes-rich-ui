@@ -1,0 +1,111 @@
+{
+ "title": "Offers",
+ "pageSize": 5,
+ "columns": [
+  {
+   "key": "city",
+   "label": "City",
+   "type": "text"
+  },
+  {
+   "key": "rent",
+   "label": "Rent",
+   "type": "currency"
+  },
+  {
+   "key": "vacancy",
+   "label": "Vacancy",
+   "type": "percent",
+   "precision": 1
+  },
+  {
+   "key": "seen",
+   "label": "Seen",
+   "type": "date"
+  },
+  {
+   "key": "score",
+   "label": "Score",
+   "type": "number",
+   "precision": 2,
+   "unit": "pts"
+  },
+  {
+   "key": "src",
+   "label": "Sources",
+   "type": "sources"
+  }
+ ],
+ "rows": [
+  {
+   "city": "Austin",
+   "rent": 1750,
+   "vacancy": 6.25,
+   "seen": "2026-09-01",
+   "score": 3.5,
+   "src": [
+    "s1"
+   ]
+  },
+  {
+   "city": "Denver",
+   "rent": null,
+   "vacancy": 5.0,
+   "seen": "2026-08-15",
+   "score": null,
+   "src": [
+    "s1",
+    "s2"
+   ]
+  },
+  {
+   "city": "Boise",
+   "rent": 1500,
+   "vacancy": null,
+   "seen": "2026-09-10",
+   "score": 2,
+   "src": []
+  },
+  {
+   "city": "Reno",
+   "rent": 1620.5,
+   "vacancy": 7.75,
+   "seen": "2026-07-30",
+   "score": 4.25,
+   "src": [
+    "s2"
+   ]
+  },
+  {
+   "city": "Tulsa",
+   "rent": 990,
+   "vacancy": 9.1,
+   "seen": null,
+   "score": 1,
+   "src": [
+    "s3"
+   ]
+  },
+  {
+   "city": "Omaha",
+   "rent": 1100,
+   "vacancy": 4.4,
+   "seen": "2026-09-20",
+   "score": 2.75,
+   "src": [
+    "s1"
+   ]
+  },
+  {
+   "city": "Fargo",
+   "rent": 950,
+   "vacancy": 3.2,
+   "seen": "2026-06-01",
+   "score": 1.5,
+   "src": [
+    "s2",
+    "s3"
+   ]
+  }
+ ]
+}

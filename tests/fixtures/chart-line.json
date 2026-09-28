@@ -1,0 +1,43 @@
+{
+ "kind": "line",
+ "title": "Daily active seats",
+ "xLabel": "Date",
+ "yLabel": "Seats",
+ "caveat": "Gap on 2026-09-03 = telemetry outage.",
+ "series": [
+  {
+   "label": "prod",
+   "data": [
+    {
+     "x": "2026-09-01T00:00:00Z",
+     "y": 10
+    },
+    {
+     "x": "2026-09-02T00:00:00Z",
+     "y": 12
+    },
+    {
+     "x": "2026-09-03T00:00:00Z",
+     "y": null
+    },
+    {
+     "x": "2026-09-04T00:00:00Z",
+     "y": 15
+    }
+   ]
+  },
+  {
+   "label": "staging",
+   "data": [
+    {
+     "x": "2026-09-01T00:00:00Z",
+     "y": 2
+    },
+    {
+     "x": "2026-09-04T00:00:00Z",
+     "y": 3
+    }
+   ]
+  }
+ ]
+}

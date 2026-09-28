@@ -1,0 +1,55 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  # Floor: v2026.9.24 (requires_hermes in plugin.yaml). Release scheme is date
+  # tags; v0.21.x exists only as abandoned rc/canary tags, so the measured floor
+  # is the date tag the plugin was verified against.
+  HERMES_PIN: f97608f178d1ffeca59860195ab7da295f7c8e5f
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install JS deps (lockfile-pinned)
+        run: npm ci
+
+      - name: Build desktop bundle
+        run: node scripts/build.mjs
+
+      - name: Test suite (python + node, serial)
+        run: python3 scripts/suite.py . out
+
+      - name: Committed bundle must equal a fresh build
+        run: git diff --exit-code desktop/plugin.js
+
+      - name: Desktop half parses as ESM
+        run: cp desktop/plugin.js /tmp/plugin.check.mjs && node --check /tmp/plugin.check.mjs
+
+      - name: Checkout pinned hermes-agent
+        run: |
+          git clone --filter=blob:none https://github.com/NousResearch/hermes-agent /tmp/hermes-agent
+          git -C /tmp/hermes-agent checkout "$HERMES_PIN"
+
+      - name: Install pinned hermes (editable)
+        run: pip install -e /tmp/hermes-agent
+
+      - name: Validate plugin against pinned hermes
+        run: hermes plugins validate .
+
+      - name: Scrub audit — publish tree must build with 0 private-string hits
+        run: python3 scripts/make_public.py /tmp/public-tree

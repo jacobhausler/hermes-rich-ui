@@ -1,0 +1,21 @@
+// Component registry for the hermes-rich-ui/1 catalog (18 types). Wrapped in ../index.mjs.
+import { Card } from './card.mjs'
+import { Stack } from './stack.mjs'
+import { Grid } from './grid.mjs'
+import { Divider } from './divider.mjs'
+import { Tabs } from './tabs.mjs'
+import { Accordion } from './accordion.mjs'
+import { Heading } from './heading.mjs'
+import { Text } from './text.mjs'
+import { Callout } from './callout.mjs'
+import { Badge } from './badge.mjs'
+import { Metric } from './metric.mjs'
+import { Progress } from './progress.mjs'
+import { KeyValueList } from './keyvaluelist.mjs'
+import { Image } from './image.mjs'
+import { DataTable } from './table.mjs'
+import { Chart } from './chart.mjs'
+import { Timeline } from './timeline.mjs'
+import { SourceList } from './sourcelist.mjs'
+
+export const components = { Card, Stack, Grid, Divider, Tabs, Accordion, Heading, Text, Callout, Badge, Metric, Progress, KeyValueList, Image, DataTable, Chart, Timeline, SourceList }

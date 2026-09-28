@@ -1,0 +1,29 @@
+{
+ "kind": "scatter",
+ "title": "Latency vs batch size",
+ "xLabel": "Batch",
+ "yLabel": "p50 latency",
+ "unit": "ms",
+ "caveat": "Single host, single run \u2014 no fitted line.",
+ "series": [
+  {
+   "label": "sglang",
+   "data": [
+    {
+     "x": 8,
+     "y": 120,
+     "label": "b8"
+    },
+    {
+     "x": 1,
+     "y": 40,
+     "label": "b1"
+    },
+    {
+     "x": 4,
+     "y": 80
+    }
+   ]
+  }
+ ]
+}

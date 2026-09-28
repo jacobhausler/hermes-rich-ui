@@ -1,0 +1,14 @@
+*.log
+/tmp/
+node_modules
+node_modules/
+out/
+out-desc/
+shots/
+tests/.suite-home/
+tests/.public-scratch/
+# Knowledge graph: commit graph.json + GRAPH_REPORT.md, gitignore the rest of graphify-out/
+graphify-out/*
+!graphify-out/graph.json
+!graphify-out/GRAPH_REPORT.md
+pub-scrub-check/

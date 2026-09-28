@@ -1,0 +1,59 @@
+{
+  "surfaceId": "ru-0123456789ab",
+  "catalogId": "hermes-rich-ui/1",
+  "components": [
+    { "id": "root", "component": "Card", "title": { "path": "/data/title" }, "subtitle": "all 18 types", "sourceIds": ["s1"], "children": ["h1", "stack", "grid", "div1", "tabs", "acc", "kv", "img", "table", "chart", "tl", "src"] },
+    { "id": "h1", "component": "Heading", "text": "Fixture heading", "level": 2, "accessibility": { "label": "fixture heading" } },
+    { "id": "stack", "component": "Stack", "direction": "horizontal", "gap": "sm", "children": ["t1", "co", "bd"] },
+    { "id": "t1", "component": "Text", "text": { "path": "/data/note" }, "tone": "muted", "sourceIds": ["s1", "s2"] },
+    { "id": "co", "component": "Callout", "title": "Heads up", "text": { "path": "/data/note" }, "tone": "caution" },
+    { "id": "bd", "component": "Badge", "label": { "path": "/data/status" }, "tone": "success" },
+    { "id": "grid", "component": "Grid", "columns": 3, "children": ["m1", "m2", "m3", "pg1", "pg2"] },
+    { "id": "m1", "component": "Metric", "label": "Median", "value": { "path": "/data/median" }, "format": "currency", "precision": 2, "sourceIds": ["s2"] },
+    { "id": "m2", "component": "Metric", "label": "Share", "value": { "path": "/data/share" }, "format": "percent", "precision": 1 },
+    { "id": "m3", "component": "Metric", "label": "Missing", "value": { "path": "/data/missing" }, "unit": "kg" },
+    { "id": "pg1", "component": "Progress", "label": "Done", "current": { "path": "/data/done" }, "total": { "path": "/data/total" } },
+    { "id": "pg2", "component": "Progress", "label": "Unknown", "current": { "path": "/data/done" }, "total": { "path": "/data/missing" } },
+    { "id": "div1", "component": "Divider", "label": "details" },
+    { "id": "tabs", "component": "Tabs", "tabs": [ { "title": "One", "child": "tab1" }, { "title": { "path": "/data/tabTitle" }, "child": "tab2" } ] },
+    { "id": "tab1", "component": "Text", "text": "tab one body" },
+    { "id": "tab2", "component": "Text", "text": "tab two body" },
+    { "id": "acc", "component": "Accordion", "items": [ { "title": "Open item", "child": "acc1", "open": true }, { "title": "Closed item", "child": "acc2" } ] },
+    { "id": "acc1", "component": "Text", "text": "accordion body A" },
+    { "id": "acc2", "component": "Text", "text": "accordion body B" },
+    { "id": "kv", "component": "KeyValueList", "items": { "path": "/data/kv" } },
+    { "id": "img", "component": "Image", "src": "https://example.com/x.png", "alt": "example image", "caption": "an example", "maxHeight": 200 },
+    { "id": "table", "component": "DataTable", "columns": [ { "key": "a", "label": "A", "type": "text" } ], "rows": { "path": "/data/rows" } },
+    { "id": "chart", "component": "Chart", "kind": "bar", "series": [ { "label": "s", "data": { "path": "/data/bars" } } ] },
+    { "id": "tl", "component": "Timeline", "title": "History", "items": { "path": "/data/events" } },
+    { "id": "src", "component": "SourceList", "title": "Sources" }
+  ],
+  "dataModel": {
+    "data": {
+      "title": "Fixture card",
+      "note": "hello\nworld",
+      "status": "ok",
+      "median": 1234.5,
+      "share": 12.345,
+      "missing": null,
+      "done": 3,
+      "total": 4,
+      "tabTitle": "Two",
+      "kv": [ { "label": "k1", "value": "v1", "sourceIds": ["s1"] }, { "label": "k2", "value": null } ],
+      "rows": [ { "a": "r1" } ],
+      "bars": [ { "label": "x", "value": 1 } ],
+      "events": [ { "date": "2026-09-25", "label": "published", "status": "done", "sourceIds": ["s2"] }, { "label": "next", "status": "pending" } ]
+    },
+    "meta": {
+      "summary": "Plain-text summary of the fixture.",
+      "authored_at": "2026-09-25T10:11:12Z",
+      "dataset": { "id": "fixture", "revision": 1, "observed_at": null, "published_at": "2026-09-25T10:11:12Z" },
+      "sources": [
+        { "id": "s1", "kind": "web", "label": "Example site", "url": "https://example.com/", "accessed_at": "2026-09-25", "note": "primary" },
+        { "id": "s2", "kind": "tool", "label": "Local computation" }
+      ],
+      "derivations": []
+    }
+  },
+  "metadata": { "extensions": { "hermes_policy": "embedded" } }
+}
