@@ -1,7 +1,146 @@
 {
-  "hyperedges": [],
   "input_tokens": 0,
   "output_tokens": 0,
+  "failed_sources": [],
+  "extracted_sources": [
+    "__init__.py",
+    "catalog/hermes-rich-ui.catalog.json",
+    "dashboard/manifest.json",
+    "dashboard/plugin_api.py",
+    "desktop/src/card.mjs",
+    "desktop/src/components/_shared.mjs",
+    "desktop/src/components/accordion.mjs",
+    "desktop/src/components/asof.mjs",
+    "desktop/src/components/badge.mjs",
+    "desktop/src/components/barlist.mjs",
+    "desktop/src/components/callout.mjs",
+    "desktop/src/components/card.mjs",
+    "desktop/src/components/chart.mjs",
+    "desktop/src/components/checklist.mjs",
+    "desktop/src/components/chipset.mjs",
+    "desktop/src/components/codeblock.mjs",
+    "desktop/src/components/divider.mjs",
+    "desktop/src/components/gallery.mjs",
+    "desktop/src/components/grid.mjs",
+    "desktop/src/components/heading.mjs",
+    "desktop/src/components/heatmap.mjs",
+    "desktop/src/components/image.mjs",
+    "desktop/src/components/index.mjs",
+    "desktop/src/components/keyvaluelist.mjs",
+    "desktop/src/components/metric.mjs",
+    "desktop/src/components/progress.mjs",
+    "desktop/src/components/sourcelist.mjs",
+    "desktop/src/components/sparkline.mjs",
+    "desktop/src/components/stack.mjs",
+    "desktop/src/components/table.mjs",
+    "desktop/src/components/tabs.mjs",
+    "desktop/src/components/text.mjs",
+    "desktop/src/components/timeline.mjs",
+    "desktop/src/index.mjs",
+    "desktop/src/lower.mjs",
+    "engine/__init__.py",
+    "engine/admission.py",
+    "engine/store.py",
+    "engine/tool.py",
+    "examples/explanation/present-args.json",
+    "examples/explanation/surface.json",
+    "examples/research/present-args.json",
+    "examples/research/surface.json",
+    "package.json",
+    "scripts/build.mjs",
+    "scripts/make_public.py",
+    "scripts/screenshots/crop.py",
+    "scripts/screenshots/probe-legend.mjs",
+    "scripts/screenshots/round.sh",
+    "scripts/screenshots/ru-cdp.mjs",
+    "scripts/screenshots/ru-shots.sh",
+    "scripts/screenshots/seed_gallery.py",
+    "scripts/suite.py",
+    "tests/_lane_backend.py",
+    "tests/e2e_present.py",
+    "tests/fixtures/chart-area.json",
+    "tests/fixtures/chart-bar.json",
+    "tests/fixtures/chart-empty.json",
+    "tests/fixtures/chart-histogram.json",
+    "tests/fixtures/chart-line.json",
+    "tests/fixtures/chart-range.json",
+    "tests/fixtures/chart-scatter.json",
+    "tests/fixtures/chart-waterfall.json",
+    "tests/fixtures/expansion-asof.json",
+    "tests/fixtures/expansion-checklist.json",
+    "tests/fixtures/expansion-chipset.json",
+    "tests/fixtures/expansion-codeblock.json",
+    "tests/fixtures/expansion-epack.json",
+    "tests/fixtures/expansion-gallery.json",
+    "tests/fixtures/expansion-microviz.json",
+    "tests/fixtures/sdk-loader.mjs",
+    "tests/fixtures/sdk-stub.mjs",
+    "tests/fixtures/surface-all-types.json",
+    "tests/fixtures/table-basic.json",
+    "tests/helpers/__init__.py",
+    "tests/helpers/admit.py",
+    "tests/helpers/fixtures-sdk-resolve.mjs",
+    "tests/helpers/microviz_checks.py",
+    "tests/helpers/render.mjs",
+    "tests/lanes/L1_admission_checks.py",
+    "tests/lanes/__init__.py",
+    "tests/test_admission.py",
+    "tests/test_api.py",
+    "tests/test_bundle_scan.mjs",
+    "tests/test_chart.mjs",
+    "tests/test_components.mjs",
+    "tests/test_e2e_record.mjs",
+    "tests/test_expansion_integration.mjs",
+    "tests/test_fixtures_admit.py",
+    "tests/test_hostile_admission.py",
+    "tests/test_hostile_render.mjs",
+    "tests/test_lower.mjs",
+    "tests/test_placeholder.py",
+    "tests/test_public_strings.py",
+    "tests/test_render_smoke.mjs",
+    "tests/test_skill_docs.py",
+    "tests/test_store.py",
+    "tests/test_synth_admission.py",
+    "tests/test_synth_chart.mjs",
+    "tests/test_synth_fmt.mjs",
+    "tests/test_synth_harness.mjs",
+    "tests/test_synth_layout.mjs",
+    "tests/test_synth_lists.mjs",
+    "tests/test_synth_lists.py",
+    "tests/test_synth_media.mjs",
+    "tests/test_synth_media_admission.py",
+    "tests/test_synth_microviz.mjs",
+    "tests/test_synth_microviz_admission.py",
+    "tests/test_synth_mono.mjs",
+    "tests/test_synth_mono.py",
+    "tests/test_synth_table.mjs",
+    "tests/test_synth_text_enums.mjs",
+    "tests/test_table.mjs",
+    "tests/test_tool.py",
+    ".github/ISSUE_TEMPLATE/bug_report.md",
+    ".github/ISSUE_TEMPLATE/feature_request.md",
+    ".github/pull_request_template.md",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "INSTALL.md",
+    "MANIFEST-L1-admission.md",
+    "MANIFEST-L2-chart.md",
+    "MANIFEST-L3-microviz.md",
+    "MANIFEST-L4-lists.md",
+    "MANIFEST-L5-mono.md",
+    "MANIFEST-L6-media.md",
+    "MANIFEST-L7-epack.md",
+    "README.md",
+    "docs/ARCHITECTURE.md",
+    "docs/CONTRACTS.md",
+    "docs/DECISIONS.md",
+    "docs/REVIEW-C0.md",
+    "skill/SKILL.md",
+    "skill/debugging/SKILL.md",
+    "skill/maintaining/SKILL.md",
+    "skill/references/recipes.md"
+  ],
   "nodes": [
     {
       "id": "init",
@@ -10275,8 +10414,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "importlib_util",
@@ -10284,8 +10422,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "json",
@@ -10293,8 +10430,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "sys",
@@ -10302,8 +10438,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "pathlib",
@@ -10311,8 +10446,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "fastapi",
@@ -10320,8 +10454,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "fastapi_responses",
@@ -10329,8 +10462,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "ref_hermes_plugin_sdk",
@@ -10338,8 +10470,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "copy",
@@ -10347,8 +10478,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "math",
@@ -10356,8 +10486,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "os",
@@ -10365,8 +10494,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "re",
@@ -10374,8 +10502,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "unicodedata",
@@ -10383,8 +10510,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "datetime",
@@ -10392,8 +10518,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "urllib_parse",
@@ -10401,8 +10526,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "typing",
@@ -10410,8 +10534,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "logging",
@@ -10419,8 +10542,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "ref_node_fs",
@@ -10428,8 +10550,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "ref_node_crypto",
@@ -10437,8 +10558,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "ref_node_url",
@@ -10446,8 +10566,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "argparse",
@@ -10455,8 +10574,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "fnmatch",
@@ -10464,8 +10582,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "shutil",
@@ -10473,8 +10590,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "subprocess",
@@ -10482,8 +10598,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "pil",
@@ -10491,8 +10606,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "time",
@@ -10500,8 +10614,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "tempfile",
@@ -10509,8 +10622,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "traceback",
@@ -10518,26 +10630,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
-    },
-    {
-      "id": "asyncio",
-      "label": "asyncio",
-      "file_type": "concept",
-      "type": "external",
-      "external": true,
-      "source_file": "",
-      "_origin": "semantic"
-    },
-    {
-      "id": "ref_node_test",
-      "label": "ref_node_test",
-      "file_type": "concept",
-      "type": "external",
-      "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "ref_node_assert",
@@ -10545,8 +10638,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "ref_node_module",
@@ -10554,26 +10646,7 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
-    },
-    {
-      "id": "ref_node_child_process",
-      "label": "ref_node_child_process",
-      "file_type": "concept",
-      "type": "external",
-      "external": true,
-      "source_file": "",
-      "_origin": "semantic"
-    },
-    {
-      "id": "ref_node_os",
-      "label": "ref_node_os",
-      "file_type": "concept",
-      "type": "external",
-      "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
     },
     {
       "id": "ref_node_path",
@@ -10581,8 +10654,39 @@
       "file_type": "concept",
       "type": "external",
       "external": true,
-      "source_file": "",
-      "_origin": "semantic"
+      "source_file": ""
+    },
+    {
+      "id": "asyncio",
+      "label": "asyncio",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "ref_node_test",
+      "label": "ref_node_test",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "ref_node_child_process",
+      "label": "ref_node_child_process",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "ref_node_os",
+      "label": "ref_node_os",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
     },
     {
       "id": "tests_helpers_render_assert",
