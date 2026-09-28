@@ -6,11 +6,13 @@ import { common, text, V } from './_shared.mjs'
 export const Tabs = ({ element, children }) => {
   const p = element.props ?? {}
   const tabs = Array.isArray(p.tabs) ? p.tabs : []
-  const [active, setActive] = useState(0)
   const kids = Children.toArray(children)
+  // E5 defaultTab?: integer seed tab, clamped into range (negative → 0, past-end → last).
+  const seeded = Number.isInteger(p.defaultTab) ? Math.max(0, Math.min(p.defaultTab, Math.max(0, kids.length - 1))) : 0
+  const [active, setActive] = useState(seeded)
   const idx = Math.min(active, Math.max(0, kids.length - 1))
   return jsxs('div', {
-    ...common(element),
+    ...common(element, { 'data-ru-default-tab': Number.isInteger(p.defaultTab) ? seeded : undefined }),
     style: { display: 'flex', flexDirection: 'column', gap: 8 },
     children: [
       jsx('div', { role: 'tablist',

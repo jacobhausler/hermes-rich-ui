@@ -1,0 +1,22 @@
+{
+  "components": [
+    { "id": "root", "component": "Card", "title": "Checklist lane", "children": ["ck"] },
+    { "id": "ck", "component": "Checklist", "title": "Readiness", "showTally": true,
+      "items": [
+        { "label": "plan approved", "done": true },
+        { "label": "assets staged", "done": false },
+        { "label": "sign-off" }
+      ],
+      "sourceIds": ["s1"] }
+  ],
+  "dataModel": {
+    "data": {},
+    "meta": {
+      "summary": "Checklist fixture.",
+      "authored_at": "2026-09-25T10:11:12Z",
+      "dataset": { "id": "fixture", "revision": 1, "observed_at": null, "published_at": "2026-09-25T10:11:12Z" },
+      "sources": [ { "id": "s1", "kind": "web", "label": "Example site", "url": "https://example.com/" } ],
+      "derivations": []
+    }
+  }
+}

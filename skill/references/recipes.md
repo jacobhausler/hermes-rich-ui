@@ -123,3 +123,426 @@ templates.
   "derivations": []
 }
 ```
+
+## KPI trend row
+
+```json
+{
+  "title": "Throughput",
+  "summary": "Requests and error rate with renderer-computed trend strips.",
+  "components": [
+    {
+      "id": "root",
+      "component": "Card",
+      "title": "Throughput",
+      "children": [
+        "row",
+        "note"
+      ]
+    },
+    {
+      "id": "row",
+      "component": "Stack",
+      "direction": "horizontal",
+      "gap": "md",
+      "children": [
+        "m1",
+        "sp1",
+        "m2",
+        "sp2"
+      ]
+    },
+    {
+      "id": "m1",
+      "component": "Metric",
+      "label": "Requests",
+      "value": {
+        "path": "/data/rps"
+      },
+      "unit": "rps"
+    },
+    {
+      "id": "sp1",
+      "component": "Sparkline",
+      "values": [
+        900,
+        980,
+        1010,
+        null,
+        1150,
+        1240
+      ]
+    },
+    {
+      "id": "m2",
+      "component": "Metric",
+      "label": "Errors",
+      "value": {
+        "path": "/data/err"
+      },
+      "unit": "%",
+      "precision": 1
+    },
+    {
+      "id": "sp2",
+      "component": "Sparkline",
+      "tone": "danger",
+      "direction": "bar",
+      "series": [
+        0.9,
+        0.8,
+        0.6,
+        null,
+        0.5,
+        0.4
+      ]
+    },
+    {
+      "id": "note",
+      "component": "Text",
+      "text": "Trend chips are computed first-vs-last by the renderer.",
+      "variant": "caption"
+    }
+  ],
+  "data": {
+    "rps": 1240,
+    "rps_series": [
+      900,
+      980,
+      1010,
+      null,
+      1150,
+      1240
+    ],
+    "err": 0.4,
+    "err_series": [
+      0.9,
+      0.8,
+      0.6,
+      null,
+      0.5,
+      0.4
+    ]
+  },
+  "sources": [
+    {
+      "id": "s1",
+      "kind": "web",
+      "label": "Example metrics",
+      "url": "https://example.com/metrics",
+      "accessed_at": "2026-09-26T10:00:00Z"
+    }
+  ],
+  "derivations": []
+}
+```
+
+## Ranked list
+
+> A 4–12-row ranked list is a **BarList**, not a Chart or a DataTable; anything
+> already tabular (filter/paging/sources columns) stays a DataTable.
+
+```json
+{
+  "title": "Top traffic sources",
+  "summary": "Sessions by source, ranked; the null row renders unavailable, never 0.",
+  "components": [
+    {
+      "id": "root",
+      "component": "Card",
+      "title": "Top traffic sources",
+      "children": [
+        "bl",
+        "src"
+      ]
+    },
+    {
+      "id": "bl",
+      "component": "BarList",
+      "items": {
+        "path": "/data/rows"
+      },
+      "unit": " sessions",
+      "sort": "desc",
+      "sourceIds": [
+        "s1"
+      ]
+    },
+    {
+      "id": "src",
+      "component": "SourceList"
+    }
+  ],
+  "data": {
+    "rows": [
+      {
+        "label": "Search",
+        "value": 4820,
+        "sourceIds": [
+          "s1"
+        ]
+      },
+      {
+        "label": "Direct",
+        "value": 2310,
+        "sourceIds": [
+          "s1"
+        ]
+      },
+      {
+        "label": "Referral",
+        "value": null,
+        "sourceIds": [
+          "s1"
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "s1",
+      "kind": "web",
+      "label": "Example metrics",
+      "url": "https://example.com/metrics",
+      "accessed_at": "2026-09-26T10:00:00Z"
+    }
+  ],
+  "derivations": []
+}
+```
+
+## Day x lane matrix
+
+```json
+{
+  "title": "Build minutes by day and lane",
+  "summary": "HeatMap matrix; null cells hatch as an em-dash, never a guessed color.",
+  "components": [
+    {
+      "id": "root",
+      "component": "Card",
+      "title": "Build minutes by day and lane",
+      "children": [
+        "hm"
+      ]
+    },
+    {
+      "id": "hm",
+      "component": "HeatMap",
+      "rows": {
+        "path": "/data/rows"
+      },
+      "cols": {
+        "path": "/data/cols"
+      },
+      "cells": {
+        "path": "/data/cells"
+      },
+      "unit": "min",
+      "sourceIds": [
+        "s1"
+      ]
+    }
+  ],
+  "data": {
+    "rows": [
+      {
+        "label": "Mon"
+      },
+      {
+        "label": "Tue"
+      },
+      {
+        "label": "Wed"
+      }
+    ],
+    "cols": [
+      {
+        "label": "lint"
+      },
+      {
+        "label": "test"
+      },
+      {
+        "label": "build"
+      }
+    ],
+    "cells": [
+      {
+        "row": "Mon",
+        "col": "lint",
+        "value": 2
+      },
+      {
+        "row": "Mon",
+        "col": "test",
+        "value": 9
+      },
+      {
+        "row": "Mon",
+        "col": "build",
+        "value": 5
+      },
+      {
+        "row": "Tue",
+        "col": "lint",
+        "value": 1
+      },
+      {
+        "row": "Tue",
+        "col": "test",
+        "value": null
+      },
+      {
+        "row": "Wed",
+        "col": "build",
+        "value": 7
+      }
+    ]
+  },
+  "sources": [
+    {
+      "id": "s1",
+      "kind": "web",
+      "label": "Example metrics",
+      "url": "https://example.com/metrics",
+      "accessed_at": "2026-09-26T10:00:00Z"
+    }
+  ],
+  "derivations": []
+}
+```
+
+## Show the code
+
+```json
+{
+  "title": "Reproduce the failure",
+  "summary": "Exact config and command output, verbatim, with the source cited.",
+  "components": [
+    {
+      "id": "root",
+      "component": "Card",
+      "children": [
+        "cfg",
+        "out",
+        "src"
+      ]
+    },
+    {
+      "id": "cfg",
+      "component": "CodeBlock",
+      "code": {
+        "path": "/data/config"
+      },
+      "caption": "nginx.conf fragment as shipped",
+      "language": "nginx",
+      "sourceIds": [
+        "s1"
+      ]
+    },
+    {
+      "id": "out",
+      "component": "CodeBlock",
+      "code": {
+        "path": "/data/output"
+      },
+      "caption": "verbatim stdout",
+      "language": "text",
+      "showLines": true
+    },
+    {
+      "id": "src",
+      "component": "SourceList"
+    }
+  ],
+  "data": {
+    "config": "location /api {\n    proxy_pass http://127.0.0.1:9000;\n}",
+    "output": "$ curl -s https://example.com/health\n{\"status\":\"degraded\"}"
+  },
+  "sources": [
+    {
+      "id": "s1",
+      "kind": "file",
+      "label": "Config as shipped",
+      "accessed_at": "2026-09-27T10:00:00Z"
+    }
+  ],
+  "derivations": []
+}
+```
+
+## Evidence strip
+
+```json
+{
+  "title": "Menu board evidence",
+  "summary": "Two photos of the posted menu, observed 2026-09-27T14:05Z.",
+  "components": [
+    {
+      "id": "root",
+      "component": "Card",
+      "children": [
+        "gal",
+        "asof",
+        "src"
+      ]
+    },
+    {
+      "id": "gal",
+      "component": "ImageGallery",
+      "title": "Posted menu",
+      "columns": 2,
+      "items": {
+        "path": "/data/tiles"
+      },
+      "sourceIds": [
+        "s1"
+      ]
+    },
+    {
+      "id": "asof",
+      "component": "AsOf",
+      "observedAt": {
+        "path": "/data/observed"
+      },
+      "note": "Prices read from the posted board; not an out-the-door quote."
+    },
+    {
+      "id": "src",
+      "component": "SourceList"
+    }
+  ],
+  "data": {
+    "tiles": [
+      {
+        "src": "https://example.com/menu-1.jpg",
+        "alt": "Menu board, left half",
+        "caption": "Mains",
+        "sourceIds": [
+          "s1"
+        ]
+      },
+      {
+        "src": "https://example.com/menu-2.jpg",
+        "alt": "Menu board, right half",
+        "sourceIds": [
+          "s1"
+        ]
+      }
+    ],
+    "observed": "2026-09-27T14:05:00Z"
+  },
+  "sources": [
+    {
+      "id": "s1",
+      "kind": "web",
+      "label": "Menu page",
+      "url": "https://example.com/menu",
+      "accessed_at": "2026-09-27T14:05:00Z"
+    }
+  ],
+  "derivations": []
+}
+```
+

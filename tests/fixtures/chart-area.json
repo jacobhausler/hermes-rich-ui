@@ -1,0 +1,26 @@
+{
+ "kind": "area",
+ "title": "Requests over time",
+ "yLabel": "Requests",
+ "unit": "per min",
+ "caveat": "Sampled once per minute; gaps are missing scrapes, not zero traffic.",
+ "series": [
+  {
+   "label": "edge",
+   "data": [
+    { "x": "2026-09-01T00:00:00Z", "y": 10 },
+    { "x": "2026-09-02T00:00:00Z", "y": 12 },
+    { "x": "2026-09-03T00:00:00Z", "y": null },
+    { "x": "2026-09-04T00:00:00Z", "y": 15 }
+   ]
+  },
+  {
+   "label": "origin",
+   "data": [
+    { "x": "2026-09-01T00:00:00Z", "y": 2 },
+    { "x": "2026-09-02T00:00:00Z", "y": null },
+    { "x": "2026-09-04T00:00:00Z", "y": 3 }
+   ]
+  }
+ ]
+}

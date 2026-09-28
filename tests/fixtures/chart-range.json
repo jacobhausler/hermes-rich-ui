@@ -1,0 +1,25 @@
+{
+ "kind": "range",
+ "title": "Asking price band by city",
+ "yLabel": "Price",
+ "unit": "USD",
+ "caveat": "Band endpoints as published; the missing band renders unavailable, never a midpoint.",
+ "series": [
+  {
+   "label": "houses",
+   "data": [
+    { "label": "Austin", "low": 350000, "high": 520000 },
+    { "label": "Denver", "low": 410000, "high": 480000 },
+    { "label": "Boise", "low": null, "high": null }
+   ]
+  },
+  {
+   "label": "condos",
+   "data": [
+    { "label": "Austin", "low": 280000, "high": 390000 },
+    { "label": "Denver", "low": null, "high": null },
+    { "label": "Boise", "low": 220000, "high": 310000 }
+   ]
+  }
+ ]
+}

@@ -3,7 +3,7 @@
 **Publish rich, read-only answer cards from Hermes agents.** One `rich_present`
 tool call turns an agent's real, gathered data — table rows, chart series,
 metrics, a dated sequence, cited sources — into an A2UI v1.0 `createSurface`
-record against the read-only `hermes-rich-ui/1` catalog (18 component types).
+record against the read-only `hermes-rich-ui/1` catalog (26 component types).
 The agent's reply carries a `::richui{id="<card_id>"}` directive that the Hermes
 desktop transcript expands into an inline card, rendered by the zod-stubbed
 `Renderer` from `@json-render/react` 0.21.0 with uPlot 1.6.32 charts. Nothing
@@ -77,7 +77,7 @@ returned directive line into their reply.
 
 ## Philosophy: read-only, evidence-first
 
-- 18 read-only component types. No forms, no actions, no scripts, no network
+- 26 read-only component types. No forms, no actions, no scripts, no network
   calls from the card. Local interaction (sort/filter/page, chart hover, tabs,
   expand) is built into the renderer, never authored in the spec.
 - The agent authors only content; the gateway mints identities, admits the
@@ -90,7 +90,8 @@ returned directive line into their reply.
   carry `derivations` with method and input paths. Fabricating series, prices,
   or history to fill a card is forbidden by the authoring contract
   (`skill/SKILL.md`).
-- Chart engine is one library: uPlot 1.6.32 (bar / line / histogram / scatter).
+- Chart engine is one library: uPlot 1.6.32 (bar / line / histogram / scatter /
+  area / waterfall / range, plus the Sparkline / BarList / HeatMap micro-viz).
 
 ## Security posture
 
@@ -112,28 +113,36 @@ returned directive line into their reply.
 - **No self-updater.** Nothing downloads or swaps code at runtime. The
   committed bundle is the artifact, and CI rebuilds it and fails on any diff.
 
-## The 18 types (catalog `hermes-rich-ui/1`)
+## The 26 types (catalog `hermes-rich-ui/1`)
 
 | # | component | purpose |
 |---|---|---|
-| 1 | Card | the card itself: title, subtitle, children |
+| 1 | Card | the card itself: title, subtitle, footer, children |
 | 2 | Stack | vertical/horizontal arrangement |
 | 3 | Grid | 1–4 column layout |
-| 4 | Divider | section separation, optional label |
+| 4 | Divider | section separation, optional label, horizontal or vertical |
 | 5 | Tabs | switch between 1–8 child views |
 | 6 | Accordion | 1–12 expandable sections |
-| 7 | Heading | level 1–3 heading |
-| 8 | Text | plain explanatory text, tone/variant |
+| 7 | Heading | level 1–4 heading |
+| 8 | Text | plain explanatory text, tone/variant (incl. mono) |
 | 9 | Callout | takeaway, limit, or uncertainty |
 | 10 | Badge | compact categorical label |
-| 11 | Metric | one salient scalar (null ⇒ unavailable) |
-| 12 | Progress | completed/total, or indeterminate |
+| 11 | Metric | one salient scalar, optional renderer-computed delta vs `previous` (null ⇒ unavailable) |
+| 12 | Progress | completed/total with optional target tick, or indeterminate |
 | 13 | KeyValueList | compact label/value facts |
 | 14 | Image | https-only image with required alt |
-| 15 | DataTable | typed, sortable, pageable rows |
-| 16 | Chart | bar / line / histogram / scatter (uPlot) |
-| 17 | Timeline | dated or labeled sequence |
+| 15 | DataTable | typed, sortable (seedable `defaultSort`), pageable rows |
+| 16 | Chart | bar / line / histogram / scatter / area / waterfall / range (uPlot) |
+| 17 | Timeline | dated or labeled sequence (done/active/pending/failed) |
 | 18 | SourceList | evidence and provenance |
+| 19 | CodeBlock | verbatim code/config block, caption, optional line numbers |
+| 20 | Checklist | undated done/unchecked/unknown items with computed tally |
+| 21 | ChipSet | up to 24 compact chips in one wrap row |
+| 22 | AsOf | observed/published provenance stamps (never-fabricated ISO-8601) |
+| 23 | ImageGallery | up to 8 https-only evidence tiles in 1–4 columns |
+| 24 | Sparkline | inline KPI trend strip beside a Metric (trend chip computed) |
+| 25 | BarList | ranked list with inline bars (nulls sink last, never 0) |
+| 26 | HeatMap | rows × cols matrix (≤144 cells) with computed color ramp |
 
 Props are frozen in `docs/CONTRACTS.md` §2; authoring guidance lives in
 `skill/SKILL.md` with complete recipe examples in
@@ -141,7 +150,7 @@ Props are frozen in `docs/CONTRACTS.md` §2; authoring guidance lives in
 
 ## Where to go next
 
-- Authoring agents: start at [`skill/SKILL.md`](skill/SKILL.md), then the five
+- Authoring agents: start at [`skill/SKILL.md`](skill/SKILL.md), then the ten
   recipes in [`skill/references/recipes.md`](skill/references/recipes.md).
 - Installing: [`INSTALL.md`](INSTALL.md) (both halves + negative control).
 - Contributing / hacking on the repo: read [`AGENTS.md`](AGENTS.md) (laws,

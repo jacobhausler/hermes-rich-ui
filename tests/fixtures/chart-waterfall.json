@@ -1,0 +1,18 @@
+{
+ "kind": "waterfall",
+ "title": "Budget walk to net",
+ "yLabel": "Amount",
+ "unit": "USD",
+ "caveat": "Running baseline is computed by the renderer from the signed steps; only the total row is pinned to zero.",
+ "series": [
+  {
+   "label": "walk",
+   "data": [
+    { "label": "Revenue", "value": 100 },
+    { "label": "Costs", "value": -40 },
+    { "label": "Refunds", "value": 25 },
+    { "label": "Net", "value": null, "total": true }
+   ]
+  }
+ ]
+}

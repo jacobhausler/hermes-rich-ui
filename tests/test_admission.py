@@ -71,7 +71,7 @@ cat = load_catalog()
 check("catalog id", cat["catalogId"] == CATALOG_ID == "hermes-rich-ui/1")
 check("catalog $id", cat["$id"] == "https://hermes.local/a2ui/hermes-rich-ui/1/catalog.json")
 check("catalog protocolVersion", cat["protocolVersion"] == "1.0")
-check("catalog has 18 components", len(cat["components"]) == 18, len(cat["components"]))
+check("catalog has 26 components (v0.1.1 expansion)", len(cat["components"]) == 26, len(cat["components"]))
 check("catalog functions empty", cat["functions"] == {})
 check("catalog anyFunction false", cat["$defs"]["anyFunction"] is False)
 check("catalog anyComponent covers all", sorted(r["$ref"].rsplit("/", 1)[-1] for r in cat["$defs"]["anyComponent"]["oneOf"]) == sorted(cat["components"]))
@@ -80,8 +80,10 @@ check("every component closed + common props", all(
     s.get("additionalProperties") is False and {"id", "component", "accessibility", "sourceIds"} <= set(s["properties"])
     and "id" in s["required"] and "component" in s["required"] for s in cat["components"].values()))
 expected = ["Card", "Stack", "Grid", "Divider", "Tabs", "Accordion", "Heading", "Text", "Callout", "Badge", "Metric",
-            "Progress", "KeyValueList", "Image", "DataTable", "Chart", "Timeline", "SourceList"]
-check("catalog component names per CONTRACTS §2", sorted(cat["components"]) == sorted(expected))
+            "Progress", "KeyValueList", "Image", "DataTable", "Chart", "Timeline", "SourceList",
+            # v0.1.1 expansion (ratified counsel-0927): CONTRACTS §2 rev pending owner gate
+            "CodeBlock", "Checklist", "ChipSet", "AsOf", "ImageGallery", "Sparkline", "BarList", "HeatMap"]
+check("catalog component names (CONTRACTS §2 + v0.1.1 expansion)", sorted(cat["components"]) == sorted(expected))
 
 # ------------------------------------------------------------------ helpers
 check("pointer ~0 ~1 decoding", resolve_pointer({"a/b": {"c~d": 5}}, "/a~1b/c~0d") == (True, 5))

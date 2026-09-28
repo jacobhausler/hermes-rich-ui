@@ -1,0 +1,22 @@
+{
+  "components": [
+    { "id": "root", "component": "Card", "title": "Gallery lane", "children": ["gal"] },
+    { "id": "gal", "component": "ImageGallery", "title": "Evidence", "columns": 2, "sourceIds": ["s1"],
+      "items": { "path": "/data/tiles" } }
+  ],
+  "dataModel": {
+    "data": {
+      "tiles": [
+        { "src": "https://example.com/a.png", "alt": "first evidence", "caption": "panel A", "sourceIds": ["s1"] },
+        { "src": "https://example.com/b.png", "alt": "second evidence" }
+      ]
+    },
+    "meta": {
+      "summary": "ImageGallery fixture.",
+      "authored_at": "2026-09-25T10:11:12Z",
+      "dataset": { "id": "fixture", "revision": 1, "observed_at": null, "published_at": "2026-09-25T10:11:12Z" },
+      "sources": [ { "id": "s1", "kind": "web", "label": "Example site", "url": "https://example.com/" } ],
+      "derivations": []
+    }
+  }
+}

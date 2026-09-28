@@ -1,0 +1,16 @@
+{
+  "components": [
+    { "id": "root", "component": "Card", "title": "ChipSet lane", "children": ["cs"] },
+    { "id": "cs", "component": "ChipSet", "labels": { "path": "/data/labels" }, "tone": "info", "wrap": true, "sourceIds": ["s1"] }
+  ],
+  "dataModel": {
+    "data": { "labels": ["alpha", "beta", "alpha"] },
+    "meta": {
+      "summary": "ChipSet fixture.",
+      "authored_at": "2026-09-25T10:11:12Z",
+      "dataset": { "id": "fixture", "revision": 1, "observed_at": null, "published_at": "2026-09-25T10:11:12Z" },
+      "sources": [ { "id": "s1", "kind": "web", "label": "Example site", "url": "https://example.com/" } ],
+      "derivations": []
+    }
+  }
+}

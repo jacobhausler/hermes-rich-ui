@@ -56,6 +56,7 @@ MAX_DEPTH = 8
 MAX_COMPONENTS_BYTES = 64 * 1024
 MAX_DATA_MODEL_BYTES = 128 * 1024
 MAX_STRING = 4096
+MAX_CODE = 4096  # CodeBlock `code`, UTF-8 bytes of the resolved value
 MAX_DATA_DEPTH = 12
 MAX_SERIES = 4
 MAX_POINTS = 512
@@ -85,6 +86,16 @@ CONTAINER_CHILDREN = ("Card", "Stack", "Grid")  # `children: [...]`
 CONTAINER_TABS = "Tabs"                          # `tabs[].child`
 CONTAINER_ACCORDION = "Accordion"                # `items[].child`
 URL_KEYS = ("url", "src", "href")
+# E16 (L1): Chart kinds whose x axis is continuous (numbers or ISO-8601
+# timestamps). 'area' is the N7 kind (point shape == line); it shares the line
+# discipline.
+CONTINUOUS_X_KINDS = ("line", "area", "scatter")
+# E16 (L1): Kinds that honour the sortDesc prop (renderer sorts categories, L6).
+SORT_DESC_KINDS = ("bar", "histogram")
+# E17 (L1): the Timeline status enum including the new 'failed' value.
+TIMELINE_STATUSES = ("done", "active", "pending", "failed")
+# N9 (L1) range point shape, quoted verbatim in rejection messages (L4).
+RANGE_POINT_SHAPE = "{label, low: number|null, high: number|null}"
 
 _CATALOG = None
 
@@ -604,14 +615,303 @@ def _check_histogram_series(label, i, data, errors):
         prev_high = high if prev_high is None else max(prev_high, high)
 
 
+# Chart kinds whose x axis is continuous (numbers or ISO-8601 timestamps).
+# 'area' is the N7 kind (point shape == line); it shares the line discipline.
+# (CONTINUOUS_X_KINDS / SORT_DESC_KINDS / TIMELINE_STATUSES / RANGE_POINT_SHAPE
+# are module-level constants above.)
+
+
+def _check_chart_x_mix(label, kind, series, data_model):
+    """E16: cross-series x-type discipline for non-categorical charts.
+
+    ``_check_line_series`` already forbids mixing numbers and ISO-8601 strings
+    WITHIN one series; this closes the cross-series gap (admission.py:569-585
+    neighbours): across ALL series of a continuous-x chart the resolved x
+    values must not mix ISO-date strings vs numbers vs plain strings, which
+    today admits and renders no chart (chart.mjs 'mixed date and numeric x
+    values' fires only after publication).
+
+    ``label`` is the component id used as the error prefix (same as the other
+    per-kind checks), ``kind`` the resolved chart kind, ``series`` the raw
+    component ``series`` list (per-series ``data`` may be a literal array or a
+    DataBinding — resolved here via ``_resolve_prop``), and ``data_model`` the
+    surface dataModel for binding resolution.
+
+    Returns a list of error strings; the single error names the property
+    ('x'), the rule, and EVERY offending series index (L4).
+    """
+    if kind not in CONTINUOUS_X_KINDS:
+        return []
+    per_series = []  # (series index, set of x type names) in ascending index order
+    for i, s in enumerate(series):
+        if not isinstance(s, dict):
+            continue
+        found, data = _resolve_prop(s, "data", data_model)
+        if not found or not isinstance(data, list):
+            continue
+        types = set()
+        for pt in data:
+            if not isinstance(pt, dict) or "x" not in pt:
+                continue
+            x = pt["x"]
+            if _is_number(x):
+                types.add("number")
+            elif isinstance(x, str):
+                types.add("iso8601" if parse_iso8601(x) is not None else "string")
+        if types:
+            per_series.append((i, types))
+    all_types = set()
+    for _i, types in per_series:
+        all_types |= types
+    if len(all_types) <= 1:
+        return []
+    # Deterministic order: first appearance scanning series ascending, types
+    # alphabetical within a series.
+    order = []
+    for _i, types in per_series:
+        for ty in sorted(types):
+            if ty in all_types and ty not in order:
+                order.append(ty)
+    parts = []
+    for ty in order:
+        idxs = [i for i, types in per_series if ty in types]
+        parts.append("series %s use %s" % (idxs, ty))
+    return [
+        "%s: /series: chart x values mix types across series — %s; rule: every "
+        "series of a %s chart must use the same x type (all finite numbers, or "
+        "all ISO-8601 strings)" % (label, ", ".join(parts), kind)
+    ]
+
+
+def _check_range_series(series, path):
+    """N9 Chart kind 'range': a sibling of ``_check_histogram_series``.
+
+    ``series`` is ONE series' resolved point list; ``path`` is the error-path
+    prefix, e.g. ``"%s: /series/%d/data" % (label, i)`` — each point error is
+    ``<path>/<j>: ...`` exactly like the histogram check's points.
+
+    Point shape (L4 messages quote it verbatim): {label, low: number|null,
+    high: number|null}. Rules:
+    - low and high BOTH null  -> admitted: an unavailable row (L1, renders
+      "unavailable", never a midpoint).
+    - EXACTLY ONE null         -> rejected, naming the low/high pair rule.
+    - both present             -> must be finite numbers (non-numeric rejected
+      naming the expected shape); low <= high is VALID (RATIFY S3 equality
+      ruling — a zero-width interval is legal), low > high is rejected naming
+      the expected shape.
+    """
+    errors = []
+    for j, pt in enumerate(series):
+        if not isinstance(pt, dict):
+            continue
+        low, high = pt.get("low"), pt.get("high")
+        low_null, high_null = low is None, high is None
+        where = "%s/%d" % (path, j)
+        if low_null and high_null:
+            continue  # unavailable row (L1) — never fabricate an endpoint
+        if low_null or high_null:
+            null_key = "low" if low_null else "high"
+            other_key = "high" if low_null else "low"
+            other_val = high if low_null else low
+            errors.append(
+                "%s: range point has %s null but %s = %r; rule: low and high "
+                "must be provided together as numbers, or both null for an "
+                "unavailable row — exactly-one-null is not admitted (expected "
+                "shape %s)" % (where, null_key, other_key, other_val, RANGE_POINT_SHAPE)
+            )
+            continue
+        for name, v in (("low", low), ("high", high)):
+            if not _is_number(v):
+                errors.append(
+                    "%s: range %s must be a finite number or null, got %s "
+                    "(expected shape %s)" % (where, name, _type_of(v), RANGE_POINT_SHAPE)
+                )
+        if _is_number(low) and _is_number(high) and low is not None and high is not None and not low <= high:
+            errors.append(
+                "%s: range low %r must be <= high %r; rule: low <= high "
+                "(equality is a valid zero-width interval) (expected shape %s)"
+                % (where, low, high, RANGE_POINT_SHAPE)
+            )
+    return errors
+
+
+def _check_chart_sort_desc(label, comp):
+    """E16: ``sortDesc`` admission plumbing (the renderer sorts categories, L6).
+
+    A boolean ``sortDesc`` is accepted on the bar/histogram kinds ONLY; on any
+    other kind the rejection names the prop and the valid kinds (L4); a
+    non-boolean value is rejected naming the prop and the expected type.
+    Absent sortDesc is legal (no default is injected — L1).
+
+    The catalog gains ``sortDesc: {type: boolean}`` on Chart (MANIFEST, L8);
+    this function carries the kind-interaction rule the schema cannot express.
+    """
+    if "sortDesc" not in comp:
+        return []
+    errors = []
+    v = comp["sortDesc"]
+    if not isinstance(v, bool):
+        errors.append(
+            "%s: /sortDesc: sortDesc must be a boolean, got %s" % (label, _type_of(v))
+        )
+    kind = comp.get("kind")
+    if kind not in SORT_DESC_KINDS:
+        errors.append(
+            "%s: /sortDesc: sortDesc is only valid on chart kinds %s, got kind %r "
+            "(rule: sortDesc sorts categories, which only bar and histogram have)"
+            % (label, list(SORT_DESC_KINDS), kind)
+        )
+    return errors
+
+
+def _check_timeline_dates(items, path):
+    """E17: Timeline date-hint + status admission (rules the schema can't say).
+
+    ``items`` is the resolved Timeline item list (literal or bound); ``path``
+    is the error prefix, e.g. ``"%s: /items" % label`` — each error is
+    ``<path>/<j>/<key>: ...``.
+
+    - ``date`` is optional. When present it must be a string: an ISO-8601
+      string (``parse_iso8601`` accepts it — the renderer auto-formats) or a
+      NON-ISO string, which PASSES THROUGH verbatim (the renderer prints it
+      as-is; admission never rewrites it, L1). An empty or whitespace-only
+      date is rejected, naming the item index (L4).
+    - ``status`` is optional; when present it must be one of
+      ``TIMELINE_STATUSES`` (including the new 'failed'). An ABSENT status is
+      legal and stays absent — admission never injects a default (the neutral
+      rendering is the renderer's job, never an invented 'pending', L1).
+    """
+    errors = []
+    for j, it in enumerate(items):
+        if not isinstance(it, dict):
+            continue
+        if "date" in it and it["date"] is not None:
+            d = it["date"]
+            where = "%s/%d/date" % (path, j)
+            if not isinstance(d, str):
+                errors.append(
+                    "%s: item %d date must be a string (ISO-8601 or a verbatim "
+                    "label), got %s" % (where, j, _type_of(d))
+                )
+            elif not d.strip():
+                errors.append(
+                    "%s: item %d has an empty date string; rule: date is "
+                    "omitted, an ISO-8601 string (auto-formatted), or a "
+                    "non-empty verbatim string" % (where, j)
+                )
+            # non-ISO, non-empty: passes through verbatim (no rejection)
+        if "status" in it and it["status"] is not None:
+            st = it["status"]
+            if not isinstance(st, str) or st not in TIMELINE_STATUSES:
+                where = "%s/%d/status" % (path, j)
+                errors.append(
+                    "%s: item %d status %r is not one of %s; rule: status is "
+                    "omitted (rendered neutral, never invented) or one of the "
+                    "enum values" % (where, j, st, list(TIMELINE_STATUSES))
+                )
+    return errors
+
+
+def check_code_cap(comp, data_model, errors):
+    """Append an error when CodeBlock `code` (literal or bound) exceeds 4 KiB.
+
+    The generic string scan caps every literal string at MAX_STRING (4096) but
+    never reaches inside dataModel, so a bound `code` could smuggle an
+    unbounded string; this closes the gap and names the cap (L4).
+    """
+    found, val = _resolve_prop(comp, "code", data_model)
+    if found and isinstance(val, str) and len(val.encode("utf-8")) > MAX_CODE:
+        errors.append("%s: /code: code exceeds %d KiB cap (%d bytes)"
+                      % (comp.get("id"), MAX_CODE // 1024, len(val.encode("utf-8"))))
+
+
+def _check_heatmap_matrix(label, rows, cols, cells, errors):
+    """N14 (S9): cells are a closed matrix over the declared row/col labels.
+    refs must be declared labels (refs subset of rows/cols) and one cell per
+    (row, col) pair — duplicates reject (L4: every error names the property)."""
+    if not (isinstance(rows, list) and isinstance(cols, list) and isinstance(cells, list)):
+        return
+    row_labels = [r.get("label") for r in rows if isinstance(r, dict)]
+    col_labels = [c.get("label") for c in cols if isinstance(c, dict)]
+    if len(set(row_labels)) != len(row_labels):
+        errors.append("%s: /rows: duplicate row label" % label)
+    if len(set(col_labels)) != len(col_labels):
+        errors.append("%s: /cols: duplicate column label" % label)
+    seen = set()
+    for i, cell in enumerate(cells):
+        if not isinstance(cell, dict):
+            continue
+        where = "%s: /cells/%d" % (label, i)
+        r, c = cell.get("row"), cell.get("col")
+        if r not in row_labels:
+            errors.append("%s/row: %r is not a declared row label (cells must reference /rows)" % (where, r))
+        if c not in col_labels:
+            errors.append("%s/col: %r is not a declared column label (cells must reference /cols)" % (where, c))
+        key = (r, c)
+        if key in seen:
+            errors.append("%s: duplicate cell for (row %r, col %r) — one cell per (row, col) pair" % (where, r, c))
+        seen.add(key)
+
+
+def _check_sparkline_values(label, values, series, errors):
+    """N12: at least one of values/series must be a (literal or bound) array.
+    The renderer reads values first, then series; item shapes/caps are catalog's
+    (oneOf number|null, maxItems 512)."""
+    if not isinstance(values, list) and not isinstance(series, list):
+        errors.append("%s: /values: Sparkline requires a 'values' (or 'series') array of number|null" % label)
+
+
+def _check_asof_fields(comp, data_model, errors):
+    """AsOf (S6, L6): nullable ISO-8601 strings via the EXISTING parse_iso8601 —
+    no new parser. null/absent is legal and OMITS its segment at render; a
+    non-null value (literal or bound) must parse, else the error names the
+    offending property and the rule (L4). Unresolvable bindings are already an
+    error from the schema pass."""
+    label = comp.get("id")
+    for k in ("observedAt", "publishedAt"):
+        found, v = _resolve_prop(comp, k, data_model)
+        if not found or v is None:
+            continue
+        ptr = "%s: /%s" % (label, k)
+        if not isinstance(v, str):
+            errors.append("%s: must be ISO-8601; leave absent if unknown (expected string, got %s)" % (ptr, type(v).__name__))
+        elif parse_iso8601(v) is None:
+            errors.append("%s: %r must be ISO-8601; leave absent if unknown" % (ptr, v[:64]))
+
+
+def _check_gallery_items(label, items, errors):
+    """ImageGallery (S6, L6): every item is a closed {src(https), alt REQUIRED,
+    caption?, sourceIds?} object; src is additionally swept by the URL_KEYS scan."""
+    for i, it in enumerate(items):
+        ptr = "%s: /items/%d" % (label, i)
+        if not isinstance(it, dict):
+            errors.append("%s: gallery item must be an object" % ptr)
+            continue
+        for k in it:
+            if k not in ("src", "alt", "caption", "sourceIds"):
+                errors.append("%s: unknown property '%s'" % (ptr, k))
+        _check_str(it.get("src"), ptr + "/src", 1, 4096, errors, required=True)
+        _check_str(it.get("alt"), ptr + "/alt", 1, 4096, errors, required=True)
+        if it.get("caption") is not None:
+            _check_str(it.get("caption"), ptr + "/caption", 0, 4096, errors)
+
+
 def _check_leaf_specifics(comp, catalog, data_model, errors):
     """Rules JSON Schema cannot express: chart point shapes per kind, table column keys."""
     t = comp.get("component")
     label = comp.get("id")
+    if t == "CodeBlock":
+        # E15 (L5): 4 KiB UTF-8 cap on the resolved `code` (literal or bound).
+        check_code_cap(comp, data_model, errors)
+        return
     if t == "Chart":
         kind = comp.get("kind")
-        shape = catalog["$defs"].get("ChartPoint_%s" % kind)
         series = comp.get("series")
+        # E16: sortDesc prop rule + cross-series x-type discipline (L4 errors).
+        errors.extend(_check_chart_sort_desc(label, comp))
+        if isinstance(series, list):
+            errors.extend(_check_chart_x_mix(label, kind, series, data_model))
+        shape = catalog["$defs"].get("ChartPoint_%s" % kind)
         if not shape or not isinstance(series, list):
             return
         ctx = _Ctx(catalog, data_model)
@@ -630,6 +930,10 @@ def _check_leaf_specifics(comp, catalog, data_model, errors):
                 _check_line_series(label, i, data, errors)
             elif kind == "histogram":
                 _check_histogram_series(label, i, data, errors)
+            elif kind == "range":
+                # N9 (L1): sibling of the histogram check — point indices are
+                # appended inside the function, mirroring histogram point errors.
+                errors.extend(_check_range_series(data, "%s: /series/%d/data" % (label, i)))
     elif t == "DataTable":
         cols = comp.get("columns")
         if not isinstance(cols, list):
@@ -662,8 +966,49 @@ def _check_leaf_specifics(comp, catalog, data_model, errors):
                     # REVIEW-C0 E11: the cell under the declared key is a list of source ids.
                     if not (isinstance(v, list) and all(isinstance(x, str) for x in v)) and v is not None:
                         errors.append("%s: row %d column '%s' (sources) must be a string[]" % (label, i, k))
+                elif kinds[k] == "bar":
+                    # E15/S10 (L7): every cell under a bar column's declared key must be a
+                    # finite number or null (null renders 'unavailable', never 0-width).
+                    # Mirrors barColumnViolations() in desktop/src/components/table.mjs.
+                    if not (_is_number(v) or v is None):
+                        errors.append("%s: row %d column '%s' (bar) must be a finite number or null, got %r" % (label, i, k, type(v).__name__))
                 elif isinstance(v, (dict, list)):
                     errors.append("%s: row %d column '%s' must be a scalar" % (label, i, k))
+    elif t == "Timeline":
+        # E17 (L1): date-hint + status rules; absent status is never fabricated (L1).
+        found, items = _resolve_prop(comp, "items", data_model)
+        if found and isinstance(items, list):
+            errors.extend(_check_timeline_dates(items, "%s: /items" % label))
+    elif t == "HeatMap":
+        # N14 (L3, S9): closed matrix over declared row/col labels.
+        found, rows = _resolve_prop(comp, "rows", data_model)
+        if not found:
+            return
+        found, cols = _resolve_prop(comp, "cols", data_model)
+        if not found:
+            return
+        found, cells = _resolve_prop(comp, "cells", data_model)
+        if not found:
+            return
+        _check_heatmap_matrix(label, rows, cols, cells, errors)
+    elif t == "Sparkline":
+        # N12 (L3): at least one of values/series must resolve to an array.
+        # Bindings resolve first (manifest §2 semantics): a {path} array in the
+        # dataModel is as good as a literal (matches BarList/HeatMap branches).
+        _ok_sv, _sv = _resolve_prop(comp, "values", data_model)
+        _ok_ss, _ss = _resolve_prop(comp, "series", data_model)
+        _check_sparkline_values(label, _sv if _ok_sv else None,
+                                _ss if _ok_ss else None, errors)
+    elif t == "AsOf":
+        # S6 (L6): nullable ISO-8601 via the EXISTING parse_iso8601 — no new
+        # parser. null/absent is legal and OMITS its rendered segment. Error
+        # names the property + the rule (L4).
+        _check_asof_fields(comp, data_model, errors)
+    elif t == "ImageGallery":
+        # S6 (L6): closed per-tile grammar; the ≤8 cap is the schema maxItems.
+        found, items = _resolve_prop(comp, "items", data_model)
+        if found and isinstance(items, list):
+            _check_gallery_items(label, items, errors)
 
 
 def _collect_source_ids(comp, data_model, out):
@@ -673,7 +1018,18 @@ def _collect_source_ids(comp, data_model, out):
         for i, sid in enumerate(comp["sourceIds"]):
             out.append(("%s: /sourceIds/%d" % (label, i), sid))
     t = comp.get("component")
-    if t in ("KeyValueList", "Timeline"):
+    if t in ("KeyValueList", "Timeline", "Checklist", "BarList"):
+        # L4 (Checklist) + L3 (BarList) widen the per-item sourceIds walk; the
+        # items shapes all match the existing /items/%d/sourceIds/%d walk.
+        found, items = _resolve_prop(comp, "items", data_model)
+        if found and isinstance(items, list):
+            for i, it in enumerate(items):
+                if isinstance(it, dict) and isinstance(it.get("sourceIds"), list):
+                    for j, sid in enumerate(it["sourceIds"]):
+                        out.append(("%s: /items/%d/sourceIds/%d" % (label, i, j), sid))
+    elif t == "ImageGallery":
+        # S6 (L6): per-tile evidence resolves against /meta/sources; identical
+        # shape to the items branch above.
         found, items = _resolve_prop(comp, "items", data_model)
         if found and isinstance(items, list):
             for i, it in enumerate(items):

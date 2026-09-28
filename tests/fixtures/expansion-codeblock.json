@@ -1,0 +1,16 @@
+{
+  "components": [
+    { "id": "root", "component": "Card", "title": "CodeBlock lane", "children": ["code1"] },
+    { "id": "code1", "component": "CodeBlock", "code": { "path": "/data/code" }, "caption": "verbatim stdout", "language": "python", "showLines": true, "sourceIds": ["s1"] }
+  ],
+  "dataModel": {
+    "data": { "code": "def main():\n    print(\"hi\")\n    return 0" },
+    "meta": {
+      "summary": "CodeBlock fixture.",
+      "authored_at": "2026-09-25T10:11:12Z",
+      "dataset": { "id": "fixture", "revision": 1, "observed_at": null, "published_at": "2026-09-25T10:11:12Z" },
+      "sources": [ { "id": "s1", "kind": "web", "label": "Example site", "url": "https://example.com/" } ],
+      "derivations": []
+    }
+  }
+}

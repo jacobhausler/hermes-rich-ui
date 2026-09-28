@@ -1,7 +1,7 @@
 ---
 name: rich-ui-maintaining
 description: "Use when triaging an issue or PR on this repo. Repro on a fresh clone, blast-classify, walk R1-R10, rule merge|changes|decision, GitHub is the ledger."
-version: 0.1.0
+version: 0.1.1
 metadata:
   hermes:
     tags: [maintenance, triage, github, review, release]

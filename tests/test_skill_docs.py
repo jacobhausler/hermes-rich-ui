@@ -58,13 +58,20 @@ if fm:
 
 comps = components_from_contracts()
 check("contracts_section2_has_18_components", len(comps) == 18, "found=%d" % len(comps))
-for c in comps:
+
+# Single source of truth for the LIVE component surface is the catalog JSON;
+# CONTRACTS.md §2 is the frozen v0.1.0 baseline (18) and must stay a subset
+# (v0.1.1 added 8 additive types pending the owner-gated CONTRACTS rev).
+_catalog = json.loads(read("catalog/hermes-rich-ui.catalog.json"))
+live_comps = sorted(_catalog["components"])
+check("contracts_subset_of_catalog", set(comps) <= set(live_comps))
+for c in live_comps:
     check("skill_mentions_component_%s" % c, re.search(r"\b%s\b" % c, skill_text) is not None)
 
 # --- recipes.md validity ----------------------------------------------------
 rec_text = read("skill/references/recipes.md")
 blocks = re.findall(r"```json\n(.*?)```", rec_text, re.S)
-check("recipes_has_5_examples", len(blocks) == 5, "found=%d" % len(blocks))
+check("recipes_has_10_examples", len(blocks) == 10, "found=%d" % len(blocks))
 for i, block in enumerate(blocks):
     try:
         obj = json.loads(block)
@@ -76,7 +83,7 @@ for i, block in enumerate(blocks):
     ids = [c.get("id") for c in comps_i if isinstance(c, dict)]
     check("recipe_%d_has_root_component" % i, "root" in ids, "n=%d" % len(comps_i))
     types_i = {c.get("component") for c in comps_i if isinstance(c, dict)}
-    check("recipe_%d_types_are_catalog_types" % i, bool(types_i) and types_i.issubset(set(comps)),
+    check("recipe_%d_types_are_catalog_types" % i, bool(types_i) and types_i.issubset(set(live_comps)),
           ",".join(sorted(t for t in types_i if t)))
     for c in comps_i:
         if isinstance(c, dict) and c.get("id") == "root" and comps:

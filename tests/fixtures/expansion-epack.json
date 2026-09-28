@@ -1,0 +1,21 @@
+{
+  "components": [
+    { "id": "root", "component": "Card", "title": "E-pack lane", "footer": { "path": "/data/footer" }, "children": ["tbl", "tl", "m", "tabs"] },
+    { "id": "tbl", "component": "DataTable", "title": "Lanes", "columns": [ { "key": "lane", "label": "Lane", "type": "text" }, { "key": "score", "label": "Score", "type": "bar", "precision": 1 } ], "defaultSort": { "key": "score", "dir": "desc" }, "rows": [ { "lane": "L1", "score": 9.5 }, { "lane": "L2", "score": null }, { "lane": "L3", "score": 7.25 } ] },
+    { "id": "tl", "component": "Timeline", "title": "Lanes", "items": [ { "date": "2026-09-26", "label": "L0 build", "status": "failed", "sourceIds": ["s1"] }, { "date": "later-ish", "label": "triage" } ] },
+    { "id": "m", "component": "Metric", "label": "Cost", "value": { "path": "/data/cost" }, "previous": { "path": "/data/costPrev" }, "invertTone": true, "format": "currency", "unit": "USD" },
+    { "id": "tabs", "component": "Tabs", "defaultTab": 1, "tabs": [ { "title": "A", "child": "ta" }, { "title": "B", "child": "tb" } ] },
+    { "id": "ta", "component": "Text", "text": "panel A" },
+    { "id": "tb", "component": "Text", "text": "panel B", "variant": "mono" }
+  ],
+  "dataModel": {
+    "data": { "footer": "E-pack footer binding.", "cost": 4200, "costPrev": 4000 },
+    "meta": {
+      "summary": "E-pack fixture.",
+      "authored_at": "2026-09-25T10:11:12Z",
+      "dataset": { "id": "fixture", "revision": 1, "observed_at": null, "published_at": "2026-09-25T10:11:12Z" },
+      "sources": [ { "id": "s1", "kind": "web", "label": "Example site", "url": "https://example.com/" } ],
+      "derivations": []
+    }
+  }
+}

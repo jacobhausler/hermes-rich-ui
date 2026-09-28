@@ -6,8 +6,10 @@ import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo, useState } from 'react'
 import { ownSources } from './_shared.mjs'
 
-const TYPES = ['text', 'number', 'currency', 'percent', 'date', 'sources']
-const NUMERIC = new Set(['number', 'currency', 'percent'])
+// E15: column type 'bar' (width ∝ column max, computed in the RENDERER — L6). 'bar' sorts
+// and formats like 'number'. defaultSort?: {key,dir} seeds the sort (deletes agent pre-sorting).
+const TYPES = ['text', 'number', 'currency', 'percent', 'date', 'sources', 'bar']
+const NUMERIC = new Set(['number', 'currency', 'percent', 'bar'])
 const MAX_ROWS = 100
 const DEFAULT_PAGE = 10
 
@@ -59,6 +61,23 @@ export function sortRows(rows, col, dir) {
   return keyed.map(k => k.row)
 }
 
+// E15/S10 pure helper for the row-level bar check the integrator merges into
+// admission.py (admission.py itself is shared-seam — this helper is the tested unit).
+// Rule it encodes: every NON-NULL cell read under a 'bar' column's declared key must be
+// a finite number (null/undefined is legal → "unavailable"); returns offending row
+// indices — empty array means the column is bar-safe. The error text must name the
+// column key and the rule (L4): see MANIFEST.md for the admission.py glue.
+export function barColumnViolations(rows, key) {
+  if (!Array.isArray(rows)) return []
+  const bad = []
+  rows.forEach((row, i) => {
+    const v = own(row, key)
+    if (isNullish(v)) return
+    if (!isNum(v)) bad.push(i)
+  })
+  return bad
+}
+
 const usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 const usdCache = new Map()
 function usdFmt(precision) {
@@ -74,7 +93,7 @@ export function formatCell(col, row) {
   if (isNullish(v)) return null
   if (col.type === 'currency') return isNum(v) ? usdFmt(col.precision).format(v) : String(v)
   if (col.type === 'percent') { if (!isNum(v)) return String(v); const s = col.precision === null ? String(v) : v.toFixed(col.precision); return `${s}%` }
-  if (col.type === 'number') {
+  if (col.type === 'number' || col.type === 'bar') {
     if (!isNum(v)) return String(v)
     const s = col.precision === null ? v.toLocaleString('en-US', { maximumFractionDigits: 6 }) : v.toLocaleString('en-US', { minimumFractionDigits: col.precision, maximumFractionDigits: col.precision })
     return col.unit ? `${s} ${col.unit}` : s
@@ -122,12 +141,41 @@ function Cell({ col, row }) {
   return t === null ? h('span', { style: S.unavailable }, 'unavailable') : h('span', {}, t)
 }
 
+// E15 bar cell: width ∝ |value| / column-wide maxAbs (computed over ALL rows — L6, never
+// per-cell). Zero-baseline like the chart: a center line at 50%, positive bars extend right,
+// negative bars extend left. null → "unavailable" with NO bar element (never a zero-width bar).
+function BarCell({ col, row, maxAbs }) {
+  const v = own(row, col.key)
+  const t = formatCell(col, row)
+  const label = t === null ? h('span', { style: S.unavailable }, 'unavailable') : h('span', {}, t)
+  if (!isNum(v) || !(maxAbs > 0)) return h('span', { 'data-ru-bar': 'absent', style: { display: 'inline-flex', alignItems: 'center', gap: 6, width: '100%', justifyContent: 'flex-end' } }, label, 'lb')
+  const frac = Math.abs(v) / maxAbs
+  const wPct = Math.max(2, Math.round(frac * 100))
+  const barStyle = { height: 6, borderRadius: 2, background: 'var(--ui-accent)', position: 'absolute', ...(v < 0 ? { right: '50%' } : { left: '50%' }), width: `${wPct / 2}%` }
+  return h('span', { 'data-ru-bar': String(wPct), 'data-ru-bar-sign': v < 0 ? 'neg' : 'pos',
+    style: { display: 'inline-flex', alignItems: 'center', gap: 6, width: '100%', justifyContent: 'flex-end' } },
+    [h('span', {}, label, 'l'),
+     h('span', { 'data-ru-bar-track': '', style: { position: 'relative', display: 'inline-block', width: 64, height: 6, background: 'var(--ui-bg-tertiary)', borderRadius: 2 } },
+       [h('span', { 'aria-hidden': 'true', style: { position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: 'var(--ui-stroke-secondary)' } }, undefined, 'zero'),
+        h('span', { 'aria-hidden': 'true', style: barStyle }, undefined, 'b')], 'tr')]
+    , 'bar')
+}
+
 export function DataTable({ element }) {
   const props = (element && element.props) || {}
   const cols = useMemo(() => normColumns(props.columns), [props.columns])
   const allRows = useMemo(() => (Array.isArray(props.rows) ? props.rows.filter(r => r && typeof r === 'object').slice(0, MAX_ROWS) : []), [props.rows])
   const pageSize = Number.isInteger(props.pageSize) && props.pageSize >= 1 ? Math.min(props.pageSize, 50) : DEFAULT_PAGE
-  const [sort, setSort] = useState({ key: null, dir: 'asc' })
+  // E15 defaultSort?: {key,dir} — seed the sort so agents stop pre-sorting rows. An unknown
+  // key falls back to the unsorted state (header clicks still work); dir defaults to 'asc'.
+  const seededSort = (() => {
+    const d = props.defaultSort
+    if (d && typeof d === 'object' && typeof d.key === 'string' && (props.columns || []).some(c => c && c.key === d.key)) {
+      return { key: d.key, dir: d.dir === 'desc' ? 'desc' : 'asc' }
+    }
+    return { key: null, dir: 'asc' }
+  })()
+  const [sort, setSort] = useState(seededSort)
   const [query, setQuery] = useState('')
   const [page, setPage] = useState(0)
 
@@ -150,13 +198,20 @@ export function DataTable({ element }) {
   const header = h('tr', {}, cols.map(c => {
     const active = sort.key === c.key
     const arrow = active ? (sort.dir === 'asc' ? ' ▲' : ' ▼') : ''
-    const label = c.unit && c.type !== 'number' ? `${c.label} (${c.unit})` : c.label
+    const label = c.unit && c.type !== 'number' && c.type !== 'bar' ? `${c.label} (${c.unit})` : c.label
     return h('th', { scope: 'col', style: S.th, 'aria-sort': active ? (sort.dir === 'asc' ? 'ascending' : 'descending') : 'none' },
       h('button', { type: 'button', style: S.thBtn(active), onClick: () => onSort(c.key), 'data-sort-key': c.key }, label + arrow), c.key)
   }))
   const body = visible.length === 0
     ? [h('tr', {}, h('td', { colSpan: Math.max(1, cols.length), style: S.empty }, allRows.length === 0 ? 'no rows' : 'no rows match the filter'), 'empty')]
-    : visible.map((row, i) => h('tr', {}, cols.map(c => h('td', { style: S.td(NUMERIC.has(c.type)) }, h(Cell, { col: c, row }), c.key)), `r${curPage * pageSize + i}`))
+    : visible.map((row, i) => h('tr', {}, cols.map(c => {
+        if (c.type === 'bar') {
+          // E15 L6: column-wide scale computed in the RENDERER over ALL rows (max |value|).
+          const maxAbs = allRows.reduce((m, r) => { const v = own(r, c.key); return isNum(v) ? Math.max(m, Math.abs(v)) : m }, 0)
+          return h('td', { style: S.td(true) }, h(BarCell, { col: c, row, maxAbs }), c.key)
+        }
+        return h('td', { style: S.td(NUMERIC.has(c.type)) }, h(Cell, { col: c, row }), c.key)
+      }), `r${curPage * pageSize + i}`))
 
   return h('div', { style: S.box, 'data-richui': 'table', 'data-ru': 'DataTable', role: 'region', 'aria-label': accLabel || title || 'data table' }, [
     h('div', { style: S.head }, [

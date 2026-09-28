@@ -119,11 +119,11 @@ test('unlowerable(): clean surface -> []; non-object -> reason', () => {
   assert.ok(unlowerable({ components: 'nope' }).includes('components is not an array'))
 })
 
-test('fixture: all 18 types lower, deterministic, every child resolves', () => {
+test('fixture: all 26 types lower, deterministic, every child resolves', () => {
   const a = lower(fixture), b = lower(fixture)
   assert.deepEqual(a, b)
   const types = new Set(Object.values(a.spec.elements).map(e => e.type))
-  assert.equal(types.size, 18)
+  assert.equal(types.size, 26)
   for (const [id, el] of Object.entries(a.spec.elements)) for (const c of el.children) assert.ok(a.spec.elements[c], `${id} -> ${c}`)
   assert.equal(a.initialState.meta.sources.length, 2)
   assert.deepEqual(a.spec.elements.root.props.title, { $state: '/data/title' })

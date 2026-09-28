@@ -2,6 +2,31 @@
 
 All notable changes to hermes-rich-ui are documented here.
 
+## v0.1.1 — 2026-09-28 (counsel-ratified expansion)
+
+26 component types (was 18), all additive; catalog id stays `hermes-rich-ui/1`.
+
+- **New types:** CodeBlock (literal `pre`, caption + language label, 4 KiB cap),
+  Checklist (tri-state read-only, renderer-computed tally, null = UNKNOWN ≠ false),
+  ChipSet (one flex-wrap row of N badges), AsOf (evidence strip: published/observed
+  ISO dates, honest absent), ImageGallery (≤8 tiles, alt fallback), Sparkline (inline
+  trend strip, first-vs-last-non-null chip, null gaps), BarList (ranked rows, width
+  shares computed, nulls sink last as `unavailable`), HeatMap (DOM matrix, observed
+  min→max accent alpha ramp, hatched nulls, 12×12 cap).
+- **Chart:** kinds `+= area | waterfall | range` (waterfall deltas computed in the
+  renderer; range admits zero-width intervals and both-null unavailable rows, rejects
+  exactly-one-null); props `stack` (custom stack path — uPlot dist has no stackGroup),
+  `stepped` (via uPlot paths.stepped), `sortDesc` (bar/histogram only), `height`
+  (120–480 clamp). Admission gains cross-series x-type discipline (E16).
+- **E-pack on existing types:** Card footer, Stack align, Divider orientation,
+  Tabs defaultTab, Metric previous/invertTone, Progress target/unit, KeyValueList
+  item format/unit/precision, DataTable bar column + defaultSort, Text variant mono,
+  Heading level 4, Badge/Callout tone += error|outline, Timeline status += failed.
+- Evidence grammar extended: Checklist and BarList per-item `sourceIds`, Sparkline
+  bound values resolve through the dataModel.
+- Skill + 10 recipes cover the full surface; fixtures admit end-to-end through the
+  real engine (`tests/test_expansion_integration.mjs`).
+
 ## Publish prep — 2026-09-27
 
 - Publish gate: `scripts/make_public.py` (private-string guard + clean-tree exporter,

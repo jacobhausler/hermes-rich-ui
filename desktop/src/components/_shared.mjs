@@ -1,4 +1,5 @@
 // Shared helpers for hermes-rich-ui components. Inline style + --ui-* vars only.
+import { useState } from 'react'
 import { Badge, Tip } from '@hermes/plugin-sdk'
 import { jsx, jsxs } from 'react/jsx-runtime'
 
@@ -51,7 +52,9 @@ export function text(v) {
 // Every value below is in the real list; tests/test_components.mjs pins it.
 export const BADGE_VARIANTS_REAL = ['default', 'muted', 'success', 'warn', 'destructive', 'outline', 'solid']
 export const BADGE_SIZES_REAL = ['default', 'xs', 'overlay']
-export const BADGE_VARIANT = { neutral: 'muted', info: 'default', success: 'success', caution: 'warn' }
+// E10 (counsel 0928): error/outline added — both values are in BADGE_VARIANTS_REAL above,
+// pinned by the same idiom in tests/test_components.mjs (D6).
+export const BADGE_VARIANT = { neutral: 'muted', info: 'default', success: 'success', caution: 'warn', error: 'destructive', outline: 'outline' }
 export const badge = (label, tone, extra = {}, key) => jsx(Badge, { variant: BADGE_VARIANT[tone] ?? 'muted', size: 'xs', ...extra, children: label }, key)
 
 // Sources are injected into props by the registry wrapper (index.mjs) as `_sources` (the /meta/sources array).
@@ -101,3 +104,30 @@ export function formatMetric(value, { format = 'number', precision, unit } = {})
 }
 
 export const row = (style, ...kids) => jsxs('div', { style: { display: 'flex', alignItems: 'center', gap: 6, ...style }, children: kids })
+
+// E14 + N6 (counsel 0928): the ONE tile implementation shared by Image and ImageGallery.
+// https posture (L3) untouched: a non-https src never reaches the network — it degrades
+// to the dashed alt box immediately; a failed https load swaps to that box via the img
+// error handler (never a broken-image glyph, Q-E13). Admission never fetched or verified
+// anything about the URL (L1) — this is presentation, not attestation. Attribution
+// (sourceSup) lives in the figcaption OUTSIDE the img/blocked swap, so it stays visible
+// when the image is blocked or unreachable (S-E14).
+export function ImageTile({ src, alt, caption, maxHeight, sourceIds, sources, extra = {} }) {
+  const https = typeof src === 'string' && src.startsWith('https://') ? src : null
+  const maxH = Math.min(600, Math.max(64, Number(maxHeight) || 320))
+  const [failed, setFailed] = useState(false)
+  const label = String(alt ?? '')
+  const attr = sourceSup(sourceIds, sources, 'a')
+  return jsxs('figure', {
+    ...extra,
+    style: { margin: 0, display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start', minWidth: 0 },
+    children: [
+      https && !failed
+        ? jsx('img', { src: https, alt: label, loading: 'lazy', onError: () => setFailed(true), style: { maxHeight: maxH, maxWidth: '100%', objectFit: 'contain', borderRadius: 4, border: `1px solid ${V.stroke3}` } }, 'i')
+        : jsx('div', { 'data-ru-image-blocked': https ? 'unreachable' : 'scheme', style: { fontSize: 12, color: V.text3, fontStyle: 'italic', border: `1px dashed ${V.stroke3}`, borderRadius: 4, padding: '8px 10px' }, children: (label || 'image') + (https ? ' — image unavailable' : ' — image blocked (https only)') }, 'i'),
+      caption || attr
+        ? jsxs('figcaption', { style: { fontSize: 11, color: V.text2 }, children: [caption ? String(caption) : null, attr] }, 'c')
+        : null
+    ]
+  })
+}

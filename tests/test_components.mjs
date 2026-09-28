@@ -37,7 +37,7 @@ const { CardBody, UnknownType, InlineError, ID_RE } = await import('../desktop/s
 const { setOpenExternal } = await import('../desktop/src/components/sourcelist.mjs')
 
 const fixture = JSON.parse(readFileSync(new URL('./fixtures/surface-all-types.json', import.meta.url), 'utf8'))
-const TYPES = ['Card', 'Stack', 'Grid', 'Divider', 'Tabs', 'Accordion', 'Heading', 'Text', 'Callout', 'Badge', 'Metric', 'Progress', 'KeyValueList', 'Image', 'DataTable', 'Chart', 'Timeline', 'SourceList']
+const TYPES = ['Card', 'Stack', 'Grid', 'Divider', 'Tabs', 'Accordion', 'Heading', 'Text', 'Callout', 'Badge', 'Metric', 'Progress', 'KeyValueList', 'Image', 'DataTable', 'Chart', 'Timeline', 'SourceList', 'CodeBlock', 'Checklist', 'ChipSet', 'AsOf', 'ImageGallery', 'Sparkline', 'BarList', 'HeatMap']
 
 const mount = document.getElementById('r')
 const root = createRoot(mount)
@@ -50,7 +50,7 @@ async function renderSpec(spec, initialState) {
   })
 }
 
-test('every one of the 18 types renders its DOM marker through the real Renderer', async () => {
+test('every one of the 26 types renders its DOM marker through the real Renderer', async () => {
   const { spec, initialState } = lower(fixture)
   await renderSpec(spec, initialState)
   for (const t of TYPES) assert.ok($(`[data-ru="${t}"]`), `missing marker for ${t}`)

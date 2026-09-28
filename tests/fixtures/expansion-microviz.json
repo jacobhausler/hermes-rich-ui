@@ -1,0 +1,35 @@
+{
+  "components": [
+    { "id": "root", "component": "Card", "title": "Microviz lane", "children": ["row"] },
+    { "id": "row", "component": "Stack", "direction": "horizontal", "gap": "md", "children": ["sp1", "bl", "hm"] },
+    { "id": "sp1", "component": "Sparkline", "values": [900, 980, 1010, null, 1150, 1240], "direction": "bar", "tone": "danger", "width": 120, "height": 24 },
+    { "id": "bl", "component": "BarList", "items": { "path": "/data/ranking" }, "unit": " sessions", "sort": "desc", "sourceIds": ["s1"] },
+    { "id": "hm", "component": "HeatMap", "rows": { "path": "/data/hm_rows" }, "cols": { "path": "/data/hm_cols" }, "cells": { "path": "/data/hm_cells" }, "unit": "min", "precision": 0, "showValues": true, "sourceIds": ["s1"] }
+  ],
+  "dataModel": {
+    "data": {
+      "ranking": [
+        { "label": "Search", "value": 4820, "sourceIds": ["s1"] },
+        { "label": "Direct", "value": 2310 },
+        { "label": "Referral", "value": null }
+      ],
+      "hm_rows": [ { "label": "Mon" }, { "label": "Tue" }, { "label": "Wed" } ],
+      "hm_cols": [ { "label": "lint" }, { "label": "test" }, { "label": "build" } ],
+      "hm_cells": [
+        { "row": "Mon", "col": "lint", "value": 2 },
+        { "row": "Mon", "col": "test", "value": 9 },
+        { "row": "Mon", "col": "build", "value": 5 },
+        { "row": "Tue", "col": "lint", "value": 1 },
+        { "row": "Tue", "col": "test", "value": null },
+        { "row": "Wed", "col": "build", "value": 7 }
+      ]
+    },
+    "meta": {
+      "summary": "Microviz fixture.",
+      "authored_at": "2026-09-25T10:11:12Z",
+      "dataset": { "id": "fixture", "revision": 1, "observed_at": null, "published_at": "2026-09-25T10:11:12Z" },
+      "sources": [ { "id": "s1", "kind": "web", "label": "Example site", "url": "https://example.com/" } ],
+      "derivations": []
+    }
+  }
+}

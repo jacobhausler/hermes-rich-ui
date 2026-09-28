@@ -1,0 +1,16 @@
+{
+  "components": [
+    { "id": "root", "component": "Card", "title": "AsOf lane", "children": ["asof"] },
+    { "id": "asof", "component": "AsOf", "observedAt": { "path": "/data/observed" }, "publishedAt": "2026-09-01", "note": "audited by hand", "sourceIds": ["s1"] }
+  ],
+  "dataModel": {
+    "data": { "observed": "2026-09-26T10:00:00Z" },
+    "meta": {
+      "summary": "AsOf fixture.",
+      "authored_at": "2026-09-25T10:11:12Z",
+      "dataset": { "id": "fixture", "revision": 1, "observed_at": null, "published_at": "2026-09-25T10:11:12Z" },
+      "sources": [ { "id": "s1", "kind": "web", "label": "Example site", "url": "https://example.com/" } ],
+      "derivations": []
+    }
+  }
+}
