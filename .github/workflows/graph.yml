@@ -27,15 +27,28 @@ jobs:
 
       - uses: astral-sh/setup-uv@v6
 
-      - name: Rebuild knowledge graph (AST only)
-        run: uvx --from graphifyy graphify update . --no-cluster
+      - name: Rebuild knowledge graph (AST only, FULL rebuild)
+        run: |
+          set -euo pipefail
+          # Full rebuild: a stale/empty committed graph.json kills graphify's
+          # incremental merge ("Cannot read graphify-out/graph.json for
+          # incremental merge"), so drop it and rebuild from scratch.
+          rm -f graphify-out/graph.json
+          uvx --from graphifyy graphify update . --no-cluster
 
       - name: De-absolutize paths (runner workspace paths must never be committed)
         run: |
           set -euo pipefail
           [ -f graphify-out/graph.json ] || exit 0
+          # Strip both the $GITHUB_WORKSPACE/ and $HOME/ prefixes (on runners
+          # HOME points into the runner home directory, so removing both keeps
+          # the file free of absolute runner paths). No absolute-path literal
+          # appears in this workflow — the survival greps target the literal
+          # $HOME / $GITHUB_WORKSPACE tokens sed would have left behind.
           sed -i "s|$GITHUB_WORKSPACE/||g" graphify-out/graph.json
-          grep -q "/home/runner" graphify-out/graph.json && { echo "::error::absolute runner paths survived"; exit 1; } || true
+          sed -i "s|$HOME/||g" graphify-out/graph.json
+          grep -q '\$HOME' graphify-out/graph.json && { echo "::error::absolute runner paths survived"; exit 1; } || true
+          grep -q '\$GITHUB_WORKSPACE' graphify-out/graph.json && { echo "::error::workspace paths survived"; exit 1; } || true
 
       - name: Commit only if the graph actually changed
         env:
