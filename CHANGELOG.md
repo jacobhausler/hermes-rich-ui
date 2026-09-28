@@ -2,10 +2,11 @@
 
 All notable changes to hermes-rich-ui are documented here.
 
-## Unreleased
+## v0.1.3 — 2026-09-28
 
-- requires_hermes now uses the semver release (>=0.21.5); the date-tag form
-  blocked every install on 0.21.5.
+- **Install fix (P1):** `requires_hermes` now uses the semver release (`>=0.21.5`,
+  the v2026.9.24 release). The date-tag form `>=v2026.9.24` was compared by core as
+  version 2026.9.24 and blocked every install on 0.21.5 (#13).
 
 ## v0.1.2 — 2026-09-28
 
