@@ -1,5 +1,5 @@
 name: hermes-rich-ui
-version: 0.1.3
+version: 0.1.4
 description: Rich, evidence-backed answer cards — tables, charts, metrics, timelines, sources — rendered inline in the desktop transcript
 description_long: |
   Adds a `rich_present` tool: the agent publishes an A2UI v1.0 `createSurface`
