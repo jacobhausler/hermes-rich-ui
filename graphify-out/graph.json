@@ -89,6 +89,7 @@
     "tests/test_bundle_scan.mjs",
     "tests/test_chart.mjs",
     "tests/test_components.mjs",
+    "tests/test_directive_grammar.py",
     "tests/test_e2e_record.mjs",
     "tests/test_expansion_integration.mjs",
     "tests/test_fixtures_admit.py",
@@ -6960,6 +6961,22 @@
       "source_file": "tests/test_components.mjs",
       "source_location": "L47",
       "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_directive_grammar",
+      "label": "test_directive_grammar.py",
+      "file_type": "code",
+      "source_file": "tests/test_directive_grammar.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_directive_grammar_rationale_1",
+      "label": "Pin our emitted ::richui{id=\"ru-...\"} against upstream Hermes Desktop's…",
+      "file_type": "rationale",
+      "source_file": "tests/test_directive_grammar.py",
+      "source_location": "L1",
       "_origin": "ast"
     },
     {
@@ -26663,6 +26680,60 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_directive_grammar",
+      "target": "re",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_directive_grammar.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_directive_grammar",
+      "target": "sys",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_directive_grammar.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_directive_grammar",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_directive_grammar.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_directive_grammar",
+      "target": "tests_lane_backend",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_directive_grammar.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_directive_grammar_rationale_1",
+      "target": "tests_test_directive_grammar",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_directive_grammar.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_e2e_record",
       "target": "ref_node_test",
       "relation": "imports_from",
@@ -34060,6 +34131,17 @@
       "confidence": "EXTRACTED",
       "source_file": "tests/test_api.py",
       "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_directive_grammar",
+      "target": "tests_lane_backend_load",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_directive_grammar.py",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast"
     },
