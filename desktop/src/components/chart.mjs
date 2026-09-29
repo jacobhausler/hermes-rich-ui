@@ -22,7 +22,7 @@ const WF_ROLE_TOKENS = { up: '--ui-green', down: '--ui-red', total: '--ui-text-s
 export const WF_ROLE_LABELS = { up: 'Increase', down: 'Decrease', total: 'Total' }
 const WF_ROLE_ORDER = ['up', 'down', 'total']
 const FALLBACK = { '--ui-accent': '#3b82f6', '--ui-green': '#22c55e', '--ui-purple': '#a855f7', '--ui-orange': '#f97316',
-  '--ui-red': '#ef4444', '--ui-text-tertiary': '#6b7280',
+  '--ui-red': '#ef4444',
   '--ui-text-secondary': '#9ca3af', '--ui-text-primary': '#e5e7eb', '--ui-stroke-tertiary': '#374151', '--ui-stroke-secondary': '#4b5563' }
 const HEIGHT = 240          // default chart height (F1: `height` prop clamps 120..480)
 const HEIGHT_MIN = 120
@@ -243,16 +243,19 @@ export function seriesToUplot(kind, series, opts = {}) {
       const tp = new Array(order.length).fill(null)
       const rl = new Array(order.length).fill(null)
       let run = 0
+      let firstIdx = -1                            // review #16 finding 4: the SERIES' own first non-gap index
       for (let i = 0; i < order.length; i++) {
         const v = st[i]
         if (v === null && !tt[i]) continue            // missing step: gap; running total unchanged
         points++
+        const isFirst = firstIdx === -1
+        if (isFirst) firstIdx = i
         if (tt[i]) {
-          // #15 opening anchor: total:true + a numeric value as the FIRST point pins 0→value
-          // and RESETS the running total to that value (the walk starts from the authored opening,
-          // the value is still never a hand-computed cumulative — L6). Later totals keep pinning
-          // 0→run and ignore `value`, exactly as before (old cards unchanged).
-          if (i === 0 && isNum(v)) { bs[i] = 0; tp[i] = run = v }
+          // #15 opening anchor: total:true + a numeric value as the FIRST point of THIS series
+          // pins 0→value and RESETS the running total to that value (the walk starts from the
+          // authored opening, the value is still never a hand-computed cumulative — L6). Later
+          // totals keep pinning 0→run and ignore `value`, exactly as before (old cards unchanged).
+          if (isFirst && isNum(v)) { bs[i] = 0; tp[i] = run = v }
           else { bs[i] = 0; tp[i] = run }             // total bar: pinned 0 → cumulative
           rl[i] = 'total'
         } else { bs[i] = run; tp[i] = run = run + v; rl[i] = v < 0 ? 'down' : 'up' }  // step: base → base+value (across zero fine; test pins it)
@@ -369,16 +372,16 @@ export function waterfallPlan(u, model, props, colors) {
   const pxPerUnit = (u.valToPos(n - 0.5, 'x', true) - u.valToPos(-0.5, 'x', true)) / Math.max(1, n)
   const unit = typeof props.unit === 'string' && props.unit ? props.unit : ''
   const wfFill = (role) => (colors.wf && colors.wf[role]) || FALLBACK[WF_ROLE_TOKENS[role]] || '#888'
-  const bars = [], connectors = [], labels = []
+  const bars = [], connectors = [], labels = [], labelCandidates = []
   const shown = (s) => !u.series || !u.series[s + 1] || u.series[s + 1].show !== false
   for (let s = 0; s < model.labels.length; s++) {
     if (!shown(s)) continue
     const bases = wf.bases[s], tops = wf.tops[s], rolesCol = wf.roles[s], stepsCol = wf.steps[s], totalsCol = wf.totals[s]
+    const l0 = (i) => u.valToPos(i, 'x', true) + (s * slot - group / 2) * pxPerUnit   // left edge of bar i's slot
     for (let i = 0; i < n; i++) {
       const top = tops[i], base = bases[i]
       if (isNullish(top) || isNullish(base)) continue
-      const centre = u.valToPos(i, 'x', true)
-      const l = centre + (s * slot - group / 2) * pxPerUnit
+      const l = l0(i)
       const t = u.valToPos(top, 'y', true), b = u.valToPos(base, 'y', true)
       const role = rolesCol[i] || 'up'
       bars.push({ x: l, y: Math.min(t, b), w: Math.max(slot * pxPerUnit, 1), h: Math.max(Math.abs(b - t), 1), role, fill: wfFill(role) })
@@ -396,23 +399,33 @@ export function waterfallPlan(u, model, props, colors) {
       connectors.push({ x1, x2, y1: u.valToPos(lvA, 'y', true), y2: u.valToPos(lvB, 'y', true) })
     }
     // Value labels: signed step on step bars, renderer-computed running value on total bars.
-    // Skipped entirely when bars are too narrow, and individually when neighbours would overlap.
-    let lastX = -Infinity, lastHalf = 0
-    for (let i = 0; i < n; i++) {
-      if (isNullish(tops[i]) || isNullish(bases[i])) continue
-      if (slot * pxPerUnit < WF_LABEL_MIN_SLOT) continue
-      const isTotal = totalsCol[i]
-      const v = isTotal ? tops[i] : stepsCol[i]
-      if (!isNum(v)) continue
-      const text = fmtWfValue(v, unit, !isTotal)
-      if (!text) continue
-      const centre = u.valToPos(i, 'x', true)
-      const half = text.length * WF_LABEL_HALF_PER_CHAR + WF_LABEL_HALF_PAD
-      if (centre - lastX < half + lastHalf) continue
-      const topEdge = u.valToPos(Math.max(tops[i], bases[i]), 'y', true)   // visually upper edge (y grows down)
-      labels.push({ x: centre, y: topEdge - WF_LABEL_GAP, text, color: colors.text || FALLBACK['--ui-text-secondary'] })
-      lastX = centre; lastHalf = half
+    // Skipped entirely when bars are too narrow. Review #16 finding 2: each label rides its
+    // SERIES' bar-slot centre (the floatingRectPaths geometry), not the shared category
+    // centre, and candidates from ALL series are gathered first so the overlap walk below
+    // runs across every series together.
+    if (slot * pxPerUnit >= WF_LABEL_MIN_SLOT) {
+      for (let i = 0; i < n; i++) {
+        if (isNullish(tops[i]) || isNullish(bases[i])) continue
+        const isTotal = totalsCol[i]
+        const v = isTotal ? tops[i] : stepsCol[i]
+        if (!isNum(v)) continue
+        const text = fmtWfValue(v, unit, !isTotal)
+        if (!text) continue
+        const x = l0(i) + slot * pxPerUnit / 2                       // bar-slot centre
+        const half = text.length * WF_LABEL_HALF_PER_CHAR + WF_LABEL_HALF_PAD
+        const topEdge = u.valToPos(Math.max(tops[i], bases[i]), 'y', true)   // visually upper edge (y grows down)
+        labelCandidates.push({ x, y: topEdge - WF_LABEL_GAP, text, color: colors.text || FALLBACK['--ui-text-secondary'], half })
+      }
     }
+  }
+  // One overlap walk across ALL series (sorted left→right): a label survives only if it
+  // clears the previously kept label, whatever series it came from.
+  labelCandidates.sort((a, b) => a.x - b.x)
+  let lastX = -Infinity, lastHalf = 0
+  for (const c of labelCandidates) {
+    if (c.x - lastX < c.half + lastHalf) continue
+    labels.push({ x: c.x, y: c.y, text: c.text, color: c.color })
+    lastX = c.x; lastHalf = c.half
   }
   const key = WF_ROLE_ORDER.map((role) => ({ color: wfFill(role), label: WF_ROLE_LABELS[role] }))
   return { bars, connectors, labels, key }
@@ -437,10 +450,27 @@ export function drawWaterfallPlan(u, plan) {
   ctx.font = `${Math.round(11 * pr)}px system-ui, sans-serif`
   ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
   for (const l of plan.labels) { ctx.fillStyle = l.color; ctx.fillText && ctx.fillText(l.text, l.x, l.y) }
-  // Key banner: Increase / Decrease / Total, top-left inside the plot.
+  // Key banner: Increase / Decrease / Total, positioned FROM THE PLOT BOX (review #16
+  // finding 1): canvas-absolute 6*pr/12*pr put the swatches in the y-axis gutter (size ~56)
+  // and ran the ~190px banner over the opening bar's value label. Simple headroom check:
+  // if the tallest bar's top label area reaches into the left-aligned banner band, draw
+  // the banner at the top-RIGHT of the plot box instead (still inside the box).
   ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
-  const keyTop = plan.keyTop != null ? plan.keyTop : 12 * pr
-  let kx = plan.keyLeft != null ? plan.keyLeft : 6 * pr
+  const bbox = u.bbox
+  const keyTop = (bbox ? bbox.top : 0) + 12 * pr
+  const KEY_W = 165 * pr, KEY_H = 14 * pr
+  const boxLeft = (bbox ? bbox.left : 0) + 6 * pr
+  const boxRight = bbox ? bbox.left + bbox.width : (ctx.canvas.width / pr)
+  let keyLeft = boxLeft
+  if (bbox) {
+    let under = false
+    for (const b of plan.bars) {
+      if (b.y > keyTop - 5 * pr + KEY_H) continue                    // bar top sits below the banner band (y grows down)
+      if (b.x + b.w >= boxLeft && b.x <= boxLeft + KEY_W) { under = true; break }
+    }
+    if (under) keyLeft = Math.max(boxLeft, boxRight - 6 * pr - KEY_W)
+  }
+  let kx = plan.keyLeft != null ? plan.keyLeft : keyLeft
   for (const e of plan.key) {
     ctx.fillStyle = e.color
     ctx.fillRect && ctx.fillRect(kx, keyTop - 5 * pr, 10 * pr, 10 * pr)

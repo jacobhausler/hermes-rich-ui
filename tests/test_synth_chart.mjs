@@ -6,7 +6,10 @@
 // captured opts tree is walked to assert NO stackGroup option anywhere (RATIFY S7: the
 // vendored dist has none — stacking is renderer-computed).
 import { test } from 'node:test'
+import { readFileSync } from 'node:fs'
 import { assert as A, renderComponent, $, $$, act, registry, fixtureJson } from './helpers/render.mjs'
+// repo-root reader for the catalog-doc pin below
+const fsRead = (rel) => readFileSync(new URL(`../${rel}`, import.meta.url), 'utf8')
 // Dynamic imports: registerHooks (in helpers/render.mjs) must run BEFORE chart.mjs resolves
 // its @hermes/plugin-sdk import — same pattern as tests/test_chart.mjs.
 const uPlot = (await import('uplot')).default
@@ -108,6 +111,8 @@ function fakeU(model, width = 600, height = 320) {
   const yPos = (v) => padT + ((yMax - v) / ((yMax - yMin) || 1)) * plotH
   return {
     width, height,
+    // uPlot's plot box (CSS px), same convention as padL/padT above.
+    bbox: { left: padL, top: padT, width: plotW, height: plotH },
     // uPlot's series array includes the x-series at index 0.
     series: [{}, ...model.data.slice(1).map(() => ({ show: true }))],
     valToPos: (v, scale) => (scale === 'x' ? padL + ((v + 0.5) / n) * plotW : yPos(v)),
@@ -155,6 +160,37 @@ test('waterfall #15 migration: an OLD card without an anchor keeps identical geo
   assert.deepEqual(m.wf.totals[0], [false, false, false, true])
   assert.deepEqual(m.data[1], [100, 60, 85, 85])
   assert.deepEqual(m.wf.roles[0], ['up', 'down', 'up', 'total'], 'new field only — old cards render exactly as before')
+})
+
+// Review #16 (pf-mechanic) finding 5, ruling (a): the FIRST-point total:true + numeric
+// value is DELIBERATELY an opening balance (maintainer ruling: keep the new meaning —
+// main drew a zero-height bar for that shape, never what an author meant). This test
+// pins the new geometry ON PURPOSE on the old catalog-admissible shape.
+test('waterfall #16 R10 pin: first-point total:true + numeric value is the OPENING BALANCE on purpose (finding 5)', () => {
+  const m = seriesToUplot('waterfall', [{ label: 's', data: [
+    { label: 'open', value: 50, total: true }, { label: 'a', value: 5 }, { label: 'end', value: null, total: true }
+  ] }])
+  assert.deepEqual(m.wf.bases[0], [0, 50, 0], 'opening bar pins 0→50; the walk starts FROM the authored opening')
+  assert.deepEqual(m.wf.tops[0], [50, 55, 55], 'running total starts at the anchor (main drew [0,5,5] — a zero-height opening bar)')
+  // (5b) the semantic change is DOCUMENTED: the admitted ChartPoint_waterfall description
+  // must state the first-point anchor rule (text-only update; shape/$defs unchanged).
+  const catalog = JSON.parse(fsRead('catalog/hermes-rich-ui.catalog.json'))
+  const desc = catalog.$defs.ChartPoint_waterfall.description
+  assert.ok(/FIRST point with total:true and a numeric value is the opening anchor/i.test(desc),
+    'catalog documents the opening-anchor meaning of a first-point total:true')
+})
+
+// Review #16 (pf-mechanic) finding 4: the anchor is the SERIES' first non-gap point, not
+// union index 0 — a second series whose first labelled point is a new-label
+// total+value anchor must not have its value silently ignored.
+test('waterfall #16 anchor binds on the SERIES first non-gap index, not union index 0 (finding 4)', () => {
+  const m = seriesToUplot('waterfall', [
+    { label: 'a', data: [{ label: 'shared', value: 10 }, { label: 'x', value: null, total: true }] },
+    { label: 'b', data: [{ label: 'x', value: 70, total: true }] }   // first point at union index 1
+  ])
+  assert.deepEqual(m.wf.bases[1], [null, 0], 'series b opening bar pins to 0 at ITS first index (union index 1)')
+  assert.deepEqual(m.wf.tops[1], [null, 70], 'value 70 is the opening balance, NOT silently ignored (pre-fix: tops [null,0,0]-style)')
+  assert.deepEqual(m.wf.roles[1], [null, 'total'])
 })
 
 test('waterfall #15 plan: thin connector from each bar top (running level) to the next bar base', () => {
@@ -225,6 +261,67 @@ test('waterfall #15 key: the three meanings are labelled Increase / Decrease / T
   const plan = wfmod.waterfallPlan(fakeU(m), m, fx('chart-waterfall'), COLORS)
   assert.deepEqual(plan.key.map(e => e.label), ['Increase', 'Decrease', 'Total'])
   assert.deepEqual(plan.key.map(e => e.color), ['#22c55e', '#ef4444', '#9ca3af'])
+})
+
+// Review #16 (pf-mechanic) finding 1: the key banner is positioned from the PLOT BOX, not
+// canvas-absolute — the y-axis gutter (size ~56) would otherwise sit under the swatches.
+test('waterfall #16 key banner is positioned inside u.bbox, never in the y-axis gutter (finding 1)', () => {
+  const paintKey = (u, plan) => {
+    const painted = []
+    const ctx = {
+      canvas: { width: u.width },
+      beginPath() {}, moveTo(x, y) { painted.push({ op: 'moveTo', x, y }) }, lineTo() {}, stroke() {},
+      fillRect(x, y, w, h) { painted.push({ op: 'fillRect', x, y, w, h }) },
+      fillText(t, x, y) { painted.push({ op: 'fillText', x, y, t }) },
+      save() {}, restore() {}, setLineDash() {}
+    }
+    wfmod.drawWaterfallPlan({ ctx, width: u.width, bbox: u.bbox }, plan)
+    return painted.filter(p => p.op === 'fillRect' && p.w <= 10.5)  // swatches only (bar rects are 100px+ wide)
+  }
+  // (1) Normal card: every swatch sits inside the plot box — never in the y-axis gutter
+  // (canvas-absolute 6*pr/12*pr put them at x=6, far left of bbox.left ≈ 64).
+  const m = seriesToUplot('waterfall', fx('chart-waterfall').series)
+  const u = fakeU(m)
+  const plan = wfmod.waterfallPlan(u, m, fx('chart-waterfall'), COLORS)
+  const swatches = paintKey(u, plan)
+  assert.equal(swatches.length, plan.key.length, 'one swatch per key entry')
+  for (const s of swatches) {
+    assert.ok(s.x >= u.bbox.left, `key swatch x=${s.x} stays right of the plot-box left edge (${u.bbox.left}) — out of the y-axis gutter`)
+    assert.ok(s.y >= u.bbox.top, `key swatch y=${s.y} stays below the plot-box top edge (${u.bbox.top})`)
+    assert.ok(s.x + s.w <= u.bbox.left + u.bbox.width, 'key stays inside the plot box on the right')
+  }
+  // (2) Headroom check: the tallest bar's top label area reaches into the banner band →
+  // the banner moves to the TOP-RIGHT of the plot box (still inside it).
+  const flipped = swatches[0].x
+  assert.ok(flipped > u.bbox.left + 6, 'tallest bar under the banner band → key flips top-right')
+  // (3) With bars clear of the band the banner keeps the plot-box top-LEFT anchor.
+  const clear = paintKey(u, { ...plan, bars: [] })
+  assert.equal(clear[0].x, u.bbox.left + 6, 'no overlap → banner anchors at bbox.left + 6')
+  assert.ok(flipped > clear[0].x, 'the headroom fallback sits right of the left-aligned spot')
+})
+
+// Review #16 (pf-mechanic) finding 2: value labels ride their SERIES' bar-slot centre
+// (floatingRectPaths geometry), and the overlap walk runs across ALL series together —
+// two series must never print on top of each other at the category centre.
+test('waterfall #16 multi-series value labels sit at each series bar-slot centre, distinct per bar (finding 2)', () => {
+  const props = { kind: 'waterfall', unit: 'USD', series: [
+    { label: 'a', data: [{ label: 'x', value: 10 }, { label: 'y', value: -3 }] },
+    { label: 'b', data: [{ label: 'x', value: 4 }, { label: 'y', value: 8 }] }
+  ] }
+  const m = seriesToUplot('waterfall', props.series)
+  const u = fakeU(m, 900, 320)
+  const plan = wfmod.waterfallPlan(u, m, props, COLORS)
+  assert.equal(plan.labels.length, 4, 'every visible bar gets a label at a wide slot')
+  assert.equal(new Set(plan.labels.map(l => l.x)).size, 4, 'label x are all DISTINCT — series share only the category centre (the bug)')
+  // One label per bar slot: x == l + slot*pxPerUnit/2, the floatingRectPaths geometry.
+  const n = m.data[0].length
+  const group = 0.8, slot = group / m.labels.length
+  const pxPerUnit = (u.valToPos(n - 0.5, 'x', true) - u.valToPos(-0.5, 'x', true)) / n
+  const slots = plan.bars.map(b => b.x + Math.max(slot * pxPerUnit, 1) / 2)
+  for (const l of plan.labels) {
+    assert.ok(slots.some(sx => Math.abs(sx - l.x) < 0.5),
+      `label at x=${l.x.toFixed(1)} sits on a bar-slot centre ${slots.map(s => s.toFixed(1)).join(',')}`)
+  }
 })
 
 test('waterfall #15 opts: canvas key/labels/connectors wired via opts.hooks.draw; uPlot paints no rects itself', () => {
