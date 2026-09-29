@@ -349,6 +349,49 @@ test('waterfall #16 r2 key width: top-right fallback keeps the LAST TEXT inside 
     'reserved KEY_W equals the actually-drawn banner extent (one shared helper)')
 })
 
+// Review #16 round 3 (pf-mechanic) blocker B1: the right-edge clamp pinned the key ORIGIN
+// to bbox.left but still painted every label — probes at pr=2 ended the last text at
+// device x=497 past bbox.right=460 (240px chart) and past 300 at the 160px minimum
+// (buildOpts width: Math.max(160, floor(width)), chart.mjs:631). Maintainer ruling: when
+// keyLayout(pr, key).width exceeds the plot box minus the 6*pr margins on both sides, SKIP
+// the key entirely (value labels and bar colours still carry the meaning; no single-swatch
+// variant).
+test('waterfall #16 r3 narrow chart: the whole key is skipped when keyLayout width exceeds the plot box minus margins (blocker B1)', () => {
+  const pr = 2
+  const m = seriesToUplot('waterfall', fx('chart-waterfall').series)
+  const u = fakeU(m, 160, 320)                       // supported minimum: buildOpts width = max(160, floor(width))
+  const plan = wfmod.waterfallPlan(u, m, fx('chart-waterfall'), COLORS)
+  // Precondition: the banner genuinely cannot fit (round-3 probe geometry, pr=2).
+  assert.ok(wfmod.keyLayout(pr, plan.key).width > u.bbox.width - 12 * pr,
+    'probe canvas: the key is wider than the plot box minus both 6*pr margins')
+  const painted = []
+  const ctx = {
+    canvas: { width: u.width * pr },                 // pr = canvas.width / u.width = 2
+    beginPath() {}, moveTo() {}, lineTo() {}, stroke() {},
+    fillRect(x, y, w, h) { painted.push({ op: 'fillRect', x, y, w, h }) },
+    fillText(t, x, y) { painted.push({ op: 'fillText', x, y, t }) },
+    save() {}, restore() {}, setLineDash() {}
+  }
+  const drawn = { ...plan, labels: [] }               // value labels out of scope: any fillText left is key paint
+  wfmod.drawWaterfallPlan({ ctx, width: u.width, bbox: u.bbox }, drawn)
+  const keyTexts = painted.filter(p => p.op === 'fillText')
+  assert.deepEqual(keyTexts.map(p => p.t), [],
+    'no key item is painted (equivalently: no key text extends past bbox.right — pre-fix the last text ended at 497 vs a 300 right edge)')
+  assert.equal(drawn.keySkipped, true, 'the plan reports the key as skipped')
+  // Sanity: a wide box at the same pr still paints the full key (the skip is width-gated,
+  // not pr-gated) and reports it as not skipped.
+  const wide = fakeU(m, 900, 320)
+  const widePainted = []
+  const wideCtx = { ...ctx, canvas: { width: wide.width * pr },
+    fillRect(x, y, w, h) { widePainted.push({ op: 'fillRect', x, y, w, h }) },
+    fillText(t, x, y) { widePainted.push({ op: 'fillText', x, y, t }) } }
+  const wideDrawn = { ...wfmod.waterfallPlan(wide, m, fx('chart-waterfall'), COLORS), labels: [] }
+  wfmod.drawWaterfallPlan({ ctx: wideCtx, width: wide.width, bbox: wide.bbox }, wideDrawn)
+  assert.deepEqual(widePainted.filter(p => p.op === 'fillText').map(p => p.t), ['Increase', 'Decrease', 'Total'],
+    'the wide-box key still paints at pr=2')
+  assert.equal(wideDrawn.keySkipped, false, 'wide box → key not skipped')
+})
+
 // Review #16 round 2 (pf-mechanic) blocker 2 (F3, maintainer ruling): role colouring is
 // scoped to SINGLE-SERIES waterfalls. Exactly one series → role fills + the
 // Increase/Decrease/Total key + a neutralised uPlot series swatch (no legend colour that

@@ -492,10 +492,18 @@ export function drawWaterfallPlan(u, plan) {
   const KEY_H = 14 * pr
   const layout = keyLayout(pr, plan.key)
   const KEY_W = layout.width
+  // Round 3 blocker B1 (maintainer ruling): at narrow plots the old clamp pinned the key
+  // ORIGIN to bbox.left but still painted every label — at pr=2 the last text ended at
+  // device x=497 past bbox.right=460 (240px chart) and past 300 at the supported 160px
+  // minimum. When the banner can't fit the plot box minus the 6*pr margins on both sides,
+  // SKIP the key entirely: value labels and bar colours still carry the meaning, and a
+  // partial key would mislead (no single-swatch variant).
+  const keyBudget = bbox ? bbox.width - 12 * pr : Infinity
+  plan.keySkipped = layout.items.length > 0 && KEY_W > keyBudget
   const boxLeft = (bbox ? bbox.left : 0) + 6 * pr
   const boxRight = bbox ? bbox.left + bbox.width : (ctx.canvas.width / pr)
   let keyLeft = boxLeft
-  if (bbox) {
+  if (bbox && !plan.keySkipped) {
     let under = false
     for (const b of plan.bars) {
       if (b.y > keyTop - 5 * pr + KEY_H) continue                    // bar top sits below the banner band (y grows down)
@@ -504,12 +512,14 @@ export function drawWaterfallPlan(u, plan) {
     if (under) keyLeft = Math.max(boxLeft, boxRight - 6 * pr - KEY_W)
   }
   const keyOrigin = plan.keyLeft != null ? plan.keyLeft : keyLeft
-  for (const item of layout.items) {
-    const kx = keyOrigin + item.x
-    ctx.fillStyle = item.color
-    ctx.fillRect && ctx.fillRect(kx, keyTop - 5 * pr, KEY_SWATCH * pr, KEY_SWATCH * pr)
-    ctx.fillStyle = plan.keyTextColor
-    ctx.fillText && ctx.fillText(item.label, kx + KEY_TEXT_GAP * pr, keyTop)
+  if (!plan.keySkipped) {
+    for (const item of layout.items) {
+      const kx = keyOrigin + item.x
+      ctx.fillStyle = item.color
+      ctx.fillRect && ctx.fillRect(kx, keyTop - 5 * pr, KEY_SWATCH * pr, KEY_SWATCH * pr)
+      ctx.fillStyle = plan.keyTextColor
+      ctx.fillText && ctx.fillText(item.label, kx + KEY_TEXT_GAP * pr, keyTop)
+    }
   }
   ctx.restore && ctx.restore()
 }
