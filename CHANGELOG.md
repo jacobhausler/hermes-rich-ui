@@ -2,8 +2,11 @@
 
 All notable changes to hermes-rich-ui are documented here.
 
-## Unreleased
+## v0.1.4 — 2026-09-29
 
+- **Waterfall balance walk (#15, #16):** sign-coded bars for single-series
+  waterfalls, signed value labels, connector lines, and a first-point
+  `total: true`+`value` opening anchor; multi-series waterfalls keep per-series colours.
 - **Waterfall first-point totals (semantic change, #15/#16):** a FIRST point with
   `total: true` and a numeric `value` is now the opening anchor — it pins 0→value and
   starts the running balance (main drew a zero-height bar for that shape, which is
@@ -16,6 +19,8 @@ All notable changes to hermes-rich-ui are documented here.
   anchor bound on each series' first non-gap index. Sign (increase/decrease/total)
   colours apply to single-series waterfalls only; multi-series waterfalls keep the
   per-series colours and the uPlot series legend, exactly as before #15.
+- Waterfall colour key is skipped entirely on charts too narrow to hold it (value
+  labels and bar colours still carry the meaning).
 
 ## v0.1.3 — 2026-09-28
 
