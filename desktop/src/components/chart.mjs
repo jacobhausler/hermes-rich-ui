@@ -12,11 +12,17 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import uPlot from 'uplot'
-import { ownSources } from './_shared.mjs'
+import { formatMetric, ownSources } from './_shared.mjs'
 
 const KINDS = ['bar', 'line', 'scatter', 'histogram', 'area', 'waterfall', 'range']
 const SERIES_TOKENS = ['--ui-accent', '--ui-green', '--ui-purple', '--ui-orange']
+// #15: the three waterfall fill roles — same colour-source path as SERIES_TOKENS
+// (theme token at runtime, FALLBACK entry off-screen/tests; never a loose hex).
+const WF_ROLE_TOKENS = { up: '--ui-green', down: '--ui-red', total: '--ui-text-secondary' }
+export const WF_ROLE_LABELS = { up: 'Increase', down: 'Decrease', total: 'Total' }
+const WF_ROLE_ORDER = ['up', 'down', 'total']
 const FALLBACK = { '--ui-accent': '#3b82f6', '--ui-green': '#22c55e', '--ui-purple': '#a855f7', '--ui-orange': '#f97316',
+  '--ui-red': '#ef4444', '--ui-text-tertiary': '#6b7280',
   '--ui-text-secondary': '#9ca3af', '--ui-text-primary': '#e5e7eb', '--ui-stroke-tertiary': '#374151', '--ui-stroke-secondary': '#4b5563' }
 const HEIGHT = 240          // default chart height (F1: `height` prop clamps 120..480)
 const HEIGHT_MIN = 120
@@ -218,7 +224,7 @@ export function seriesToUplot(kind, series, opts = {}) {
     }
     if (order.length === 0) return empty('no labelled steps')
     let points = 0
-    const steps = [], bases = [], tops = [], totals = []
+    const steps = [], bases = [], tops = [], totals = [], roles = []
     for (const s of ss) {
       const st = new Array(order.length).fill(null)
       const tt = new Array(order.length).fill(false)
@@ -235,19 +241,27 @@ export function seriesToUplot(kind, series, opts = {}) {
       }
       const bs = new Array(order.length).fill(null)
       const tp = new Array(order.length).fill(null)
+      const rl = new Array(order.length).fill(null)
       let run = 0
       for (let i = 0; i < order.length; i++) {
         const v = st[i]
         if (v === null && !tt[i]) continue            // missing step: gap; running total unchanged
         points++
-        if (tt[i]) { bs[i] = 0; tp[i] = run }        // total bar: pinned 0 → cumulative
-        else { bs[i] = run; tp[i] = run = run + v }  // step: base → base+value (across zero fine; test pins it)
+        if (tt[i]) {
+          // #15 opening anchor: total:true + a numeric value as the FIRST point pins 0→value
+          // and RESETS the running total to that value (the walk starts from the authored opening,
+          // the value is still never a hand-computed cumulative — L6). Later totals keep pinning
+          // 0→run and ignore `value`, exactly as before (old cards unchanged).
+          if (i === 0 && isNum(v)) { bs[i] = 0; tp[i] = run = v }
+          else { bs[i] = 0; tp[i] = run }             // total bar: pinned 0 → cumulative
+          rl[i] = 'total'
+        } else { bs[i] = run; tp[i] = run = run + v; rl[i] = v < 0 ? 'down' : 'up' }  // step: base → base+value (across zero fine; test pins it)
       }
-      steps.push(st); totals.push(tt); bases.push(bs); tops.push(tp)
+      steps.push(st); totals.push(tt); bases.push(bs); tops.push(tp); roles.push(rl)
     }
     if (points === 0) return empty('all waterfall values are null')
     const out = { ok: true, data: [order.map((_, i) => i), ...tops], labels, xAxisIsTime: false, xLabels: order, points }
-    out.wf = { steps, bases, tops, totals }
+    out.wf = { steps, bases, tops, totals, roles }
     return out
   }
 
@@ -325,6 +339,117 @@ function histogramPaths(highs) {
     }
     return { stroke: p, fill: p, clip: null, band: null, gaps: null, flags: 0 }
   }
+}
+
+// #15 value-label geometry pins and the ONE formatter call site for waterfall value labels
+// (maintainer directive, 2026-09-28): every label text goes through the shared formatMetric —
+// when the repo-wide smart-defaults formatter lands, only fmtWfValue changes. Sign prefix is
+// added AROUND the formatter result (formatter stays unit/number-formatting owner).
+const WF_LABEL_HALF_PER_CHAR = 2.75   // half-width estimate per char at the 11px canvas font
+const WF_LABEL_HALF_PAD = 2            // half-width glyph bleed beyond the char estimate
+const WF_LABEL_MIN_SLOT = 24           // bar slot narrower than this px → labels skipped entirely
+const WF_LABEL_GAP = 5                 // label baseline sits this many px above the bar top
+function fmtWfValue(v, unit, signed) {
+  const out = formatMetric(v, { unit })
+  if (out == null) return null
+  return signed && v > 0 ? '+' + out : out
+}
+
+/**
+ * Pure waterfall layout plan for the #15 canvas painter (testable without a canvas):
+ * per-role bar rects, top→next-base connectors, width-aware value labels, and the
+ * Increase/Decrease/Total key. `u` is any uPlot-like exposing valToPos + series visibility.
+ */
+export function waterfallPlan(u, model, props, colors) {
+  const wf = model.wf
+  const n = model.data[0].length
+  const seriesCount = Math.max(1, model.labels.length)
+  const group = 0.8, slot = group / seriesCount
+  // px-per-x-unit over the categorical range [-0.5, n-0.5] (same convention as floatingRectPaths).
+  const pxPerUnit = (u.valToPos(n - 0.5, 'x', true) - u.valToPos(-0.5, 'x', true)) / Math.max(1, n)
+  const unit = typeof props.unit === 'string' && props.unit ? props.unit : ''
+  const wfFill = (role) => (colors.wf && colors.wf[role]) || FALLBACK[WF_ROLE_TOKENS[role]] || '#888'
+  const bars = [], connectors = [], labels = []
+  const shown = (s) => !u.series || !u.series[s + 1] || u.series[s + 1].show !== false
+  for (let s = 0; s < model.labels.length; s++) {
+    if (!shown(s)) continue
+    const bases = wf.bases[s], tops = wf.tops[s], rolesCol = wf.roles[s], stepsCol = wf.steps[s], totalsCol = wf.totals[s]
+    for (let i = 0; i < n; i++) {
+      const top = tops[i], base = bases[i]
+      if (isNullish(top) || isNullish(base)) continue
+      const centre = u.valToPos(i, 'x', true)
+      const l = centre + (s * slot - group / 2) * pxPerUnit
+      const t = u.valToPos(top, 'y', true), b = u.valToPos(base, 'y', true)
+      const role = rolesCol[i] || 'up'
+      bars.push({ x: l, y: Math.min(t, b), w: Math.max(slot * pxPerUnit, 1), h: Math.max(Math.abs(b - t), 1), role, fill: wfFill(role) })
+    }
+    // Connector: bar i's running level (its top) → the level bar i+1 rests at. A total bar's
+    // walk level is its VALUE (top), not the pinned-to-zero base artifact.
+    const walkLevel = (i) => (totalsCol[i] ? tops[i] : bases[i])
+    for (let i = 0; i < n - 1; i++) {
+      if (isNullish(tops[i]) || isNullish(bases[i]) || isNullish(tops[i + 1]) || isNullish(bases[i + 1])) continue
+      const lvA = tops[i], lvB = walkLevel(i + 1)
+      if (isNullish(lvA) || isNullish(lvB)) continue
+      const x1 = u.valToPos(i, 'x', true) + (s * slot - group / 2 + slot) * pxPerUnit   // right edge of bar i's slot
+      const x2 = u.valToPos(i + 1, 'x', true) + (s * slot - group / 2) * pxPerUnit      // left edge of bar i+1's slot
+      if (!(x2 > x1)) continue
+      connectors.push({ x1, x2, y1: u.valToPos(lvA, 'y', true), y2: u.valToPos(lvB, 'y', true) })
+    }
+    // Value labels: signed step on step bars, renderer-computed running value on total bars.
+    // Skipped entirely when bars are too narrow, and individually when neighbours would overlap.
+    let lastX = -Infinity, lastHalf = 0
+    for (let i = 0; i < n; i++) {
+      if (isNullish(tops[i]) || isNullish(bases[i])) continue
+      if (slot * pxPerUnit < WF_LABEL_MIN_SLOT) continue
+      const isTotal = totalsCol[i]
+      const v = isTotal ? tops[i] : stepsCol[i]
+      if (!isNum(v)) continue
+      const text = fmtWfValue(v, unit, !isTotal)
+      if (!text) continue
+      const centre = u.valToPos(i, 'x', true)
+      const half = text.length * WF_LABEL_HALF_PER_CHAR + WF_LABEL_HALF_PAD
+      if (centre - lastX < half + lastHalf) continue
+      const topEdge = u.valToPos(Math.max(tops[i], bases[i]), 'y', true)   // visually upper edge (y grows down)
+      labels.push({ x: centre, y: topEdge - WF_LABEL_GAP, text, color: colors.text || FALLBACK['--ui-text-secondary'] })
+      lastX = centre; lastHalf = half
+    }
+  }
+  const key = WF_ROLE_ORDER.map((role) => ({ color: wfFill(role), label: WF_ROLE_LABELS[role] }))
+  return { bars, connectors, labels, key }
+}
+
+// opts.hooks.draw painter for waterfall (bars get their role-coded fills here, so the
+// series path paints nothing). Consumes ONLY waterfallPlan output. Coordinates are canvas
+// device px (uPlot convention: valToPos(..., true) and a manual pxRatio, no ctx.setTransform).
+export function drawWaterfallPlan(u, plan) {
+  const ctx = u && u.ctx
+  if (!ctx || !plan || !ctx.canvas) return
+  const pr = (u.width && ctx.canvas.width) ? ctx.canvas.width / u.width : 1
+  ctx.save && ctx.save()
+  ctx.strokeStyle = plan.strokeStyle
+  ctx.lineWidth = Math.max(1, pr)
+  ctx.setLineDash && ctx.setLineDash([3 * pr, 3 * pr])
+  ctx.beginPath && ctx.beginPath()
+  for (const c of plan.connectors) { ctx.moveTo && ctx.moveTo(c.x1, c.y1); ctx.lineTo && ctx.lineTo(c.x2, c.y2) }
+  ctx.stroke && ctx.stroke()
+  ctx.setLineDash && ctx.setLineDash([])
+  for (const b of plan.bars) { ctx.fillStyle = b.fill; ctx.fillRect && ctx.fillRect(b.x, b.y, b.w, b.h) }
+  ctx.font = `${Math.round(11 * pr)}px system-ui, sans-serif`
+  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
+  for (const l of plan.labels) { ctx.fillStyle = l.color; ctx.fillText && ctx.fillText(l.text, l.x, l.y) }
+  // Key banner: Increase / Decrease / Total, top-left inside the plot.
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
+  const keyTop = plan.keyTop != null ? plan.keyTop : 12 * pr
+  let kx = plan.keyLeft != null ? plan.keyLeft : 6 * pr
+  for (const e of plan.key) {
+    ctx.fillStyle = e.color
+    ctx.fillRect && ctx.fillRect(kx, keyTop - 5 * pr, 10 * pr, 10 * pr)
+    const textW = e.label.length * 5.5 * pr
+    ctx.fillStyle = plan.keyTextColor
+    ctx.fillText && ctx.fillText(e.label, kx + 13 * pr, keyTop)
+    kx += 13 * pr + textW + 12 * pr
+  }
+  ctx.restore && ctx.restore()
 }
 
 // Shared geometry for the floating-rect kinds (waterfall, range): one rect per category from
@@ -417,7 +542,12 @@ export function buildOpts(kind, model, props, width, colors) {
     }
     else if (kind === 'histogram') { s.paths = histogramPaths(model.highs[i]); s.fill = color; s.width = 0; s.points = { show: false } }
     else if (kind === 'scatter') { s.paths = () => null; s.points = { show: true, size: 7, fill: color, stroke: color, width: 1 } }
-    else if (kind === 'waterfall') { s.paths = floatingRectPaths(labels.length, i, model.wf.bases); s.fill = color; s.width = 0; s.points = { show: false } }
+    else if (kind === 'waterfall') {
+      // #15: bars are painted per sign-role by the draw hook below (three distinct fills +
+      // connectors + value labels + key), so the series path itself paints nothing.
+      s.paths = () => ({ stroke: null, fill: null, clip: null, band: null, gaps: null, flags: 0 })
+      s.fill = color; s.width = 0; s.points = { show: false }
+    }
     else if (kind === 'range') { s.paths = floatingRectPaths(labels.length, i, model.lows); s.fill = color; s.width = 0; s.points = { show: false } }
     else if (kind === 'area') {
       // Fill toward zero: uPlot's seriesFillTo returns 0 on a linear scale; withAlpha keeps the
@@ -437,7 +567,17 @@ export function buildOpts(kind, model, props, width, colors) {
     scales, series,
     axes: [xAxis, yAxis],
     cursor: { show: true, x: true, y: true, drag: { x: false, y: false, setScale: false }, points: { show: true } },
-    legend: { show: true, live: false }
+    legend: { show: true, live: false },
+    // #15: waterfall paints its role-coded bars, connectors, value labels and key here —
+    // after uPlot's own draw pass, from the pure waterfallPlan(u, ...) layout.
+    ...(kind === 'waterfall' ? { hooks: { draw: [(u) => {
+      try {
+        const plan = waterfallPlan(u, model, props, colors)
+        plan.strokeStyle = colors.grid || FALLBACK['--ui-stroke-tertiary']
+        plan.keyTextColor = colors.text || FALLBACK['--ui-text-secondary']
+        drawWaterfallPlan(u, plan)
+      } catch { /* a canvas-side failure must never blank the chart */ }
+    }] } } : {})
   }
 }
 
@@ -515,7 +655,9 @@ function UplotHost({ kind, model, props, propsKey, height }) {
     const colors = {
       series: SERIES_TOKENS.map(t => readToken(el, t)),
       text: readToken(el, '--ui-text-secondary'),
-      grid: readToken(el, '--ui-stroke-tertiary')
+      grid: readToken(el, '--ui-stroke-tertiary'),
+      // #15: the three waterfall fills ride the same colour-source path as SERIES_TOKENS.
+      wf: Object.fromEntries(WF_ROLE_ORDER.map(r => [r, readToken(el, WF_ROLE_TOKENS[r])]))
     }
     let u = null
     const width = () => (el.clientWidth || el.getBoundingClientRect().width || 600)

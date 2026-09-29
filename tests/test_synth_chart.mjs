@@ -92,6 +92,152 @@ test('waterfall: custom floating-rect path, no bars() path, no stackGroup option
   assert.ok(Array.isArray(o.scales.x.range()), 'categorical x range present')
 })
 
+// ---------- kind: waterfall readability (#15: sign-coded fills, value labels, connectors, opening anchor) ----------
+// Module object (not named imports): wfmod.waterfallPlan is just undefined on main, so each
+// #15 test fails on its own instead of the whole file failing to load.
+const wfmod = await import('../desktop/src/components/chart.mjs')
+
+// Fake uPlot instance: deterministic valToPos for the layout buildOpts gives waterfall
+// (categorical x over [-0.5, n-0.5]; y via zeroBaseline over the data extremes).
+function fakeU(model, width = 600, height = 320) {
+  const n = model.data[0].length
+  const all = [...model.wf.bases.flat(), ...model.wf.tops.flat()].filter(v => typeof v === 'number')
+  const yMin = Math.min(0, ...all), yMax = Math.max(0, ...all)
+  const padL = 64, padR = 10, padT = 10, padB = 20   // padL matches the y-axis size (buildOpts axisBase)
+  const plotW = width - padL - padR, plotH = height - padT - padB
+  const yPos = (v) => padT + ((yMax - v) / ((yMax - yMin) || 1)) * plotH
+  return {
+    width, height,
+    // uPlot's series array includes the x-series at index 0.
+    series: [{}, ...model.data.slice(1).map(() => ({ show: true }))],
+    valToPos: (v, scale) => (scale === 'x' ? padL + ((v + 0.5) / n) * plotW : yPos(v)),
+    yPos
+  }
+}
+
+test('waterfall #15: sign classification — wf.roles classifies each bar up/down/total', () => {
+  const m = seriesToUplot('waterfall', [{ label: 's', data: [
+    { label: 'a', value: 10 }, { label: 'b', value: -25 }, { label: 'c', value: 5 }, { label: 'T', value: null, total: true }
+  ] }])
+  assert.deepEqual(m.wf.roles[0], ['up', 'down', 'up', 'total'], 'the fill decision lives in the model, next to bases/tops')
+})
+
+test('waterfall #15: opening anchor — total:true + numeric value on the FIRST point pins 0→value and resets the running total', () => {
+  const m = seriesToUplot('waterfall', [{ label: 'walk', data: [
+    { label: 'Opening', value: 500, total: true },
+    { label: 'Deposits', value: 200 },
+    { label: 'Rent', value: -150 },
+    { label: 'Closing', value: null, total: true }
+  ] }])
+  assert.equal(m.ok, true)
+  assert.deepEqual(m.wf.bases[0], [0, 500, 700, 0], 'opening bar pinned to 0; the walk starts from the authored opening, not from 0')
+  assert.deepEqual(m.wf.tops[0], [500, 700, 550, 550], 'running total RESETS to the opening, then stays renderer-computed (L6)')
+  assert.deepEqual(m.data[1], [500, 700, 550, 550], 'tops live in the uPlot data column')
+  assert.deepEqual(m.wf.roles[0], ['total', 'up', 'down', 'total'])
+})
+
+test('waterfall #15: closing total equals opening + sum of the signed steps (L6: never agent-supplied)', () => {
+  const steps = [320.5, -80, 15, -200.5]
+  const m = seriesToUplot('waterfall', [{ label: 's', data: [
+    { label: 'Open', value: 1000, total: true },
+    ...steps.map((v, i) => ({ label: 'a' + i, value: v })),
+    { label: 'Close', value: null, total: true }
+  ] }])
+  const last = m.wf.tops[0].length - 1
+  assert.equal(m.wf.bases[0][last], 0, 'closing bar pinned to zero')
+  assert.equal(m.wf.tops[0][last], 1000 + steps.reduce((a, b) => a + b, 0), 'closing = opening + net movement, computed by the renderer')
+})
+
+test('waterfall #15 migration: an OLD card without an anchor keeps identical geometry; only roles is added', () => {
+  const m = seriesToUplot('waterfall', fx('chart-waterfall').series)
+  assert.deepEqual(m.wf.bases[0], [0, 100, 60, 0])
+  assert.deepEqual(m.wf.tops[0], [100, 60, 85, 85])
+  assert.deepEqual(m.wf.totals[0], [false, false, false, true])
+  assert.deepEqual(m.data[1], [100, 60, 85, 85])
+  assert.deepEqual(m.wf.roles[0], ['up', 'down', 'up', 'total'], 'new field only — old cards render exactly as before')
+})
+
+test('waterfall #15 plan: thin connector from each bar top (running level) to the next bar base', () => {
+  const props = fx('chart-waterfall')
+  const m = seriesToUplot('waterfall', props.series)
+  const u = fakeU(m)
+  const plan = wfmod.waterfallPlan(u, m, props, COLORS)
+  assert.equal(plan.connectors.length, m.xLabels.length - 1, 'one connector per adjacent pair')
+  // A total bar's meaningful level is its running VALUE (top), not its pinned-to-zero base artifact.
+  const walkLevel = (i) => (m.wf.totals[0][i] ? m.wf.tops[0][i] : m.wf.bases[0][i])
+  plan.connectors.forEach((c, k) => {
+    assert.equal(c.y1, u.yPos(m.wf.tops[0][k]), `connector ${k} leaves at the running level of bar ${k}`)
+    assert.equal(c.y2, u.yPos(walkLevel(k + 1)), `connector ${k} lands at the walk level of bar ${k + 1}`)
+    assert.equal(c.y1, c.y2, 'contiguous walk → horizontal connector')
+    assert.ok(c.x2 > c.x1, 'runs left → right between the bars')
+  })
+})
+
+test('waterfall #15 plan: bars get distinct role fills from the token palette (increase/decrease/total)', () => {
+  const props = fx('chart-waterfall')
+  const m = seriesToUplot('waterfall', props.series)
+  const plan = wfmod.waterfallPlan(fakeU(m), m, props, COLORS)
+  assert.deepEqual(plan.bars.map(b => b.role), ['up', 'down', 'up', 'total'])
+  assert.deepEqual(plan.bars.map(b => b.fill), ['#22c55e', '#ef4444', '#22c55e', '#9ca3af'],
+    'increase=green, decrease=red, total=neutral — token-driven (FALLBACK here, theme vars at runtime)')
+  assert.equal(new Set(plan.bars.map(b => b.fill)).size, 3, 'three distinct fills')
+})
+
+test('waterfall #15 plan: honour a legend-hidden series (uPlot series.show === false)', () => {
+  const props = fx('chart-waterfall')
+  const m = seriesToUplot('waterfall', props.series)
+  const u = fakeU(m)
+  u.series[1].show = false
+  const plan = wfmod.waterfallPlan(u, m, props, COLORS)
+  assert.deepEqual(plan.bars, [], 'hidden series paints nothing')
+})
+
+test('waterfall #15 plan: signed step labels through the shared formatter (unit honoured); total shows the running value unsigned', () => {
+  const props = fx('chart-waterfall')
+  const m = seriesToUplot('waterfall', props.series)
+  const plan = wfmod.waterfallPlan(fakeU(m, 900, 320), m, props, COLORS)
+  assert.deepEqual(plan.labels.map(l => l.text), ['+100 USD', '-40 USD', '+25 USD', '85 USD'],
+    'steps signed via the ONE formatMetric call site; total bars show the renderer-computed running value')
+  assert.ok(plan.labels.every(l => Number.isFinite(l.x) && Number.isFinite(l.y)), 'labels are placed over their bars')
+})
+
+test('waterfall #15 plan: labels skip when bars are too narrow — 12 categories at 320px height never overlap', () => {
+  const data = []
+  for (let i = 0; i < 12; i++) data.push({ label: 'cat ' + i, value: i % 2 ? -1900 : 2800 })
+  data.push({ label: 'close', value: null, total: true })
+  const props = { kind: 'waterfall', unit: 'USD', series: [{ label: 'walk', data }] }
+  const m = seriesToUplot('waterfall', props.series)
+  const narrow = wfmod.waterfallPlan(fakeU(m, 400, 320), m, props, COLORS)
+  assert.deepEqual(narrow.labels.map(l => l.text), [], '400px-wide plot: bars too narrow → labels skipped, never overlapped')
+  const wide = wfmod.waterfallPlan(fakeU(m, 1100, 320), m, props, COLORS)
+  assert.equal(wide.labels.length, 13, 'the same 13 bars label every step once the slots fit')
+  for (let i = 1; i < wide.labels.length; i++) {
+    const gap = Math.abs(wide.labels[i].x - wide.labels[i - 1].x)
+    const halves = (wide.labels[i].text.length + wide.labels[i - 1].text.length) * 2.75 + 4
+    assert.ok(gap >= halves, `labels ${i - 1}/${i} boxes do not overlap (${gap.toFixed(1)}px ≥ ${halves.toFixed(1)}px)`)
+  }
+})
+
+test('waterfall #15 key: the three meanings are labelled Increase / Decrease / Total', () => {
+  assert.deepEqual(wfmod.WF_ROLE_LABELS, { up: 'Increase', down: 'Decrease', total: 'Total' },
+    'the banner key labels each sign class so the fills are decodable')
+  const m = seriesToUplot('waterfall', fx('chart-waterfall').series)
+  const plan = wfmod.waterfallPlan(fakeU(m), m, fx('chart-waterfall'), COLORS)
+  assert.deepEqual(plan.key.map(e => e.label), ['Increase', 'Decrease', 'Total'])
+  assert.deepEqual(plan.key.map(e => e.color), ['#22c55e', '#ef4444', '#9ca3af'])
+})
+
+test('waterfall #15 opts: canvas key/labels/connectors wired via opts.hooks.draw; uPlot paints no rects itself', () => {
+  const props = fx('chart-waterfall')
+  const m = seriesToUplot('waterfall', props.series)
+  const o = buildOpts('waterfall', m, props, 400, { ...COLORS, wf: { up: '#22c55e', down: '#ef4444', total: '#9ca3af' } })
+  assert.ok(Array.isArray(o.hooks.draw) && o.hooks.draw.every(f => typeof f === 'function'), 'draw hook registered (opts.hooks.draw)')
+  assert.equal(typeof o.series[1].paths, 'function')
+  assert.deepEqual(o.series[1].paths(fakeU(m), 1, 0, 3), { stroke: null, fill: null, clip: null, band: null, gaps: null, flags: 0 },
+    'bars are painted by the draw hook per role, so the series path paints nothing')
+  assert.ok(!deepKeys(o).includes('stackGroup'), 'no uPlot stacking option anywhere (S7)')
+})
+
 // ---------- kind: range (N9) ----------
 test('range: rect low→high, endpoints kept as supplied, ≤4 series/≤512 pts enforced by normSeries', () => {
   const m = seriesToUplot('range', fx('chart-range').series)
