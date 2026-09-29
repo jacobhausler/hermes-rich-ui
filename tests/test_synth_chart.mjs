@@ -300,6 +300,116 @@ test('waterfall #16 key banner is positioned inside u.bbox, never in the y-axis 
   assert.ok(flipped > clear[0].x, 'the headroom fallback sits right of the left-aligned spot')
 })
 
+// Review #16 round 2 (pf-mechanic) blocker 1 (F1): the reserved key width came from a
+// hardcoded KEY_W=165*pr while the painter actually drew ≈178.5*pr, so the top-right
+// fallback put the "Total" TEXT ≈13px past bbox.right (probe at bbox.right=536 reached
+// x≈543.5). The width now comes from keyLayout(pr, key) — the SAME per-item sum the
+// painter walks — and the assertions below test the TEXT extent, not just the swatches.
+function captureKeyPaint(u, plan) {
+  const painted = []
+  const ctx = {
+    canvas: { width: u.width },
+    beginPath() {}, moveTo() {}, lineTo() {}, stroke() {},
+    fillRect(x, y, w, h) { painted.push({ op: 'fillRect', x, y, w, h }) },
+    fillText(t, x, y) { painted.push({ op: 'fillText', x, y, t }) },
+    save() {}, restore() {}, setLineDash() {}
+  }
+  wfmod.drawWaterfallPlan({ ctx, width: u.width, bbox: u.bbox }, { ...plan, labels: [] })   // value labels out of scope here
+  return painted
+}
+const keyTextEnd = (p, pr = 1) => p.x + p.t.length * 5.5 * pr   // the painter's per-char estimate
+
+test('waterfall #16 r2 key width: top-right fallback keeps the LAST TEXT inside bbox.right; left anchor never left of bbox.left (blocker 1)', () => {
+  const m = seriesToUplot('waterfall', fx('chart-waterfall').series)
+  // bbox.right = 536 (the reviewer's probe): padL 64 + padR 10 → canvas width 546.
+  const u = fakeU(m, 546, 320)
+  assert.equal(u.bbox.left + u.bbox.width, 536, 'probe canvas: bbox.right = 536')
+  const plan = wfmod.waterfallPlan(u, m, fx('chart-waterfall'), COLORS)
+  // (1) Fallback path (bars under the left banner band → top-right anchor).
+  const texts = captureKeyPaint(u, plan).filter(p => p.op === 'fillText')
+  assert.deepEqual(texts.map(t => t.t), ['Increase', 'Decrease', 'Total'], 'three key labels painted')
+  for (const p of texts) {
+    assert.ok(p.x >= u.bbox.left, `fallback key text "${p.t}" starts inside the plot box (x=${p.x} ≥ ${u.bbox.left})`)
+    assert.ok(keyTextEnd(p) <= u.bbox.left + u.bbox.width,
+      `fallback key text "${p.t}" ends at ${keyTextEnd(p).toFixed(1)} ≤ bbox.right ${u.bbox.left + u.bbox.width} (old KEY_W=165pr put Total at ≈543.5)`)
+  }
+  // (2) Left-anchored path: no bar in the band → every text starts ≥ bbox.left (and ends inside).
+  const left = captureKeyPaint(u, { ...plan, bars: [] }).filter(p => p.op === 'fillText')
+  for (const p of left) {
+    assert.ok(p.x >= u.bbox.left, `left-anchored key text "${p.t}" starts ≥ bbox.left`)
+    assert.ok(keyTextEnd(p) <= u.bbox.left + u.bbox.width, `left-anchored key text "${p.t}" ends ≤ bbox.right`)
+  }
+  // (3) keyLayout is the single source of truth: reserved width == the actually-drawn
+  // extent, measured first swatch left edge → last text end.
+  const layout = wfmod.keyLayout(1, plan.key)
+  const leftAll = captureKeyPaint(u, { ...plan, bars: [] })
+  const firstSwatch = leftAll.find(p => p.op === 'fillRect' && p.w <= 10.5)
+  const drawn = leftAll.filter(p => p.op === 'fillText').pop()
+  assert.ok(Math.abs(layout.width - (keyTextEnd(drawn) - firstSwatch.x)) < 1e-9,
+    'reserved KEY_W equals the actually-drawn banner extent (one shared helper)')
+})
+
+// Review #16 round 2 (pf-mechanic) blocker 2 (F3, maintainer ruling): role colouring is
+// scoped to SINGLE-SERIES waterfalls. Exactly one series → role fills + the
+// Increase/Decrease/Total key + a neutralised uPlot series swatch (no legend colour that
+// no bar uses). This test pins the single-series half; multi-series is next.
+test('waterfall #16 r2 single-series: role fills, the key draws, and the legend swatch shows no colour no bar uses (blocker 2a)', () => {
+  const props = fx('chart-waterfall')
+  const m = seriesToUplot('waterfall', props.series)
+  const plan = wfmod.waterfallPlan(fakeU(m, 900, 320), m, props, COLORS)
+  assert.deepEqual(plan.bars.map(b => b.fill), ['#22c55e', '#ef4444', '#22c55e', '#9ca3af'],
+    'single series: bars carry the increase/decrease/total role fills')
+  assert.deepEqual(plan.key.map(e => e.label), ['Increase', 'Decrease', 'Total'], 'the role key is drawn')
+  const o = buildOpts('waterfall', m, props, 400, COLORS)
+  assert.ok(o.legend.markers, 'single-series waterfall neutralises the uPlot series swatch')
+  assert.equal(o.legend.markers.width(null, 1), 0, 'no marker border (stroke colour is not shown)')
+  assert.notEqual(o.legend.markers.fill(null, 1), COLORS.series[0],
+    'swatch fill is NOT the SERIES_TOKENS colour — the legend shows no colour no bar uses')
+  assert.equal(o.legend.markers.fill(null, 1), COLORS.text, 'swatch is the neutral text colour')
+})
+
+// Blocker 2b (the F3 regression pin): with TWO series the bars must keep main's
+// per-series colours (exactly the pre-PR behaviour: fill = colors.series[i % n]), no
+// role key is drawn, and the legend swatch colours equal the bar fills. This test FAILS
+// at 0ab0b1a (there every series painted with the shared role fills and the key showed).
+test('waterfall #16 r2 multi-series: per-series bar colours match the legend, no role key (blocker 2b, fails at 0ab0b1a)', () => {
+  const props = { kind: 'waterfall', unit: 'USD', series: [
+    { label: '2025', data: [{ label: 'open', value: 500, total: true }, { label: 'in', value: 200 }, { label: 'out', value: -80 }] },
+    { label: '2026', data: [{ label: 'open', value: 400, total: true }, { label: 'in', value: 260 }, { label: 'out', value: -30 }] }
+  ] }
+  const m = seriesToUplot('waterfall', props.series)
+  const u = fakeU(m, 900, 320)
+  const plan = wfmod.waterfallPlan(u, m, props, COLORS)
+  const group = 0.8, slot = group / m.labels.length
+  const n = m.data[0].length
+  const pxPerUnit = (u.valToPos(n - 0.5, 'x', true) - u.valToPos(-0.5, 'x', true)) / n
+  // Which series does a bar belong to? Match its left edge against the plan's own slot formula.
+  const seriesOf = (b) => {
+    for (let s = 0; s < m.labels.length; s++)
+      for (let i = 0; i < n; i++)
+        if (Math.abs(u.valToPos(i, 'x', true) + (s * slot - group / 2) * pxPerUnit - b.x) < 1e-6) return s
+    return -1
+  }
+  assert.ok(plan.bars.length >= 6, 'both series paint their bars')
+  for (const b of plan.bars) {
+    const s = seriesOf(b)
+    assert.ok(s === 0 || s === 1, `bar at x=${b.x.toFixed(1)} resolves to a series slot (${s})`)
+    assert.equal(b.fill, COLORS.series[s % COLORS.series.length],
+      `series ${s}'s bar fill equals main's per-series colour (SERIES_TOKENS[${s}]) — pre-PR behaviour`)
+  }
+  assert.deepEqual(plan.key, [], 'multi-series: the role key is NOT drawn (the legend is the key)')
+  assert.ok(plan.labels.length > 0 && plan.connectors.length > 0, 'labels and connectors still draw in multi-series mode')
+  // Legend agreement: default uPlot markers (legendFill = s.fill) and s.fill === bar fill.
+  const o = buildOpts('waterfall', m, props, 400, COLORS)
+  assert.equal(o.legend.markers, undefined, 'multi-series keeps uPlot default legend markers')
+  for (let s = 0; s < 2; s++) {
+    const bars = plan.bars.filter(b => seriesOf(b) === s)
+    assert.ok(bars.length > 0)
+    for (const b of bars) assert.equal(b.fill, o.series[s + 1].fill,
+      `legend swatch colour for series ${s} equals its bar fill`)
+  }
+})
+
 // Review #16 (pf-mechanic) finding 2: value labels ride their SERIES' bar-slot centre
 // (floatingRectPaths geometry), and the overlap walk runs across ALL series together —
 // two series must never print on top of each other at the category centre.

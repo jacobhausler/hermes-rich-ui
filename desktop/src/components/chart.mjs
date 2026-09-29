@@ -358,10 +358,28 @@ function fmtWfValue(v, unit, signed) {
   return signed && v > 0 ? '+' + out : out
 }
 
+// Key banner geometry constants: the ONLY width formula for the key. keyLayout sums the
+// per-item widths and drawWaterfallPlan walks the same per-item increments, so the space
+// reserved for placement always equals the banner actually drawn (review #16 round 2, F1).
+const KEY_SWATCH = 10, KEY_TEXT_GAP = 13, KEY_ITEM_TAIL = 12, KEY_PX_PER_CHAR = 5.5
+export function keyLayout(pr, key) {
+  let x = 0; const items = []
+  for (const e of (key || [])) {
+    items.push({ x, label: e.label, color: e.color })
+    x += KEY_TEXT_GAP * pr + e.label.length * KEY_PX_PER_CHAR * pr + KEY_ITEM_TAIL * pr
+  }
+  // No trailing gap after the last label; an empty key (multi-series mode) reserves 0.
+  return { items, width: items.length ? x - KEY_ITEM_TAIL * pr : 0 }
+}
+
 /**
  * Pure waterfall layout plan for the #15 canvas painter (testable without a canvas):
- * per-role bar rects, top→next-base connectors, width-aware value labels, and the
+ * bar rects, top→next-base connectors, width-aware value labels, and the
  * Increase/Decrease/Total key. `u` is any uPlot-like exposing valToPos + series visibility.
+ * Maintainer ruling (review #16 round 2, F3): role colouring + key are for SINGLE-SERIES
+ * waterfalls only; two or more series keep main's per-series fills and the uPlot series
+ * legend (this is exactly pre-#15 main behaviour for multi-series). Value labels and
+ * connectors draw in BOTH modes.
  */
 export function waterfallPlan(u, model, props, colors) {
   const wf = model.wf
@@ -372,6 +390,10 @@ export function waterfallPlan(u, model, props, colors) {
   const pxPerUnit = (u.valToPos(n - 0.5, 'x', true) - u.valToPos(-0.5, 'x', true)) / Math.max(1, n)
   const unit = typeof props.unit === 'string' && props.unit ? props.unit : ''
   const wfFill = (role) => (colors.wf && colors.wf[role]) || FALLBACK[WF_ROLE_TOKENS[role]] || '#888'
+  // F3 ruling: role fills + key are single-series only; multi-series keeps main's
+  // per-series colour, the exact expression buildOpts uses for s.fill / legend swatches.
+  const single = model.labels.length <= 1
+  const seriesFill = (s) => (colors.series && colors.series[s % colors.series.length]) || FALLBACK[SERIES_TOKENS[s % SERIES_TOKENS.length]]
   const bars = [], connectors = [], labels = [], labelCandidates = []
   const shown = (s) => !u.series || !u.series[s + 1] || u.series[s + 1].show !== false
   for (let s = 0; s < model.labels.length; s++) {
@@ -384,7 +406,11 @@ export function waterfallPlan(u, model, props, colors) {
       const l = l0(i)
       const t = u.valToPos(top, 'y', true), b = u.valToPos(base, 'y', true)
       const role = rolesCol[i] || 'up'
-      bars.push({ x: l, y: Math.min(t, b), w: Math.max(slot * pxPerUnit, 1), h: Math.max(Math.abs(b - t), 1), role, fill: wfFill(role) })
+      // F3 ruling (review #16 round 2): single-series → role fills; two or more series →
+      // main's per-series fill (same expression as buildOpts' s.fill = color), so every
+      // bar's colour equals its uPlot legend swatch.
+      const fill = single ? wfFill(role) : seriesFill(s)
+      bars.push({ x: l, y: Math.min(t, b), w: Math.max(slot * pxPerUnit, 1), h: Math.max(Math.abs(b - t), 1), role, fill })
     }
     // Connector: bar i's running level (its top) → the level bar i+1 rests at. A total bar's
     // walk level is its VALUE (top), not the pinned-to-zero base artifact.
@@ -427,7 +453,9 @@ export function waterfallPlan(u, model, props, colors) {
     labels.push({ x: c.x, y: c.y, text: c.text, color: c.color })
     lastX = c.x; lastHalf = c.half
   }
-  const key = WF_ROLE_ORDER.map((role) => ({ color: wfFill(role), label: WF_ROLE_LABELS[role] }))
+  // F3 ruling: the role key belongs to the single-series mode only — with 2+ series the
+  // bars carry per-series colours and the uPlot series legend is the correct key.
+  const key = single ? WF_ROLE_ORDER.map((role) => ({ color: wfFill(role), label: WF_ROLE_LABELS[role] })) : []
   return { bars, connectors, labels, key }
 }
 
@@ -450,15 +478,20 @@ export function drawWaterfallPlan(u, plan) {
   ctx.font = `${Math.round(11 * pr)}px system-ui, sans-serif`
   ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
   for (const l of plan.labels) { ctx.fillStyle = l.color; ctx.fillText && ctx.fillText(l.text, l.x, l.y) }
-  // Key banner: Increase / Decrease / Total, positioned FROM THE PLOT BOX (review #16
-  // finding 1): canvas-absolute 6*pr/12*pr put the swatches in the y-axis gutter (size ~56)
-  // and ran the ~190px banner over the opening bar's value label. Simple headroom check:
-  // if the tallest bar's top label area reaches into the left-aligned banner band, draw
-  // the banner at the top-RIGHT of the plot box instead (still inside the box).
+  // Key banner: Increase / Decrease / Total (single-series only; plan.key is empty for
+  // multi-series), positioned FROM THE PLOT BOX (review #16 finding 1): canvas-absolute
+  // 6*pr/12*pr put the swatches in the y-axis gutter (size ~56) and ran the banner over
+  // the opening bar's value label. Simple headroom check: if the tallest bar's top label
+  // area reaches into the left-aligned banner band, draw the banner at the top-RIGHT of
+  // the plot box instead (still inside the box). Round 2 fix (F1): the reserved width is
+  // keyLayout()'s width — the SAME per-item sum the loop below draws — so the right-edge
+  // fallback can never push the last label past bbox.right the way the old KEY_W=165pr did.
   ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
   const bbox = u.bbox
   const keyTop = (bbox ? bbox.top : 0) + 12 * pr
-  const KEY_W = 165 * pr, KEY_H = 14 * pr
+  const KEY_H = 14 * pr
+  const layout = keyLayout(pr, plan.key)
+  const KEY_W = layout.width
   const boxLeft = (bbox ? bbox.left : 0) + 6 * pr
   const boxRight = bbox ? bbox.left + bbox.width : (ctx.canvas.width / pr)
   let keyLeft = boxLeft
@@ -470,14 +503,13 @@ export function drawWaterfallPlan(u, plan) {
     }
     if (under) keyLeft = Math.max(boxLeft, boxRight - 6 * pr - KEY_W)
   }
-  let kx = plan.keyLeft != null ? plan.keyLeft : keyLeft
-  for (const e of plan.key) {
-    ctx.fillStyle = e.color
-    ctx.fillRect && ctx.fillRect(kx, keyTop - 5 * pr, 10 * pr, 10 * pr)
-    const textW = e.label.length * 5.5 * pr
+  const keyOrigin = plan.keyLeft != null ? plan.keyLeft : keyLeft
+  for (const item of layout.items) {
+    const kx = keyOrigin + item.x
+    ctx.fillStyle = item.color
+    ctx.fillRect && ctx.fillRect(kx, keyTop - 5 * pr, KEY_SWATCH * pr, KEY_SWATCH * pr)
     ctx.fillStyle = plan.keyTextColor
-    ctx.fillText && ctx.fillText(e.label, kx + 13 * pr, keyTop)
-    kx += 13 * pr + textW + 12 * pr
+    ctx.fillText && ctx.fillText(item.label, kx + KEY_TEXT_GAP * pr, keyTop)
   }
   ctx.restore && ctx.restore()
 }
@@ -573,8 +605,12 @@ export function buildOpts(kind, model, props, width, colors) {
     else if (kind === 'histogram') { s.paths = histogramPaths(model.highs[i]); s.fill = color; s.width = 0; s.points = { show: false } }
     else if (kind === 'scatter') { s.paths = () => null; s.points = { show: true, size: 7, fill: color, stroke: color, width: 1 } }
     else if (kind === 'waterfall') {
-      // #15: bars are painted per sign-role by the draw hook below (three distinct fills +
-      // connectors + value labels + key), so the series path itself paints nothing.
+      // #15 / F3 ruling: single-series bars are painted per sign-role by the draw hook
+      // below (three fills + connectors + value labels + key); multi-series bars keep
+      // main's per-series fill painted by the hook too (exactly pre-#15 main geometry).
+      // The series path itself paints nothing, and the legend swatch is neutralised (see
+      // opts.legend.markers below) only in single-series mode so no legend shows a colour
+      // no bar uses.
       s.paths = () => ({ stroke: null, fill: null, clip: null, band: null, gaps: null, flags: 0 })
       s.fill = color; s.width = 0; s.points = { show: false }
     }
@@ -597,7 +633,14 @@ export function buildOpts(kind, model, props, width, colors) {
     scales, series,
     axes: [xAxis, yAxis],
     cursor: { show: true, x: true, y: true, drag: { x: false, y: false, setScale: false }, points: { show: true } },
-    legend: { show: true, live: false },
+    legend: { show: true, live: false,
+      // F3 ruling: in single-series waterfall mode the bars carry role colours, so the
+      // uPlot series swatch must not show the (unused) SERIES_TOKENS colour — width 0
+      // drops the border, fill paints the neutral --ui-text-secondary the key/labels use.
+      // Multi-series keeps the default markers: legendFill = s.fill = the bar fill below.
+      ...(kind === 'waterfall' && labels.length === 1
+        ? { markers: { width: () => 0, dash: 'solid', stroke: 'transparent', fill: () => colors.text || FALLBACK['--ui-text-secondary'] } }
+        : {}) },
     // #15: waterfall paints its role-coded bars, connectors, value labels and key here —
     // after uPlot's own draw pass, from the pure waterfallPlan(u, ...) layout.
     ...(kind === 'waterfall' ? { hooks: { draw: [(u) => {
