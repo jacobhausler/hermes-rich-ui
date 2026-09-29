@@ -1,0 +1,371 @@
+{
+ "envelope": {
+  "card_id": "ru-f3af0e45428d",
+  "session_id": "session-fixture",
+  "profile": null,
+  "created_at": "2026-09-29T05:20:20Z",
+  "policy": "embedded",
+  "source": null,
+  "revision": 1
+ },
+ "surface": {
+  "version": "v1.0",
+  "createSurface": {
+   "surfaceId": "ru-f3af0e45428d",
+   "catalogId": "hermes-rich-ui/1",
+   "components": [
+    {
+     "children": [
+      "metrics",
+      "wf",
+      "mid",
+      "row2",
+      "note"
+     ],
+     "component": "Card",
+     "footer": "Illustrative household numbers. The renderer computes every running balance, share and stack.",
+     "id": "root",
+     "subtitle": "Illustrative data showing the v0.1.1–v0.1.4 finance toolkit",
+     "title": "September money check-in"
+    },
+    {
+     "children": [
+      "m1",
+      "m2",
+      "m3",
+      "m4"
+     ],
+     "columns": 4,
+     "component": "Grid",
+     "gap": "md",
+     "id": "metrics"
+    },
+    {
+     "component": "Metric",
+     "format": "currency",
+     "id": "m1",
+     "label": "Closing balance",
+     "previous": 4250,
+     "value": 4500,
+     "invertTone": false
+    },
+    {
+     "component": "Metric",
+     "format": "currency",
+     "id": "m2",
+     "invertTone": true,
+     "label": "Spent",
+     "previous": 5100,
+     "value": 5435
+    },
+    {
+     "component": "Metric",
+     "format": "percent",
+     "id": "m3",
+     "label": "Savings rate",
+     "precision": 1,
+     "previous": 9.8,
+     "value": 12.4,
+     "invertTone": false
+    },
+    {
+     "component": "Progress",
+     "current": 7400,
+     "id": "m4",
+     "label": "Emergency fund",
+     "target": 9000,
+     "total": 10000,
+     "unit": "USD"
+    },
+    {
+     "component": "Chart",
+     "height": 300,
+     "id": "wf",
+     "kind": "waterfall",
+     "series": [
+      {
+       "data": [
+        {
+         "label": "Opening 9/1",
+         "total": true,
+         "value": 4250
+        },
+        {
+         "label": "Paycheck",
+         "value": 2800
+        },
+        {
+         "label": "Rent",
+         "value": -1900
+        },
+        {
+         "label": "Groceries",
+         "value": -520
+        },
+        {
+         "label": "Utilities",
+         "value": -310
+        },
+        {
+         "label": "Paycheck 9/19",
+         "value": 2800
+        },
+        {
+         "label": "Card payment",
+         "value": -2415
+        },
+        {
+         "label": "Dining",
+         "value": -290
+        },
+        {
+         "label": "Refund",
+         "value": 85
+        },
+        {
+         "label": "Closing 9/30",
+         "total": true,
+         "value": null
+        }
+       ],
+       "label": "Checking"
+      }
+     ],
+     "title": "Checking — balance walk",
+     "unit": "USD"
+    },
+    {
+     "align": "start",
+     "children": [
+      "bars",
+      "spark"
+     ],
+     "component": "Stack",
+     "direction": "horizontal",
+     "gap": "lg",
+     "id": "mid"
+    },
+    {
+     "component": "BarList",
+     "format": "currency",
+     "id": "bars",
+     "items": [
+      {
+       "label": "Rent",
+       "value": 1900
+      },
+      {
+       "label": "Card payment",
+       "value": 2415
+      },
+      {
+       "label": "Groceries",
+       "value": 520
+      },
+      {
+       "label": "Utilities",
+       "value": 310
+      },
+      {
+       "label": "Dining",
+       "value": 290
+      },
+      {
+       "label": "Subscriptions",
+       "value": null
+      }
+     ],
+     "sort": "desc"
+    },
+    {
+     "component": "Sparkline",
+     "direction": "line",
+     "id": "spark",
+     "tone": "success",
+     "values": [
+      4250,
+      4250,
+      4250,
+      4250,
+      7050,
+      5150,
+      5150,
+      4630,
+      4630,
+      4320,
+      4320,
+      4320,
+      4320,
+      4320,
+      4320,
+      4320,
+      4320,
+      4320,
+      7120,
+      7120,
+      7120,
+      7120,
+      4705,
+      4705,
+      null,
+      4415,
+      4415,
+      4415,
+      4500,
+      4500
+     ],
+     "width": 120,
+     "height": 24
+    },
+    {
+     "children": [
+      "area",
+      "range"
+     ],
+     "columns": 2,
+     "component": "Grid",
+     "gap": "md",
+     "id": "row2"
+    },
+    {
+     "component": "Chart",
+     "height": 220,
+     "id": "area",
+     "kind": "area",
+     "series": [
+      {
+       "data": [
+        {
+         "x": "2026-04-01",
+         "y": 5600
+        },
+        {
+         "x": "2026-05-01",
+         "y": 5600
+        },
+        {
+         "x": "2026-06-01",
+         "y": 5900
+        },
+        {
+         "x": "2026-07-01",
+         "y": 5600
+        },
+        {
+         "x": "2026-08-01",
+         "y": 5600
+        },
+        {
+         "x": "2026-09-01",
+         "y": 5685
+        }
+       ],
+       "label": "Paychecks"
+      },
+      {
+       "data": [
+        {
+         "x": "2026-04-01",
+         "y": 0
+        },
+        {
+         "x": "2026-05-01",
+         "y": 120
+        },
+        {
+         "x": "2026-06-01",
+         "y": 0
+        },
+        {
+         "x": "2026-07-01",
+         "y": 640
+        },
+        {
+         "x": "2026-08-01",
+         "y": 0
+        },
+        {
+         "x": "2026-09-01",
+         "y": 85
+        }
+       ],
+       "label": "Other income"
+      }
+     ],
+     "stack": true,
+     "title": "Income by month (stacked)",
+     "unit": "USD"
+    },
+    {
+     "caveat": "Weekly low–high of the checking balance",
+     "component": "Chart",
+     "height": 220,
+     "id": "range",
+     "kind": "range",
+     "series": [
+      {
+       "data": [
+        {
+         "high": 7050,
+         "label": "Wk 1",
+         "low": 4250
+        },
+        {
+         "high": 5150,
+         "label": "Wk 2",
+         "low": 4630
+        },
+        {
+         "high": 4320,
+         "label": "Wk 3",
+         "low": 4320
+        },
+        {
+         "high": 7120,
+         "label": "Wk 4",
+         "low": 4705
+        },
+        {
+         "high": 4500,
+         "label": "Wk 5",
+         "low": 4415
+        }
+       ],
+       "label": "Balance"
+      }
+     ],
+     "title": "Weekly balance range",
+     "unit": "USD"
+    },
+    {
+     "component": "Callout",
+     "id": "note",
+     "text": "Spending rose 6.6% month over month, mostly the card payment. The savings rate still improved because income rose more.",
+     "title": "Heads up",
+     "tone": "caution"
+    }
+   ],
+   "dataModel": {
+    "data": {},
+    "meta": {
+     "title": "September money check-in",
+     "summary": "Illustrative September check-in: checking opens at $4,250 and closes at $4,500 after two paychecks and six outflows; spending is up, the savings rate improved, and the emergency fund is at 74% of $10k.",
+     "authored_at": "2026-09-29T05:20:20Z",
+     "dataset": {
+      "id": "card:ru-f3af0e45428d",
+      "revision": 1,
+      "observed_at": null,
+      "published_at": "2026-09-29T05:20:20Z"
+     },
+     "sources": [],
+     "derivations": []
+    }
+   },
+   "metadata": {
+    "extensions": {
+     "hermes_policy": "embedded"
+    }
+   }
+  }
+ }
+}

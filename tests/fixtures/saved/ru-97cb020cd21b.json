@@ -1,0 +1,436 @@
+{
+ "envelope": {
+  "card_id": "ru-97cb020cd21b",
+  "session_id": "session-fixture",
+  "profile": null,
+  "created_at": "2026-09-29T05:20:40Z",
+  "policy": "embedded",
+  "source": null,
+  "revision": 1
+ },
+ "surface": {
+  "version": "v1.0",
+  "createSurface": {
+   "surfaceId": "ru-97cb020cd21b",
+   "catalogId": "hermes-rich-ui/1",
+   "components": [
+    {
+     "children": [
+      "kpis",
+      "heat",
+      "row",
+      "acc"
+     ],
+     "component": "Card",
+     "footer": "Illustrative fleet data. Heat map colours are scaled to the observed min–max; hatched cells are nulls, never zeros.",
+     "id": "root",
+     "subtitle": "Illustrative ops data showing the microviz + evidence toolkit",
+     "title": "Homelab fleet — weekly health"
+    },
+    {
+     "children": [
+      "k1",
+      "k2",
+      "k3"
+     ],
+     "columns": 3,
+     "component": "Grid",
+     "gap": "md",
+     "id": "kpis"
+    },
+    {
+     "component": "Metric",
+     "format": "percent",
+     "id": "k1",
+     "label": "Uptime",
+     "precision": 2,
+     "previous": 99.71,
+     "value": 99.94,
+     "invertTone": false
+    },
+    {
+     "component": "Metric",
+     "id": "k2",
+     "invertTone": true,
+     "label": "p95 latency",
+     "previous": 412,
+     "unit": "ms",
+     "value": 318,
+     "format": "number"
+    },
+    {
+     "component": "Metric",
+     "id": "k3",
+     "label": "Unverified host",
+     "value": null,
+     "format": "number",
+     "invertTone": false
+    },
+    {
+     "cells": [
+      {
+       "col": "Mon",
+       "row": "host-a",
+       "value": 42
+      },
+      {
+       "col": "Tue",
+       "row": "host-a",
+       "value": 51
+      },
+      {
+       "col": "Wed",
+       "row": "host-a",
+       "value": 48
+      },
+      {
+       "col": "Thu",
+       "row": "host-a",
+       "value": 77
+      },
+      {
+       "col": "Fri",
+       "row": "host-a",
+       "value": 63
+      },
+      {
+       "col": "Mon",
+       "row": "host-b",
+       "value": 81
+      },
+      {
+       "col": "Tue",
+       "row": "host-b",
+       "value": 88
+      },
+      {
+       "col": "Wed",
+       "row": "host-b",
+       "value": 92
+      },
+      {
+       "col": "Thu",
+       "row": "host-b",
+       "value": 95
+      },
+      {
+       "col": "Fri",
+       "row": "host-b",
+       "value": 70
+      },
+      {
+       "col": "Mon",
+       "row": "host-c",
+       "value": 23
+      },
+      {
+       "col": "Tue",
+       "row": "host-c",
+       "value": 25
+      },
+      {
+       "col": "Wed",
+       "row": "host-c",
+       "value": null
+      },
+      {
+       "col": "Thu",
+       "row": "host-c",
+       "value": 31
+      },
+      {
+       "col": "Fri",
+       "row": "host-c",
+       "value": 28
+      },
+      {
+       "col": "Mon",
+       "row": "host-d",
+       "value": 12
+      },
+      {
+       "col": "Tue",
+       "row": "host-d",
+       "value": 15
+      },
+      {
+       "col": "Wed",
+       "row": "host-d",
+       "value": 14
+      },
+      {
+       "col": "Thu",
+       "row": "host-d",
+       "value": 9
+      },
+      {
+       "col": "Fri",
+       "row": "host-d",
+       "value": null
+      }
+     ],
+     "cols": [
+      {
+       "label": "Mon"
+      },
+      {
+       "label": "Tue"
+      },
+      {
+       "label": "Wed"
+      },
+      {
+       "label": "Thu"
+      },
+      {
+       "label": "Fri"
+      }
+     ],
+     "component": "HeatMap",
+     "id": "heat",
+     "rows": [
+      {
+       "label": "host-a"
+      },
+      {
+       "label": "host-b"
+      },
+      {
+       "label": "host-c"
+      },
+      {
+       "label": "host-d"
+      }
+     ],
+     "showValues": true,
+     "sourceIds": [
+      "prom"
+     ],
+     "unit": "%"
+    },
+    {
+     "align": "start",
+     "children": [
+      "table",
+      "side"
+     ],
+     "component": "Stack",
+     "direction": "horizontal",
+     "gap": "lg",
+     "id": "row"
+    },
+    {
+     "columns": [
+      {
+       "key": "host",
+       "label": "Host",
+       "type": "text"
+      },
+      {
+       "key": "cpu",
+       "label": "CPU",
+       "type": "bar"
+      },
+      {
+       "key": "disk",
+       "label": "Disk free",
+       "type": "number",
+       "unit": "GB"
+      },
+      {
+       "key": "cost",
+       "label": "Power / mo",
+       "type": "currency",
+       "precision": 2
+      },
+      {
+       "key": "seen",
+       "label": "Last seen",
+       "type": "date"
+      },
+      {
+       "key": "src",
+       "label": "Evidence",
+       "type": "sources"
+      }
+     ],
+     "component": "DataTable",
+     "defaultSort": {
+      "dir": "desc",
+      "key": "cpu"
+     },
+     "id": "table",
+     "rows": [
+      {
+       "cost": 14.2,
+       "cpu": 67,
+       "disk": 412,
+       "host": "host-b",
+       "seen": "2026-09-29",
+       "src": [
+        "prom"
+       ]
+      },
+      {
+       "cost": 6.8,
+       "cpu": 56,
+       "disk": 88,
+       "host": "host-a",
+       "seen": "2026-09-29",
+       "src": [
+        "prom"
+       ]
+      },
+      {
+       "cost": 21.5,
+       "cpu": 27,
+       "disk": 9120,
+       "host": "host-c",
+       "seen": "2026-09-28",
+       "src": [
+        "prom",
+        "smart"
+       ]
+      },
+      {
+       "cost": 3.1,
+       "cpu": 13,
+       "disk": null,
+       "host": "host-d",
+       "seen": "2026-09-27",
+       "src": []
+      }
+     ],
+     "title": "Hosts"
+    },
+    {
+     "children": [
+      "sp",
+      "chips2"
+     ],
+     "component": "Stack",
+     "direction": "vertical",
+     "gap": "sm",
+     "id": "side"
+    },
+    {
+     "component": "Sparkline",
+     "direction": "bar",
+     "id": "sp",
+     "tone": "danger",
+     "values": [
+      2,
+      0,
+      1,
+      4,
+      3,
+      7,
+      5
+     ],
+     "width": 120,
+     "height": 24
+    },
+    {
+     "component": "ChipSet",
+     "id": "chips2",
+     "labels": [
+      "nomad",
+      "tailscale",
+      "prometheus",
+      "smartd"
+     ],
+     "tone": "neutral",
+     "wrap": true
+    },
+    {
+     "component": "Accordion",
+     "id": "acc",
+     "items": [
+      {
+       "child": "incidents",
+       "open": false,
+       "title": "Incidents this week"
+      },
+      {
+       "child": "gallery",
+       "title": "Dashboards"
+      }
+     ]
+    },
+    {
+     "component": "Timeline",
+     "id": "incidents",
+     "items": [
+      {
+       "date": "2026-09-24",
+       "label": "host-c scrape gap",
+       "status": "failed",
+       "text": "Wednesday metrics missing (hatched in the heat map)"
+      },
+      {
+       "date": "2026-09-26",
+       "label": "host-b CPU spike",
+       "status": "done",
+       "text": "Model lane backlog drained"
+      },
+      {
+       "date": "2026-09-27",
+       "label": "host-d offline Fri",
+       "status": "pending",
+       "text": "Waiting on owner hands"
+      }
+     ]
+    },
+    {
+     "columns": 2,
+     "component": "ImageGallery",
+     "id": "gallery",
+     "items": [
+      {
+       "alt": "rich-ui gallery screenshot 1",
+       "src": "https://example.com/hermes-rich-ui/assets/screenshot-1.png"
+      },
+      {
+       "alt": "rich-ui gallery screenshot 2",
+       "src": "https://example.com/hermes-rich-ui/assets/screenshot-2.png"
+      }
+     ],
+     "title": "Card gallery"
+    }
+   ],
+   "dataModel": {
+    "data": {},
+    "meta": {
+     "title": "Homelab fleet — weekly health",
+     "summary": "Illustrative homelab week: 99.94% uptime, p95 latency down to 318 ms; host-b is the hottest host; host-c had a Wednesday scrape gap and host-d was offline Friday.",
+     "authored_at": "2026-09-29T05:20:40Z",
+     "dataset": {
+      "id": "card:ru-97cb020cd21b",
+      "revision": 1,
+      "observed_at": null,
+      "published_at": "2026-09-29T05:20:40Z"
+     },
+     "sources": [
+      {
+       "id": "prom",
+       "kind": "tool",
+       "label": "Prometheus (illustrative)",
+       "note": "weekly CPU %"
+      },
+      {
+       "id": "smart",
+       "kind": "tool",
+       "label": "smartd report (illustrative)"
+      }
+     ],
+     "derivations": []
+    }
+   },
+   "metadata": {
+    "extensions": {
+     "hermes_policy": "embedded"
+    }
+   }
+  }
+ }
+}

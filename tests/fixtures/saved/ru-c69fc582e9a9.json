@@ -1,0 +1,246 @@
+{
+ "envelope": {
+  "card_id": "ru-c69fc582e9a9",
+  "session_id": "session-fixture",
+  "profile": null,
+  "created_at": "2026-09-29T05:19:51Z",
+  "policy": "embedded",
+  "source": null,
+  "revision": 1
+ },
+ "surface": {
+  "version": "v1.0",
+  "createSurface": {
+   "surfaceId": "ru-c69fc582e9a9",
+   "catalogId": "hermes-rich-ui/1",
+   "components": [
+    {
+     "children": [
+      "top",
+      "div1",
+      "tabs",
+      "src"
+     ],
+     "component": "Card",
+     "footer": "Shipped by the rich-ui bot with peer review from a second bot. Catalog PR NousResearch/hermes-agent#126569 is awaiting upstream review.",
+     "id": "root",
+     "subtitle": "v0.1.0 → v0.1.4 in two days: 18 → 26 component types, new chart kinds, and a real balance walk",
+     "title": "hermes-rich-ui — what's new"
+    },
+    {
+     "align": "start",
+     "children": [
+      "tl",
+      "right"
+     ],
+     "component": "Stack",
+     "direction": "horizontal",
+     "gap": "lg",
+     "id": "top"
+    },
+    {
+     "component": "Timeline",
+     "id": "tl",
+     "items": [
+      {
+       "date": "2026-09-28",
+       "label": "v0.1.1 — the expansion",
+       "status": "done",
+       "text": "8 new types, area/waterfall/range charts, stack/stepped/sortDesc/height, E-pack options"
+      },
+      {
+       "date": "2026-09-28",
+       "label": "v0.1.2 — tool description parity",
+       "status": "done",
+       "text": "The model can now see all 26 types (#9, #10)"
+      },
+      {
+       "date": "2026-09-28",
+       "label": "Catalog installs blocked (#12)",
+       "status": "failed",
+       "text": "requires_hermes used a date tag; core compares semver"
+      },
+      {
+       "date": "2026-09-28",
+       "label": "v0.1.3 — semver floor >=0.21.5",
+       "status": "done",
+       "text": "Install gate fixed and pinned by a test (#13)"
+      },
+      {
+       "date": "2026-09-29",
+       "label": "v0.1.4 — waterfall balance walk",
+       "status": "done",
+       "text": "Sign colours, value labels, connectors, opening anchor (#15, #16)"
+      },
+      {
+       "label": "v0.2.0 — opinionated smart defaults",
+       "status": "active",
+       "text": "3 sig figs + k/M/B everywhere; design review of every component in flight"
+      }
+     ],
+     "sourceIds": [
+      "rel"
+     ],
+     "title": "Release line"
+    },
+    {
+     "children": [
+      "h4",
+      "chips",
+      "check",
+      "asof"
+     ],
+     "component": "Stack",
+     "direction": "vertical",
+     "gap": "md",
+     "id": "right"
+    },
+    {
+     "component": "Heading",
+     "id": "h4",
+     "level": 4,
+     "text": "New in the set"
+    },
+    {
+     "component": "ChipSet",
+     "id": "chips",
+     "labels": [
+      "Checklist",
+      "ChipSet",
+      "CodeBlock",
+      "AsOf",
+      "ImageGallery",
+      "Sparkline",
+      "BarList",
+      "HeatMap",
+      "area",
+      "waterfall",
+      "range"
+     ],
+     "tone": "info",
+     "wrap": true
+    },
+    {
+     "component": "Checklist",
+     "id": "check",
+     "items": [
+      {
+       "done": true,
+       "label": "Suite 35/35 at the tag"
+      },
+      {
+       "done": true,
+       "label": "Bundle rebuilds byte-identical"
+      },
+      {
+       "done": true,
+       "label": "Private-string scrub: 0 hits"
+      },
+      {
+       "done": true,
+       "label": "Cross-bot deep review (4 rounds on #16)"
+      },
+      {
+       "done": true,
+       "label": "Rendered and checked on the owner's Mac"
+      },
+      {
+       "done": null,
+       "label": "Upstream catalog admission"
+      }
+     ],
+     "showTally": true,
+     "sourceIds": [
+      "pr16"
+     ],
+     "title": "v0.1.4 release gates"
+    },
+    {
+     "component": "AsOf",
+     "id": "asof",
+     "note": "Release facts read from GitHub",
+     "observedAt": "2026-09-29T05:10:00Z",
+     "publishedAt": "2026-09-29"
+    },
+    {
+     "component": "Divider",
+     "id": "div1",
+     "label": "How agents use it",
+     "orientation": "horizontal"
+    },
+    {
+     "component": "Tabs",
+     "defaultTab": 1,
+     "id": "tabs",
+     "tabs": [
+      {
+       "child": "code1",
+       "title": "Minimal call"
+      },
+      {
+       "child": "code2",
+       "title": "Balance walk (v0.1.4)"
+      }
+     ]
+    },
+    {
+     "caption": "The smallest valid card: one root Card, one bound Metric",
+     "code": "rich_present({\n  title: \"Suite\", summary: \"Suite passing\",\n  components: [\n    {id: \"root\", component: \"Card\", title: \"Suite\", children: [\"m\"]},\n    {id: \"m\", component: \"Metric\", label: \"Tests\", value: {path: \"/data/n\"}}\n  ],\n  data: {n: 35}\n})",
+     "component": "CodeBlock",
+     "id": "code1",
+     "language": "js",
+     "showLines": true
+    },
+    {
+     "caption": "First point total:true + value = opening anchor; the renderer computes every running value",
+     "code": "{component: \"Chart\", kind: \"waterfall\", series: [{label: \"Balance\", data: [\n  {label: \"Opening\", value: 4250, total: true},\n  {label: \"Paycheck\", value: 2800},\n  {label: \"Rent\", value: -1900},\n  {label: \"Closing\", total: true}\n]}]}",
+     "component": "CodeBlock",
+     "id": "code2",
+     "language": "js",
+     "showLines": true
+    },
+    {
+     "component": "SourceList",
+     "id": "src",
+     "title": "Sources"
+    }
+   ],
+   "dataModel": {
+    "data": {},
+    "meta": {
+     "title": "hermes-rich-ui — what's new",
+     "summary": "hermes-rich-ui release line v0.1.1–v0.1.4: 26 component types, new chart kinds, the v0.1.4 waterfall balance walk; v0.2.0 smart defaults in design.",
+     "authored_at": "2026-09-29T05:19:51Z",
+     "dataset": {
+      "id": "card:ru-c69fc582e9a9",
+      "revision": 1,
+      "observed_at": null,
+      "published_at": "2026-09-29T05:19:51Z"
+     },
+     "sources": [
+      {
+       "accessed_at": "2026-09-29T05:10:00Z",
+       "id": "rel",
+       "kind": "web",
+       "label": "hermes-rich-ui releases",
+       "url": "https://example.com/hermes-rich-ui/releases"
+      },
+      {
+       "accessed_at": "2026-09-29T05:10:00Z",
+       "id": "pr16",
+       "kind": "web",
+       "label": "PR #16 — waterfall balance walk",
+       "url": "https://example.com/hermes-rich-ui/pull/16"
+      }
+     ],
+     "derivations": []
+    }
+   },
+   "metadata": {
+    "extensions": {
+     "hermes_policy": "embedded"
+    }
+   }
+  }
+ }
+}

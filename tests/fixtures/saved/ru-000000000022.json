@@ -1,0 +1,217 @@
+{
+ "envelope": {
+  "card_id": "ru-000000000022",
+  "session_id": "session-fixture",
+  "profile": null,
+  "created_at": "2026-09-29T00:00:00Z",
+  "policy": "embedded",
+  "source": null,
+  "revision": 1
+ },
+ "surface": {
+  "version": "v1.0",
+  "createSurface": {
+   "surfaceId": "ru-000000000022",
+   "catalogId": "hermes-rich-ui/1",
+   "components": [
+    {
+     "id": "root",
+     "component": "Card",
+     "title": "Baked defaults",
+     "children": [
+      "stack",
+      "grid",
+      "div",
+      "check",
+      "chips",
+      "code",
+      "gal",
+      "spark",
+      "bars",
+      "heat"
+     ]
+    },
+    {
+     "id": "stack",
+     "component": "Stack",
+     "direction": "vertical",
+     "gap": "md",
+     "children": [
+      "h",
+      "t",
+      "b"
+     ]
+    },
+    {
+     "id": "h",
+     "component": "Heading",
+     "text": "Heading",
+     "level": 2
+    },
+    {
+     "id": "t",
+     "component": "Text",
+     "text": "Body text",
+     "tone": "default",
+     "variant": "body"
+    },
+    {
+     "id": "b",
+     "component": "Badge",
+     "label": "beta",
+     "tone": "neutral"
+    },
+    {
+     "id": "grid",
+     "component": "Grid",
+     "columns": 2,
+     "gap": "md",
+     "children": [
+      "m1",
+      "m2"
+     ]
+    },
+    {
+     "id": "m1",
+     "component": "Metric",
+     "label": "Revenue",
+     "value": 1234.5,
+     "previous": 1000,
+     "format": "number",
+     "invertTone": false
+    },
+    {
+     "id": "m2",
+     "component": "Metric",
+     "label": "Rows",
+     "value": 1234567,
+     "format": "number",
+     "invertTone": false
+    },
+    {
+     "id": "div",
+     "component": "Divider",
+     "orientation": "horizontal"
+    },
+    {
+     "id": "check",
+     "component": "Checklist",
+     "items": [
+      {
+       "label": "a",
+       "done": true
+      },
+      {
+       "label": "b"
+      }
+     ],
+     "showTally": true
+    },
+    {
+     "id": "chips",
+     "component": "ChipSet",
+     "labels": [
+      "a",
+      "b"
+     ],
+     "tone": "neutral",
+     "wrap": true
+    },
+    {
+     "id": "code",
+     "component": "CodeBlock",
+     "code": "ls -la\necho hi",
+     "showLines": false
+    },
+    {
+     "id": "gal",
+     "component": "ImageGallery",
+     "items": [
+      {
+       "src": "https://example.com/a.png",
+       "alt": "a"
+      },
+      {
+       "src": "https://example.com/b.png",
+       "alt": "b"
+      }
+     ],
+     "columns": 2
+    },
+    {
+     "id": "spark",
+     "component": "Sparkline",
+     "values": [
+      1,
+      3,
+      2,
+      5
+     ],
+     "direction": "line",
+     "width": 120,
+     "height": 24,
+     "tone": "default"
+    },
+    {
+     "id": "bars",
+     "component": "BarList",
+     "items": [
+      {
+       "label": "a",
+       "value": 3
+      },
+      {
+       "label": "b",
+       "value": 9
+      }
+     ],
+     "format": "number",
+     "sort": "desc"
+    },
+    {
+     "id": "heat",
+     "component": "HeatMap",
+     "rows": [
+      {
+       "label": "r"
+      }
+     ],
+     "cols": [
+      {
+       "label": "c"
+      }
+     ],
+     "cells": [
+      {
+       "row": "r",
+       "col": "c",
+       "value": 1.5
+      }
+     ],
+     "showValues": true
+    }
+   ],
+   "dataModel": {
+    "data": {},
+    "meta": {
+     "title": "Baked defaults",
+     "summary": "Every catalog default written explicitly, as admission bakes it.",
+     "authored_at": "2026-09-29T00:00:00Z",
+     "dataset": {
+      "id": "card:ru-000000000022",
+      "revision": 1,
+      "observed_at": null,
+      "published_at": "2026-09-29T00:00:00Z"
+     },
+     "sources": [],
+     "derivations": []
+    }
+   },
+   "metadata": {
+    "extensions": {
+     "hermes_policy": "embedded"
+    }
+   }
+  }
+ }
+}
