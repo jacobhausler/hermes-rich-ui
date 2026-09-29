@@ -12,11 +12,17 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import uPlot from 'uplot'
-import { ownSources } from './_shared.mjs'
+import { formatMetric, ownSources } from './_shared.mjs'
 
 const KINDS = ['bar', 'line', 'scatter', 'histogram', 'area', 'waterfall', 'range']
 const SERIES_TOKENS = ['--ui-accent', '--ui-green', '--ui-purple', '--ui-orange']
+// #15: the three waterfall fill roles — same colour-source path as SERIES_TOKENS
+// (theme token at runtime, FALLBACK entry off-screen/tests; never a loose hex).
+const WF_ROLE_TOKENS = { up: '--ui-green', down: '--ui-red', total: '--ui-text-secondary' }
+export const WF_ROLE_LABELS = { up: 'Increase', down: 'Decrease', total: 'Total' }
+const WF_ROLE_ORDER = ['up', 'down', 'total']
 const FALLBACK = { '--ui-accent': '#3b82f6', '--ui-green': '#22c55e', '--ui-purple': '#a855f7', '--ui-orange': '#f97316',
+  '--ui-red': '#ef4444',
   '--ui-text-secondary': '#9ca3af', '--ui-text-primary': '#e5e7eb', '--ui-stroke-tertiary': '#374151', '--ui-stroke-secondary': '#4b5563' }
 const HEIGHT = 240          // default chart height (F1: `height` prop clamps 120..480)
 const HEIGHT_MIN = 120
@@ -218,7 +224,7 @@ export function seriesToUplot(kind, series, opts = {}) {
     }
     if (order.length === 0) return empty('no labelled steps')
     let points = 0
-    const steps = [], bases = [], tops = [], totals = []
+    const steps = [], bases = [], tops = [], totals = [], roles = []
     for (const s of ss) {
       const st = new Array(order.length).fill(null)
       const tt = new Array(order.length).fill(false)
@@ -235,19 +241,30 @@ export function seriesToUplot(kind, series, opts = {}) {
       }
       const bs = new Array(order.length).fill(null)
       const tp = new Array(order.length).fill(null)
+      const rl = new Array(order.length).fill(null)
       let run = 0
+      let firstIdx = -1                            // review #16 finding 4: the SERIES' own first non-gap index
       for (let i = 0; i < order.length; i++) {
         const v = st[i]
         if (v === null && !tt[i]) continue            // missing step: gap; running total unchanged
         points++
-        if (tt[i]) { bs[i] = 0; tp[i] = run }        // total bar: pinned 0 → cumulative
-        else { bs[i] = run; tp[i] = run = run + v }  // step: base → base+value (across zero fine; test pins it)
+        const isFirst = firstIdx === -1
+        if (isFirst) firstIdx = i
+        if (tt[i]) {
+          // #15 opening anchor: total:true + a numeric value as the FIRST point of THIS series
+          // pins 0→value and RESETS the running total to that value (the walk starts from the
+          // authored opening, the value is still never a hand-computed cumulative — L6). Later
+          // totals keep pinning 0→run and ignore `value`, exactly as before (old cards unchanged).
+          if (isFirst && isNum(v)) { bs[i] = 0; tp[i] = run = v }
+          else { bs[i] = 0; tp[i] = run }             // total bar: pinned 0 → cumulative
+          rl[i] = 'total'
+        } else { bs[i] = run; tp[i] = run = run + v; rl[i] = v < 0 ? 'down' : 'up' }  // step: base → base+value (across zero fine; test pins it)
       }
-      steps.push(st); totals.push(tt); bases.push(bs); tops.push(tp)
+      steps.push(st); totals.push(tt); bases.push(bs); tops.push(tp); roles.push(rl)
     }
     if (points === 0) return empty('all waterfall values are null')
     const out = { ok: true, data: [order.map((_, i) => i), ...tops], labels, xAxisIsTime: false, xLabels: order, points }
-    out.wf = { steps, bases, tops, totals }
+    out.wf = { steps, bases, tops, totals, roles }
     return out
   }
 
@@ -325,6 +342,186 @@ function histogramPaths(highs) {
     }
     return { stroke: p, fill: p, clip: null, band: null, gaps: null, flags: 0 }
   }
+}
+
+// #15 value-label geometry pins and the ONE formatter call site for waterfall value labels
+// (maintainer directive, 2026-09-28): every label text goes through the shared formatMetric —
+// when the repo-wide smart-defaults formatter lands, only fmtWfValue changes. Sign prefix is
+// added AROUND the formatter result (formatter stays unit/number-formatting owner).
+const WF_LABEL_HALF_PER_CHAR = 2.75   // half-width estimate per char at the 11px canvas font
+const WF_LABEL_HALF_PAD = 2            // half-width glyph bleed beyond the char estimate
+const WF_LABEL_MIN_SLOT = 24           // bar slot narrower than this px → labels skipped entirely
+const WF_LABEL_GAP = 5                 // label baseline sits this many px above the bar top
+function fmtWfValue(v, unit, signed) {
+  const out = formatMetric(v, { unit })
+  if (out == null) return null
+  return signed && v > 0 ? '+' + out : out
+}
+
+// Key banner geometry constants: the ONLY width formula for the key. keyLayout sums the
+// per-item widths and drawWaterfallPlan walks the same per-item increments, so the space
+// reserved for placement always equals the banner actually drawn (review #16 round 2, F1).
+const KEY_SWATCH = 10, KEY_TEXT_GAP = 13, KEY_ITEM_TAIL = 12, KEY_PX_PER_CHAR = 5.5
+export function keyLayout(pr, key) {
+  let x = 0; const items = []
+  for (const e of (key || [])) {
+    items.push({ x, label: e.label, color: e.color })
+    x += KEY_TEXT_GAP * pr + e.label.length * KEY_PX_PER_CHAR * pr + KEY_ITEM_TAIL * pr
+  }
+  // No trailing gap after the last label; an empty key (multi-series mode) reserves 0.
+  return { items, width: items.length ? x - KEY_ITEM_TAIL * pr : 0 }
+}
+
+/**
+ * Pure waterfall layout plan for the #15 canvas painter (testable without a canvas):
+ * bar rects, top→next-base connectors, width-aware value labels, and the
+ * Increase/Decrease/Total key. `u` is any uPlot-like exposing valToPos + series visibility.
+ * Maintainer ruling (review #16 round 2, F3): role colouring + key are for SINGLE-SERIES
+ * waterfalls only; two or more series keep main's per-series fills and the uPlot series
+ * legend (this is exactly pre-#15 main behaviour for multi-series). Value labels and
+ * connectors draw in BOTH modes.
+ */
+export function waterfallPlan(u, model, props, colors) {
+  const wf = model.wf
+  const n = model.data[0].length
+  const seriesCount = Math.max(1, model.labels.length)
+  const group = 0.8, slot = group / seriesCount
+  // px-per-x-unit over the categorical range [-0.5, n-0.5] (same convention as floatingRectPaths).
+  const pxPerUnit = (u.valToPos(n - 0.5, 'x', true) - u.valToPos(-0.5, 'x', true)) / Math.max(1, n)
+  const unit = typeof props.unit === 'string' && props.unit ? props.unit : ''
+  const wfFill = (role) => (colors.wf && colors.wf[role]) || FALLBACK[WF_ROLE_TOKENS[role]] || '#888'
+  // F3 ruling: role fills + key are single-series only; multi-series keeps main's
+  // per-series colour, the exact expression buildOpts uses for s.fill / legend swatches.
+  const single = model.labels.length <= 1
+  const seriesFill = (s) => (colors.series && colors.series[s % colors.series.length]) || FALLBACK[SERIES_TOKENS[s % SERIES_TOKENS.length]]
+  const bars = [], connectors = [], labels = [], labelCandidates = []
+  const shown = (s) => !u.series || !u.series[s + 1] || u.series[s + 1].show !== false
+  for (let s = 0; s < model.labels.length; s++) {
+    if (!shown(s)) continue
+    const bases = wf.bases[s], tops = wf.tops[s], rolesCol = wf.roles[s], stepsCol = wf.steps[s], totalsCol = wf.totals[s]
+    const l0 = (i) => u.valToPos(i, 'x', true) + (s * slot - group / 2) * pxPerUnit   // left edge of bar i's slot
+    for (let i = 0; i < n; i++) {
+      const top = tops[i], base = bases[i]
+      if (isNullish(top) || isNullish(base)) continue
+      const l = l0(i)
+      const t = u.valToPos(top, 'y', true), b = u.valToPos(base, 'y', true)
+      const role = rolesCol[i] || 'up'
+      // F3 ruling (review #16 round 2): single-series → role fills; two or more series →
+      // main's per-series fill (same expression as buildOpts' s.fill = color), so every
+      // bar's colour equals its uPlot legend swatch.
+      const fill = single ? wfFill(role) : seriesFill(s)
+      bars.push({ x: l, y: Math.min(t, b), w: Math.max(slot * pxPerUnit, 1), h: Math.max(Math.abs(b - t), 1), role, fill })
+    }
+    // Connector: bar i's running level (its top) → the level bar i+1 rests at. A total bar's
+    // walk level is its VALUE (top), not the pinned-to-zero base artifact.
+    const walkLevel = (i) => (totalsCol[i] ? tops[i] : bases[i])
+    for (let i = 0; i < n - 1; i++) {
+      if (isNullish(tops[i]) || isNullish(bases[i]) || isNullish(tops[i + 1]) || isNullish(bases[i + 1])) continue
+      const lvA = tops[i], lvB = walkLevel(i + 1)
+      if (isNullish(lvA) || isNullish(lvB)) continue
+      const x1 = u.valToPos(i, 'x', true) + (s * slot - group / 2 + slot) * pxPerUnit   // right edge of bar i's slot
+      const x2 = u.valToPos(i + 1, 'x', true) + (s * slot - group / 2) * pxPerUnit      // left edge of bar i+1's slot
+      if (!(x2 > x1)) continue
+      connectors.push({ x1, x2, y1: u.valToPos(lvA, 'y', true), y2: u.valToPos(lvB, 'y', true) })
+    }
+    // Value labels: signed step on step bars, renderer-computed running value on total bars.
+    // Skipped entirely when bars are too narrow. Review #16 finding 2: each label rides its
+    // SERIES' bar-slot centre (the floatingRectPaths geometry), not the shared category
+    // centre, and candidates from ALL series are gathered first so the overlap walk below
+    // runs across every series together.
+    if (slot * pxPerUnit >= WF_LABEL_MIN_SLOT) {
+      for (let i = 0; i < n; i++) {
+        if (isNullish(tops[i]) || isNullish(bases[i])) continue
+        const isTotal = totalsCol[i]
+        const v = isTotal ? tops[i] : stepsCol[i]
+        if (!isNum(v)) continue
+        const text = fmtWfValue(v, unit, !isTotal)
+        if (!text) continue
+        const x = l0(i) + slot * pxPerUnit / 2                       // bar-slot centre
+        const half = text.length * WF_LABEL_HALF_PER_CHAR + WF_LABEL_HALF_PAD
+        const topEdge = u.valToPos(Math.max(tops[i], bases[i]), 'y', true)   // visually upper edge (y grows down)
+        labelCandidates.push({ x, y: topEdge - WF_LABEL_GAP, text, color: colors.text || FALLBACK['--ui-text-secondary'], half })
+      }
+    }
+  }
+  // One overlap walk across ALL series (sorted left→right): a label survives only if it
+  // clears the previously kept label, whatever series it came from.
+  labelCandidates.sort((a, b) => a.x - b.x)
+  let lastX = -Infinity, lastHalf = 0
+  for (const c of labelCandidates) {
+    if (c.x - lastX < c.half + lastHalf) continue
+    labels.push({ x: c.x, y: c.y, text: c.text, color: c.color })
+    lastX = c.x; lastHalf = c.half
+  }
+  // F3 ruling: the role key belongs to the single-series mode only — with 2+ series the
+  // bars carry per-series colours and the uPlot series legend is the correct key.
+  const key = single ? WF_ROLE_ORDER.map((role) => ({ color: wfFill(role), label: WF_ROLE_LABELS[role] })) : []
+  return { bars, connectors, labels, key }
+}
+
+// opts.hooks.draw painter for waterfall (bars get their role-coded fills here, so the
+// series path paints nothing). Consumes ONLY waterfallPlan output. Coordinates are canvas
+// device px (uPlot convention: valToPos(..., true) and a manual pxRatio, no ctx.setTransform).
+export function drawWaterfallPlan(u, plan) {
+  const ctx = u && u.ctx
+  if (!ctx || !plan || !ctx.canvas) return
+  const pr = (u.width && ctx.canvas.width) ? ctx.canvas.width / u.width : 1
+  ctx.save && ctx.save()
+  ctx.strokeStyle = plan.strokeStyle
+  ctx.lineWidth = Math.max(1, pr)
+  ctx.setLineDash && ctx.setLineDash([3 * pr, 3 * pr])
+  ctx.beginPath && ctx.beginPath()
+  for (const c of plan.connectors) { ctx.moveTo && ctx.moveTo(c.x1, c.y1); ctx.lineTo && ctx.lineTo(c.x2, c.y2) }
+  ctx.stroke && ctx.stroke()
+  ctx.setLineDash && ctx.setLineDash([])
+  for (const b of plan.bars) { ctx.fillStyle = b.fill; ctx.fillRect && ctx.fillRect(b.x, b.y, b.w, b.h) }
+  ctx.font = `${Math.round(11 * pr)}px system-ui, sans-serif`
+  ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
+  for (const l of plan.labels) { ctx.fillStyle = l.color; ctx.fillText && ctx.fillText(l.text, l.x, l.y) }
+  // Key banner: Increase / Decrease / Total (single-series only; plan.key is empty for
+  // multi-series), positioned FROM THE PLOT BOX (review #16 finding 1): canvas-absolute
+  // 6*pr/12*pr put the swatches in the y-axis gutter (size ~56) and ran the banner over
+  // the opening bar's value label. Simple headroom check: if the tallest bar's top label
+  // area reaches into the left-aligned banner band, draw the banner at the top-RIGHT of
+  // the plot box instead (still inside the box). Round 2 fix (F1): the reserved width is
+  // keyLayout()'s width — the SAME per-item sum the loop below draws — so the right-edge
+  // fallback can never push the last label past bbox.right the way the old KEY_W=165pr did.
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'
+  const bbox = u.bbox
+  const keyTop = (bbox ? bbox.top : 0) + 12 * pr
+  const KEY_H = 14 * pr
+  const layout = keyLayout(pr, plan.key)
+  const KEY_W = layout.width
+  // Round 3 blocker B1 (maintainer ruling): at narrow plots the old clamp pinned the key
+  // ORIGIN to bbox.left but still painted every label — at pr=2 the last text ended at
+  // device x=497 past bbox.right=460 (240px chart) and past 300 at the supported 160px
+  // minimum. When the banner can't fit the plot box minus the 6*pr margins on both sides,
+  // SKIP the key entirely: value labels and bar colours still carry the meaning, and a
+  // partial key would mislead (no single-swatch variant).
+  const keyBudget = bbox ? bbox.width - 12 * pr : Infinity
+  plan.keySkipped = layout.items.length > 0 && KEY_W > keyBudget
+  const boxLeft = (bbox ? bbox.left : 0) + 6 * pr
+  const boxRight = bbox ? bbox.left + bbox.width : (ctx.canvas.width / pr)
+  let keyLeft = boxLeft
+  if (bbox && !plan.keySkipped) {
+    let under = false
+    for (const b of plan.bars) {
+      if (b.y > keyTop - 5 * pr + KEY_H) continue                    // bar top sits below the banner band (y grows down)
+      if (b.x + b.w >= boxLeft && b.x <= boxLeft + KEY_W) { under = true; break }
+    }
+    if (under) keyLeft = Math.max(boxLeft, boxRight - 6 * pr - KEY_W)
+  }
+  const keyOrigin = plan.keyLeft != null ? plan.keyLeft : keyLeft
+  if (!plan.keySkipped) {
+    for (const item of layout.items) {
+      const kx = keyOrigin + item.x
+      ctx.fillStyle = item.color
+      ctx.fillRect && ctx.fillRect(kx, keyTop - 5 * pr, KEY_SWATCH * pr, KEY_SWATCH * pr)
+      ctx.fillStyle = plan.keyTextColor
+      ctx.fillText && ctx.fillText(item.label, kx + KEY_TEXT_GAP * pr, keyTop)
+    }
+  }
+  ctx.restore && ctx.restore()
 }
 
 // Shared geometry for the floating-rect kinds (waterfall, range): one rect per category from
@@ -417,7 +614,16 @@ export function buildOpts(kind, model, props, width, colors) {
     }
     else if (kind === 'histogram') { s.paths = histogramPaths(model.highs[i]); s.fill = color; s.width = 0; s.points = { show: false } }
     else if (kind === 'scatter') { s.paths = () => null; s.points = { show: true, size: 7, fill: color, stroke: color, width: 1 } }
-    else if (kind === 'waterfall') { s.paths = floatingRectPaths(labels.length, i, model.wf.bases); s.fill = color; s.width = 0; s.points = { show: false } }
+    else if (kind === 'waterfall') {
+      // #15 / F3 ruling: single-series bars are painted per sign-role by the draw hook
+      // below (three fills + connectors + value labels + key); multi-series bars keep
+      // main's per-series fill painted by the hook too (exactly pre-#15 main geometry).
+      // The series path itself paints nothing, and the legend swatch is neutralised (see
+      // opts.legend.markers below) only in single-series mode so no legend shows a colour
+      // no bar uses.
+      s.paths = () => ({ stroke: null, fill: null, clip: null, band: null, gaps: null, flags: 0 })
+      s.fill = color; s.width = 0; s.points = { show: false }
+    }
     else if (kind === 'range') { s.paths = floatingRectPaths(labels.length, i, model.lows); s.fill = color; s.width = 0; s.points = { show: false } }
     else if (kind === 'area') {
       // Fill toward zero: uPlot's seriesFillTo returns 0 on a linear scale; withAlpha keeps the
@@ -437,7 +643,24 @@ export function buildOpts(kind, model, props, width, colors) {
     scales, series,
     axes: [xAxis, yAxis],
     cursor: { show: true, x: true, y: true, drag: { x: false, y: false, setScale: false }, points: { show: true } },
-    legend: { show: true, live: false }
+    legend: { show: true, live: false,
+      // F3 ruling: in single-series waterfall mode the bars carry role colours, so the
+      // uPlot series swatch must not show the (unused) SERIES_TOKENS colour — width 0
+      // drops the border, fill paints the neutral --ui-text-secondary the key/labels use.
+      // Multi-series keeps the default markers: legendFill = s.fill = the bar fill below.
+      ...(kind === 'waterfall' && labels.length === 1
+        ? { markers: { width: () => 0, dash: 'solid', stroke: 'transparent', fill: () => colors.text || FALLBACK['--ui-text-secondary'] } }
+        : {}) },
+    // #15: waterfall paints its role-coded bars, connectors, value labels and key here —
+    // after uPlot's own draw pass, from the pure waterfallPlan(u, ...) layout.
+    ...(kind === 'waterfall' ? { hooks: { draw: [(u) => {
+      try {
+        const plan = waterfallPlan(u, model, props, colors)
+        plan.strokeStyle = colors.grid || FALLBACK['--ui-stroke-tertiary']
+        plan.keyTextColor = colors.text || FALLBACK['--ui-text-secondary']
+        drawWaterfallPlan(u, plan)
+      } catch { /* a canvas-side failure must never blank the chart */ }
+    }] } } : {})
   }
 }
 
@@ -515,7 +738,9 @@ function UplotHost({ kind, model, props, propsKey, height }) {
     const colors = {
       series: SERIES_TOKENS.map(t => readToken(el, t)),
       text: readToken(el, '--ui-text-secondary'),
-      grid: readToken(el, '--ui-stroke-tertiary')
+      grid: readToken(el, '--ui-stroke-tertiary'),
+      // #15: the three waterfall fills ride the same colour-source path as SERIES_TOKENS.
+      wf: Object.fromEntries(WF_ROLE_ORDER.map(r => [r, readToken(el, WF_ROLE_TOKENS[r])]))
     }
     let u = null
     const width = () => (el.clientWidth || el.getBoundingClientRect().width || 600)

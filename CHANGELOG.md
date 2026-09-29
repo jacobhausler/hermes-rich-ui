@@ -2,6 +2,21 @@
 
 All notable changes to hermes-rich-ui are documented here.
 
+## Unreleased
+
+- **Waterfall first-point totals (semantic change, #15/#16):** a FIRST point with
+  `total: true` and a numeric `value` is now the opening anchor — it pins 0→value and
+  starts the running balance (main drew a zero-height bar for that shape, which is
+  never what an author meant; 0 saved cards used it). Later `total: true` rows still
+  pin the base to zero and show the renderer-computed running total, and their
+  `value` is ignored. Catalog description updated (text-only, no shape change).
+  Cross-bot review #16 fixes: key banner positioned from the uPlot plot box (with a
+  top-right headroom fallback sized from the same per-item width sum the painter draws),
+  per-series bar-slot value labels with one overlap walk across all series, and the
+  anchor bound on each series' first non-gap index. Sign (increase/decrease/total)
+  colours apply to single-series waterfalls only; multi-series waterfalls keep the
+  per-series colours and the uPlot series legend, exactly as before #15.
+
 ## v0.1.3 — 2026-09-28
 
 - **Install fix (P1):** `requires_hermes` now uses the semver release (`>=0.21.5`,

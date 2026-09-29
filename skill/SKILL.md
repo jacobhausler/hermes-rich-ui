@@ -60,7 +60,10 @@ All values flow through data bindings: write `{"path": "/data/x"}` (or `/meta/..
 | 26 | HeatMap | rows ≤12 {label}, cols ≤12 {label}, cells ≤144 {row, col, value(number\|null)} (refs ⊆ declared labels, one cell per (row, col) pair — duplicates rejected), unit?, precision?, showValues? — ramp + caption min/max computed |
 
 Chart data shapes: bar `[{label, value}]`; waterfall `[{label, value, total?}]` (signed
-steps, renderer owns the baseline); line/area `[{x: ISO-8601|number, y}]` (null splits the
+steps, renderer owns the baseline; a FIRST point with `total: true` + numeric `value`
+is the opening anchor — pins 0→value and starts the running balance; later `total: true`
+rows pin the base to zero and show the renderer-computed running total, their value is
+ignored); line/area `[{x: ISO-8601|number, y}]` (null splits the
 line; all `x` in one series numbers OR ISO-8601, never mixed — "yesterday" is rejected);
 scatter `[{x, y, label?}]`; histogram `[{low, high, count}]` — bins supplied, never
 computed, `low < high`, sorted, non-overlapping; range `[{label, low, high}]` — endpoints
