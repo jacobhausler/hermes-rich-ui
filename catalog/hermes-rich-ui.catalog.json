@@ -2137,7 +2137,7 @@
         "value"
       ],
       "additionalProperties": false,
-      "description": "waterfall point: {label, value: number|null, total?: bool}; signed steps (e.g. +100 revenue, -40 cost) and the running baseline are computed by the renderer; total:true rows pin the base to zero (value null renders the total bar). Never hand-compute cumulative columns."
+      "description": "waterfall point: {label, value: number|null, total?: bool}; signed steps (e.g. +100 revenue, -40 cost) and the running baseline are computed by the renderer; a FIRST point with total:true and a numeric value is the opening anchor (pins 0->value and starts the running balance); later total:true rows pin the base to zero and show the renderer-computed running total (their value is ignored). Never hand-compute cumulative columns."
     }
   }
 }
