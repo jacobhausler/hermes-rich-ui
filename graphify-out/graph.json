@@ -8,6 +8,7 @@
     "dashboard/manifest.json",
     "dashboard/plugin_api.py",
     "desktop/src/card.mjs",
+    "desktop/src/components/_house.mjs",
     "desktop/src/components/_shared.mjs",
     "desktop/src/components/accordion.mjs",
     "desktop/src/components/asof.mjs",
@@ -20,6 +21,7 @@
     "desktop/src/components/chipset.mjs",
     "desktop/src/components/codeblock.mjs",
     "desktop/src/components/divider.mjs",
+    "desktop/src/components/fmt.mjs",
     "desktop/src/components/gallery.mjs",
     "desktop/src/components/grid.mjs",
     "desktop/src/components/heading.mjs",
@@ -73,6 +75,10 @@
     "tests/fixtures/expansion-epack.json",
     "tests/fixtures/expansion-gallery.json",
     "tests/fixtures/expansion-microviz.json",
+    "tests/fixtures/saved/ru-000000000022.json",
+    "tests/fixtures/saved/ru-97cb020cd21b.json",
+    "tests/fixtures/saved/ru-c69fc582e9a9.json",
+    "tests/fixtures/saved/ru-f3af0e45428d.json",
     "tests/fixtures/sdk-loader.mjs",
     "tests/fixtures/sdk-stub.mjs",
     "tests/fixtures/surface-all-types.json",
@@ -93,6 +99,8 @@
     "tests/test_e2e_record.mjs",
     "tests/test_expansion_integration.mjs",
     "tests/test_fixtures_admit.py",
+    "tests/test_fmt.mjs",
+    "tests/test_fmt_dates.mjs",
     "tests/test_hostile_admission.py",
     "tests/test_hostile_render.mjs",
     "tests/test_lower.mjs",
@@ -100,6 +108,7 @@
     "tests/test_public_strings.py",
     "tests/test_render_smoke.mjs",
     "tests/test_requires_hermes.py",
+    "tests/test_saved_cards.mjs",
     "tests/test_skill_docs.py",
     "tests/test_store.py",
     "tests/test_synth_admission.py",
@@ -2521,6 +2530,22 @@
       "_origin": "ast"
     },
     {
+      "id": "desktop_src_components_house",
+      "label": "_house.mjs",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_house.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_house_house",
+      "label": "HOUSE",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_house.mjs",
+      "source_location": "L2",
+      "_origin": "ast"
+    },
+    {
       "id": "desktop_src_components_shared",
       "label": "_shared.mjs",
       "file_type": "code",
@@ -3272,6 +3297,337 @@
       "file_type": "code",
       "source_file": "desktop/src/components/divider.mjs",
       "source_location": "L6",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt",
+      "label": "fmt.mjs",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_tier_at",
+      "label": "TIER_AT",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_sym",
+      "label": "SYM",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_iso4217",
+      "label": "ISO4217",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_nf",
+      "label": "nf()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L6",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_clean",
+      "label": "clean()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L7",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_sup",
+      "label": "SUP",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L8",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_sci",
+      "label": "sci()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L9",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_sigstr",
+      "label": "sigStr()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L10",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_curopts",
+      "label": "curOpts()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L11",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_minorof",
+      "label": "minorOf()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L12",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_symof",
+      "label": "symOf()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L13",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_ride",
+      "label": "RIDE",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L15",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_once",
+      "label": "ONCE",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L16",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_bare",
+      "label": "BARE",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L17",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_unit_table",
+      "label": "UNIT_TABLE",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L18",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_unitspec",
+      "label": "unitSpec()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L20",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_place",
+      "label": "place()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L31",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_tierof",
+      "label": "tierOf()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L32",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_finish",
+      "label": "finish()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L37",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_body",
+      "label": "body()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L43",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_cents",
+      "label": "cents()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L70",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_prec",
+      "label": "prec()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L76",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_numof",
+      "label": "numOf()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L77",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_one",
+      "label": "one()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L78",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_fmt",
+      "label": "fmt()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L84",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_num",
+      "label": "num()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L88",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_fmtset",
+      "label": "fmtSet()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L93",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_additiverow",
+      "label": "additiveRow()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L125",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_fmtcolumn",
+      "label": "fmtColumn()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L129",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_fmtpair",
+      "label": "fmtPair()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L130",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_fmtticks",
+      "label": "fmtTicks()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L134",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_unitlabel",
+      "label": "unitLabel()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L155",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_axistitle",
+      "label": "axisTitle()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L156",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_iso_re",
+      "label": "ISO_RE",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L158",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_mon",
+      "label": "MON",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L159",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_daysin",
+      "label": "daysIn()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L160",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_fmt_fmtdate",
+      "label": "fmtDate()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L161",
       "_callable": true,
       "_origin": "ast"
     },
@@ -7366,6 +7722,89 @@
       "_origin": "ast"
     },
     {
+      "id": "tests_test_fmt",
+      "label": "test_fmt.mjs",
+      "file_type": "code",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_fmt_row",
+      "label": "row()",
+      "file_type": "code",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L9",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_fmt_usd",
+      "label": "USD",
+      "file_type": "code",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L10",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_fmt_golden",
+      "label": "GOLDEN",
+      "file_type": "code",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L19",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_fmt_p",
+      "label": "P()",
+      "file_type": "code",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L164",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_fmt_cells",
+      "label": "CELLS",
+      "file_type": "code",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L165",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_fmt_spec",
+      "label": "SPEC",
+      "file_type": "code",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L179",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_fmt_dates",
+      "label": "test_fmt_dates.mjs",
+      "file_type": "code",
+      "source_file": "tests/test_fmt_dates.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_fmt_dates_inputs",
+      "label": "INPUTS",
+      "file_type": "code",
+      "source_file": "tests/test_fmt_dates.mjs",
+      "source_location": "L8",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_fmt_dates_facesin",
+      "label": "facesIn()",
+      "file_type": "code",
+      "source_file": "tests/test_fmt_dates.mjs",
+      "source_location": "L13",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "tests_test_hostile_admission",
       "label": "test_hostile_admission.py",
       "file_type": "code",
@@ -7678,6 +8117,64 @@
       "file_type": "rationale",
       "source_file": "tests/test_requires_hermes.py",
       "source_location": "L2",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_saved_cards",
+      "label": "test_saved_cards.mjs",
+      "file_type": "code",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_saved_cards_root",
+      "label": "ROOT",
+      "file_type": "code",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L15",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_saved_cards_dir",
+      "label": "DIR",
+      "file_type": "code",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L16",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_saved_cards_files",
+      "label": "FILES",
+      "file_type": "code",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L17",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_saved_cards_load",
+      "label": "load()",
+      "file_type": "code",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L18",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_saved_cards_render",
+      "label": "render()",
+      "file_type": "code",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L19",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_saved_cards_baked",
+      "label": "BAKED",
+      "file_type": "code",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L90",
       "_origin": "ast"
     },
     {
@@ -10799,6 +11296,14 @@
       "_origin": "ast"
     },
     {
+      "id": "desktop_src_components_house_sig_compact_from_tiers_sci_below_locale_minus",
+      "label": "{ SIG, COMPACT_FROM, TIERS, SCI_BELOW, LOCALE, MINUS }",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_house.mjs",
+      "source_location": "L10",
+      "_origin": "ast"
+    },
+    {
       "id": "hashlib",
       "label": "hashlib",
       "file_type": "concept",
@@ -10857,6 +11362,54 @@
     {
       "id": "ref_hermes_plugin_sdk",
       "label": "ref_hermes_plugin_sdk",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "desktop_src_components_house_sig",
+      "label": "desktop_src_components_house_sig",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "desktop_src_components_house_compact_from",
+      "label": "desktop_src_components_house_compact_from",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "desktop_src_components_house_tiers",
+      "label": "desktop_src_components_house_tiers",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "desktop_src_components_house_sci_below",
+      "label": "desktop_src_components_house_sci_below",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "desktop_src_components_house_locale",
+      "label": "desktop_src_components_house_locale",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "desktop_src_components_house_minus",
+      "label": "desktop_src_components_house_minus",
       "file_type": "concept",
       "type": "external",
       "external": true,
@@ -11087,14 +11640,6 @@
       "source_file": ""
     },
     {
-      "id": "tests_helpers_render_assert",
-      "label": "tests_helpers_render_assert",
-      "file_type": "concept",
-      "type": "external",
-      "external": true,
-      "source_file": ""
-    },
-    {
       "id": "tests_helpers_render_act",
       "label": "tests_helpers_render_act",
       "file_type": "concept",
@@ -11105,6 +11650,14 @@
     {
       "id": "tests_helpers_render_registry",
       "label": "tests_helpers_render_registry",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "tests_helpers_render_assert",
+      "label": "tests_helpers_render_assert",
       "file_type": "concept",
       "type": "external",
       "external": true,
@@ -15372,6 +15925,16 @@
       "_origin": "ast"
     },
     {
+      "source": "desktop_src_components_house",
+      "target": "desktop_src_components_house_house",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_house.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "desktop_src_components_shared",
       "target": "ref_react",
       "relation": "imports_from",
@@ -17407,6 +17970,937 @@
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/divider.mjs",
       "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_house",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_house_sig",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_house_compact_from",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_house_tiers",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_house_sci_below",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_house_locale",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_house_minus",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_tier_at",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_sym",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_iso4217",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_nf",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_clean",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_sup",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_sci",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_sigstr",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_curopts",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_minorof",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_symof",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_ride",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_once",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_bare",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_unit_table",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_unitspec",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_place",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_tierof",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_finish",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_body",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_cents",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_prec",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_numof",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L77",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_one",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_fmt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L84",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_num",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_fmtset",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_additiverow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L125",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_fmtcolumn",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L129",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_fmtpair",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L130",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_fmtticks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L134",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_unitlabel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L155",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_axistitle",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L156",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_iso_re",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L158",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_mon",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L159",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_daysin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L160",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt",
+      "target": "desktop_src_components_fmt_fmtdate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L161",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_sigstr",
+      "target": "desktop_src_components_fmt_nf",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_minorof",
+      "target": "desktop_src_components_fmt_curopts",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_symof",
+      "target": "desktop_src_components_fmt_curopts",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_finish",
+      "target": "desktop_src_components_fmt_place",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_finish",
+      "target": "desktop_src_components_fmt_symof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_body",
+      "target": "desktop_src_components_fmt_nf",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_body",
+      "target": "desktop_src_components_fmt_minorof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_body",
+      "target": "desktop_src_components_fmt_tierof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_body",
+      "target": "desktop_src_components_fmt_sci",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_body",
+      "target": "desktop_src_components_fmt_sigstr",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L60",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_cents",
+      "target": "desktop_src_components_fmt_minorof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L73",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_numof",
+      "target": "desktop_src_components_fmt_clean",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L77",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_one",
+      "target": "desktop_src_components_fmt_body",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L80",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_one",
+      "target": "desktop_src_components_fmt_finish",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmt",
+      "target": "desktop_src_components_fmt_unitspec",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmt",
+      "target": "desktop_src_components_fmt_numof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmt",
+      "target": "desktop_src_components_fmt_one",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmt",
+      "target": "desktop_src_components_fmt_prec",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmt",
+      "target": "desktop_src_components_fmt_cents",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_num",
+      "target": "desktop_src_components_fmt_fmt",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L89",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtset",
+      "target": "desktop_src_components_fmt_unitspec",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L94",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtset",
+      "target": "desktop_src_components_fmt_prec",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L94",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtset",
+      "target": "desktop_src_components_fmt_numof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtset",
+      "target": "desktop_src_components_fmt_tierof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtset",
+      "target": "desktop_src_components_fmt_minorof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtset",
+      "target": "desktop_src_components_fmt_cents",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L96",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtset",
+      "target": "desktop_src_components_fmt_one",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L97",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtset",
+      "target": "desktop_src_components_fmt_additiverow",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L106",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtcolumn",
+      "target": "desktop_src_components_fmt_fmtset",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L129",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtpair",
+      "target": "desktop_src_components_fmt_unitspec",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L131",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtpair",
+      "target": "desktop_src_components_fmt_fmtset",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L131",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtpair",
+      "target": "desktop_src_components_fmt_place",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L132",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtticks",
+      "target": "desktop_src_components_fmt_unitspec",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L135",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtticks",
+      "target": "desktop_src_components_fmt_clean",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L135",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtticks",
+      "target": "desktop_src_components_fmt_tierof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L136",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtticks",
+      "target": "desktop_src_components_fmt_minorof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L136",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtticks",
+      "target": "desktop_src_components_fmt_fmtset",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L137",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtticks",
+      "target": "desktop_src_components_fmt_nf",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L150",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtticks",
+      "target": "desktop_src_components_fmt_finish",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L151",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_unitlabel",
+      "target": "desktop_src_components_fmt_unitspec",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L155",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_unitlabel",
+      "target": "desktop_src_components_fmt_place",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L155",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_axistitle",
+      "target": "desktop_src_components_fmt_unitspec",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L156",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_axistitle",
+      "target": "desktop_src_components_fmt_place",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L156",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_fmt_fmtdate",
+      "target": "desktop_src_components_fmt_daysin",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/fmt.mjs",
+      "source_location": "L165",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -27607,6 +29101,361 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_fmt",
+      "target": "ref_node_test",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_house",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_house_house",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_house_sig",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_house_compact_from",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_house_tiers",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_house_sci_below",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_house_locale",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_house_minus",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_fmt",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_fmt_num",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_fmt_fmt",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_fmt_fmtset",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_fmt_fmtcolumn",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_fmt_fmtpair",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_fmt_fmtticks",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_fmt_unit_table",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_fmt_unitlabel",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "desktop_src_components_fmt_axistitle",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "tests_test_fmt_row",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "tests_test_fmt_usd",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "tests_test_fmt_golden",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "tests_test_fmt_p",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L164",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "tests_test_fmt_cells",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L165",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "tests_test_fmt_spec",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L179",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt",
+      "target": "tests_test_fmt_row",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt_dates",
+      "target": "ref_node_test",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt_dates.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt_dates",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt_dates.mjs",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt_dates",
+      "target": "ref_node_child_process",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt_dates.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt_dates",
+      "target": "tests_test_fmt_dates_inputs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt_dates.mjs",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt_dates",
+      "target": "tests_test_fmt_dates_facesin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt_dates.mjs",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_fmt_dates",
+      "target": "tests_test_fmt_dates_facesin",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt_dates.mjs",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_hostile_admission",
       "target": "copy",
       "relation": "imports",
@@ -28442,6 +30291,247 @@
       "source_file": "tests/test_requires_hermes.py",
       "source_location": "L2",
       "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "ref_node_test",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "ref_node_fs",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "ref_node_child_process",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "ref_node_url",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "ref_node_path",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_helpers_render",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_helpers_render_react",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_helpers_render_act",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_helpers_render_registry",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_helpers_render",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_helpers_render_mount",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_test_saved_cards_root",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_test_saved_cards_dir",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_test_saved_cards_files",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_test_saved_cards_load",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_test_saved_cards_render",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_test_saved_cards_baked",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L90",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards_render",
+      "target": "tests_test_saved_cards_render",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_test_saved_cards_load",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "tests_test_saved_cards_render",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "desktop_src_card",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards",
+      "target": "client",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_saved_cards.mjs",
       "_origin": "ast"
     },
     {
@@ -35554,6 +37644,17 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_fmt_p",
+      "target": "desktop_src_components_fmt_fmtpair",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_fmt.mjs",
+      "source_location": "L164",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_synth_chart_fx",
       "target": "tests_helpers_render_fixturejson",
       "relation": "calls",
@@ -36566,6 +38667,18 @@
       "confidence_score": 0.85,
       "source_file": "tests/test_expansion_integration.mjs",
       "source_location": "L67",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_saved_cards_render",
+      "target": "desktop_src_card_cardbody",
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_saved_cards.mjs",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast"
     },
