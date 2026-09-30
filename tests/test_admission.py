@@ -129,6 +129,14 @@ full = [
 ]
 full_dm = dm(data={"n": 42, "pts": [{"x": 1, "y": 2, "label": "p"}]})
 admits("full-coverage surface admits", full, full_dm)
+# #25: additive Heading level 5; old levels retain their authored values, absent stays 2.
+for level in range(1, 6):
+    heading = [card("h"), {"id": "h", "component": "Heading", "text": "Section", "level": level}]
+    norm = admits("Heading level %d admits" % level, heading, dm())
+    check("Heading level %d persists" % level, norm and norm[1]["level"] == level)
+heading_default = admits("Heading absent level defaults to 2", [card("h"), {"id": "h", "component": "Heading", "text": "Section"}], dm())
+check("Heading default stays 2", heading_default and heading_default[1]["level"] == 2)
+rejects("Heading level 6 rejects", [card("h"), {"id": "h", "component": "Heading", "text": "Section", "level": 6}], dm(), "expected one of")
 admits("sourceIds inside bound table rows resolve", [
     card("t"),
     {"id": "t", "component": "DataTable", "columns": [{"key": "a", "label": "A", "type": "text"}, {"key": "sourceIds", "label": "E", "type": "sources"}],
