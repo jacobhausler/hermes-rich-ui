@@ -9,7 +9,7 @@ test('E8 Text variant=mono is ui-monospace with tabular-nums', async () => {
   const t = $('[data-ru="Text"]')
   assert.equal(t.getAttribute('data-ru-variant'), 'mono')
   assert.ok(t.style.fontFamily.includes('ui-monospace'), t.style.fontFamily)
-  assert.equal(t.style.fontVariantNumeric, 'tabular-nums')
+  assert.equal(t.style.fontVariantNumeric, 'tabular-nums lining-nums')
   assert.equal(t.textContent, 'deadbeefcafe')
 })
 test('E8 Text body/caption render exactly as before (no mono styles leak, no marker)', async () => {

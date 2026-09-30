@@ -38,7 +38,7 @@ All values flow through data bindings: write `{"path": "/data/x"}` (or `/meta/..
 | 4 | Divider | label?, orientation? (horizontal\|vertical; E4) |
 | 5 | Tabs | tabs: [{title, child}] (1..8), defaultTab? 0..7 (E5) |
 | 6 | Accordion | items: [{title, child, open?}] (1..12) |
-| 7 | Heading | text, level? (1\|2\|3\|4) |
+| 7 | Heading | text, level? (1\|2\|3\|4\|5; 5 = eyebrow) |
 | 8 | Text | text, tone? (default\|muted), variant? (body\|caption\|mono) |
 | 9 | Callout | title?, text, tone (info\|caution\|success\|error) |
 | 10 | Badge | label, tone? (neutral\|info\|success\|caution\|error\|outline) |

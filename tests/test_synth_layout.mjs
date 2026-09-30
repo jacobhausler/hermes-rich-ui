@@ -108,9 +108,11 @@ test('E7 Heading level 4 renders h4 at size 12', async () => {
   assert.equal(h.tagName, 'H4')
   assert.equal(h.style.fontSize, '12px')
 })
-test('E7 Heading default/unknown level still falls back to h2 (L8 default)', async () => {
+test('E7 Heading default/unknown level falls back to h2; level 5 is additive', async () => {
   await renderComponent({ id: 'h', component: 'Heading', props: { text: 'x' } })
   assert.equal($('[data-ru="Heading"]').tagName, 'H2')
   await renderComponent({ id: 'h', component: 'Heading', props: { text: 'x', level: 5 } })
-  assert.equal($('[data-ru="Heading"]').tagName, 'H2', 'level 5 stays non-admitted fallback')
+  assert.equal($('[data-ru="Heading"]').tagName, 'H5', 'level 5 is the eyebrow')
+  await renderComponent({ id: 'h', component: 'Heading', props: { text: 'x', level: 6 } })
+  assert.equal($('[data-ru="Heading"]').tagName, 'H2', 'unsupported level still falls back')
 })

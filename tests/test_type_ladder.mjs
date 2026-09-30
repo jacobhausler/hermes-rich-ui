@@ -16,6 +16,7 @@ const EXPECTED = {
   eyebrow: [11, 600, 16, '0.04em'], micro: [10, 400, 12, '0em']
 }
 const quad = s => [s.fontSize, s.fontWeight, s.lineHeight, s.letterSpacing]
+for (const row of Object.values(EXPECTED)) row[2] += 'px'
 
 test('all named steps spread the exact four-property ramp, only 400/600', () => {
   assert.deepEqual(Object.keys(TYPE).sort(), Object.keys(EXPECTED).sort())
@@ -23,7 +24,7 @@ test('all named steps spread the exact four-property ramp, only 400/600', () => 
     assert.deepEqual(quad(TYPE[step]), expected, step)
     assert.deepEqual(quad(type(step)), expected, `type(${step})`)
   }
-  assert.deepEqual(quad(type('small', { mono: true, num: true, caps: true })), [12, 400, 17, '0.04em'])
+  assert.deepEqual(quad(type('small', { mono: true, num: true, caps: true })), [12, 400, '17px', '0.04em'])
   assert.match(type('small', { mono: true }).fontFamily, /monospace/)
   assert.match(type('small', { num: true }).fontVariantNumeric, /tabular-nums/)
   assert.equal(type('caption', { caps: true }).textTransform, 'uppercase')
@@ -48,7 +49,7 @@ test('Heading 1–5, absent level, and every quad defeat prose inheritance', asy
     assert.equal(el.tagName, `H${level || 2}`)
     const expected = EXPECTED[step]
     assert.deepEqual([el.style.fontSize, el.style.fontWeight, el.style.lineHeight, el.style.letterSpacing],
-      [`${expected[0]}px`, String(expected[1]), `${expected[2]}px`, expected[3]], String(level))
+      [`${expected[0]}px`, String(expected[1]), expected[2], expected[3]], String(level))
     assert.equal(el.style.textTransform, level === 5 ? 'uppercase' : '', String(level))
   }
 })
@@ -56,7 +57,6 @@ test('Heading 1–5, absent level, and every quad defeat prose inheritance', asy
 // EXEMPT is a shrinking list: non-text glyphs / SDK-owned chrome, never authored content.
 // File:line points to the owner of each exemption at the base of #25.
 const EXEMPT = new Map([
-  ['_shared.mjs:58 Badge SDK chip', '[data-ru="Badge"]'],
   ['_shared.mjs:77 citation superscript', '[data-ru-sources]'],
   ['chart.mjs:580 uPlot canvas labels', '[data-richui="chart-canvas"]'],
   ['sparkline.mjs:122 trend glyph', '[data-ru-chip]'],
@@ -67,7 +67,9 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const saved = ['ru-f3af0e45428d', 'ru-c69fc582e9a9', 'ru-97cb020cd21b', 'ru-000000000022']
 const { CardBody } = await import('../desktop/src/card.mjs')
 const { createRoot } = await import('react-dom/client')
-const cardRoot = createRoot(mount)
+const cardMount = document.createElement('div')
+document.body.append(cardMount)
+const cardRoot = createRoot(cardMount)
 
 test('saved-card rendered text pairs are ramp-only or named shrinking exemptions', async () => {
   const pairs = new Set(Object.values(EXPECTED).map(([size, weight]) => `${size}/${weight}`))
@@ -75,14 +77,14 @@ test('saved-card rendered text pairs are ramp-only or named shrinking exemptions
   for (const name of saved) {
     const record = JSON.parse(readFileSync(path.join(ROOT, 'tests/fixtures/saved', name + '.json'), 'utf8'))
     await act(async () => { cardRoot.render(React.createElement(CardBody, { record, registry })) })
-    const walk = document.createTreeWalker(mount, 4)
+    const walk = document.createTreeWalker(cardMount, 4)
     for (let node = walk.nextNode(); node; node = walk.nextNode()) {
       if (!node.textContent.trim()) continue
       const el = node.parentElement
       if (!el.closest('[data-ru]')) continue
       if ([...EXEMPT.values()].some(sel => el.closest(sel))) continue
       let size, weight
-      for (let ancestor = el; ancestor && ancestor !== mount; ancestor = ancestor.parentElement) {
+      for (let ancestor = el; ancestor && ancestor !== cardMount; ancestor = ancestor.parentElement) {
         size ||= ancestor.style?.fontSize
         weight ||= ancestor.style?.fontWeight
       }
@@ -93,5 +95,5 @@ test('saved-card rendered text pairs are ramp-only or named shrinking exemptions
     }
   }
   assert.ok(checked > 120, `census checked ${checked} saved text nodes`)
-  assert.ok(EXEMPT.size <= 6, 'exemption list may only shrink')
+  assert.ok(EXEMPT.size <= 5, 'exemption list may only shrink from the red-first baseline')
 })

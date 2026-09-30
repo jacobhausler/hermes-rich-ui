@@ -12,7 +12,7 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import uPlot from 'uplot'
-import { formatMetric, ownSources } from './_shared.mjs'
+import { formatMetric, ownSources, type } from './_shared.mjs'
 
 const KINDS = ['bar', 'line', 'scatter', 'histogram', 'area', 'waterfall', 'range']
 const SERIES_TOKENS = ['--ui-accent', '--ui-green', '--ui-purple', '--ui-orange']
@@ -665,16 +665,16 @@ export function buildOpts(kind, model, props, width, colors) {
 }
 
 const S = {
-  box: { display: 'flex', flexDirection: 'column', gap: 6, color: 'var(--ui-text-primary)', fontSize: 13, minWidth: 0, margin: 0 },
+  box: { display: 'flex', flexDirection: 'column', gap: 6, color: 'var(--ui-text-primary)', ...type('body'), minWidth: 0, margin: 0 },
   head: { display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 },
-  title: { fontWeight: 600, color: 'var(--ui-text-primary)' },
-  toggle: (on) => ({ font: 'inherit', fontSize: 11, padding: '2px 8px', borderRadius: 6, cursor: 'pointer', border: '1px solid var(--ui-stroke-secondary)', background: on ? 'var(--ui-bg-tertiary)' : 'var(--ui-bg-elevated)', color: 'var(--ui-text-secondary)' }),
-  caveat: { color: 'var(--ui-text-tertiary)', fontSize: 12, whiteSpace: 'pre-wrap' },
-  caption: { color: 'var(--ui-text-tertiary)', fontSize: 11 },
+  title: { ...type('h3'), color: 'var(--ui-text-primary)' },
+  toggle: (on) => ({ font: 'inherit', ...type('caption'), padding: '2px 8px', borderRadius: 6, cursor: 'pointer', border: '1px solid var(--ui-stroke-secondary)', background: on ? 'var(--ui-bg-tertiary)' : 'var(--ui-bg-elevated)', color: 'var(--ui-text-secondary)' }),
+  caveat: { color: 'var(--ui-text-tertiary)', ...type('small'), whiteSpace: 'pre-wrap' },
+  caption: { ...type('caption'), color: 'var(--ui-text-tertiary)' },
   nodata: { border: '1px dashed var(--ui-stroke-tertiary)', borderRadius: 8, padding: 16, color: 'var(--ui-text-tertiary)', background: 'var(--ui-bg-tertiary)', textAlign: 'center' },
   host: { width: '100%', minHeight: HEIGHT, overflow: 'hidden' },
-  table: { borderCollapse: 'collapse', width: '100%', fontSize: 12 },
-  th: { textAlign: 'left', padding: '4px 8px', borderBottom: '1px solid var(--ui-stroke-secondary)', color: 'var(--ui-text-secondary)', fontWeight: 600 },
+  table: { ...type('small'), borderCollapse: 'collapse', width: '100%' },
+  th: { ...type('h4'), textAlign: 'left', padding: '4px 8px', borderBottom: '1px solid var(--ui-stroke-secondary)', color: 'var(--ui-text-secondary)' },
   td: { padding: '3px 8px', borderBottom: '1px solid var(--ui-stroke-tertiary)', color: 'var(--ui-text-primary)', fontVariantNumeric: 'tabular-nums' },
   unavailable: { color: 'var(--ui-text-tertiary)', fontStyle: 'italic' }
 }

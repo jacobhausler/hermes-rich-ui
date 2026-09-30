@@ -1,5 +1,5 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { common, isNil, ownSources, V } from './_shared.mjs'
+import { common, isNil, ownSources, V, type } from './_shared.mjs'
 
 // N5 (counsel 0928): the house evidence-law timestamp primitive — observed/published as a
 // fixed vocabulary instead of hand-merged prose. accessedAt is TRIMMED (F8): source-scoped
@@ -20,7 +20,7 @@ export const AsOf = ({ element }) => {
     : jsxs('span', { 'data-ru-null': '', style: { fontStyle: 'italic' }, children: ['no timestamps published'] }, 'c')
   return jsxs('div', {
     ...common(element, { 'data-ru-fields': parts.length }),
-    style: { display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: 4, fontSize: 11, color: V.text3 },
+    style: { display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: 4, ...type('caption'), color: V.text3 },
     children: [caption, ownSources(p)]
   })
 }

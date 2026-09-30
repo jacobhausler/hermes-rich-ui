@@ -6,7 +6,7 @@
 // 0-width bar and never 0 as a value (L1). Negatives clip at 0 with a blank share (pinned).
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo } from 'react'
-import { common, formatMetric, unavailable, ownSources, sourceSup, isNil, V } from './_shared.mjs'
+import { common, formatMetric, unavailable, ownSources, sourceSup, isNil, V, type } from './_shared.mjs'
 
 const MAX_ITEMS = 30
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
@@ -56,7 +56,7 @@ function h(type, props, children, key) {
 }
 
 const S = {
-  list: { display: 'flex', flexDirection: 'column', gap: 4, fontSize: 12, color: V.text },
+  list: { display: 'flex', flexDirection: 'column', gap: 4, ...type('small'), color: V.text },
   row: { display: 'grid', gridTemplateColumns: 'minmax(0, 8em) minmax(0, 1fr) auto', gap: 8, alignItems: 'center', minWidth: 0 },
   label: { color: V.text2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   track: { position: 'relative', height: 10, borderRadius: 3, background: V.bg3, overflow: 'hidden', minWidth: 24 },

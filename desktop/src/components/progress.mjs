@@ -1,5 +1,5 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { common, isNil, unavailable, ownSources, V } from './_shared.mjs'
+import { common, isNil, unavailable, ownSources, V, type } from './_shared.mjs'
 
 export const Progress = ({ element }) => {
   const p = element.props ?? {}
@@ -20,7 +20,7 @@ export const Progress = ({ element }) => {
     ...common(element, { role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': indeterminate ? undefined : tot, 'aria-valuenow': indeterminate ? undefined : cur, 'data-ru-indeterminate': indeterminate ? 'true' : 'false', 'data-ru-target': tgtOk ? String(tgt) : undefined, 'data-ru-target-error': targetExceedsTotal ? 'target_greater_than_total' : undefined }),
     style: { display: 'flex', flexDirection: 'column', gap: 4 },
     children: [
-      jsxs('div', { style: { display: 'flex', justifyContent: 'space-between', fontSize: 11, color: V.text2 },
+      jsxs('div', { style: { display: 'flex', justifyContent: 'space-between', ...type('caption'), color: V.text2 },
         children: [
           jsxs('span', { children: [String(p.label ?? ''), ownSources(p)] }, 'a'),
           // E12/L1: current-null NEVER prints 0; a known current with a null/absent total
@@ -45,7 +45,7 @@ export const Progress = ({ element }) => {
         children: jsx('div', { style: { position: 'absolute', left: `${tickPct}%`, top: -6, width: 2, height: 6, background: V.text3, borderRadius: 1 } })
       }, 'tick') : null,
       tgtOk ? jsx('div', { 'data-ru-vs-target': targetExceedsTotal ? 'unavailable:target_exceeds_total' : 'ok',
-        style: { fontSize: 11, color: V.text3, fontVariantNumeric: 'tabular-nums' },
+        style: { ...type('caption'), color: V.text3, fontVariantNumeric: 'tabular-nums' },
         children: targetExceedsTotal
           ? `vs target: unavailable — target (${tgt}) is greater than total (${tot}); relation: target must be <= total`
           : `vs target ${tgt}${unit}`

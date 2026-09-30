@@ -4,7 +4,7 @@
 // "N of M rows" counter that reflects the filter. Nulls sort LAST in both directions and render "unavailable".
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo, useState } from 'react'
-import { ownSources } from './_shared.mjs'
+import { ownSources, type } from './_shared.mjs'
 
 // E15: column type 'bar' (width ∝ column max, computed in the RENDERER — L6). 'bar' sorts
 // and formats like 'number'. defaultSort?: {key,dir} seeds the sort (deletes agent pre-sorting).
@@ -114,19 +114,19 @@ function rowMatches(cols, row, q) {
 }
 
 const S = {
-  box: { display: 'flex', flexDirection: 'column', gap: 6, color: 'var(--ui-text-primary)', fontSize: 13, minWidth: 0 },
+  box: { display: 'flex', flexDirection: 'column', gap: 6, color: 'var(--ui-text-primary)', ...type('body'), minWidth: 0 },
   head: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' },
-  title: { fontWeight: 600 },
-  input: { font: 'inherit', fontSize: 12, padding: '3px 8px', borderRadius: 6, border: '1px solid var(--ui-stroke-secondary)', background: 'var(--ui-bg-elevated)', color: 'var(--ui-text-primary)', minWidth: 140 },
+  title: { ...type('h3') },
+  input: { font: 'inherit', ...type('small'), padding: '3px 8px', borderRadius: 6, border: '1px solid var(--ui-stroke-secondary)', background: 'var(--ui-bg-elevated)', color: 'var(--ui-text-primary)', minWidth: 140 },
   wrap: { overflowX: 'auto' },
-  table: { borderCollapse: 'collapse', width: '100%', fontSize: 12 },
+  table: { ...type('small'), borderCollapse: 'collapse', width: '100%' },
   th: { padding: 0, borderBottom: '1px solid var(--ui-stroke-secondary)', textAlign: 'left' },
-  thBtn: (active) => ({ font: 'inherit', fontWeight: 600, fontSize: 12, width: '100%', textAlign: 'inherit', padding: '5px 8px', border: 0, background: 'transparent', cursor: 'pointer', color: active ? 'var(--ui-accent)' : 'var(--ui-text-secondary)', whiteSpace: 'nowrap' }),
+  thBtn: (active) => ({ font: 'inherit', ...type('h4'), width: '100%', textAlign: 'inherit', padding: '5px 8px', border: 0, background: 'transparent', cursor: 'pointer', color: active ? 'var(--ui-accent)' : 'var(--ui-text-secondary)', whiteSpace: 'nowrap' }),
   td: (numeric) => ({ padding: '4px 8px', borderBottom: '1px solid var(--ui-stroke-tertiary)', textAlign: numeric ? 'right' : 'left', fontVariantNumeric: numeric ? 'tabular-nums' : 'normal', verticalAlign: 'top' }),
   unavailable: { color: 'var(--ui-text-tertiary)', fontStyle: 'italic' },
-  badge: { display: 'inline-block', fontSize: 10, lineHeight: '14px', padding: '0 5px', marginRight: 3, borderRadius: 999, border: '1px solid var(--ui-stroke-secondary)', background: 'var(--ui-bg-tertiary)', color: 'var(--ui-text-secondary)', fontFamily: 'ui-monospace, monospace' },
-  foot: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, color: 'var(--ui-text-tertiary)', fontSize: 11 },
-  pager: (disabled) => ({ font: 'inherit', fontSize: 11, padding: '2px 8px', borderRadius: 6, border: '1px solid var(--ui-stroke-secondary)', background: 'var(--ui-bg-elevated)', color: disabled ? 'var(--ui-text-tertiary)' : 'var(--ui-text-secondary)', cursor: disabled ? 'default' : 'pointer' }),
+  badge: { display: 'inline-block', ...type('caption', { mono: true }), padding: '0 5px', marginRight: 3, borderRadius: 999, border: '1px solid var(--ui-stroke-secondary)', background: 'var(--ui-bg-tertiary)', color: 'var(--ui-text-secondary)' },
+  foot: { ...type('caption'), display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, color: 'var(--ui-text-tertiary)' },
+  pager: (disabled) => ({ font: 'inherit', ...type('caption'), padding: '2px 8px', borderRadius: 6, border: '1px solid var(--ui-stroke-secondary)', background: 'var(--ui-bg-elevated)', color: disabled ? 'var(--ui-text-tertiary)' : 'var(--ui-text-secondary)', cursor: disabled ? 'default' : 'pointer' }),
   empty: { padding: '8px 12px', textAlign: 'center', color: 'var(--ui-text-tertiary)', fontStyle: 'italic' }
 }
 

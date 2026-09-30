@@ -1,5 +1,5 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { common, text, ownSources, row, V } from './_shared.mjs'
+import { common, text, ownSources, row, V, type } from './_shared.mjs'
 
 // CodeBlock (expansion N1, 2026-09-28): monospace literal code/config/shell output.
 // `language` is a LABEL ONLY — never parsed, never selects a highlighter. No syntax
@@ -9,15 +9,15 @@ import { common, text, ownSources, row, V } from './_shared.mjs'
 const MONO = 'ui-monospace, monospace' // same idiom as table.mjs badge fontFamily
 
 const headerRow = { flexWrap: 'wrap' }
-const captionStyle = { fontSize: 11, color: V.text3 }
+const captionStyle = { ...type('caption'), color: V.text3 }
 // Same pill idiom as table.mjs:108 (badge style), ui-monospace carried through.
 const langStyle = {
-  display: 'inline-block', fontSize: 10, lineHeight: '14px', padding: '0 5px',
+  display: 'inline-block', ...type('micro', { mono: true }), padding: '0 5px',
   borderRadius: 999, border: '1px solid ' + V.stroke3, background: V.bg3,
   color: V.text2, fontFamily: MONO
 }
 const preStyle = {
-  margin: 0, padding: '8px 10px', fontSize: 12, lineHeight: 1.5, color: V.text,
+  margin: 0, padding: '8px 10px', ...type('small', { mono: true }), color: V.text,
   background: V.bg3, border: '1px solid ' + V.stroke3, borderRadius: 6,
   whiteSpace: 'pre-wrap', wordBreak: 'break-all', overflow: 'auto',
   minWidth: 0, fontFamily: MONO

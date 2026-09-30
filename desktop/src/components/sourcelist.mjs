@@ -1,5 +1,5 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { common, isNil, badge, V } from './_shared.mjs'
+import { common, isNil, badge, V, type } from './_shared.mjs'
 
 // External link path (grepped apps/desktop/src/sdk/index.ts + contrib/plugin.ts on 2026-09-25):
 // the SDK `host` object has NO openExternal; the curated door is `ctx.os.openExternal(url)`
@@ -28,10 +28,10 @@ export const SourceList = ({ element }) => {
     ...common(element),
     style: { display: 'flex', flexDirection: 'column', gap: 4 },
     children: [
-      isNil(p.title) ? null : jsx('div', { style: { fontWeight: 600, fontSize: 12, color: V.text }, children: String(p.title) }, 't'),
+      isNil(p.title) ? null : jsx('div', { style: { ...type('h3'), color: V.text }, children: String(p.title) }, 't'),
       shown.length === 0
-        ? jsx('div', { 'data-ru-empty': explicitEmpty ? 'cited' : 'none', style: { fontSize: 12, color: V.text3, fontStyle: 'italic' }, children: explicitEmpty ? 'No sources cited' : 'no sources' }, 'e')
-        : jsx('ol', { style: { margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 3, fontSize: 12 },
+        ? jsx('div', { 'data-ru-empty': explicitEmpty ? 'cited' : 'none', style: { ...type('small'), color: V.text3, fontStyle: 'italic' }, children: explicitEmpty ? 'No sources cited' : 'no sources' }, 'e')
+        : jsx('ol', { style: { margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 3, ...type('small') },
           children: shown.map((s, i) => {
             const url = typeof s.url === 'string' && s.url.startsWith('https://') ? s.url : null
             const label = String(s.label || s.url || s.id || '')
@@ -46,8 +46,8 @@ export const SourceList = ({ element }) => {
                   }, 'a')
                   : jsx('span', { 'data-ru-url': url || undefined, style: url ? { wordBreak: 'break-all' } : undefined, children: url ? `${label} — ${url}` : label }, 'a'),
                 s.kind ? badge(String(s.kind), KIND_TONE[s.kind] ?? 'neutral', {}, 'k') : null,
-                s.accessed_at ? jsx('span', { style: { color: V.text3, fontSize: 11 }, children: String(s.accessed_at) }, 'd') : null,
-                s.note ? jsx('span', { style: { color: V.text2, fontSize: 11, flexBasis: '100%' }, children: String(s.note) }, 'n') : null
+                s.accessed_at ? jsx('span', { style: { ...type('caption'), color: V.text3 }, children: String(s.accessed_at) }, 'd') : null,
+                s.note ? jsx('span', { style: { color: V.text2, ...type('caption'), flexBasis: '100%' }, children: String(s.note) }, 'n') : null
               ]
             }, String(s.id ?? '') + ':' + i)
           })

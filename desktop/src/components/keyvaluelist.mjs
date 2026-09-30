@@ -1,5 +1,5 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { common, text, isNil, formatMetric, sourceSup, ownSources, V } from './_shared.mjs'
+import { common, text, isNil, formatMetric, sourceSup, ownSources, V, type } from './_shared.mjs'
 
 // E13: per-item format?/unit?/precision? routed through formatMetric WHEN the resolved value
 // is a NUMBER. Any string (even "42000") + format → render the raw string VERBATIM, never
@@ -24,7 +24,7 @@ export const KeyValueList = ({ element }) => {
     ...common(element),
     style: { display: 'flex', flexDirection: 'column', marginBottom: 4 },
     children: [
-      jsx('dl', { style: { margin: 0, display: 'grid', gridTemplateColumns: 'max-content minmax(0, 1fr)', columnGap: 12, rowGap: 4, fontSize: 12, alignItems: 'baseline' },
+      jsx('dl', { style: { margin: 0, display: 'grid', gridTemplateColumns: 'max-content minmax(0, 1fr)', columnGap: 12, rowGap: 4, ...type('small'), alignItems: 'baseline' },
         children: items.flatMap((it, i) => {
           const fv = formatItemValue(it)
           return [
