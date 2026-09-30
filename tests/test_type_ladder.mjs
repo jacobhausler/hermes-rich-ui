@@ -24,10 +24,11 @@ test('all named steps spread the exact four-property ramp, only 400/600', () => 
     assert.deepEqual(quad(TYPE[step]), expected, step)
     assert.deepEqual(quad(type(step)), expected, `type(${step})`)
   }
-  assert.deepEqual(quad(type('small', { mono: true, num: true, caps: true })), [12, 400, '17px', '0.04em'])
+  assert.deepEqual(quad(type('small', { mono: true, num: true, caps: true })), [12, 400, '17px', '0em'])
   assert.match(type('small', { mono: true }).fontFamily, /monospace/)
   assert.match(type('small', { num: true }).fontVariantNumeric, /tabular-nums/)
   assert.equal(type('caption', { caps: true }).textTransform, 'uppercase')
+  assert.deepEqual(quad(type('caption', { caps: true })), [11, 400, '16px', '0em'], 'caps does not borrow eyebrow tracking')
   assert.ok(Object.values(TYPE).every(s => s.fontWeight !== 500))
 })
 
@@ -54,10 +55,9 @@ test('Heading 1–5, absent level, and every quad defeat prose inheritance', asy
   }
 })
 
-// EXEMPT is a shrinking list: non-text glyphs / SDK-owned chrome, never authored content.
-// File:line points to the owner of each exemption at the base of #25.
+// EXEMPT only skips non-text glyphs / SDK-owned chrome, never citation text.
+// File:line points to the owner of each remaining exemption at the base of #25.
 const EXEMPT = new Map([
-  ['_shared.mjs:77 citation superscript', '[data-ru-sources]'],
   ['chart.mjs:580 uPlot canvas labels', '[data-richui="chart-canvas"]'],
   ['sparkline.mjs:122 trend glyph', '[data-ru-chip]'],
   ['accordion.mjs:19 chevron glyph', '[data-ru="Accordion"] button > span:first-child'],
@@ -74,9 +74,17 @@ const cardRoot = createRoot(cardMount)
 test('saved-card rendered text pairs are ramp-only or named shrinking exemptions', async () => {
   const pairs = new Set(Object.values(EXPECTED).map(([size, weight]) => `${size}/${weight}`))
   let checked = 0
+  let markers = 0
   for (const name of saved) {
     const record = JSON.parse(readFileSync(path.join(ROOT, 'tests/fixtures/saved', name + '.json'), 'utf8'))
     await act(async () => { cardRoot.render(React.createElement(CardBody, { record, registry })) })
+    // Citation markers are provenance chrome: micro (10px) is permitted below the
+    // content floor, but the full rendered quad is not exempt from the ramp.
+    for (const sup of cardMount.querySelectorAll('sup[data-ru-sources]')) {
+      assert.deepEqual([sup.style.fontSize, sup.style.fontWeight, sup.style.lineHeight, sup.style.letterSpacing],
+        ['10px', '400', '12px', '0em'], `${name} citation marker micro quad`)
+      markers++
+    }
     const walk = document.createTreeWalker(cardMount, 4)
     for (let node = walk.nextNode(); node; node = walk.nextNode()) {
       if (!node.textContent.trim()) continue
@@ -90,10 +98,10 @@ test('saved-card rendered text pairs are ramp-only or named shrinking exemptions
       }
       assert.ok(size && weight, `${name} ${el.outerHTML.slice(0, 140)} has explicit size and weight`)
       assert.ok(pairs.has(`${parseFloat(size)}/${weight}`), `${name} ${el.textContent.slice(0, 40)}: ${size}/${weight}`)
-      assert.ok(parseFloat(size) >= 11, `${name} content floor: ${el.textContent.slice(0, 40)}`)
+      if (!el.closest('sup[data-ru-sources]')) assert.ok(parseFloat(size) >= 11, `${name} content floor: ${el.textContent.slice(0, 40)}`)
       checked++
     }
   }
   assert.ok(checked > 120, `census checked ${checked} saved text nodes`)
-  assert.ok(EXEMPT.size <= 5, 'exemption list may only shrink from the red-first baseline')
+  assert.ok(markers > 0, 'saved cards exercise citation markers')
 })

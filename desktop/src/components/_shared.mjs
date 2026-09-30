@@ -25,7 +25,7 @@ export const V = {
 export function type(step, mods = {}) {
   if (!Object.hasOwn(TYPE, step)) throw new RangeError(`unknown type step: ${step}`)
   const { caps = false, mono = false, num = false } = mods
-  return { ...TYPE[step], ...((caps || step === 'eyebrow') ? { textTransform: 'uppercase', letterSpacing: '0.04em' } : {}),
+  return { ...TYPE[step], ...((caps || step === 'eyebrow') ? { textTransform: 'uppercase' } : {}),
     ...(mono ? { fontFamily: 'ui-monospace, monospace' } : {}),
     ...(num ? { fontVariantNumeric: 'tabular-nums lining-nums' } : {}) }
 }

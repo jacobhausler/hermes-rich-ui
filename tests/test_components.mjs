@@ -50,6 +50,43 @@ async function renderSpec(spec, initialState) {
   })
 }
 
+test('saved 97cb HeatMap clears host row/header/corner borders, not heat-cell edges', async () => {
+  // The host prose border is deliberately loaded after our hoisted reset. This
+  // checks the rendered cascade (not a snapshot of the reset CSS string).
+  const host = document.createElement('style')
+  host.textContent = '.prose tr,.prose th{border-bottom:1px solid rgb(209, 213, 219)}'
+  const shell = document.createElement('div')
+  shell.className = 'prose'
+  document.body.append(shell)
+  document.head.append(host)
+  const { createRoot } = await import('react-dom/client')
+  const cardRoot = createRoot(shell)
+  try {
+    const record = JSON.parse(readFileSync(new URL('./fixtures/saved/ru-97cb020cd21b.json', import.meta.url), 'utf8'))
+    await act(async () => { cardRoot.render(React.createElement(CardBody, { record, registry })) })
+    const heat = shell.querySelector('[data-ru="HeatMap"]')
+    assert.ok(heat, 'saved 97cb HeatMap rendered')
+    const rows = [...heat.querySelectorAll('tr')]
+    const headers = [...heat.querySelectorAll('th')]
+    const cells = [...heat.querySelectorAll('td')]
+    assert.ok(rows.length >= 4 && headers.length >= 2 && cells.length > 0, 'header/corner, four rows and heat cells covered')
+    for (const el of [...rows, ...headers]) {
+      const border = getComputedStyle(el)
+      assert.equal(border.borderBottomWidth, '0px', `${el.tagName} ${el.textContent.slice(0, 20)} has no host row rule`)
+      assert.equal(border.borderBottomStyle, 'none', `${el.tagName} has no host border style`)
+    }
+    for (const cell of cells) {
+      // jsdom does not resolve the --ui-* var in the computed shorthand; the
+      // rendered cell's inline border still proves the intended edge survives.
+      assert.match(cell.style.border, /^1px solid var\(--ui-stroke-tertiary\)$/, 'intentional cell edge remains')
+    }
+  } finally {
+    host.remove()
+    await act(async () => { cardRoot.unmount() })
+    shell.remove()
+  }
+})
+
 test('every one of the 26 types renders its DOM marker through the real Renderer', async () => {
   const { spec, initialState } = lower(fixture)
   await renderSpec(spec, initialState)
