@@ -49,8 +49,40 @@ for (const f of FILES) {
     assert.equal($$('[data-ru-error]').length, 0, 'no inline error')
     assert.equal($$('[data-ru-unknown]').length, 0, 'no unknown type')
     assert.equal($$('[data-ru-unlowerable]').length, 0, 'lowers')
-    const seen = new Set($$('[data-ru]').map(el => el.getAttribute('data-ru')))
-    for (const c of record.surface.createSurface.components) assert.ok(seen.has(c.component), `marker for ${c.component}`)
+    // Cardinality is per INSTANCE, not per type: a missing second Metric must fail.
+    const components = record.surface.createSurface.components
+    const inactive = new Set(components.flatMap(c => c.component === 'Tabs' ? (c.tabs || []).slice(1).map(t => t.child) : []))
+    const counts = new Map()
+    for (const c of components.filter(c => !inactive.has(c.id))) counts.set(c.component, (counts.get(c.component) || 0) + 1)
+    for (const [type, count] of counts) assert.equal($$('[data-ru]').filter(el => el.getAttribute('data-ru') === type).length, count, `${f}: ${type} instances`)
+    // The old formatter is still used here. Pin actual authored numeric faces by id,
+    // not just a wrapper: a Metric that renders '???' must fail even if its root remains.
+    const metricFaces = {
+      'ru-000000000022.json': { m1: '1,234.5', m2: '1,234,567' },
+      'ru-97cb020cd21b.json': { k1: '99.94%', k2: '318 ms', k3: 'unavailable' },
+      'ru-f3af0e45428d.json': { m1: '$4,500', m2: '$5,435', m3: '12.4%' }
+    }
+    for (const c of components.filter(c => c.component === 'Metric')) {
+      const el = $$('[data-ru="Metric"]').find(node => node.textContent.includes(c.label))
+      assert.ok(el, `${f}: Metric ${c.id} (${c.label}) mounted`)
+      assert.equal(el.querySelector('[data-ru-value]')?.textContent, metricFaces[f][c.id], `${f}: Metric ${c.id} authored value`)
+    }
+    // Test-only identity labels preserve the stored fixture while proving each common
+    // component id has its own rendered node (the registry doesn't expose ids in DOM).
+    const tagged = structuredClone(record)
+    for (const c of tagged.surface.createSurface.components) c.accessibility = { label: `saved-id:${c.id}` }
+    await render(tagged)
+    for (const btn of $$('[data-ru="Accordion"] button[aria-expanded="false"]')) await act(async () => { btn.click() })
+    const seenIds = new Set()
+    const collect = () => { for (const el of $$('[data-ru][aria-label^="saved-id:"]')) seenIds.add(el.getAttribute('aria-label').slice(9).split(':')[0]) }
+    collect()
+    for (const tab of $$('[role="tab"]').filter(el => el.getAttribute('aria-selected') === 'false')) {
+      await act(async () => { tab.click() })
+      collect()
+    }
+    for (const c of components) {
+      assert.ok(seenIds.has(c.id), `${f}: component id ${c.id} mounted`)
+    }
   })
 }
 

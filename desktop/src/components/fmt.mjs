@@ -29,16 +29,16 @@ export function unitSpec(format, unit) {  // format × unit → one spec; a cont
   return mk(/^(pp|bp)$/.test(u) ? 'points' : /^(°|‰|×|\/)/.test(u) ? 'attached' : 'word', { suffix: u })
 }
 const place = (spec, surface) => (spec.contra ? 'ride' : UNIT_TABLE[spec.cls][surface])
-function tierOf(a) {  // [divisor, letter] chosen AFTER rounding (999950 → 1M, 9999.6 → 10k); beyond 999T → null (scientific).
-  if (Math.round(a) < COMPACT_FROM) return [1, '']
+function tierOf(a, minor = 0) {  // choose AFTER rounding at the displayable unit; cents must not prematurely cross 10k.
+  if (Math.round(a * 10 ** minor) / 10 ** minor < COMPACT_FROM) return [1, '']
   let i = TIER_AT.length - 1; while (i > 0 && a < TIER_AT[i][0]) i--
   return TIER_AT[Number((a / TIER_AT[i][0]).toPrecision(SIG)) >= 1000 ? i + 1 : i] || null
 }
 function finish(neg, body, spec, surface, face = true) {  // sign + currency symbol + digits + unit. A '<'/'>' bound flips for negatives (|n| < 0.01 ⇔ n > −0.01).
   const m = /^([<>])(.*)$/.exec(body), lead = !m ? '' : neg === (m[1] === '<') ? '>' : '<', p = place(spec, surface)
-  let s = lead + (neg ? '-' : '') + (spec.cls === 'currency' ? symOf(spec.currency) : '') + (m ? m[2] : body) + (spec.cls === 'percent' ? '%' : '')
+  let s = lead + (neg ? (face ? MINUS : '-') : '') + (spec.cls === 'currency' ? symOf(spec.currency) : '') + (m ? m[2] : body) + (spec.cls === 'percent' ? '%' : '')
   if (spec.suffix && (p === 'ride' || p === 'sibling')) s += (spec.cls === 'attached' ? '' : NBSP) + spec.suffix
-  return face ? s.replace(/-/g, MINUS) : s
+  return s
 }
 function body(a, spec, o) {  // one magnitude a ≥ 0 → digits. o = { precision, exact, cents, sig, tier, fixed, group }
   const money = spec.cls === 'currency', pct = spec.cls === 'percent', p = o.precision
@@ -47,10 +47,15 @@ function body(a, spec, o) {  // one magnitude a ≥ 0 → digits. o = { precisio
     if (pct && a !== 100 && Number(a.toFixed(p)) === 100) return a < 100 ? '>' + (100 - 1 / 10 ** p).toFixed(p) : '<' + (100 + 1 / 10 ** p).toFixed(p)
     return nf(a, { minimumFractionDigits: p, maximumFractionDigits: p })
   }
-  if (o.exact) return money ? nf(a, { minimumFractionDigits: o.cents === false ? 0 : minorOf(spec.currency), maximumFractionDigits: 6 }) : nf(a, { maximumSignificantDigits: 15 })
+  if (o.exact) {
+    const minor = money ? minorOf(spec.currency) : 0
+    return money ? nf(a, { minimumFractionDigits: o.cents === false ? 0 : minor,
+      maximumFractionDigits: Math.min(100, Math.max(minor, a ? 14 - Math.floor(Math.log10(a)) : minor)) })
+      : nf(a, { maximumSignificantDigits: 15 })
+  }
   if (a === 0) return '0'
   if (pct && a < 0.01) return '<0.01'
-  const sig = o.sig ?? SIG, [div, t] = o.tier ?? tierOf(a) ?? (money ? TOP : [0, ''])
+  const sig = o.sig ?? SIG, [div, t] = o.tier ?? tierOf(a, money ? minorOf(spec.currency) : 0) ?? (money ? TOP : [0, ''])
   if (!div) return sci(a, sig)
   if (t) return (o.fixed !== undefined ? (a / div).toFixed(o.fixed) : sigStr(a / div, sig, true)) + t
   const group = o.group ?? spec.cls !== 'bare', minor = money ? minorOf(spec.currency) : 0
@@ -62,13 +67,18 @@ function body(a, spec, o) {  // one magnitude a ≥ 0 → digits. o = { precisio
   for (let w = sig + 1; pct && a !== 100 && Number(s) === 100 && w <= 6; w++) s = sigStr(a, w) // landmark guard (AD-4)
   return pct && a !== 100 && Number(s) === 100 ? (a < 100 ? '>99.9999' : '<100.0001') : s
 }
-const cents = (n, spec, under = COMPACT_FROM) => spec.cls === 'currency' && Math.abs(n) < under && Math.round(Math.abs(n) * 100) % 100 !== 0
+const cents = (n, spec) => {
+  if (spec.cls !== 'currency') return false
+  // No second threshold: compact faces ignore cents; the rung decision owns 10k.
+  const scale = 10 ** minorOf(spec.currency), units = Math.round(Math.abs(n) * scale)
+  return units % scale !== 0
+}
 const prec = p => (Number.isInteger(p) && p >= 0 && p <= 6 ? p : undefined)
 const numOf = (v, spec) => (typeof v === 'number' && Number.isFinite(v) ? clean(v * spec.scale) : null)
 function one(v, n, spec, o, surface) {
   if (n === null) return typeof v === 'string' ? v : null // strings verbatim ('02139'); null → the caller's null word
   const b = body(Math.abs(n), spec, o)
-  return finish(n < 0 && /[1-9]/.test(b), b, spec, surface, !o.exact)
+  return finish(n < 0 && /[1-9]/.test(b), b, spec, surface, o.face ?? !o.exact)
 }
 // D1/D2: one value (a currency set of one). level:'exact' = the readout: grouped, 15 s.f., ASCII '-', minor units.
 export function fmt(value, { format, unit, precision, level = 'face', surface = 'face' } = {}) {
@@ -82,19 +92,31 @@ export function num(value, opts = {}) {  // D3: the only way a component prints 
 // Sets (AD-1/2/3): one tier from the largest value, shared cents, collision → widen one → exact; additivity (≥ 3 values, exactly one equals the sum of the others) → widen ≤ 2 decimals → exact.
 export function fmtSet(values, ctx = {}) {
   const spec = unitSpec(ctx.format, ctx.unit), p = prec(ctx.precision), surface = ctx.surface || 'face'
-  const nums = values.map(v => numOf(v, spec)), fin = nums.filter(n => n !== null), max = Math.max(0, ...fin.map(Math.abs)), tier = tierOf(max)
+  const nums = values.map(v => numOf(v, spec)), fin = nums.filter(n => n !== null), max = Math.max(0, ...fin.map(Math.abs)), tier = tierOf(max, spec.cls === 'currency' ? minorOf(spec.currency) : 0)
   const base = { precision: p, group: ctx.group, cents: fin.some(n => cents(n, spec)), tier: p === undefined && tier && tier[1] ? tier : undefined }
-  // one tier for the set; a value over 1000× smaller than the largest is too far apart to share it (keeps its own face)
-  const run = o => values.map((v, i) => one(v, nums[i], spec, o.tier && Math.abs(nums[i]) * 1000 < max ? { ...o, tier: undefined } : o, surface))
-  const exact = () => run({ exact: true, cents: fin.some(n => cents(n, spec, Infinity)) }).map((s, i) => (nums[i] === null ? s : s.replace(/-/g, MINUS)))
+  const run = o => values.map((v, i) => one(v, nums[i], spec, o, surface))
+  const exact = () => {
+    const minor = spec.cls === 'currency' ? 10 ** minorOf(spec.currency) : 1
+    return run({ exact: true, face: true, cents: fin.some(n => Math.round(Math.abs(n) * minor) % minor !== 0) })
+  }
   const collide = f => f.some((s, i) => nums[i] !== null && f.some((t, j) => nums[j] !== null && t === s && nums[j] !== nums[i]))
   let faces = run(base)
   if (p !== undefined) return faces
   if (collide(faces) && collide(faces = run({ ...base, sig: SIG + 1 }))) return exact()
   const k = ctx.additive !== false && fin.length >= 3 ? additiveRow(nums) : -1
-  const val = s => Number(s.replace(MINUS, '-').replace(/[^\d.-]/g, '')) // a face read back at its displayed step
-  const adds = f => { const v = f.map((s, i) => (nums[i] === null ? 0 : val(s))), rest = v.reduce((a, x, i) => (i === k ? a : a + x), 0)
-    return Math.abs(rest - v[k]) <= 1e-9 * Math.max(1, Math.abs(v[k])) && !collide(f) }
+  const val = s => { // read the numeric face at its printed rung, including scientific and signed faces
+    const m = /([\d,]+(?:\.\d+)?)(?:×10([⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+))?([kMBT])?/.exec(s)
+    if (!m) return NaN
+    const supers = { '⁻': '-', '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9' }
+    const exp = m[2] ? Number([...m[2]].map(c => supers[c]).join('')) : 0
+    return (s.includes(MINUS) || s.startsWith('-') ? -1 : 1) * Number(m[1].replaceAll(',', '')) * 10 ** exp * (TIER_AT.find(t => t[1] === m[3])?.[0] ?? 1)
+  }
+  const adds = f => {
+    if (f.some((s, i) => nums[i] !== null && (s.startsWith('<') || s.startsWith('>') ||
+      (nums[i] !== 0 && val(s) === 0) || (spec.cls === 'percent' && nums[i] !== 100 && val(s) === 100)))) return false
+    const v = f.map((s, i) => (nums[i] === null ? 0 : val(s))), rest = v.reduce((a, x, i) => (i === k ? a : a + x), 0)
+    return Number.isFinite(rest) && Math.abs(rest - v[k]) <= 1e-9 * Math.max(1, Math.abs(v[k])) && !collide(f)
+  }
   if (k < 0 || adds(faces)) return faces
   const d0 = Math.max(...faces.map(s => (/\.(\d+)/.exec(s || '') || ['', ''])[1].length))
   for (let d = d0; d <= d0 + 2; d++) { const f = run({ ...base, fixed: d }); if (adds(f)) return f }
@@ -109,10 +131,20 @@ export function fmtPair(a, b, ctx = {}) {  // C13: a pair shares one tier from t
   const spec = unitSpec(ctx.format, ctx.unit), surface = ctx.surface || 'pair', [x, y] = fmtSet([a, b], { ...ctx, group: true, surface })
   return [x, y].filter(s => s !== null).join(ctx.sep ?? ' / ') + (place(spec, surface) === 'once' && y !== null ? NBSP + spec.suffix : '')
 }
-export function fmtTicks(ticks, ctx = {}) {  // S1/C11: ticks obey the face grouping rule; one tier per axis from max |tick|; decimals from the step.
+export function fmtTicks(ticks, ctx = {}) {  // one axis rung; widen from step until every distinct tick has a distinct nonzero/landmark-safe face.
   const spec = unitSpec(ctx.format, ctx.unit), vals = ticks.filter(Number.isFinite).map(v => clean(v * spec.scale))
-  const [div, t] = tierOf(Math.max(0, ...vals.map(Math.abs))) ?? TOP
-  let d = 0; while (d < 6 && !vals.every(v => Math.abs(v / div - Number((v / div).toFixed(d))) < 1e-9)) d++
+  const tier = tierOf(Math.max(0, ...vals.map(Math.abs)), spec.cls === 'currency' ? minorOf(spec.currency) : 0)
+  if (!tier) return fmtSet(ticks, { ...ctx, surface: 'ticks', additive: false }) // scientific beyond 999T (money stays on T)
+  const [div, t] = tier
+  let d = 0
+  const ok = digits => vals.every(v => {
+    const rounded = Number((v / div).toFixed(digits))
+    return Math.abs(v / div - rounded) <= 1e-12 * Math.max(1, Math.abs(v / div)) &&
+      (v === 0 || rounded !== 0) && (spec.cls !== 'percent' || v === 100 || rounded * div !== 100) &&
+      !vals.some(w => w !== v && Number((w / div).toFixed(digits)) === rounded)
+  })
+  while (d < 20 && !ok(d)) d++
+  if (!ok(d)) return fmtSet(ticks, { ...ctx, surface: 'ticks', additive: false })
   return ticks.map(v => {
     if (!Number.isFinite(v)) return ''
     const m = clean(v * spec.scale) / div, b = nf(Math.abs(m), { maximumFractionDigits: d, useGrouping: spec.cls !== 'bare' && !t })
@@ -123,13 +155,16 @@ export function fmtTicks(ticks, ctx = {}) {  // S1/C11: ticks obey the face grou
 export const unitLabel = (label, ctx = {}) => { const s = unitSpec(ctx.format, ctx.unit); return place(s, 'header') === 'label (unit)' ? `${label} (${s.suffix})` : label }
 export const axisTitle = (ctx = {}) => { const s = unitSpec(ctx.format, ctx.unit); return place(s, 'axisTitle') === 'unit' ? s.suffix : null }
 // D4: ISO-only parsing; calendar dates (and midnight UTC) never shift; floating wall clocks print as written; zoned instants print in the viewer zone (or opts.timeZone) with its abbreviation; en-US; never relative.
-export const ISO_RE = /^\d{4}-\d{2}-\d{2}(?:[T ]\d{2}:\d{2}(?::\d{2}(?:\.\d{1,9})?)?(?:Z|[+-]\d{2}:?\d{2})?)?$/
+export const ISO_RE = /^\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])(?:[T ](?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d{1,9})?)?(?:Z|[+-](?:[01]\d|2[0-3]):?[0-5]\d)?)?$/
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const daysIn = (year, month) => month === 2 ? ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28) : [4, 6, 9, 11].includes(month) ? 30 : 31
 export function fmtDate(v, { timeZone, level = 'face' } = {}) {
   if (v === null || v === undefined || v === '') return null
   if (typeof v !== 'string' || !ISO_RE.test(v) || level === 'exact') return String(v)
-  const [y, mo, d] = v.slice(0, 10).split('-').map(Number), cal = `${MON[mo - 1]} ${d}, ${y}`
-  if (v.length === 10 || /T00:00(:00(\.0+)?)?(Z|[+-]00:?00)$/.test(v)) return cal
+  const [y, mo, d] = v.slice(0, 10).split('-').map(Number)
+  if (d > daysIn(y, mo)) return v
+  const cal = `${MON[mo - 1]} ${d}, ${y}`
+  if (v.length === 10 || /[T ]00:00(:00(\.0+)?)?(Z|[+-]00:?00)$/.test(v)) return cal
   if (!/(Z|[+-]\d{2}:?\d{2})$/.test(v)) { const h = +v.slice(11, 13); return `${cal}, ${h % 12 || 12}:${v.slice(14, 16)} ${h < 12 ? 'AM' : 'PM'}` }
   const t = Date.parse(v.replace(' ', 'T').replace(/([+-]\d{2})(\d{2})$/, '$1:$2')); if (!Number.isFinite(t)) return v
   const P = Object.fromEntries(new Intl.DateTimeFormat(LOCALE, { timeZone, year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZoneName: 'short' })

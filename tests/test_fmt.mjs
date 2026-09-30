@@ -63,6 +63,43 @@ test('D1/AD-4 landmarks: never 100%, never 0 for a nonzero', () => {
   assert.equal(fmt(0.42, { format: 'fraction' }), '42%')
 })
 
+test('F1/A1/A4/M5: landmarks and nonzero survive set additivity and float cleanup', () => {
+  assert.equal(fmt(99.9999, { unit: '%' }), '99.9999%')
+  assert.equal(fmt(99.99996, { unit: '%' }), '>99.9999%')
+  assert.equal(fmt(100.00004, { unit: '%' }), '<100.0001%')
+  assert.equal(fmt(99.99999999999999, { unit: '%' }), '100%') // clean once to 15 s.f.
+  assert.equal(row(fmtSet([99.99996, 0.01004, 100.01], { unit: '%' })), '99.99996% · 0.01004% · 100.01000%')
+  assert.equal(row(fmtSet([1.111, 2.222, 0.00004, 3.33304])), '1.111 · 2.222 · 0.00004 · 3.33304')
+  assert.equal(row(fmtSet([1.111, 2.222, -0.00004, 3.33296])), '1.111 · 2.222 · −0.00004 · 3.33296')
+})
+
+test('F2/M8: readout carries 15 significant figures, including sub-cent money', () => {
+  assert.equal(fmt(1 / 3, { level: 'exact' }), '0.333333333333333')
+  assert.equal(num(1e-7, USD).exact, '$0.0000001')
+  assert.equal(num(0.0000025, USD).exact, '$0.0000025')
+  assert.equal(num(0.123456789, USD).exact, '$0.123456789')
+  assert.equal(num(0.0000025, USD).aria, null) // exact equals face; no redundant aria
+})
+
+test('F3: authored unit hyphens survive in faces and sets', () => {
+  assert.equal(fmt(12, { unit: 'person-days' }), `12${N}person-days`)
+  assert.equal(fmt(-12, { unit: 'kW-h' }), `−12${N}kW-h`)
+  assert.equal(row(fmtSet([-12, 15], { unit: 'person-days' })), `−12${N}person-days · 15${N}person-days`)
+})
+test('F6: minor-unit rounding precedes the money tier threshold', () => {
+  assert.equal(fmt(9999.99, USD), '$9,999.99')
+  assert.equal(fmt(9999.995, USD), '$10k')
+  assert.equal(row(fmtSet([900.5, 15000], USD)), '$0.901k · $15k')
+})
+test('F7: sets share one rung without an unspecced 1000x exception', () => {
+  assert.equal(row(fmtSet([10, 11000])), '0.01k · 11k')
+})
+test('A6: currency cents use ISO 4217 minor units (KWD)', () => {
+  assert.equal(row(fmtSet([1.001, 2.5], { unit: 'KWD' })), 'KWD 1.001 · KWD 2.500')
+  assert.equal(fmt(1.001, { unit: 'KWD' }), 'KWD 1.001')
+  assert.equal(row(fmtSet([1.005, 2.5], { unit: 'KWD' })), 'KWD 1.005 · KWD 2.500')
+})
+
 test('D2/AD-5 no unit ladder: the authored unit is the display rung', () => {
   assert.equal(fmt(1234, { unit: 'ms' }), `1,234${N}ms`)
   assert.equal(fmt(9120, { unit: 'GB' }), `9,120${N}GB`)
@@ -106,6 +143,13 @@ test('S1/C11 ticks: face grouping rule, one tier per axis, decimals from the ste
   assert.equal(row(fmtTicks([0, 5000, 10000])), '0 · 5k · 10k')
   assert.equal(row(fmtTicks([0, 5e8, 1e9])), '0 · 0.5B · 1B')
   assert.equal(row(fmtTicks([0, 0.25, 0.5])), '0 · 0.25 · 0.5')
+})
+
+test('A2/A4: tick faces stay distinct, nonzero, signed, scientific beyond top tier', () => {
+  assert.equal(row(fmtTicks([0, 1e-7, 2e-7, 3e-7])), '0 · 0.0000001 · 0.0000002 · 0.0000003')
+  assert.equal(row(fmtTicks([1.0000001, 1.0000002, 1.0000003])), '1.0000001 · 1.0000002 · 1.0000003')
+  assert.equal(row(fmtTicks([-10, 0, 10])), '−10 · 0 · 10')
+  assert.equal(row(fmtTicks([0, 5e15, 1e16])), '0 · 5×10¹⁵ · 1×10¹⁶')
 })
 
 test('D3 num(): face, exact, aria only when they differ, tabular lining numerals', () => {

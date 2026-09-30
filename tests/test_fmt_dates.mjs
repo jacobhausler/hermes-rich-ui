@@ -6,7 +6,9 @@ import { spawnSync } from 'node:child_process'
 
 const FMT = new URL('../desktop/src/components/fmt.mjs', import.meta.url).href
 const INPUTS = ['2026-09-28', '2026-09-29T04:30:00Z', '2026-09-28T23:30:00-05:00', '2026-09-28T00:00:00Z',
-  '2026-09-28T14:05', 'Q3 2026', '42', '09/28/2026', '']
+  '2026-09-28T14:05', '2026-09-28T00:30', '2026-09-28 00:00:00Z', '2026-09-28T00:00:00+00:00',
+  '2026-13-01', '2026-00-10', '2026-02-30', '2026-02-30T10:00:00Z', '2026-09-28T24:00',
+  '2026-09-28T14:60', '2026-09-28T14:05+25:00', 'Q3 2026', '42', '09/28/2026', '']
 
 function facesIn(TZ) {
   const src = `const { fmtDate } = await import(${JSON.stringify(FMT)}); const xs = ${JSON.stringify(INPUTS)};` +
@@ -23,6 +25,11 @@ test('D4 dates in Chicago and Tokyo', () => {
   assert.equal(tok['2026-09-28'], 'Sep 28, 2026')
   assert.equal(chi['2026-09-28T00:00:00Z'], 'Sep 28, 2026')
   assert.equal(tok['2026-09-28T00:00:00Z'], 'Sep 28, 2026')
+  for (const z of [chi, tok]) {
+    assert.equal(z['2026-09-28 00:00:00Z'], 'Sep 28, 2026')
+    assert.equal(z['2026-09-28T00:00:00+00:00'], 'Sep 28, 2026')
+    assert.equal(z['2026-09-28T00:30'], 'Sep 28, 2026, 12:30 AM')
+  }
   // a zoned instant shows in the viewer's zone with its abbreviation, no seconds
   assert.equal(chi['2026-09-29T04:30:00Z'], 'Sep 28, 2026, 11:30 PM CDT')
   assert.equal(tok['2026-09-29T04:30:00Z'], 'Sep 29, 2026, 1:30 PM GMT+9')
@@ -33,11 +40,13 @@ test('D4 dates in Chicago and Tokyo', () => {
   assert.equal(tok['2026-09-28T14:05'], 'Sep 28, 2026, 2:05 PM')
   // ISO-only parsing: everything else is verbatim
   for (const z of [chi, tok]) {
+    for (const invalid of ['2026-13-01', '2026-00-10', '2026-02-30', '2026-02-30T10:00:00Z',
+      '2026-09-28T24:00', '2026-09-28T14:60', '2026-09-28T14:05+25:00']) assert.equal(z[invalid], invalid)
     assert.equal(z['Q3 2026'], 'Q3 2026')
     assert.equal(z['42'], '42')
     assert.equal(z['09/28/2026'], '09/28/2026')
     assert.equal(z[''], null)
     assert.equal(z.null, null)
-    assert.deepEqual(z.exact.slice(0, 8), INPUTS.slice(0, 8)) // the readout is the authored string
+    assert.deepEqual(z.exact.slice(0, -1), INPUTS.slice(0, -1)) // readout = authored, even invalid ISO
   }
 })
