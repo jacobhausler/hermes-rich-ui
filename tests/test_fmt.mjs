@@ -150,6 +150,8 @@ test('A2/A4: tick faces stay distinct, nonzero, signed, scientific beyond top ti
   assert.equal(row(fmtTicks([1.0000001, 1.0000002, 1.0000003])), '1.0000001 · 1.0000002 · 1.0000003')
   assert.equal(row(fmtTicks([-10, 0, 10])), '−10 · 0 · 10')
   assert.equal(row(fmtTicks([0, 5e15, 1e16])), '0 · 5×10¹⁵ · 1×10¹⁶')
+  assert.equal(row(fmtTicks([1, 1 + 1e-13])), '1 · 1.0000000000001')
+  assert.equal(row(fmtTicks([1e-13])), '0.0000000000001')
 })
 
 test('D3 num(): face, exact, aria only when they differ, tabular lining numerals', () => {
