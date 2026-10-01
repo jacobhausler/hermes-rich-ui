@@ -109,5 +109,12 @@ jobs:
           BR="chore/graph-${GITHUB_SHA::7}"
           git commit -m "chore(graph): rebuild graphify knowledge graph"
           git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BR}"
-          gh pr create --base main --head "${BR}" --title "chore(graph): rebuild graphify knowledge graph (${GITHUB_SHA::7})" --body "Automated graph rebuild from main ${GITHUB_SHA}; legit diff per the no-op cmp guard. Part of #46." --label chore || true
+          # F1 (#48 review): no --label chore — that label does not exist on this
+          # repo and gh fails the whole create. F3 nit: no bare `|| true` (and no
+          # pipe, which would mask gh's exit code); the only tolerated create
+          # failure is the already-exists case (same-sha re-run).
+          if ! PR_CREATE_OUT=$(gh pr create --base main --head "${BR}" --title "chore(graph): rebuild graphify knowledge graph (${GITHUB_SHA::7})" --body "Automated graph rebuild from main ${GITHUB_SHA}; legit diff per the no-op cmp guard. Part of #46." 2>&1); then
+            printf '%s\n' "${PR_CREATE_OUT}"
+            printf '%s\n' "${PR_CREATE_OUT}" | grep -qi 'already exists' || { echo "::error::gh pr create failed"; exit 1; }
+          fi
           gh pr merge --auto --squash "${BR}"
