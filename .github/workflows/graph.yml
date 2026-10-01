@@ -52,7 +52,12 @@ jobs:
 
       - name: Commit only if the graph actually changed
         env:
-          GH_TOKEN: ${{ github.token }}
+          # MUST be a distinct user identity (repo-scoped fine-grained PAT), NOT github.token:
+          # 1) job-token has no pull-requests permission -> gh pr create 403s (round-2 B1);
+          # 2) workflows triggered by GITHUB_TOKEN never fire further workflows, so gates
+          #    would never run on the chore/graph PR head and ruleset auto-merge stalls (B2).
+          # A fine-grained PAT user identity fires pull_request triggers like any member PR.
+          GH_TOKEN: ${{ secrets.GRAPH_PR_PAT }}
         run: |
           set -euo pipefail
           NEW=graphify-out/graph.json
@@ -102,5 +107,19 @@ jobs:
             echo "no staged graph changes — no-op"
             exit 0
           fi
-          git commit -m "chore(graph): rebuild graphify knowledge graph [skip ci]"
-          git push
+          # protect-main ruleset (GH013): direct pushes to main are declined —
+          # push a branch, open a PR, and let the required gates check + squash
+          # auto-merge land it (fix per #46). [skip ci] removed so `gates`
+          # actually runs on the PR; otherwise auto-merge would stall.
+          BR="chore/graph-${GITHUB_SHA::7}"
+          git commit -m "chore(graph): rebuild graphify knowledge graph"
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BR}"
+          # F1 (#48 review): no --label chore — that label does not exist on this
+          # repo and gh fails the whole create. F3 nit: no bare `|| true` (and no
+          # pipe, which would mask gh's exit code); the only tolerated create
+          # failure is the already-exists case (same-sha re-run).
+          if ! PR_CREATE_OUT=$(gh pr create --base main --head "${BR}" --title "chore(graph): rebuild graphify knowledge graph (${GITHUB_SHA::7})" --body "Automated graph rebuild from main ${GITHUB_SHA}; legit diff per the no-op cmp guard. Part of #46." 2>&1); then
+            printf '%s\n' "${PR_CREATE_OUT}"
+            printf '%s\n' "${PR_CREATE_OUT}" | grep -qi 'already exists' || { echo "::error::gh pr create failed"; exit 1; }
+          fi
+          gh pr merge --auto --squash "${BR}"
