@@ -9,8 +9,8 @@ const N = '\u00a0' // NBSP
 const row = a => a.join(' · ')
 const USD = { unit: 'USD' }
 
-test('_house: number constants only, frozen', () => {
-  assert.deepEqual(Object.keys(HOUSE).sort(), ['COMPACT_FROM', 'LOCALE', 'MINUS', 'SCI_BELOW', 'SIG', 'TIERS'])
+test('_house: number constants remain frozen alongside additive design tokens', () => {
+  for (const key of ['COMPACT_FROM', 'LOCALE', 'MINUS', 'SCI_BELOW', 'SIG', 'TIERS']) assert.ok(Object.hasOwn(HOUSE, key), key)
   assert.ok(Object.isFrozen(HOUSE) && Object.isFrozen(TIERS))
   assert.deepEqual([SIG, COMPACT_FROM, [...TIERS], SCI_BELOW, LOCALE, MINUS], [3, 10000, ['k', 'M', 'B', 'T'], 1e-4, 'en-US', '\u2212'])
   assert.throws(() => { 'use strict'; HOUSE.SIG = 4 })
