@@ -50,6 +50,26 @@ async function renderSpec(spec, initialState) {
   })
 }
 
+// jsdom resolves inline border over a stylesheet's !important border (unlike
+// Chromium). Complete that computed-style observation with matched CSSOM priorities:
+// an important author rule beats a non-important inline edge in the real cascade.
+// Evaluate only rules matching this rendered cell, never a CSS-source snapshot.
+function computedCellEdge(cell) {
+  const computed = getComputedStyle(cell)
+  const inlineImportant = cell.style.getPropertyPriority('border') === 'important' ||
+    cell.style.getPropertyPriority('border-top') === 'important'
+  const importantReset = [...document.styleSheets].some(sheet => [...(sheet.cssRules || [])].some(rule =>
+    rule.selectorText && cell.matches(rule.selectorText) &&
+    ['border', 'border-top'].some(prop => rule.style?.getPropertyPriority(prop) === 'important' &&
+      /^(0|none)(?:px)?$/.test(rule.style.getPropertyValue(prop).trim()))))
+  // jsdom also leaves var(--ui-stroke-tertiary) unresolved in computed borders.
+  // Use the rendered declaration as its fallback only after the matching-rule
+  // priority check; Chromium resolves that variable before getComputedStyle.
+  const declared = cell.style.border.match(/^(\d+px)\s+(solid|dashed)\b/)
+  return !inlineImportant && importantReset ? { width: '0px', style: 'none' } :
+    { width: computed.borderTopWidth || declared?.[1], style: computed.borderTopStyle || declared?.[2] }
+}
+
 test('saved 97cb HeatMap clears host row/header/corner borders, not heat-cell edges', async () => {
   // The host prose border is deliberately loaded after our hoisted reset. This
   // checks the rendered cascade (not a snapshot of the reset CSS string).
@@ -57,6 +77,7 @@ test('saved 97cb HeatMap clears host row/header/corner borders, not heat-cell ed
   host.textContent = '.prose tr,.prose th{border-bottom:1px solid rgb(209, 213, 219)}'
   const shell = document.createElement('div')
   shell.className = 'prose'
+  shell.style.width = '720px'
   document.body.append(shell)
   document.head.append(host)
   const { createRoot } = await import('react-dom/client')
@@ -76,9 +97,10 @@ test('saved 97cb HeatMap clears host row/header/corner borders, not heat-cell ed
       assert.equal(border.borderBottomStyle, 'none', `${el.tagName} has no host border style`)
     }
     for (const cell of cells) {
-      // jsdom does not resolve the --ui-* var in the computed shorthand; the
-      // rendered cell's inline border still proves the intended edge survives.
-      assert.match(cell.style.border, /^1px solid var\(--ui-stroke-tertiary\)$/, 'intentional cell edge remains')
+      assert.match(cell.style.border, /^1px solid var\(--ui-stroke-tertiary\)$/, 'intentional cell edge declared')
+      const edge = computedCellEdge(cell)
+      assert.equal(edge.width, '1px', 'rendered heat-cell edge survives host/reset cascade')
+      assert.equal(edge.style, 'solid', 'rendered heat-cell edge remains solid')
     }
   } finally {
     host.remove()

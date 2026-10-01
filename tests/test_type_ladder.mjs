@@ -55,14 +55,17 @@ test('Heading 1–5, absent level, and every quad defeat prose inheritance', asy
   }
 })
 
-// EXEMPT only skips non-text glyphs / SDK-owned chrome, never citation text.
-// File:line points to the owner of each remaining exemption at the base of #25.
+// Only uPlot owns text outside our type() path. The remaining micro-sized
+// exceptions are pinned rendered quads, not exemptions from the census.
 const EXEMPT = new Map([
-  ['chart.mjs:580 uPlot canvas labels', '[data-richui="chart-canvas"]'],
-  ['sparkline.mjs:122 trend glyph', '[data-ru-chip]'],
-  ['accordion.mjs:19 chevron glyph', '[data-ru="Accordion"] button > span:first-child'],
-  ['codeblock.mjs:15 language chrome pill', '[data-ru-lang]']
+  ['chart.mjs:580 uPlot canvas labels', '[data-richui="chart-canvas"]']
 ])
+const PINNED_MICRO = new Map([
+  ['sparkline trend glyph', '[data-ru="Sparkline"] [data-ru-chip][aria-hidden="true"]'],
+  ['Accordion chevron', '[data-ru="Accordion"] button > span:first-child'],
+  ['CodeBlock language pill', '[data-ru="CodeBlock"] [data-ru-lang]']
+])
+const CHIP_LABEL = '[data-ru="ChipSet"] [data-ru-chip]'
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const saved = ['ru-f3af0e45428d', 'ru-c69fc582e9a9', 'ru-97cb020cd21b', 'ru-000000000022']
 const { CardBody } = await import('../desktop/src/card.mjs')
@@ -75,9 +78,23 @@ test('saved-card rendered text pairs are ramp-only or named shrinking exemptions
   const pairs = new Set(Object.values(EXPECTED).map(([size, weight]) => `${size}/${weight}`))
   let checked = 0
   let markers = 0
+  let chipLabels = 0
+  const pinned = new Map([...PINNED_MICRO.keys()].map(name => [name, 0]))
   for (const name of saved) {
     const record = JSON.parse(readFileSync(path.join(ROOT, 'tests/fixtures/saved', name + '.json'), 'utf8'))
     await act(async () => { cardRoot.render(React.createElement(CardBody, { record, registry })) })
+    for (const [kind, selector] of PINNED_MICRO) {
+      for (const el of cardMount.querySelectorAll(selector)) {
+        assert.deepEqual([el.style.fontSize, el.style.fontWeight, el.style.lineHeight, el.style.letterSpacing],
+          ['10px', '400', '12px', '0em'], `${name} ${kind} rendered micro quad`)
+        pinned.set(kind, pinned.get(kind) + 1)
+      }
+    }
+    for (const chip of cardMount.querySelectorAll(CHIP_LABEL)) {
+      assert.deepEqual([chip.style.fontSize, chip.style.fontWeight, chip.style.lineHeight, chip.style.letterSpacing],
+        ['11px', '400', '16px', '0em'], `${name} authored ChipSet label caption quad`)
+      chipLabels++
+    }
     // Citation markers are provenance chrome: micro (10px) is permitted below the
     // content floor, but the full rendered quad is not exempt from the ramp.
     for (const sup of cardMount.querySelectorAll('sup[data-ru-sources]')) {
@@ -98,10 +115,13 @@ test('saved-card rendered text pairs are ramp-only or named shrinking exemptions
       }
       assert.ok(size && weight, `${name} ${el.outerHTML.slice(0, 140)} has explicit size and weight`)
       assert.ok(pairs.has(`${parseFloat(size)}/${weight}`), `${name} ${el.textContent.slice(0, 40)}: ${size}/${weight}`)
-      if (!el.closest('sup[data-ru-sources]')) assert.ok(parseFloat(size) >= 11, `${name} content floor: ${el.textContent.slice(0, 40)}`)
+      if (!el.closest('sup[data-ru-sources]') && ![...PINNED_MICRO.values()].some(sel => el.closest(sel)))
+        assert.ok(parseFloat(size) >= 11, `${name} content floor: ${el.textContent.slice(0, 40)}`)
       checked++
     }
   }
   assert.ok(checked > 120, `census checked ${checked} saved text nodes`)
   assert.ok(markers > 0, 'saved cards exercise citation markers')
+  assert.ok(chipLabels > 0, 'saved cards exercise authored ChipSet labels')
+  for (const [kind, count] of pinned) assert.ok(count > 0, `saved cards exercise ${kind}`)
 })
