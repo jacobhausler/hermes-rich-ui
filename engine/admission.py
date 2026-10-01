@@ -319,21 +319,15 @@ class _Ctx(object):
                         out = out if out is not None else dict(inst)
                         out[k] = new
                 else:
-                    dflt = self._default_of(sub)
-                    if dflt is not None:
-                        out = out if out is not None else dict(inst)
-                        out[k] = copy.deepcopy(dflt)
+                    # J9 (#27): catalog `default` is DOCUMENTATION only (it records the
+                    # renderer's house constant, tests/test_house_defaults.mjs pins the
+                    # equality). An absent prop persists ABSENT and the renderer door
+                    # takes the house constant at render; an explicit prop always wins.
+                    # Admission validates, never bakes — and never truncates.
+                    continue
             if out is not None:
                 return out
         return inst
-
-    def _default_of(self, schema):
-        if isinstance(schema, dict):
-            if "default" in schema:
-                return schema["default"]
-            if "$ref" in schema:
-                return self._default_of(self.deref(schema["$ref"]))
-        return None
 
     def _validate_one_of(self, inst, schema, ptr, errors):
         branches = schema["oneOf"]
