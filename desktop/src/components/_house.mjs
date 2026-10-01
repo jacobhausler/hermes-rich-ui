@@ -11,12 +11,40 @@ export const TYPE = Object.freeze(Object.fromEntries(Object.entries({
   [name, Object.freeze({ fontSize, fontWeight, lineHeight: `${lineHeight}px`, letterSpacing })])))
 export const INK = Object.freeze({ value: 'var(--ui-text-primary)', label: 'var(--ui-text-secondary)', meta: 'var(--ui-text-tertiary)' })
 
+// #26: foundation tokens only. No call sites move until their separately tested slices.
+// Space is physical px; the catalog's saved gap names keep their 0/4/8/16 meaning.
+export const S = Object.freeze({ hair: 2, xs: 4, sm: 8, md: 12, lg: 16, xl: 24 })
+export const R = Object.freeze({ mark: 3, control: 4, box: 6, circle: '50%' })
+export const TONE = Object.freeze({
+  neutral: 'var(--ui-text-secondary)', info: 'var(--ui-accent)',
+  success: 'var(--ui-green)', caution: 'var(--ui-yellow)', error: 'var(--ui-red)'
+})
+export const SERIES = Object.freeze(['var(--ui-accent)', 'var(--ui-orange)', 'var(--ui-purple)', 'var(--ui-green)'])
+export const B = Object.freeze({
+  hair: '1px solid var(--ui-stroke-tertiary)', head: '1px solid var(--ui-stroke-secondary)',
+  rail: tone => `3px solid ${tone}`, tab: '2px solid var(--ui-accent)',
+  absent: '1px dashed var(--ui-stroke-tertiary)'
+})
+export const SURFACE = Object.freeze({
+  card: Object.freeze({ background: 'var(--ui-bg-elevated)', border: B.hair, borderRadius: R.box, padding: S.md }),
+  inset: Object.freeze({ background: 'var(--ui-bg-tertiary)', borderRadius: R.box, padding: `${S.sm}px ${S.md}px` }),
+  flat: Object.freeze({})
+})
+
 export const HOUSE = Object.freeze({
   SIG: 3,                                    // significant figures on a face
   COMPACT_FROM: 1e4,                         // faces and axes compact from 10,000 (G4a)
   TIERS: Object.freeze(['k', 'M', 'B', 'T']), // 1e3, 1e6, 1e9, 1e12 (G4b: lowercase k only)
   SCI_BELOW: 1e-4,                           // non-money faces go ×10ⁿ below this
   LOCALE: 'en-US',
-  MINUS: '\u2212'                            // face minus; the readout keeps ASCII '-'
+  MINUS: '\u2212',                           // face minus; the readout keeps ASCII '-'
+  TILE_FLOOR: 140, BLOCK_FLOOR: 240, WIDE_FLOOR: 280,
+  CAP: 480, CAP_WHOLE: 600, FADE: 32, MEASURE: '72ch',
+  CHART_PLOT_H: 180, PAGE: 10, PAGE_GRACE: 1.5,
+  SPARK_W: 120, SPARK_H: 24, IMAGE_MAX_H: 320,
+  MARK_FILL_MIX: 55, HEAT_MIX: Object.freeze([12, 60]), TONE_TEXT_MIX: 72,
+  CITE_RUN_MIN: 3, CITE_TOKEN_LIMIT: 4, CITE_VISIBLE: 3
 })
+export const TONE_TEXT = Object.freeze(Object.fromEntries(Object.entries(TONE).map(([name, color]) =>
+  [name, `color-mix(in srgb, ${color} ${HOUSE.TONE_TEXT_MIX}%, ${INK.value})`])))
 export const { SIG, COMPACT_FROM, TIERS, SCI_BELOW, LOCALE, MINUS } = HOUSE

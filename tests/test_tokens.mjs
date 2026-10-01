@@ -64,13 +64,15 @@ function violations(node) {
       if (kind === 'space') ok = value.split(/\s+/).every(v => /^(?:0|0px|2px|4px|8px|12px|16px|20px|24px)$/.test(v))
       if (kind === 'radius') ok = value === '50%' || /^(3|4|6)px$/.test(value)
       if (kind === 'paint') {
-        // Edges, transparent absence and gradients are syntax, not independent colours.
-        const colors = value.replace(/\b(?:transparent|none|currentColor|inherit)\b/g, '')
+        // Strip only CSS geometry/keywords and valid theme paints. Any residual
+        // word/hex/rgb is a new literal colour, even inside a gradient or mix.
+        const residual = value
+          .replace(/color-mix\(in srgb, var\(--ui-[a-z-]+\) \d+%, var\(--ui-[a-z-]+\)\)/g, '')
+          .replace(/var\(--ui-[a-z-]+\)/g, '')
+          .replace(/\b(?:transparent|none|currentColor|inherit|solid|dashed|repeating-linear-gradient|linear-gradient)\b/g, '')
           .replace(/\b\d+(?:\.\d+)?(?:px|deg|%)?\b/g, '')
-          .replace(/\b(?:solid|dashed|repeating-linear-gradient|linear-gradient|in|srgb)\b/g, '')
           .replace(/[(),\s-]/g, '')
-        ok = !/#[\da-f]+\b|\brgba?\(|\bhsla?\(|oklch\(/i.test(value) &&
-          (paint(value) || theme(value) || (value.match(/var\(--ui-[a-z-]+\)/g) || []).length > 0 || !colors)
+        ok = residual === ''
       }
       if (!ok) out.add(`${component} ${el.tagName.toLowerCase()} ${prop}=${value}`)
     }

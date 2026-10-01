@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { Badge, Tip } from '@hermes/plugin-sdk'
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { TYPE } from './_house.mjs'
+import { TYPE, HOUSE, S, INK } from './_house.mjs'
 
 export const V = {
   text: 'var(--ui-text-primary)',
@@ -73,6 +73,36 @@ export function sourceLabels(ids, sources) {
   if (!Array.isArray(ids) || !ids.length) return []
   const byId = new Map((Array.isArray(sources) ? sources : []).filter(s => s && typeof s === 'object').map(s => [String(s.id), s]))
   return ids.map(id => { const s = byId.get(String(id)); return s ? (s.label || s.url || String(id)) : String(id) })
+}
+
+// Foundation-only primitive. No call sites move in #26; the old ⓘ sourceSup
+// stays byte-for-byte until the evidence slice migrates every placement together.
+// Source ids are resolved against /meta/sources, not interpreted as numbers.
+export function citeMarker(ids, sources) {
+  if (!Array.isArray(ids) || !Array.isArray(sources)) return null
+  const index = new Map(sources.map((source, i) => [source?.id, i + 1]))
+  const numbers = [...new Set(ids.filter(id => index.has(id)).map(id => index.get(id)))].sort((a, b) => a - b)
+  if (!numbers.length) return null
+  const tokens = []
+  for (let i = 0; i < numbers.length;) {
+    let end = i
+    while (end + 1 < numbers.length && numbers[end + 1] === numbers[end] + 1) end++
+    if (end - i + 1 >= HOUSE.CITE_RUN_MIN) tokens.push(`${numbers[i]}–${numbers[end]}`)
+    else for (let j = i; j <= end; j++) tokens.push(String(numbers[j]))
+    i = end + 1
+  }
+  const words = tokens.map(token => token.replace('–', ' to '))
+  const spoken = words.length === 1 ? words[0]
+    : words.length === 2 ? words.join(' and ')
+      : `${words.slice(0, -1).join(', ')}, and ${words.at(-1)}`
+  const face = tokens.length > HOUSE.CITE_TOKEN_LIMIT
+    ? `${tokens.slice(0, HOUSE.CITE_VISIBLE).join(',')} +${tokens.length - HOUSE.CITE_VISIBLE}`
+    : tokens.join(',')
+  return jsx('sup', {
+    'data-ru-citation': '', 'aria-label': `sources ${spoken}`,
+    style: { ...type('micro'), marginLeft: S.hair, color: INK.meta, verticalAlign: 'super' },
+    children: face
+  })
 }
 
 // Superscript 'ⓘ n' badge with a Tip listing the resolved source labels.
