@@ -52,7 +52,12 @@ jobs:
 
       - name: Commit only if the graph actually changed
         env:
-          GH_TOKEN: ${{ github.token }}
+          # MUST be a distinct user identity (repo-scoped fine-grained PAT), NOT github.token:
+          # 1) job-token has no pull-requests permission -> gh pr create 403s (round-2 B1);
+          # 2) workflows triggered by GITHUB_TOKEN never fire further workflows, so gates
+          #    would never run on the chore/graph PR head and ruleset auto-merge stalls (B2).
+          # A fine-grained PAT user identity fires pull_request triggers like any member PR.
+          GH_TOKEN: ${{ secrets.GRAPH_PR_PAT }}
         run: |
           set -euo pipefail
           NEW=graphify-out/graph.json
