@@ -102,5 +102,12 @@ jobs:
             echo "no staged graph changes — no-op"
             exit 0
           fi
-          git commit -m "chore(graph): rebuild graphify knowledge graph [skip ci]"
-          git push
+          # protect-main ruleset (GH013): direct pushes to main are declined —
+          # push a branch, open a PR, and let the required gates check + squash
+          # auto-merge land it (fix per #46). [skip ci] removed so `gates`
+          # actually runs on the PR; otherwise auto-merge would stall.
+          BR="chore/graph-${GITHUB_SHA::7}"
+          git commit -m "chore(graph): rebuild graphify knowledge graph"
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BR}"
+          gh pr create --base main --head "${BR}" --title "chore(graph): rebuild graphify knowledge graph (${GITHUB_SHA::7})" --body "Automated graph rebuild from main ${GITHUB_SHA}; legit diff per the no-op cmp guard. Part of #46." --label chore || true
+          gh pr merge --auto --squash "${BR}"
