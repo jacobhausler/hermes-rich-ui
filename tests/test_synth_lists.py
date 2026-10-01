@@ -170,11 +170,14 @@ admits("Checklist bound items admit", [
     card("ck"),
     {"id": "ck", "component": "Checklist", "items": {"path": "/data/steps"}},
 ], dm(data={"steps": [{"label": "a", "done": True}, {"label": "b"}]}))
-norm = admits("Checklist showTally defaults to true (normalization)", [
+norm = admits("Checklist absent showTally admits (J9: house renders the tally)", [
     card("ck"),
     {"id": "ck", "component": "Checklist", "items": [{"label": "a", "done": True}]},
 ], dm())
-check("normalized adds showTally true", any(c.get("showTally") is True for c in norm if c.get("id") == "ck"))
+# J9 (#27): the catalog `default: true` is documentation; the door persists it ABSENT and
+# the renderer takes HOUSE.CHECKLIST_SHOW_TALLY (tests/test_house_defaults.mjs pins equality).
+check("J9: absent showTally persists ABSENT (was: normalized adds showTally true)",
+      all("showTally" not in c for c in norm if c.get("id") == "ck"))
 
 rejects("Checklist 33 items rejected, error names the ≤32 cap", [
     card("ck"),

@@ -183,7 +183,11 @@ def _line_tokens(line, name):
         tok = tok.strip()
         m = re.match(r"^([A-Za-z][A-Za-z0-9_]*)\??", tok)
         if m:
-            out.append((m.group(1), tok[len(m.group(1))].startswith("?")))
+            # Helper fix (#27, commit 5): a required token per spec §4.2 is the BARE
+            # name (`text, level?`) — tok can end exactly at the identifier, so index
+            # the '?' only when something follows. Contract unchanged: '?' marks optional.
+            rest = tok[len(m.group(1)):]
+            out.append((m.group(1), rest.startswith("?")))
     return out
 
 

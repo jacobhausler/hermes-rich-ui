@@ -7,8 +7,10 @@ Public API (frozen; other modules import exactly this):
         catalog/hermes-rich-ui.catalog.json and docs/CONTRACTS.md §2/§3.
         Returns (errors, normalized). errors == [] means admitted. Each error is
         "<component id or /json/pointer>: <reason>". normalized is the component
-        list with catalog defaults applied (never mutates the input). When errors
-        are present `normalized` is still returned but must not be persisted.
+        list that persists — since J9 (#27) admission never bakes catalog
+        defaults, so normalized is value-identical to the (deep-copied) input
+        (never mutates it). When errors are present `normalized` is still
+        returned but must not be persisted.
 
     CATALOG_ID = "hermes-rich-ui/1"
 

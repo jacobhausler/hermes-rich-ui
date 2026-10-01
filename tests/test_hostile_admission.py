@@ -230,17 +230,23 @@ for i in range(1, 19):
     base[i]["text"] += "z" * add
     pad -= add
 check("K1 payload is exactly 65536 raw compact bytes", bytes_of(base) == 65536, bytes_of(base))
-k1 = run("K1 raw 65536 bytes but normalized > 65536 -> REJECT (E9)", copy.deepcopy(base), dm(), "REJECT", "after normalization")
-# a normalized-size payload at the boundary must still admit: shrink until normalized == 65536
-errs, norm = admit(copy.deepcopy(base), dm())
-over = bytes_of(norm) - 65536
+# J9 (#27): admission no longer bakes defaults, so normalized is value-identical to the
+# input — the E9 "raw fits, normalized overflows" window is CLOSED. The 64 KiB budget is
+# now a single check on the persisted bytes (= the input). These three rows replaced the
+# old-form inflation trio (K1 REJECT-after-normalization / K1b / K1c) at the same boundary.
+errs1, norm1 = admit(copy.deepcopy(base), dm())
+check("J9 K1: raw 65536 admits and normalizes byte-identically (no inflation)",
+      errs1 == [] and bytes_of(norm1) == 65536 and norm1 == base, (errs1[:2], bytes_of(norm1)))
+# grow by exactly one byte without tripping the 4096-char string cap: take a char
+# off a full text, give two back to one that still has room.
 base2 = copy.deepcopy(base)
-base2[1]["text"] = base2[1]["text"][:-over]
-errs2, norm2 = admit(base2, dm())
-check("K1b normalized exactly 65536 bytes -> ACCEPT (E9 boundary)", errs2 == [] and bytes_of(norm2) == 65536, (errs2[:2], bytes_of(norm2)))
-base2[1]["text"] += "z"
+full = next(i for i in range(1, 19) if len(base2[i]["text"]) == 4096)
+roomy = next(i for i in range(1, 19) if len(base2[i]["text"]) < 4094)
+base2[full]["text"] = base2[full]["text"][:-1]
+base2[roomy]["text"] += "zz"
 errs3, norm3 = admit(base2, dm())
-check("K1c normalized 65537 bytes -> REJECT (E9 boundary)", errs3 and bytes_of(norm3) == 65537 and any("after normalization" in e for e in errs3), errs3[:2])
+check("J9 K1c: 65537 bytes -> REJECT at the single boundary check",
+      bool(errs3) and bytes_of(base2) == 65537 and any("exceeds" in e for e in errs3), errs3[:2])
 base[1]["text"] += "z"
 run("K2 components 65537 raw bytes", copy.deepcopy(base), dm(), "REJECT", "/components")
 
