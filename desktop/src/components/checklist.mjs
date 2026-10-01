@@ -1,5 +1,6 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { common, isNil, text, sourceSup, ownSources, V, type } from './_shared.mjs'
+import { HOUSE } from './_house.mjs'
 
 // N3 Checklist — undated booleans (Timeline is for dated events). Read-only card:
 // the tri-state marker is native status text, NEVER an interactive checkbox (S ruling).
@@ -18,7 +19,7 @@ export const Checklist = ({ element }) => {
   const items = Array.isArray(p.items) ? p.items.slice(0, 32) : []
   const doneCount = items.filter((it) => it && it.done === true).length
   const tally = doneCount + '/' + items.length
-  const showTally = p.showTally !== false
+  const showTally = (p.showTally ?? HOUSE.CHECKLIST_SHOW_TALLY) !== false
   return jsxs('div', {
     ...common(element, { 'data-ru-tally': tally }),
     style: { display: 'flex', flexDirection: 'column', gap: 6 },
