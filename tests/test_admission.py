@@ -101,10 +101,17 @@ explanation = load_surface("explanation")
 norm_r = admits("examples/research admits", research["components"], research["dataModel"])
 norm_e = admits("examples/explanation admits", explanation["components"], explanation["dataModel"])
 check("research surface catalogId", research["catalogId"] == CATALOG_ID)
-check("normalized applies Metric.format default", any(c["id"] == "count" and c.get("format") == "number" for c in norm_r))
-check("normalized applies Text defaults", any(c["id"] == "intro" and c.get("tone") == "default" and c.get("variant") == "body" for c in norm_e))
+# #27 (J9) INVERTED ASSERT #1/#2: the door for new records is ABSENT-MEANS-HOUSE.
+# These two asserts used to pin admission BAKING the catalog defaults in; they now
+# pin that the defaults are NOT persisted (catalog `default` is documentation only).
+check("J9: normalized persists NO Metric.format default (was: applies 'number')",
+      any(c["id"] == "count" and "format" not in c for c in norm_r))
+check("J9: normalized persists NO Text tone/variant (was: applies default/body)",
+      any(c["id"] == "intro" and "tone" not in c and "variant" not in c for c in norm_e))
 check("normalized never mutates input", all("format" not in c for c in research["components"] if c["id"] == "count"))
 check("normalized is a distinct list", norm_r is not research["components"])
+check("J9: normalized is VALUE-identical to the input (what comes in is what persists)",
+      norm_r == research["components"])
 
 # richer positive: every container kind, bound + literal values, nested Tabs/Accordion
 full = [
@@ -134,9 +141,82 @@ for level in range(1, 6):
     heading = [card("h"), {"id": "h", "component": "Heading", "text": "Section", "level": level}]
     norm = admits("Heading level %d admits" % level, heading, dm())
     check("Heading level %d persists" % level, norm and norm[1]["level"] == level)
-heading_default = admits("Heading absent level defaults to 2", [card("h"), {"id": "h", "component": "Heading", "text": "Section"}], dm())
-check("Heading default stays 2", heading_default and heading_default[1]["level"] == 2)
+heading_default = admits("Heading absent level admits", [card("h"), {"id": "h", "component": "Heading", "text": "Section"}], dm())
+# #27 (J9) INVERTED ASSERT #3: absent level persists ABSENT — the renderer door resolves it
+# to the house constant (HOUSE.HEADING_LEVEL == 2; the catalog annotation is documentation).
+check("J9: an absent Heading level persists ABSENT (was: baked 2)",
+      heading_default and "level" not in heading_default[1])
 rejects("Heading level 6 rejects", [card("h"), {"id": "h", "component": "Heading", "text": "Section", "level": 6}], dm(), "expected one of")
+
+# ------------------------------------------------- #27 (J9): absent means house, no baking
+BAKED_PROPS = {
+    "Stack": ("direction", "gap"), "Grid": ("gap",), "Divider": ("orientation",),
+    "Heading": ("level",), "Text": ("tone", "variant"), "Badge": ("tone",),
+    "Metric": ("format", "invertTone"), "Checklist": ("showTally",),
+    "ChipSet": ("tone", "wrap"), "CodeBlock": ("showLines",),
+    "ImageGallery": ("columns",), "Sparkline": ("direction", "width", "height", "tone"),
+    "BarList": ("format", "sort"), "HeatMap": ("showValues",),
+}
+
+def _bare(component, cid, **required):
+    return [card(cid), {"id": cid, "component": component, **required}]
+
+BARE_CALLS = {
+    "Metric": _bare("Metric", "metric", label="L", value=1),
+    "Text": _bare("Text", "t", text="hello"),
+    "Badge": _bare("Badge", "b", label="ok"),
+    "Heading": _bare("Heading", "h", text="T"),
+    "Divider": _bare("Divider", "d"),
+    "Stack": _bare("Stack", "st", children=["stt"]) + [{"id": "stt", "component": "Text", "text": "hi"}],
+    "Grid": _bare("Grid", "g", columns=2, children=["gt"]) + [{"id": "gt", "component": "Text", "text": "hi"}],
+    "Checklist": _bare("Checklist", "ck", items=[{"label": "a", "done": True}]),
+    "ChipSet": _bare("ChipSet", "cs", labels=["a"]),
+    "CodeBlock": _bare("CodeBlock", "cb", code="x = 1"),
+    "ImageGallery": _bare("ImageGallery", "gal", items=[{"src": "https://example.org/i.png", "alt": "a"}]),
+    "Sparkline": _bare("Sparkline", "sp", values=[1, 2, 3]),
+    "BarList": _bare("BarList", "bl", items=[{"label": "a", "value": 1}]),
+    "HeatMap": _bare("HeatMap", "hm", rows=[{"label": "r"}], cols=[{"label": "c"}],
+                     cells=[{"row": "r", "col": "c", "value": 1}]),
+}
+for _t, _call in BARE_CALLS.items():
+    _norm = admits("J9 bare %s admits" % _t, copy.deepcopy(_call), dm())
+    _mine = [c for c in (_norm or []) if c.get("component") == _t]
+    for _k in BAKED_PROPS[_t]:
+        check("J9: admitting a bare %s persists NO '%s' key" % (_t, _k),
+              _mine and all(_k not in c for c in _mine))
+# The named red-first row from #27: {Metric label, value} persists NO format key.
+_m = admits("J9: {Metric label, value} admits", _bare("Metric", "m", label="Suite", value=3), dm())
+check("J9: {Metric label, value} persists no format key",
+      all("format" not in c for c in _m if c.get("component") == "Metric"))
+check("J9: admission identity — normalized == input list values for every bare call",
+      all(admit(copy.deepcopy(c), dm())[0] == [] and admit(copy.deepcopy(c), dm())[1] == c
+          for c in BARE_CALLS.values()))
+check("J9: an explicit non-house value is persisted verbatim (explicit always wins)",
+      (lambda n: any(c.get("format") == "percent" for c in n if c.get("component") == "Metric"))(
+          admits("J9 explicit format survives",
+                 [card("m"), {"id": "m", "component": "Metric", "label": "x", "value": 1, "format": "percent"}], dm())))
+check("J9: an explicit HOUSE value is persisted verbatim too (no dedupe, no third layer)",
+      (lambda n: any(c.get("format") == "number" and c.get("invertTone") is False for c in n if c.get("component") == "Metric"))(
+          admits("J9 explicit house value stays explicit",
+                 [card("m"), {"id": "m", "component": "Metric", "label": "x", "value": 1, "format": "number", "invertTone": False}], dm())))
+
+# J9 compat: saved (baked) records re-admit with ZERO errors and keep every baked value
+# byte-identically — the door never strips or rewrites what is already stored.
+_saved_dir = os.path.join(ROOT, "tests", "fixtures", "saved")
+_saved_seen = 0
+for _f in sorted(os.listdir(_saved_dir)):
+    if not _f.endswith(".json"):
+        continue
+    with open(os.path.join(_saved_dir, _f), encoding="utf-8") as fh:
+        _rec = json.load(fh)
+    _cs = _rec["surface"]["createSurface"]
+    _before = json.dumps(_cs["components"], sort_keys=True)
+    _errs, _norm = admit(_cs["components"], _cs["dataModel"])
+    check("J9: saved %s re-admits clean" % _f, _errs == [], _errs[:3])
+    check("J9: saved %s keeps baked values byte-identically" % _f,
+          json.dumps(_norm, sort_keys=True) == _before)
+    _saved_seen += 1
+check("J9: the saved corpus was exercised", _saved_seen >= 4, _saved_seen)
 admits("sourceIds inside bound table rows resolve", [
     card("t"),
     {"id": "t", "component": "DataTable", "columns": [{"key": "a", "label": "A", "type": "text"}, {"key": "sourceIds", "label": "E", "type": "sources"}],
