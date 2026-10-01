@@ -10,6 +10,7 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo } from 'react'
 import { common, formatMetric, ownSources, isNil, V, type } from './_shared.mjs'
+import { HOUSE } from './_house.mjs'
 
 const MAX_ROWS = 12
 const MAX_COLS = 12
@@ -76,7 +77,7 @@ export const HeatMap = ({ element }) => {
   const p = element.props ?? {}
   const propsKey = useMemo(() => { try { return JSON.stringify(p) } catch { return 'unstringifiable:' + (element?.id ?? '') } }, [p]) // eslint-disable-line react-hooks/exhaustive-deps
   const model = useMemo(() => heatModel(p.rows, p.cols, p.cells), [propsKey]) // eslint-disable-line react-hooks/exhaustive-deps
-  const showValues = p.showValues !== false
+  const showValues = (p.showValues ?? HOUSE.HEATMAP_SHOW_VALUES) !== false
   const unit = typeof p.unit === 'string' && p.unit ? p.unit : ''
 
   const head = jsxs('tr', { children: [

@@ -1,5 +1,6 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { common, isNil, ownSources, ImageTile, V, type } from './_shared.mjs'
+import { HOUSE } from './_house.mjs'
 
 // N6 (counsel 0928): an evidence strip of ≤8 tiles in ONE component (a ≥4-image strip
 // today costs 3N components). Each tile reuses the shared ImageTile (E14) so the https
@@ -11,7 +12,7 @@ const MAX_ITEMS = 8
 export const ImageGallery = ({ element }) => {
   const p = element.props ?? {}
   const items = (Array.isArray(p.items) ? p.items : []).slice(0, MAX_ITEMS)
-  const columns = Math.min(4, Math.max(1, Number(p.columns) || 2))
+  const columns = Math.min(4, Math.max(1, Number(p.columns ?? HOUSE.GALLERY_COLUMNS) || HOUSE.GALLERY_COLUMNS))
   return jsxs('div', {
     ...common(element, { 'data-ru-count': items.length }),
     style: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 },

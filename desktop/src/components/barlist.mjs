@@ -7,6 +7,7 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo } from 'react'
 import { common, formatMetric, unavailable, ownSources, sourceSup, isNil, V, type } from './_shared.mjs'
+import { HOUSE } from './_house.mjs'
 
 const MAX_ITEMS = 30
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
@@ -71,10 +72,10 @@ export const BarList = ({ element }) => {
   const p = element.props ?? {}
   const propsKey = useMemo(() => { try { return JSON.stringify(p) } catch { return 'unstringifiable:' + (element?.id ?? '') } }, [p]) // eslint-disable-line react-hooks/exhaustive-deps
   const raw = Array.isArray(p.items) ? p.items.slice(0, MAX_ITEMS) : []
-  const sort = p.sort === 'asc' ? 'asc' : p.sort === 'none' ? 'none' : 'desc'
+  const sort = (s => (s === 'asc' || s === 'none' ? s : 'desc'))(p.sort ?? HOUSE.BARLIST_SORT)
   const items = useMemo(() => sortItems(raw, sort), [propsKey]) // eslint-disable-line react-hooks/exhaustive-deps
   const { shares, counted } = useMemo(() => barShares(items), [items]) // eslint-disable-line react-hooks/exhaustive-deps
-  const fmt = { format: p.format ?? 'number', precision: p.precision, unit: p.unit }
+  const fmt = { format: p.format ?? HOUSE.BARLIST_FORMAT, precision: p.precision, unit: p.unit }
   const rows = items.map((it, i) => {
     const value = isNil(it?.value) ? null : Number(it.value)
     const formatted = value === null ? null : formatMetric(value, fmt)

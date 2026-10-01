@@ -1,5 +1,6 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { common, V, type } from './_shared.mjs'
+import { HOUSE } from './_house.mjs'
 
 const line = key => jsx('div', { style: { flex: 1, height: 1, background: V.stroke2 } }, key)
 
@@ -8,7 +9,7 @@ export const Divider = ({ element }) => {
   const label = typeof p.label === 'string' && p.label ? p.label : null
   // E4 orientation?: vertical is a 1px-wide rule that fills the row height (inside a
   // horizontal Stack it must NOT be the flex:1;height:1 horizontal stub of `line`).
-  if (p.orientation === 'vertical') {
+  if ((p.orientation ?? HOUSE.DIVIDER_ORIENTATION) === 'vertical') {
     return jsxs('div', {
       ...common(element, { role: 'separator', 'aria-orientation': 'vertical', 'data-ru-orientation': 'vertical' }),
       style: { display: 'flex', alignItems: 'stretch', alignSelf: 'stretch', margin: '0 4px' },

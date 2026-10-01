@@ -43,7 +43,18 @@ export const HOUSE = Object.freeze({
   CHART_PLOT_H: 180, PAGE: 10, PAGE_GRACE: 1.5,
   SPARK_W: 120, SPARK_H: 24, IMAGE_MAX_H: 320,
   MARK_FILL_MIX: 55, HEAT_MIX: Object.freeze([12, 60]), TONE_TEXT_MIX: 72,
-  CITE_RUN_MIN: 3, CITE_TOKEN_LIMIT: 4, CITE_VISIBLE: 3
+  CITE_RUN_MIN: 3, CITE_TOKEN_LIMIT: 4, CITE_VISIBLE: 3,
+  // #27 (J9/J13, spec §2 layer 1): the 22 door defaults. An absent prop takes THESE
+  // at render; the catalog `default` annotations are documentation of exactly these
+  // values (tests/test_house_defaults.mjs pins the equality, admission never writes them).
+  STACK_DIRECTION: 'vertical', STACK_GAP: 'md', GRID_GAP: 'md',
+  DIVIDER_ORIENTATION: 'horizontal', HEADING_LEVEL: 2,
+  TEXT_TONE: 'default', TEXT_VARIANT: 'body', BADGE_TONE: 'neutral',
+  METRIC_FORMAT: 'number', METRIC_INVERT_TONE: false,
+  CHECKLIST_SHOW_TALLY: true, CHIPSET_TONE: 'neutral', CHIPSET_WRAP: true,
+  CODEBLOCK_SHOW_LINES: false, GALLERY_COLUMNS: 2,
+  SPARKLINE_DIRECTION: 'line', SPARKLINE_TONE: 'default',
+  BARLIST_FORMAT: 'number', BARLIST_SORT: 'desc', HEATMAP_SHOW_VALUES: true
 })
 export const TONE_TEXT = Object.freeze(Object.fromEntries(Object.entries(TONE).map(([name, color]) =>
   [name, `color-mix(in srgb, ${color} ${HOUSE.TONE_TEXT_MIX}%, ${INK.value})`])))

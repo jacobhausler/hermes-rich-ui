@@ -1,5 +1,6 @@
 import { jsxs } from 'react/jsx-runtime'
 import { common, formatMetric, isNil, unavailable, ownSources, V, type } from './_shared.mjs'
+import { HOUSE } from './_house.mjs'
 
 // E11 delta: previous?: NullableDynamicNumber → the RENDERER computes Δ and %Δ (L6 —
 // the agent never hand-computes deltas). Truth-table pins (RATIFY S9):
@@ -24,11 +25,12 @@ const fmtNum = (n) => n.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
 export const Metric = ({ element }) => {
   const p = element.props ?? {}
-  const formatted = formatMetric(p.value, p)
-  const delta = computeDelta(p.value, p.previous, p.invertTone === true)
-  const unitSuffix = p.unit && p.format !== 'currency' && p.format !== 'percent' ? ` ${p.unit}` : ''
+  const format = p.format ?? HOUSE.METRIC_FORMAT
+  const formatted = formatMetric(p.value, { ...p, format })
+  const delta = computeDelta(p.value, p.previous, (p.invertTone ?? HOUSE.METRIC_INVERT_TONE) === true)
+  const unitSuffix = p.unit && format !== 'currency' && format !== 'percent' ? ` ${p.unit}` : ''
   return jsxs('div', {
-    ...common(element, { 'data-ru-format': p.format ?? 'number', 'data-ru-delta': delta ? delta.dir : undefined }),
+    ...common(element, { 'data-ru-format': format, 'data-ru-delta': delta ? delta.dir : undefined }),
     style: { display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0, paddingRight: 16 },
     children: [
       jsxs('div', { style: { ...type('caption', { caps: true }), color: V.text3 }, children: [String(p.label ?? ''), ownSources(p)] }, 'l'),

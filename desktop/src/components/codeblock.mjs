@@ -1,5 +1,6 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { common, text, ownSources, row, V, type } from './_shared.mjs'
+import { HOUSE } from './_house.mjs'
 
 // CodeBlock (expansion N1, 2026-09-28): monospace literal code/config/shell output.
 // `language` is a LABEL ONLY — never parsed, never selects a highlighter. No syntax
@@ -45,7 +46,7 @@ export const CodeBlock = ({ element }) => {
     : null
   const body = code === null
     ? jsx('div', { style: { ...preStyle, background: 'transparent', border: 'none', padding: 0 }, children: text(p.code) }, 'n')
-    : p.showLines === true
+    : (p.showLines ?? HOUSE.CODEBLOCK_SHOW_LINES) === true
       ? jsx('pre', { 'data-ru-lines': String(code.split('\n').length), style: preStyle, children:
           code.split('\n').map((ln, i, all) => jsxs('span', { 'data-ru-line': String(i + 1), style: lineStyle, children: [
             jsx('span', { 'data-ru-line-no': String(i + 1), 'aria-hidden': 'true', style: gutterStyle, children: String(i + 1) }, 'g'),

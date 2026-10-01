@@ -10,6 +10,7 @@ import { jsx, jsxs } from 'react/jsx-runtime'
 import { useEffect, useMemo, useRef } from 'react'
 import uPlot from 'uplot'
 import { ownSources, type } from './_shared.mjs'
+import { HOUSE } from './_house.mjs'
 import { UPLOT_CSS, UPLOT_CSS_HREF } from './chart.mjs'
 
 const MAX_POINTS = 512
@@ -38,8 +39,8 @@ const clamp = (v, lo, hi, dflt) => (isNum(v) ? Math.min(hi, Math.max(lo, Math.ro
 
 // Pure: uPlot options for the tiny inline mode — single canvas, NO legend, NO axes, no cursor.
 export function buildSparkOpts(model, opts) {
-  const width = clamp(opts.width, 60, 400, 120)
-  const height = clamp(opts.height, 14, 48, 24)
+  const width = clamp(opts.width, 60, 400, HOUSE.SPARK_W)
+  const height = clamp(opts.height, 14, 48, HOUSE.SPARK_H)
   const color = opts.color || FALLBACK['--ui-accent']
   const bar = opts.direction === 'bar'
   const xs = model.values.map((_, i) => i)
@@ -92,7 +93,7 @@ function Host({ model, opts, propsKey }) {
     return () => { if (u) u.destroy(); u = null }
   }, [propsKey]) // model/opts derive from propsKey (JSON.stringify of element.props)
   return h('div', { ref, 'data-richui': 'chart-canvas', 'data-ru-sparkline': '1',
-    style: { width: clamp(opts.width, 60, 400, 120) + 'px', height: clamp(opts.height, 14, 48, 24) + 'px', position: 'relative', flex: '0 0 auto', overflow: 'hidden' } })
+    style: { width: clamp(opts.width, 60, 400, HOUSE.SPARK_W) + 'px', height: clamp(opts.height, 14, 48, HOUSE.SPARK_H) + 'px', position: 'relative', flex: '0 0 auto', overflow: 'hidden' } })
 }
 
 const CHIP = { up: '▲', down: '▼', flat: '–', unavailable: '' }
@@ -104,9 +105,9 @@ export function Sparkline({ element }) {
   const raw = Array.isArray(props.values) ? props.values : Array.isArray(props.series) ? props.series : []
   const model = useMemo(() => sparkModel(raw), [propsKey]) // eslint-disable-line react-hooks/exhaustive-deps
   const opts = {
-    direction: props.direction === 'bar' ? 'bar' : 'line',
+    direction: (props.direction ?? HOUSE.SPARKLINE_DIRECTION) === 'bar' ? 'bar' : 'line',
     width: props.width, height: props.height,
-    tone: TONE_TOKEN[props.tone] ? props.tone : 'default'
+    tone: TONE_TOKEN[props.tone] ? props.tone : HOUSE.SPARKLINE_TONE
   }
   const accLabel = typeof props.accessibility?.label === 'string' && props.accessibility.label ? props.accessibility.label : 'sparkline'
 
