@@ -1,5 +1,5 @@
 import { jsxs } from 'react/jsx-runtime'
-import { common, formatMetric, isNil, unavailable, ownSources, V } from './_shared.mjs'
+import { common, formatMetric, isNil, unavailable, ownSources, V, type } from './_shared.mjs'
 
 // E11 delta: previous?: NullableDynamicNumber → the RENDERER computes Δ and %Δ (L6 —
 // the agent never hand-computes deltas). Truth-table pins (RATIFY S9):
@@ -31,11 +31,11 @@ export const Metric = ({ element }) => {
     ...common(element, { 'data-ru-format': p.format ?? 'number', 'data-ru-delta': delta ? delta.dir : undefined }),
     style: { display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0, paddingRight: 16 },
     children: [
-      jsxs('div', { style: { fontSize: 11, color: V.text3, textTransform: 'uppercase', letterSpacing: 0.4 }, children: [String(p.label ?? ''), ownSources(p)] }, 'l'),
-      jsxs('div', { 'data-ru-value': formatted ?? 'unavailable', style: { fontSize: 20, fontWeight: 600, color: V.text, fontVariantNumeric: 'tabular-nums' }, children: [formatted === null ? unavailable() : formatted] }, 'v'),
+      jsxs('div', { style: { ...type('caption', { caps: true }), color: V.text3 }, children: [String(p.label ?? ''), ownSources(p)] }, 'l'),
+      jsxs('div', { 'data-ru-value': formatted ?? 'unavailable', style: { ...type('kpi', { num: true }), color: V.text }, children: [formatted === null ? unavailable() : formatted] }, 'v'),
       delta ? jsxs('div', { 'data-ru-delta-line': delta.dir,
         'data-ru-delta-percent': delta.percent === null ? 'unavailable' : String(Math.round(delta.percent * 10) / 10),
-        style: { fontSize: 11, color: delta.color, fontVariantNumeric: 'tabular-nums' },
+        style: { ...type('caption', { num: true }), color: delta.color },
         children: [`${delta.dir === 'up' ? '▲' : delta.dir === 'down' ? '▼' : '—'} ${fmtNum(Math.abs(delta.delta))}${unitSuffix}`,
           delta.percent === null ? ' · percent unavailable'
             : ` · ${delta.percent < 0 ? '-' : '+'}${Math.round(Math.abs(delta.percent) * 10) / 10}%`]

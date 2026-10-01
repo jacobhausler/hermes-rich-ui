@@ -83,7 +83,8 @@ test('ChipSet: renders N SDK badges from 1 component with data-ru-count', async 
   assert.equal($('[data-ru="ChipSet"]').getAttribute('data-ru-count'), String(labels.length), 'data-ru-count = labels.length')
   assert.equal($$('[data-slot="badge"]').length, labels.length, 'N badges from 1 component')
   assert.ok($('[data-slot="badge"]')?.getAttribute('data-variant') === 'success', 'tone maps through Badge variant')
-  assert.ok($('[data-slot="badge"]')?.getAttribute('data-size') === 'xs', 'xs size like Badge')
+  assert.equal($('[data-slot="badge"]')?.getAttribute('data-size'), 'default', 'content chips have the 11px legibility floor')
+  assert.equal($('[data-slot="badge"]')?.style.fontSize, '11px')
   assert.ok(mount.textContent.includes('alpha') && mount.textContent.includes('theta'))
 })
 

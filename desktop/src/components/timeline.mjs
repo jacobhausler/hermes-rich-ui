@@ -1,5 +1,5 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { common, text, isNil, sourceSup, ownSources, V } from './_shared.mjs'
+import { common, text, isNil, sourceSup, ownSources, V, type } from './_shared.mjs'
 
 // E17: 'failed' joins with --ui-red (blockers no longer render as pending).
 const DOT = { done: V.green, active: V.accent, pending: V.stroke2, failed: V.red, unclassified: V.text3 }
@@ -27,7 +27,7 @@ export const Timeline = ({ element }) => {
     ...common(element),
     style: { display: 'flex', flexDirection: 'column', gap: 6 },
     children: [
-      isNil(p.title) ? null : jsxs('div', { style: { fontWeight: 600, fontSize: 12, color: V.text }, children: [String(p.title), ownSources(p)] }, 't'),
+      isNil(p.title) ? null : jsxs('div', { style: { ...type('h3'), color: V.text }, children: [String(p.title), ownSources(p)] }, 't'),
       jsx('ol', { style: { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column' },
         children: items.map((it, i) => {
           // E17/L1: absent/unknown status renders NEUTRAL unclassified — never an invented 'pending'.
@@ -36,11 +36,11 @@ export const Timeline = ({ element }) => {
             style: { display: 'grid', gridTemplateColumns: '12px minmax(0, 1fr)', columnGap: 8, position: 'relative', paddingBottom: i < items.length - 1 ? 8 : 0 },
             children: [
               jsx('span', { style: { width: 8, height: 8, marginTop: 4, borderRadius: 4, background: DOT[status], display: 'inline-block' } }, 'd'),
-              jsxs('div', { style: { display: 'flex', flexDirection: 'column', gap: 1, fontSize: 12 },
+              jsxs('div', { style: { display: 'flex', flexDirection: 'column', gap: 1, ...type('small') },
                 children: [
                   jsxs('div', { style: { display: 'flex', gap: 8, alignItems: 'baseline', color: V.text }, children: [
-                    it?.date ? jsx('span', { style: { color: V.text3, fontVariantNumeric: 'tabular-nums', fontSize: 11 }, children: formatTimelineDate(it.date) }, 'dt') : null,
-                    jsxs('span', { style: { fontWeight: 500 }, children: [text(it?.label), sourceSup(it?.sourceIds, p._sources, 's' + i)] }, 'lb')
+                    it?.date ? jsx('span', { style: { color: V.text3, ...type('caption', { num: true }) }, children: formatTimelineDate(it.date) }, 'dt') : null,
+                    jsxs('span', { style: { ...type('small') }, children: [text(it?.label), sourceSup(it?.sourceIds, p._sources, 's' + i)] }, 'lb')
                   ] }, 'l'),
                   it?.text ? jsx('div', { style: { color: V.text2, whiteSpace: 'pre-wrap' }, children: String(it.text) }, 'x') : null
                 ]

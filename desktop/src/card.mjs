@@ -4,7 +4,7 @@ import { Component, useState } from 'react'
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { JSONUIProvider, Renderer } from '@json-render/react'
 import { lower, unlowerable } from './lower.mjs'
-import { V } from './components/_shared.mjs'
+import { V, type } from './components/_shared.mjs'
 
 export const ID_RE = /^ru-[0-9a-f]{12}$/
 const Q = 'hermes-rich-ui'
@@ -16,12 +16,14 @@ const HEIGHT_CAP = 480
 // 2026-09-25: table margin 24px, li margin 6px, dt/dd margins, lh 20.57px). Scoped to
 // [data-ru-card] so nothing leaks into the app; React 19 hoists <style href precedence>
 // into <head> once per document.
-export const PROSE_RESET_HREF = 'hermes-rich-ui/prose-reset/2' // bump on every css edit (React dedupes by href)
+export const PROSE_RESET_HREF = 'hermes-rich-ui/prose-reset/3' // bump on every css edit (React dedupes by href)
 export const PROSE_RESET_CSS = [
-  '[data-ru-card] :is(table,thead,tbody,tr,th,td,ol,ul,li,dl,dt,dd,p,figure,figcaption,h1,h2,h3,h4){margin:0;line-height:1.45}',
+  '[data-ru-card] :is(table,thead,tbody,tr,th,td,ol,ul,li,dl,dt,dd,p,figure,figcaption,h1,h2,h3,h4,h5,h6){margin:0}',
   '[data-ru-card] :is(ol,ul){padding-left:0}',
   '[data-ru-card] li::marker{content:none}',
   '[data-ru-card] :is(th,td){padding:0}',
+  '[data-ru-card] :is(table,thead,tbody,tr,th,td){border:0}',
+  '[data-ru-card] :is(dt,dd,th){font-weight:inherit}',
   '[data-ru-card] button{font:inherit}',
   // horizontal Stack: prose-like children (Text, Callout) share the row; chips (Badge, Metric) keep their size
   '[data-ru-card] [data-ru-dir="horizontal"]>:is([data-ru="Text"],[data-ru="Callout"]){flex:1 1 200px}'
@@ -42,15 +44,15 @@ const FALLBACK = 'card unavailable'
 
 export const InlineError = ({ message }) => jsxs('div', {
   'data-ru-error': '', role: 'alert',
-  style: { display: 'flex', flexDirection: 'column', gap: 2, padding: '6px 10px', borderLeft: `3px solid ${V.red}`, background: V.bg3, borderRadius: 4, fontSize: 12 },
+  style: { display: 'flex', flexDirection: 'column', gap: 2, padding: '6px 10px', borderLeft: `3px solid ${V.red}`, background: V.bg3, borderRadius: 4, ...type('small') },
   children: [
     jsx('span', { style: { color: V.text2 }, children: FALLBACK }, 'f'),
-    message ? jsx('span', { style: { color: V.text3, fontFamily: 'monospace', fontSize: 11, wordBreak: 'break-word' }, children: String(message) }, 'm') : null
+    message ? jsx('span', { style: { color: V.text3, fontFamily: 'monospace', ...type('caption'), wordBreak: 'break-word' }, children: String(message) }, 'm') : null
   ]
 })
 
 export const UnknownType = ({ element }) => jsx('div', {
-  'data-ru-unknown': element?.type ?? '', style: { fontSize: 11, color: V.text3, fontStyle: 'italic' },
+  'data-ru-unknown': element?.type ?? '', style: { ...type('caption'), color: V.text3, fontStyle: 'italic' },
   children: `unsupported component: ${element?.type ?? '?'}`
 })
 
@@ -74,9 +76,9 @@ function Header({ title, meta, envelope }) {
   const policy = envelope?.policy
   return jsxs('div', {
     'data-ru-header': '',
-    style: { display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', fontSize: 11, color: V.text3 },
+    style: { display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', ...type('caption'), color: V.text3 },
     children: [
-      title ? jsx('span', { style: { fontSize: 13, fontWeight: 600, color: V.text }, children: title }, 't') : null,
+      title ? jsx('span', { style: { ...type('title'), color: V.text }, children: title }, 't') : null,
       authored ? jsx('span', { children: String(authored) }, 'a') : null,
       rev !== undefined && rev !== null ? jsx('span', { children: `rev ${rev}` }, 'r') : null,
       policy ? jsx(Badge, { variant: POLICY_TONE[policy] ?? 'muted', size: 'xs', 'data-ru-policy': policy, children: String(policy) }, 'p') : null
@@ -126,9 +128,9 @@ export function CardBody({ record, registry }) {
       jsx('style', { href: PROSE_RESET_HREF, precedence: 'default', 'data-ru-prose-reset': '1', children: PROSE_RESET_CSS }, 'css'),
       jsx(Header, { title, meta, envelope: record?.envelope }, 'h'),
       // Plain-text summary always renders ABOVE the rich body — the accessible fallback.
-      meta?.summary ? jsx('p', { 'data-ru-summary': '', style: { margin: 0, fontSize: 13, lineHeight: 1.45, color: V.text2, whiteSpace: 'pre-wrap' }, children: String(meta.summary) }, 's') : null,
+      meta?.summary ? jsx('p', { 'data-ru-summary': '', style: { margin: 0, ...type('body'), color: V.text2, whiteSpace: 'pre-wrap' }, children: String(meta.summary) }, 's') : null,
       reasons.length || lowerError
-        ? jsx('ul', { 'data-ru-unlowerable': '', style: { margin: 0, paddingLeft: 18, fontSize: 12, color: V.red },
+        ? jsx('ul', { 'data-ru-unlowerable': '', style: { margin: 0, paddingLeft: 18, ...type('small'), color: V.red },
           children: (lowerError ? [lowerError] : reasons).map((r, i) => jsx('li', { children: r }, i))
         }, 'u')
         : jsxs('div', { children: [
@@ -142,7 +144,7 @@ export function CardBody({ record, registry }) {
               })
             }, 'body'),
             jsx('button', { type: 'button', 'data-ru-toggle': '', onClick: () => setExpanded(v => !v),
-              style: { alignSelf: 'flex-start', marginTop: 4, background: 'none', border: `1px solid ${V.stroke3}`, borderRadius: 4, padding: '2px 8px', fontSize: 11, color: V.text2, cursor: 'pointer' },
+              style: { alignSelf: 'flex-start', marginTop: 4, background: 'none', border: `1px solid ${V.stroke3}`, borderRadius: 4, padding: '2px 8px', ...type('caption'), color: V.text2, cursor: 'pointer' },
               children: expanded ? 'Show less' : 'Show more'
             }, 'toggle')
           ]

@@ -123,7 +123,7 @@ returned directive line into their reply.
 | 4 | Divider | section separation, optional label, horizontal or vertical |
 | 5 | Tabs | switch between 1–8 child views |
 | 6 | Accordion | 1–12 expandable sections |
-| 7 | Heading | level 1–4 heading |
+| 7 | Heading | level 1–5 heading (5 = eyebrow) |
 | 8 | Text | plain explanatory text, tone/variant (incl. mono) |
 | 9 | Callout | takeaway, limit, or uncertainty |
 | 10 | Badge | compact categorical label |

@@ -1,5 +1,5 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { common, isNil, ownSources, ImageTile, V } from './_shared.mjs'
+import { common, isNil, ownSources, ImageTile, V, type } from './_shared.mjs'
 
 // N6 (counsel 0928): an evidence strip of ≤8 tiles in ONE component (a ≥4-image strip
 // today costs 3N components). Each tile reuses the shared ImageTile (E14) so the https
@@ -16,9 +16,9 @@ export const ImageGallery = ({ element }) => {
     ...common(element, { 'data-ru-count': items.length }),
     style: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 },
     children: [
-      isNil(p.title) ? null : jsx('div', { style: { fontWeight: 600, fontSize: 12, color: V.text }, children: [String(p.title), ownSources(p)] }, 't'),
+      isNil(p.title) ? null : jsx('div', { style: { ...type('h3'), color: V.text }, children: [String(p.title), ownSources(p)] }, 't'),
       items.length === 0
-        ? jsx('div', { 'data-ru-empty': 'none', style: { fontSize: 12, color: V.text3, fontStyle: 'italic' }, children: 'no images' }, 'e')
+        ? jsx('div', { 'data-ru-empty': 'none', style: { ...type('small'), color: V.text3, fontStyle: 'italic' }, children: 'no images' }, 'e')
         : jsx('div', { 'data-ru-columns': columns, style: { display: 'grid', gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`, gap: 8 },
             children: items.map((it, i) => jsx(ImageTile, {
               src: it?.src, alt: it?.alt, caption: it?.caption,

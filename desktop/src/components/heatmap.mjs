@@ -9,7 +9,7 @@
 // step, never divide-by-zero (S9).
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo } from 'react'
-import { common, formatMetric, ownSources, isNil, V } from './_shared.mjs'
+import { common, formatMetric, ownSources, isNil, V, type } from './_shared.mjs'
 
 const MAX_ROWS = 12
 const MAX_COLS = 12
@@ -61,15 +61,15 @@ function h(type, props, children, key) {
 const cellBg = (t) => `color-mix(in srgb, ${V.accent} ${Math.round(t * 85)}%, ${V.bg3})`
 
 const S = {
-  box: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0, color: V.text, fontSize: 12 },
+  box: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0, color: V.text },
   table: { borderCollapse: 'collapse', width: '100%' },
-  corner: { padding: '3px 6px' },
-  th: { padding: '3px 6px', color: V.text2, fontWeight: 600, textAlign: 'left', whiteSpace: 'nowrap' },
-  rowHead: { padding: '3px 6px', color: V.text2, fontWeight: 600, textAlign: 'left', whiteSpace: 'nowrap' },
-  cell: (t) => ({ padding: '4px 6px', textAlign: 'right', fontVariantNumeric: 'tabular-nums', minWidth: 34, background: cellBg(t), color: t >= 0.6 ? V.text : V.text2, border: '1px solid ' + V.stroke3 }),
+  corner: { ...type('small'), padding: '3px 6px' },
+  th: { ...type('h4'), padding: '3px 6px', color: V.text2, textAlign: 'left', whiteSpace: 'nowrap' },
+  rowHead: { ...type('h4'), padding: '3px 6px', color: V.text2, textAlign: 'left', whiteSpace: 'nowrap' },
+  cell: (t) => ({ ...type('small'), padding: '4px 6px', textAlign: 'right', fontVariantNumeric: 'tabular-nums', minWidth: 34, background: cellBg(t), color: t >= 0.6 ? V.text : V.text2, border: '1px solid ' + V.stroke3 }),
   // L1: null/missing = hatched neutral '—', never a guessed color.
-  nullCell: { padding: '4px 6px', textAlign: 'center', color: V.text3, minWidth: 34, backgroundImage: `repeating-linear-gradient(45deg, ${V.stroke3} 0 4px, transparent 4px 8px)`, border: '1px solid ' + V.stroke3 },
-  caption: { color: V.text3, fontSize: 11 }
+  nullCell: { ...type('small'), padding: '4px 6px', textAlign: 'center', color: V.text3, minWidth: 34, backgroundImage: `repeating-linear-gradient(45deg, ${V.stroke3} 0 4px, transparent 4px 8px)`, border: '1px solid ' + V.stroke3 },
+  caption: { color: V.text3, ...type('caption') }
 }
 
 export const HeatMap = ({ element }) => {

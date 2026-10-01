@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Badge, Tip } from '@hermes/plugin-sdk'
 import { jsx, jsxs } from 'react/jsx-runtime'
+import { TYPE } from './_house.mjs'
 
 export const V = {
   text: 'var(--ui-text-primary)',
@@ -17,6 +18,16 @@ export const V = {
   yellow: 'var(--ui-yellow)',
   purple: 'var(--ui-purple)',
   orange: 'var(--ui-orange)'
+}
+
+// The only component path to type: a fresh object, so callers can add layout/ink
+// without mutating the frozen ramp. caps is cosmetic; eyebrow owns its tracking.
+export function type(step, mods = {}) {
+  if (!Object.hasOwn(TYPE, step)) throw new RangeError(`unknown type step: ${step}`)
+  const { caps = false, mono = false, num = false } = mods
+  return { ...TYPE[step], ...((caps || step === 'eyebrow') ? { textTransform: 'uppercase' } : {}),
+    ...(mono ? { fontFamily: 'ui-monospace, monospace' } : {}),
+    ...(num ? { fontVariantNumeric: 'tabular-nums lining-nums' } : {}) }
 }
 
 export const GAP = { none: 0, sm: 4, md: 8, lg: 16 }
@@ -55,7 +66,7 @@ export const BADGE_SIZES_REAL = ['default', 'xs', 'overlay']
 // E10 (counsel 0928): error/outline added — both values are in BADGE_VARIANTS_REAL above,
 // pinned by the same idiom in tests/test_components.mjs (D6).
 export const BADGE_VARIANT = { neutral: 'muted', info: 'default', success: 'success', caution: 'warn', error: 'destructive', outline: 'outline' }
-export const badge = (label, tone, extra = {}, key) => jsx(Badge, { variant: BADGE_VARIANT[tone] ?? 'muted', size: 'xs', ...extra, children: label }, key)
+export const badge = (label, tone, extra = {}, key) => jsx(Badge, { variant: BADGE_VARIANT[tone] ?? 'muted', size: 'default', ...extra, style: { ...type('caption'), ...extra.style }, children: label }, key)
 
 // Sources are injected into props by the registry wrapper (index.mjs) as `_sources` (the /meta/sources array).
 export function sourceLabels(ids, sources) {
@@ -74,7 +85,7 @@ export function sourceSup(ids, sources, key) {
     children: jsx('sup', {
       'data-ru-sources': ids.length,
       'aria-label': 'sources: ' + labels.join(', '),
-      style: { marginLeft: 3, fontSize: '0.65em', color: V.text3, cursor: 'help', verticalAlign: 'super', lineHeight: 1 },
+      style: { ...type('micro'), marginLeft: 3, color: V.text3, cursor: 'help', verticalAlign: 'super' },
       children: `ⓘ ${ids.length}`
     })
   }, key)
@@ -124,9 +135,9 @@ export function ImageTile({ src, alt, caption, maxHeight, sourceIds, sources, ex
     children: [
       https && !failed
         ? jsx('img', { src: https, alt: label, loading: 'lazy', onError: () => setFailed(true), style: { maxHeight: maxH, maxWidth: '100%', objectFit: 'contain', borderRadius: 4, border: `1px solid ${V.stroke3}` } }, 'i')
-        : jsx('div', { 'data-ru-image-blocked': https ? 'unreachable' : 'scheme', style: { fontSize: 12, color: V.text3, fontStyle: 'italic', border: `1px dashed ${V.stroke3}`, borderRadius: 4, padding: '8px 10px' }, children: (label || 'image') + (https ? ' — image unavailable' : ' — image blocked (https only)') }, 'i'),
+        : jsx('div', { 'data-ru-image-blocked': https ? 'unreachable' : 'scheme', style: { ...type('small'), color: V.text3, fontStyle: 'italic', border: `1px dashed ${V.stroke3}`, borderRadius: 4, padding: '8px 10px' }, children: (label || 'image') + (https ? ' — image unavailable' : ' — image blocked (https only)') }, 'i'),
       caption || attr
-        ? jsxs('figcaption', { style: { fontSize: 11, color: V.text2 }, children: [caption ? String(caption) : null, attr] }, 'c')
+        ? jsxs('figcaption', { style: { ...type('caption'), color: V.text2 }, children: [caption ? String(caption) : null, attr] }, 'c')
         : null
     ]
   })

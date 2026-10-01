@@ -9,7 +9,7 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useEffect, useMemo, useRef } from 'react'
 import uPlot from 'uplot'
-import { ownSources } from './_shared.mjs'
+import { ownSources, type } from './_shared.mjs'
 import { UPLOT_CSS, UPLOT_CSS_HREF } from './chart.mjs'
 
 const MAX_POINTS = 512
@@ -111,7 +111,7 @@ export function Sparkline({ element }) {
   const accLabel = typeof props.accessibility?.label === 'string' && props.accessibility.label ? props.accessibility.label : 'sparkline'
 
   const body = model.points === 0
-    ? h('span', { 'data-ru-null': '', role: 'status', style: { color: 'var(--ui-text-tertiary)', fontStyle: 'italic', fontSize: 11, alignSelf: 'center' } }, 'unavailable')
+    ? h('span', { 'data-ru-null': '', role: 'status', style: { color: 'var(--ui-text-tertiary)', fontStyle: 'italic', ...type('caption'), alignSelf: 'center' } }, 'unavailable')
     : h(Host, { model, opts: { ...opts, color: undefined }, propsKey }, undefined, 'host')
 
   const children = [
@@ -119,7 +119,7 @@ export function Sparkline({ element }) {
     body,
     model.points === 0
       ? null
-      : h('span', { 'data-ru-chip': model.trend, style: { marginLeft: 4, fontSize: 10, lineHeight: 1, color: CHIP_COLOR[model.trend] }, 'aria-hidden': 'true' }, CHIP[model.trend] || 'unavailable', 'chip')
+      : h('span', { 'data-ru-chip': model.trend, style: { marginLeft: 4, ...type('micro'), color: CHIP_COLOR[model.trend] }, 'aria-hidden': 'true' }, CHIP[model.trend] || 'unavailable', 'chip')
   ]
   return jsx('span', {
     style: { display: 'inline-flex', alignItems: 'center', gap: 4, minWidth: 0, verticalAlign: 'middle' },
