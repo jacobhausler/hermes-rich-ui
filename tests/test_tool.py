@@ -76,11 +76,46 @@ def test_rejects_source_fields_before_admit():
         for k in ("source_id", "mode", "poll_ms", "update_until"):
             out = tool.rich_present(dict(ARGS, **{k: "x"}))
             assert out["ok"] is False and len(out["errors"]) == 1, out
-            assert k in out["errors"][0] and "rich_present_source" in out["errors"][0], out
+            assert k in out["errors"][0], out
+            # issue #56: never name an unregistered tool in a rejection message
+            assert "rich_present_source" not in out["errors"][0], out
+            assert "rich_present" in out["errors"][0], out
+        combined = tool.rich_present(dict(ARGS, source_id="x", mode="poll",
+                                          poll_ms=1000, update_until="later"))
+        assert combined["ok"] is False and len(combined["errors"]) == 1, combined
+        for k in ("source_id", "mode", "poll_ms", "update_until"):
+            assert k in combined["errors"][0], combined
+        assert "rich_present_source" not in combined["errors"][0], combined
     finally:
         tool.admit = fake_admit_ok
     assert calls == []
     assert store.card_count() == 0
+
+
+def test_rejection_guidance_only_names_registered_tools():
+    """issue #56 acceptance #4: a caller following the rejection text can only be
+    pointed at a tool register() actually publishes. Collect every name the door
+    registers, then require every backtick-quoted token in each source-only
+    rejection message to be a registered tool name or a non-tool word."""
+    registered_names = set()
+
+    class Ctx:
+        def register_tool(self, name, toolset, schema, handler, **kw):
+            registered_names.add(name)
+
+        def register_skill(self, name, path, description=""):
+            pass
+
+    door = load("__init__.py", "door_guidance")
+    door.register(Ctx())
+    assert registered_names, "register() must publish at least one tool"
+    non_tool_words = {"rich_present"}  # the tool under test itself
+    for k in ("source_id", "mode", "poll_ms", "update_until"):
+        out = tool.rich_present(dict(ARGS, **{k: "x"}))
+        assert out["ok"] is False and len(out["errors"]) == 1, out
+        msg = out["errors"][0]
+        for token in re.findall(r"`([^`]+)`", msg):
+            assert (token in registered_names or token in non_tool_words), (msg, token)
 
 
 def test_admit_errors_write_nothing():
@@ -251,7 +286,9 @@ def test_card_write_failure_no_receipt():
 if __name__ == "__main__":
     r = Runner()
     for t in (test_happy_path_record_shape, test_session_env_absent_is_null,
-              test_rejects_source_fields_before_admit, test_admit_errors_write_nothing,
+              test_rejects_source_fields_before_admit,
+              test_rejection_guidance_only_names_registered_tools,
+              test_admit_errors_write_nothing,
               test_admit_receives_data_model_and_normalized_is_stored, test_missing_required_fields,
               test_view_save_and_reuse, test_quota_error_surfaces_no_raise, test_handler_never_raises,
               test_view_save_oserror_keeps_receipt, test_card_write_failure_no_receipt):
