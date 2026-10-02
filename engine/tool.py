@@ -184,6 +184,15 @@ def _present(args):
             store.save_view(save_as, title, record["surface"]["createSurface"]["components"])
         except store.StoreError as e:
             warnings.append("save_view_as: card published but view not saved: %s" % e)
+        except OSError as e:
+            # #55: past the card commit the publication boundary is crossed — an
+            # expected filesystem failure (PermissionError, FileExistsError, ...)
+            # must not hide the receipt. Class name only in the warning: str(e)
+            # embeds host paths (CONTRIBUTING 'Boundaries that never move'); the
+            # detail goes to the log, never to the response (REVIEW-C0 E2).
+            LOG.warning("save_view_as: card published but view not saved", exc_info=True)
+            warnings.append("save_view_as: card published but view not saved: filesystem error %s"
+                            % type(e).__name__)
     return {"ok": True, "card_id": card_id, "directive": directive(card_id),
             "summary": summary, "warnings": warnings}
 
