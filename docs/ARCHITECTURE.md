@@ -277,8 +277,10 @@ changes as needing owner sign-off, like the D-series.
 
 **Everything else the plugin is likely to grow:** C2 (`rich_present_source`,
 manual/poll refresh, `POST /cards/{id}/refresh`, `GET /cards/{id}/poll`) is
-specified in CONTRACTS §4/§5 but NOT implemented in C0 — engine names it only
-in a rejection message (`engine/tool.py:49-50`). That's the designed seam: the
+specified in CONTRACTS §4/§5 but NOT implemented in C0 — the tool is not
+registered, so `rich_present` rejects `source_id`/`mode`/`poll_ms`/`update_until`
+with embedded-only guidance: fetch the data with available tools and pass it to
+`rich_present` as an embedded snapshot (issue #56). That's the designed seam: the
 envelope already reserves `policy`/`source`/`revision` (§1), and refresh must
 respect the two immutability laws — components never change after publish,
 refresh belongs to trusted chrome.

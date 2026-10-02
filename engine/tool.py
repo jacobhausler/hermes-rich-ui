@@ -47,7 +47,6 @@ admit = _admission.admit          # tests monkeypatch tool.admit
 CATALOG_ID = _admission.CATALOG_ID
 
 SOURCE_ONLY_ARGS = ("source_id", "mode", "poll_ms", "update_until")
-SOURCE_TOOL = "rich_present_source"
 SURFACE_VERSION = "v1.0"
 POLICY = "embedded"
 
@@ -110,8 +109,11 @@ def _present(args):
         return _fail("args: must be an object")
     bad = [k for k in SOURCE_ONLY_ARGS if k in args]
     if bad:
-        return _fail("%s: not accepted by rich_present — source-backed cards (source_id/mode/poll_ms/"
-                     "update_until) are published with the `%s` tool" % (", ".join(bad), SOURCE_TOOL))
+        return _fail("%s: not accepted by rich_present — this build publishes embedded snapshots "
+                     "only; source-backed publication and polling refresh (source_id/mode/poll_ms/"
+                     "update_until) are not implemented. To present this data now, fetch it with "
+                     "available tools and pass it to `rich_present` as an embedded snapshot "
+                     "(components + data)." % (", ".join(bad),))
 
     title = args.get("title")
     components = args.get("components")
