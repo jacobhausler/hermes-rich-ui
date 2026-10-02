@@ -115,6 +115,7 @@
     "tests/test_saved_cards.mjs",
     "tests/test_skill_docs.py",
     "tests/test_store.py",
+    "tests/test_suite_gate.py",
     "tests/test_synth_admission.py",
     "tests/test_synth_chart.mjs",
     "tests/test_synth_fmt.mjs",
@@ -6334,6 +6335,15 @@
       "_origin": "ast"
     },
     {
+      "id": "scripts_suite_fail_closed",
+      "label": "_fail_closed()",
+      "file_type": "code",
+      "source_file": "scripts/suite.py",
+      "source_location": "L27",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "scripts_suite_rationale_2",
       "label": "Serial bounded test suite: per-case logs + atomic exits.json ledger. Usage:…",
       "file_type": "rationale",
@@ -8681,6 +8691,112 @@
       "file_type": "rationale",
       "source_file": "tests/test_store.py",
       "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate",
+      "label": "test_suite_gate.py",
+      "file_type": "code",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate_seed",
+      "label": "seed()",
+      "file_type": "code",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L25",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate_read_ledger",
+      "label": "read_ledger()",
+      "file_type": "code",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L30",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate_run_suite",
+      "label": "run_suite()",
+      "file_type": "code",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L34",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate_scratch_root",
+      "label": "scratch_root()",
+      "file_type": "code",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L41",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate_test_missing_root_fails_closed",
+      "label": "test_missing_root_fails_closed()",
+      "file_type": "code",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L52",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate_test_missing_tests_dir_fails_closed",
+      "label": "test_missing_tests_dir_fails_closed()",
+      "file_type": "code",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L62",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate_test_empty_tests_dir_fails_closed",
+      "label": "test_empty_tests_dir_fails_closed()",
+      "file_type": "code",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L74",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate_test_interruption_before_case_one_never_keeps_old_ledger",
+      "label": "test_interruption_before_case_one_never_keeps_old_ledger()",
+      "file_type": "code",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L85",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate_test_one_passing_case_exits_zero_with_exact_ledger",
+      "label": "test_one_passing_case_exits_zero_with_exact_ledger()",
+      "file_type": "code",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L106",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate_test_one_failing_case_exits_one_with_exit_code",
+      "label": "test_one_failing_case_exits_one_with_exit_code()",
+      "file_type": "code",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L118",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_suite_gate_rationale_2",
+      "label": "Suite gate is fail-closed (issue #53): zero discovered tests or a bad root…",
+      "file_type": "rationale",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L2",
       "_origin": "ast"
     },
     {
@@ -12290,6 +12406,14 @@
     {
       "id": "hermes_cli_plugins_manifest",
       "label": "hermes_cli_plugins_manifest",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "signal",
+      "label": "signal",
       "file_type": "concept",
       "type": "external",
       "external": true,
@@ -27538,6 +27662,16 @@
       "_origin": "ast"
     },
     {
+      "source": "scripts_suite",
+      "target": "scripts_suite_fail_closed",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/suite.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "scripts_suite_rationale_2",
       "target": "scripts_suite",
       "relation": "rationale_for",
@@ -33058,6 +33192,402 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_suite_gate",
+      "target": "json",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "os",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "signal",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "subprocess",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "sys",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "tempfile",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "time",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "tests_test_suite_gate_seed",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "tests_test_suite_gate_read_ledger",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "tests_test_suite_gate_run_suite",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "tests_test_suite_gate_scratch_root",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "tests_test_suite_gate_test_missing_root_fails_closed",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "tests_test_suite_gate_test_missing_tests_dir_fails_closed",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "tests_test_suite_gate_test_empty_tests_dir_fails_closed",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "tests_test_suite_gate_test_interruption_before_case_one_never_keeps_old_ledger",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "tests_test_suite_gate_test_one_passing_case_exits_zero_with_exact_ledger",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate",
+      "target": "tests_test_suite_gate_test_one_failing_case_exits_one_with_exit_code",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_missing_root_fails_closed",
+      "target": "tests_test_suite_gate_seed",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_missing_root_fails_closed",
+      "target": "tests_test_suite_gate_run_suite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_missing_root_fails_closed",
+      "target": "tests_test_suite_gate_read_ledger",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_missing_tests_dir_fails_closed",
+      "target": "tests_test_suite_gate_seed",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L67",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_missing_tests_dir_fails_closed",
+      "target": "tests_test_suite_gate_run_suite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_missing_tests_dir_fails_closed",
+      "target": "tests_test_suite_gate_read_ledger",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_empty_tests_dir_fails_closed",
+      "target": "tests_test_suite_gate_scratch_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_empty_tests_dir_fails_closed",
+      "target": "tests_test_suite_gate_seed",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_empty_tests_dir_fails_closed",
+      "target": "tests_test_suite_gate_run_suite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_empty_tests_dir_fails_closed",
+      "target": "tests_test_suite_gate_read_ledger",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_interruption_before_case_one_never_keeps_old_ledger",
+      "target": "tests_test_suite_gate_scratch_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_interruption_before_case_one_never_keeps_old_ledger",
+      "target": "tests_test_suite_gate_seed",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_one_passing_case_exits_zero_with_exact_ledger",
+      "target": "tests_test_suite_gate_scratch_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_one_passing_case_exits_zero_with_exact_ledger",
+      "target": "tests_test_suite_gate_run_suite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_one_passing_case_exits_zero_with_exact_ledger",
+      "target": "tests_test_suite_gate_read_ledger",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_one_failing_case_exits_one_with_exit_code",
+      "target": "tests_test_suite_gate_scratch_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_one_failing_case_exits_one_with_exit_code",
+      "target": "tests_test_suite_gate_run_suite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_test_one_failing_case_exits_one_with_exit_code",
+      "target": "tests_test_suite_gate_read_ledger",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_suite_gate_rationale_2",
+      "target": "tests_test_suite_gate",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_suite_gate.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_synth_admission",
       "target": "os",
       "relation": "imports",
@@ -37454,7 +37984,7 @@
     },
     {
       "source": "contributing",
-      "target": "home_runner_work_hermes_rich_ui_hermes_rich_ui_license_md",
+      "target": "home_hermes_hermes_profiles_gh_dispatch_workflows_20261002_144225_ra_audit53_work_build_0_repo_license_md",
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "CONTRIBUTING.md",

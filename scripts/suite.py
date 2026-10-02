@@ -19,9 +19,25 @@ out = Path(sys.argv[2]).resolve()
 out.mkdir(parents=True, exist_ok=True)
 ledger = out / 'exits.json'
 rows = []  # fresh ledger every run — an append-only ledger kept a stale FAIL alive across re-runs (2026-09-25)
+tmp = ledger.with_suffix('.tmp')  # invalidate the prior ledger at start, before any guard or case (issue #53)
+tmp.write_text('[]\n')
+os.replace(tmp, ledger)
+
+
+def _fail_closed(reason):
+    # Issue #53: the gate is fail-closed — an invalid invocation is never
+    # reported green and never leaves a previous run's ledger as evidence.
+    print(f'SUITE ERROR: {reason}', file=sys.stderr, flush=True)
+    raise SystemExit(2)
+
+
+if not root.is_dir() or not (root / 'tests').is_dir():
+    _fail_closed(f'no tests discovered under {root / "tests"}')
 py = sorted((root / 'tests').glob('test_*.py'))
 js = sorted((root / 'tests').glob('test_*.mjs'))
 cases = [[sys.executable, str(p)] for p in py] + [['node', '--experimental-strip-types', str(p)] for p in js]
+if not cases:
+    _fail_closed(f'no tests discovered under {root / "tests"}')
 for argv in cases:
     name = Path(argv[-1]).name
     log = out / (name + '.log')
