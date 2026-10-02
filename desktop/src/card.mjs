@@ -5,6 +5,9 @@ import { jsx, jsxs } from 'react/jsx-runtime'
 import { JSONUIProvider, Renderer } from '@json-render/react'
 import { lower, unlowerable } from './lower.mjs'
 import { V, type } from './components/_shared.mjs'
+import { INK, HOUSE } from './components/_house.mjs'
+import { CardChrome } from './components/card.mjs'
+import { fmtDate } from './components/fmt.mjs'
 
 export const ID_RE = /^ru-[0-9a-f]{12}$/
 const Q = 'hermes-rich-ui'
@@ -70,18 +73,24 @@ export class CardBoundary extends Component {
 // D6: every value is a real Badge cva variant (see _shared.mjs BADGE_VARIANTS_REAL).
 export const POLICY_TONE = { embedded: 'muted', capture: 'default', manual: 'warn', poll: 'success' }
 
+// S7 (#30): the header is honest — the title prints ONCE here at title 16/600, the date goes
+// through fmtDate (no ISO/T..: on the face), 'rev N' only when N>1, the policy badge only when
+// != embedded. Meta rides right as caption meta-ink.
 function Header({ title, meta, envelope }) {
-  const authored = meta?.authored_at
+  const authored = fmtDate(meta?.authored_at)
   const rev = meta?.dataset?.revision ?? envelope?.revision
   const policy = envelope?.policy
+  const metaBits = [
+    authored ? jsx('span', { children: authored }, 'a') : null,
+    Number.isFinite(Number(rev)) && Number(rev) > 1 ? jsx('span', { children: `rev ${rev}` }, 'r') : null,
+    policy && policy !== 'embedded' ? jsx(Badge, { variant: POLICY_TONE[policy] ?? 'muted', size: 'xs', 'data-ru-policy': policy, children: String(policy) }, 'p') : null
+  ].filter(Boolean)
   return jsxs('div', {
     'data-ru-header': '',
-    style: { display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', ...type('caption'), color: V.text3 },
+    style: { display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', ...type('caption'), color: INK.meta },
     children: [
       title ? jsx('span', { style: { ...type('title'), color: V.text }, children: title }, 't') : null,
-      authored ? jsx('span', { children: String(authored) }, 'a') : null,
-      rev !== undefined && rev !== null ? jsx('span', { children: `rev ${rev}` }, 'r') : null,
-      policy ? jsx(Badge, { variant: POLICY_TONE[policy] ?? 'muted', size: 'xs', 'data-ru-policy': policy, children: String(policy) }, 'p') : null
+      metaBits.length ? jsx('span', { style: { marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'baseline', ...type('caption'), color: INK.meta }, children: metaBits }, 'm') : null
     ]
   })
 }
@@ -108,6 +117,9 @@ function bindingText(v, dataModel) {
   return null
 }
 
+// S19: exact casefold duplicates among title/summary/subtitle render once.
+const folded = v => String(v).trim().toLowerCase()
+
 export function CardBody({ record, registry }) {
   const [expanded, setExpanded] = useState(false)
   const cs = record?.surface?.createSurface
@@ -115,6 +127,10 @@ export function CardBody({ record, registry }) {
   const root = Array.isArray(cs?.components) ? cs.components.find(c => c && c.id === 'root') : null
   const rootTitle = root && root.component === 'Card' ? bindingText(root.title, cs?.dataModel) : null
   const title = (typeof meta?.title === 'string' && meta.title.trim()) ? meta.title : rootTitle
+  // J4/S7: the title prints ONCE — in the header. CardBody renders the root Card at depth 0,
+  // which suppresses its own title; the summary hides when it casefold-equals the title (S19).
+  const showSummary = typeof meta?.summary === 'string' && meta.summary.trim()
+    && !(typeof title === 'string' && folded(meta.summary) === folded(title))
   const reasons = unlowerable(cs)
   let lowered = null
   let lowerError = null
@@ -128,7 +144,8 @@ export function CardBody({ record, registry }) {
       jsx('style', { href: PROSE_RESET_HREF, precedence: 'default', 'data-ru-prose-reset': '1', children: PROSE_RESET_CSS }, 'css'),
       jsx(Header, { title, meta, envelope: record?.envelope }, 'h'),
       // Plain-text summary always renders ABOVE the rich body — the accessible fallback.
-      meta?.summary ? jsx('p', { 'data-ru-summary': '', style: { margin: 0, ...type('body'), color: V.text2, whiteSpace: 'pre-wrap' }, children: String(meta.summary) }, 's') : null,
+      // S19: hidden when casefold-equal to the title; S8: prose capped at HOUSE.MEASURE.
+      showSummary ? jsx('p', { 'data-ru-summary': '', style: { margin: 0, maxWidth: HOUSE.MEASURE, ...type('body'), color: V.text2, whiteSpace: 'pre-wrap' }, children: String(meta.summary) }, 's') : null,
       reasons.length || lowerError
         ? jsx('ul', { 'data-ru-unlowerable': '', style: { margin: 0, paddingLeft: 18, ...type('small'), color: V.red },
           children: (lowerError ? [lowerError] : reasons).map((r, i) => jsx('li', { children: r }, i))
@@ -137,9 +154,12 @@ export function CardBody({ record, registry }) {
             jsx('div', { 'data-ru-body': expanded ? 'expanded' : 'capped',
               style: { maxHeight: expanded ? 'none' : HEIGHT_CAP, overflow: 'hidden', position: 'relative' },
               children: jsx(CardBoundary, {
-                children: jsx(JSONUIProvider, {
-                  registry, initialState: lowered.initialState,
-                  children: jsx(Renderer, { spec: lowered.spec, registry, fallback: UnknownType })
+                // J4/S7/S19: the root Card renders its ONE frame; its title lives in the header only.
+                children: jsx(CardChrome.Provider, { value: { rootTitleShown: typeof title === 'string' && title.trim() !== '', rootSubtitleShown: false },
+                  children: jsx(JSONUIProvider, {
+                    registry, initialState: lowered.initialState,
+                    children: jsx(Renderer, { spec: lowered.spec, registry, fallback: UnknownType })
+                  })
                 })
               })
             }, 'body'),

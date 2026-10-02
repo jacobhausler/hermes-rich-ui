@@ -26,7 +26,8 @@ export const B = Object.freeze({
   absent: '1px dashed var(--ui-stroke-tertiary)'
 })
 export const SURFACE = Object.freeze({
-  card: Object.freeze({ background: 'var(--ui-bg-elevated)', border: B.hair, borderRadius: R.box, padding: S.md }),
+  // #30 slice 7 (C15): the ONE frame's padding is 16 — it must exceed the 12 block gap (named restyle).
+  card: Object.freeze({ background: 'var(--ui-bg-elevated)', border: B.hair, borderRadius: R.box, padding: S.lg }),
   inset: Object.freeze({ background: 'var(--ui-bg-tertiary)', borderRadius: R.box, padding: `${S.sm}px ${S.md}px` }),
   flat: Object.freeze({})
 })
