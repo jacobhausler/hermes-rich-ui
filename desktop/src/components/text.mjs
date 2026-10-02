@@ -10,7 +10,8 @@ export const Text = ({ element }) => {
   const mono = variant === 'mono'
   return jsxs('p', {
     ...common(element, { 'data-ru-variant': mono ? 'mono' : undefined }),
-    style: { margin: 0, minWidth: 0, whiteSpace: 'pre-wrap', ...type(mono ? 'small' : caption ? 'caption' : 'body', { mono, num: mono }), color: (p.tone ?? HOUSE.TEXT_TONE) === 'muted' || caption ? V.text2 : V.text },
+    // S8 (#30): prose capped at HOUSE.MEASURE (72ch).
+    style: { margin: 0, minWidth: 0, maxWidth: HOUSE.MEASURE, whiteSpace: 'pre-wrap', ...type(mono ? 'small' : caption ? 'caption' : 'body', { mono, num: mono }), color: (p.tone ?? HOUSE.TEXT_TONE) === 'muted' || caption ? V.text2 : V.text },
     children: [text(p.text), ownSources(p)]
   })
 }
