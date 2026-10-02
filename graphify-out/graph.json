@@ -5535,7 +5535,7 @@
       "label": "rich_present()",
       "file_type": "code",
       "source_file": "engine/tool.py",
-      "source_location": "L194",
+      "source_location": "L203",
       "_callable": true,
       "_origin": "ast"
     },
@@ -5544,7 +5544,7 @@
       "label": "handle_present()",
       "file_type": "code",
       "source_file": "engine/tool.py",
-      "source_location": "L204",
+      "source_location": "L213",
       "_callable": true,
       "_origin": "ast"
     },
@@ -5573,11 +5573,11 @@
       "_origin": "ast"
     },
     {
-      "id": "engine_tool_rationale_195",
+      "id": "engine_tool_rationale_204",
       "label": "Never raises. REVIEW-C0 E2: an internal exception is logged, never returned —…",
       "file_type": "rationale",
       "source_file": "engine/tool.py",
-      "source_location": "L195",
+      "source_location": "L204",
       "_origin": "ast"
     },
     {
@@ -9840,6 +9840,42 @@
       "file_type": "code",
       "source_file": "tests/test_tool.py",
       "source_location": "L168",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_capture_logs",
+      "label": "_capture_logs()",
+      "file_type": "code",
+      "source_file": "tests/test_tool.py",
+      "source_location": "L191",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_capture_logs_emit",
+      "label": "emit()",
+      "file_type": "code",
+      "source_file": "tests/test_tool.py",
+      "source_location": "L197",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_test_view_save_oserror_keeps_receipt",
+      "label": "test_view_save_oserror_keeps_receipt()",
+      "file_type": "code",
+      "source_file": "tests/test_tool.py",
+      "source_location": "L204",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_tool_test_card_write_failure_no_receipt",
+      "label": "test_card_write_failure_no_receipt()",
+      "file_type": "code",
+      "source_file": "tests/test_tool.py",
+      "source_location": "L236",
       "_callable": true,
       "_origin": "ast"
     },
@@ -26204,7 +26240,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L194",
+      "source_location": "L203",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -26214,7 +26250,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L204",
+      "source_location": "L213",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -26258,7 +26294,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L187",
+      "source_location": "L196",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -26269,7 +26305,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L198",
+      "source_location": "L207",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -26280,7 +26316,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L211",
+      "source_location": "L220",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -26315,12 +26351,12 @@
       "_origin": "ast"
     },
     {
-      "source": "engine_tool_rationale_195",
+      "source": "engine_tool_rationale_204",
       "target": "engine_tool_rich_present",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L195",
+      "source_location": "L204",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36497,6 +36533,46 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_tool",
+      "target": "tests_test_tool_capture_logs",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool.py",
+      "source_location": "L191",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_capture_logs",
+      "target": "tests_test_tool_capture_logs_emit",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool.py",
+      "source_location": "L197",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool",
+      "target": "tests_test_tool_test_view_save_oserror_keeps_receipt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool.py",
+      "source_location": "L204",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool",
+      "target": "tests_test_tool_test_card_write_failure_no_receipt",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool.py",
+      "source_location": "L236",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_tool_test_rejects_source_fields_before_admit",
       "target": "tests_test_tool_test_rejects_source_fields_before_admit_spy",
       "relation": "indirect_call",
@@ -36521,6 +36597,17 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_tool_test_view_save_oserror_keeps_receipt",
+      "target": "tests_test_tool_capture_logs",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_tool.py",
+      "source_location": "L212",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_tool",
       "target": "tests_test_tool_test_happy_path_record_shape",
       "relation": "indirect_call",
@@ -36528,7 +36615,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L193",
+      "source_location": "L253",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36540,7 +36627,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L193",
+      "source_location": "L253",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36552,7 +36639,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L194",
+      "source_location": "L254",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36564,7 +36651,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L194",
+      "source_location": "L254",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36576,7 +36663,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L195",
+      "source_location": "L255",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36588,7 +36675,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L195",
+      "source_location": "L255",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36600,7 +36687,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L196",
+      "source_location": "L256",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36612,7 +36699,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L196",
+      "source_location": "L256",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36624,7 +36711,31 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L196",
+      "source_location": "L256",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool",
+      "target": "tests_test_tool_test_view_save_oserror_keeps_receipt",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool.py",
+      "source_location": "L257",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool",
+      "target": "tests_test_tool_test_card_write_failure_no_receipt",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool.py",
+      "source_location": "L257",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42513,6 +42624,18 @@
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
       "source_location": "L177",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_tool_capture_logs",
+      "target": "tests_test_hostile_admission_h",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_tool.py",
+      "source_location": "L199",
       "weight": 1.0,
       "_origin": "ast"
     },
