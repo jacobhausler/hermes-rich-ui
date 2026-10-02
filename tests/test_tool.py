@@ -188,11 +188,72 @@ def test_handler_never_raises():
     assert out["ok"] is True
 
 
+def _capture_logs():
+    import logging
+
+    captured = []
+
+    class _H(logging.Handler):
+        def emit(self, record):
+            captured.append(record)
+    h = _H()
+    logging.getLogger("hermes_rich_ui").addHandler(h)
+    return captured, h
+
+
+def test_view_save_oserror_keeps_receipt():
+    # #55: once the card commit succeeds, an OSError from the optional view save
+    # must NOT swallow the publication receipt. Card persists, caller gets the
+    # receipt + one sanitized warning; a retry gets a receipt again.
+    import logging
+    home = Path(os.environ["HERMES_HOME"])
+    (home / "rich-ui" / "cards").mkdir(parents=True)
+    (home / "rich-ui" / "views").write_bytes(b"not a directory")  # EEXIST on mkdir
+    captured, h = _capture_logs()
+    try:
+        out = tool.rich_present(dict(ARGS, save_view_as="demo"))
+        out2 = tool.rich_present(dict(ARGS, save_view_as="demo"))
+    finally:
+        logging.getLogger("hermes_rich_ui").removeHandler(h)
+    assert out["ok"] is True, out
+    cid = out["card_id"]
+    assert store.CARD_ID_RE.match(cid), out
+    assert out["directive"] == '::richui{id="%s"}' % cid
+    assert set(out) == {"ok", "card_id", "directive", "summary", "warnings"}
+    ws = [w for w in out["warnings"] if w.startswith("save_view_as: card published but view not saved")]
+    assert len(ws) == 1, out
+    # public-strings law: exception class name only, never str(e) (host paths).
+    assert str(home) not in ws[0] and "/" not in ws[0] and "\\" not in ws[0], ws[0]
+    assert "FileExistsError" in ws[0], ws[0]
+    rec = store.read_card(cid)
+    assert rec is not None and rec["surface"]["createSurface"]["components"] == COMPONENTS_OK
+    assert store.card_count() == 2  # first call + retry, each published a receipt
+    assert out2["ok"] is True and store.CARD_ID_RE.match(out2["card_id"]), out2
+    # detail goes to the log, never to the response (REVIEW-C0 E2 log-never-leak)
+    assert any(r.exc_info and issubclass(r.exc_info[0], OSError) for r in captured), captured
+
+
+def test_card_write_failure_no_receipt():
+    # #55 acceptance 2: a card-write failure BEFORE commit still fails with no
+    # receipt and leaves zero cards (pins that the card-write catch stays put).
+    home = Path(os.environ["HERMES_HOME"])
+    (home / "rich-ui").mkdir(parents=True, exist_ok=True)
+    (home / "rich-ui" / "cards").write_bytes(b"not a directory")  # EEXIST on mkdir
+    out = tool.rich_present(dict(ARGS))
+    assert out["ok"] is False, out
+    assert "card_id" not in out, out
+    # cards/ is a regular file, so store.card_count() cannot enumerate it;
+    # count the real files directly (0 = nothing landed).
+    assert not (home / "rich-ui" / "cards").is_dir()
+    assert len(list(home.rglob("*.json"))) == 0
+
+
 if __name__ == "__main__":
     r = Runner()
     for t in (test_happy_path_record_shape, test_session_env_absent_is_null,
               test_rejects_source_fields_before_admit, test_admit_errors_write_nothing,
               test_admit_receives_data_model_and_normalized_is_stored, test_missing_required_fields,
-              test_view_save_and_reuse, test_quota_error_surfaces_no_raise, test_handler_never_raises):
+              test_view_save_and_reuse, test_quota_error_surfaces_no_raise, test_handler_never_raises,
+              test_view_save_oserror_keeps_receipt, test_card_write_failure_no_receipt):
         r.run(t)
     r.finish()
