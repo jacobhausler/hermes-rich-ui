@@ -88,6 +88,7 @@
     "tests/helpers/admit.py",
     "tests/helpers/fixtures-sdk-resolve.mjs",
     "tests/helpers/microviz_checks.py",
+    "tests/helpers/registration-sdk-shim.mjs",
     "tests/helpers/render.mjs",
     "tests/lanes/L1_admission_checks.py",
     "tests/lanes/__init__.py",
@@ -110,6 +111,7 @@
     "tests/test_lower.mjs",
     "tests/test_placeholder.py",
     "tests/test_public_strings.py",
+    "tests/test_registration_repro.mjs",
     "tests/test_render_smoke.mjs",
     "tests/test_requires_hermes.py",
     "tests/test_saved_cards.mjs",
@@ -6769,6 +6771,40 @@
       "_origin": "ast"
     },
     {
+      "id": "tests_helpers_registration_sdk_shim",
+      "label": "registration-sdk-shim.mjs",
+      "file_type": "code",
+      "source_file": "tests/helpers/registration-sdk-shim.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_helpers_registration_sdk_shim_cache",
+      "label": "cache",
+      "file_type": "code",
+      "source_file": "tests/helpers/registration-sdk-shim.mjs",
+      "source_location": "L8",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_helpers_registration_sdk_shim_resetquerycache",
+      "label": "__resetQueryCache()",
+      "file_type": "code",
+      "source_file": "tests/helpers/registration-sdk-shim.mjs",
+      "source_location": "L9",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_helpers_registration_sdk_shim_usequery",
+      "label": "useQuery()",
+      "file_type": "code",
+      "source_file": "tests/helpers/registration-sdk-shim.mjs",
+      "source_location": "L11",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "tests_helpers_render",
       "label": "$$",
       "file_type": "code",
@@ -8417,6 +8453,214 @@
       "file_type": "rationale",
       "source_file": "tests/test_public_strings.py",
       "source_location": "L2",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro",
+      "label": "test_registration_repro.mjs",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_here",
+      "label": "HERE",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L18",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_resolve",
+      "label": "resolve()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L21",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_dom",
+      "label": "dom",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L27",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_mm",
+      "label": "mm()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L34",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_swallow",
+      "label": "swallow",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L36",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_moveto",
+      "label": "moveTo()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_lineto",
+      "label": "lineTo()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_rect",
+      "label": "rect()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_arc",
+      "label": "arc()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_closepath",
+      "label": "closePath()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_addpath",
+      "label": "addPath()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_observe",
+      "label": "observe()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L42",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_disconnect",
+      "label": "disconnect()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L42",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_bundle",
+      "label": "BUNDLE",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L50",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_record",
+      "label": "RECORD",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L51",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_mountel",
+      "label": "mountEl",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L53",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_root",
+      "label": "root",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L54",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_fakehost",
+      "label": "fakeHost()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L62",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_loadbundle",
+      "label": "loadBundle()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L99",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_registerfresh",
+      "label": "registerFresh()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L103",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_restfixture",
+      "label": "restFixture()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L109",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_settle",
+      "label": "settle()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L111",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_registration_repro_assertcardrendered",
+      "label": "assertCardRendered()",
+      "file_type": "code",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L127",
+      "_callable": true,
       "_origin": "ast"
     },
     {
@@ -28406,6 +28650,47 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_helpers_registration_sdk_shim",
+      "target": "tests_fixtures_sdk_stub",
+      "relation": "imports_from",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/registration-sdk-shim.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_registration_sdk_shim",
+      "target": "tests_helpers_registration_sdk_shim_cache",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/registration-sdk-shim.mjs",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_registration_sdk_shim",
+      "target": "tests_helpers_registration_sdk_shim_resetquerycache",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/registration-sdk-shim.mjs",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_registration_sdk_shim",
+      "target": "tests_helpers_registration_sdk_shim_usequery",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/registration-sdk-shim.mjs",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_helpers_render",
       "target": "ref_node_assert",
       "relation": "imports_from",
@@ -32399,6 +32684,404 @@
       "source_file": "tests/test_public_strings.py",
       "source_location": "L2",
       "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "ref_node_test",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "ref_node_module",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "ref_node_fs",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "ref_node_url",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "ref_node_path",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "ref_jsdom",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_here",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_resolve",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_dom",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_mm",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_swallow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_moveto",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_lineto",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_rect",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_arc",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_closepath",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_addpath",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_observe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_disconnect",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_bundle",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_record",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_mountel",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_root",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_fakehost",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_loadbundle",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L99",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_registerfresh",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L103",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_restfixture",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L109",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_settle",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_assertcardrendered",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L127",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro_registerfresh",
+      "target": "tests_test_registration_repro_loadbundle",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L104",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_registerfresh",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L138",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_restfixture",
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L138",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_settle",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L150",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_assertcardrendered",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L151",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_test_registration_repro_fakehost",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "source_location": "L157",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "react",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "client",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_registration_repro",
+      "target": "tests_helpers_registration_sdk_shim",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_registration_repro.mjs",
       "_origin": "ast"
     },
     {
@@ -39741,6 +40424,17 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_helpers_registration_sdk_shim",
+      "target": "tests_fixtures_sdk_stub",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/registration-sdk-shim.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "scripts_screenshots_seed_gallery",
       "target": "engine_tool_rich_present",
       "relation": "imports",
@@ -43802,18 +44496,6 @@
       "confidence_score": 0.95,
       "source_file": "docs/ARCHITECTURE.md",
       "source_location": "L137",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "docs_architecture_3_the_card_lifecycle_one_diagram_both_halves",
-      "target": "tests_fixtures_sdk_stub_usequery",
-      "relation": "references",
-      "context": "useQuery",
-      "confidence": "INFERRED",
-      "confidence_score": 0.95,
-      "source_file": "docs/ARCHITECTURE.md",
-      "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast"
     },
