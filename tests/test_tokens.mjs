@@ -90,7 +90,7 @@ test('T1–T5: one frozen space/radius/border/surface/tone/ink/series vocabulary
   assert.equal(house.B.tab, '2px solid var(--ui-accent)')
   assert.equal(house.B.absent, '1px dashed var(--ui-stroke-tertiary)')
   assert.deepEqual(Object.keys(house.SURFACE), ['card', 'inset', 'flat'])
-  assert.deepEqual(house.SURFACE.card, { background: 'var(--ui-bg-elevated)', border: house.B.hair, borderRadius: 6, padding: 12 })
+  assert.deepEqual(house.SURFACE.card, { background: 'var(--ui-bg-elevated)', border: house.B.hair, borderRadius: 6, padding: 16 }) // #30 slice 7 (C15): padding 12->16, the named saved-card restyle
   assert.deepEqual(house.SURFACE.inset, { background: 'var(--ui-bg-tertiary)', borderRadius: 6, padding: '8px 12px' })
   assert.deepEqual(house.SURFACE.flat, {})
   assert.deepEqual(house.TONE, { neutral: 'var(--ui-text-secondary)', info: 'var(--ui-accent)', success: 'var(--ui-green)', caution: 'var(--ui-yellow)', error: 'var(--ui-red)' })

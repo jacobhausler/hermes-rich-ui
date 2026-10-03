@@ -411,9 +411,10 @@ test('CardBody: summary above body, header (title/authored/rev/policy), 480px ca
   assert.ok(card.textContent.indexOf('Plain-text summary') < card.textContent.indexOf('Fixture heading'), 'summary precedes body')
   const header = $('[data-ru-header]')
   assert.ok(header.textContent.includes('Fixture card'))
-  assert.ok(header.textContent.includes('2026-09-25T10:11:12Z'))
-  assert.ok(header.textContent.includes('rev 1'))
-  assert.equal(header.querySelector('[data-ru-policy]').textContent, 'embedded')
+  // #30 slice 7 (S7): honest header — fmtDate on the face, rev only when N>1, embedded badge hidden.
+  assert.ok(header.textContent.includes('Sep 25, 2026'), 'authored_at via fmtDate')
+  assert.doesNotMatch(header.textContent, /T\d\d:|rev 1/)
+  assert.equal(header.querySelector('[data-ru-policy]'), null, 'embedded policy badge hidden')
   const body = $('[data-ru-body]')
   assert.equal(body.getAttribute('data-ru-body'), 'capped')
   assert.equal(body.style.maxHeight, '480px')
