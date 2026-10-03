@@ -6,6 +6,7 @@ Ids are validated BEFORE any disk access; nothing here ever deletes.
 """
 from __future__ import annotations
 
+import fcntl
 import json
 import os
 import re
@@ -100,24 +101,49 @@ def _card_path(card_id: str) -> Path:
     return cards_dir() / (card_id + ".json")
 
 
+def _lockfile_path() -> Path:
+    # Deliberately OUTSIDE cards_dir() so dir_bytes() never counts the lock file.
+    return root() / "cards.lock"
+
+
+def _acquire_store_lock():
+    """Exclusive cross-process lock around the quota check + commit (#54).
+    Returns the open fd; closing it releases the flock. stdlib-only (law 2)."""
+    lock_path = _lockfile_path()
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    fd = os.open(str(lock_path), os.O_RDWR | os.O_CREAT, 0o644)
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX)
+    except BaseException:
+        os.close(fd)
+        raise
+    return fd
+
+
 def write_card(record: dict) -> Path:
     """Atomically persist a §1 record under cards/<card_id>.json.
 
     Raises StoreError on a bad id / shape and QuotaExceeded when the cards dir is
     already at or would exceed QUOTA_BYTES. The existing files are never touched.
+    Measurement, admission, and commit run under one exclusive store lock so two
+    concurrent writers can never both pass the quota check on the same free space.
     """
     if not isinstance(record, dict):
         raise StoreError("record must be an object")
     card_id = ((record.get("envelope") or {}).get("card_id")) if isinstance(record.get("envelope"), dict) else None
     path = _card_path(card_id)
     payload = json.dumps(record, ensure_ascii=False, indent=2, sort_keys=False).encode("utf-8")
-    used = dir_bytes(cards_dir())
-    if used + len(payload) > QUOTA_BYTES:
-        raise QuotaExceeded(
-            "card store quota exceeded: %s holds %d bytes, cap %d bytes; this card is %d bytes. "
-            "Nothing was written and nothing is deleted automatically — remove old cards by hand."
-            % (cards_dir(), used, QUOTA_BYTES, len(payload)))
-    _atomic_write(path, payload)
+    fd = _acquire_store_lock()
+    try:
+        used = dir_bytes(cards_dir())
+        if used + len(payload) > QUOTA_BYTES:
+            raise QuotaExceeded(
+                "card store quota exceeded: %s holds %d bytes, cap %d bytes; this card is %d bytes. "
+                "Nothing was written and nothing is deleted automatically — remove old cards by hand."
+                % (cards_dir(), used, QUOTA_BYTES, len(payload)))
+        _atomic_write(path, payload)
+    finally:
+        os.close(fd)  # dropping the fd releases the flock, even on failure paths
     return path
 
 
