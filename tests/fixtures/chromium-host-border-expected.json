@@ -1,0 +1,25 @@
+{
+  "source": "live chrome-headless-shell getComputedStyle, dogfood lane 2026-10-04",
+  "binary": "chrome-headless-shell 154.0.8037.92 linux64 (chrome-for-testing Stable)",
+  "tr_th": {
+    "borderBottomWidth": "0px",
+    "borderBottomStyle": "none"
+  },
+  "td": {
+    "borderBottomWidth": "1px",
+    "borderBottomStyle": "solid",
+    "borderBottomColor": "rgb(55, 65, 81)"
+  },
+  "miorder_teeth": [
+    {
+      "borderBottomWidth": "1px",
+      "borderBottomStyle": "solid",
+      "borderBottomColor": "rgb(209, 213, 219)"
+    },
+    {
+      "borderBottomWidth": "1px",
+      "borderBottomStyle": "solid",
+      "borderBottomColor": "rgb(209, 213, 219)"
+    }
+  ]
+}
