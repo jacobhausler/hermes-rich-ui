@@ -69,6 +69,7 @@
     "tests/fixtures/chart-range.json",
     "tests/fixtures/chart-scatter.json",
     "tests/fixtures/chart-waterfall.json",
+    "tests/fixtures/chromium-host-border-expected.json",
     "tests/fixtures/expansion-asof.json",
     "tests/fixtures/expansion-checklist.json",
     "tests/fixtures/expansion-chipset.json",
@@ -86,6 +87,7 @@
     "tests/fixtures/table-basic.json",
     "tests/helpers/__init__.py",
     "tests/helpers/admit.py",
+    "tests/helpers/chromium.mjs",
     "tests/helpers/fixtures-sdk-resolve.mjs",
     "tests/helpers/microviz_checks.py",
     "tests/helpers/registration-sdk-shim.mjs",
@@ -105,6 +107,7 @@
     "tests/test_fixtures_admit.py",
     "tests/test_fmt.mjs",
     "tests/test_fmt_dates.mjs",
+    "tests/test_host_border_chromium.mjs",
     "tests/test_hostile_admission.py",
     "tests/test_hostile_render.mjs",
     "tests/test_house_defaults.mjs",
@@ -6731,6 +6734,49 @@
       "_origin": "ast"
     },
     {
+      "id": "tests_helpers_chromium",
+      "label": "chromium.mjs",
+      "file_type": "code",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_helpers_chromium_standard_paths",
+      "label": "STANDARD_PATHS",
+      "file_type": "code",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L21",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_helpers_chromium_locatechrome",
+      "label": "locateChrome()",
+      "file_type": "code",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L29",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_helpers_chromium_chromiumgate",
+      "label": "chromiumGate()",
+      "file_type": "code",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L38",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_helpers_chromium_launchchromium",
+      "label": "launchChromium()",
+      "file_type": "code",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L50",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "tests_helpers_fixtures_sdk_resolve",
       "label": "fixtures-sdk-resolve.mjs",
       "file_type": "code",
@@ -8183,6 +8229,47 @@
       "file_type": "code",
       "source_file": "tests/test_fmt_dates.mjs",
       "source_location": "L13",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_host_border_chromium",
+      "label": "test_host_border_chromium.mjs",
+      "file_type": "code",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_host_border_chromium_expected",
+      "label": "EXPECTED",
+      "file_type": "code",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L47",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_host_border_chromium_record",
+      "label": "RECORD",
+      "file_type": "code",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L48",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_host_border_chromium_gate",
+      "label": "gate",
+      "file_type": "code",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L50",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_host_border_chromium_harvestheatmapmarkup",
+      "label": "harvestHeatMapMarkup()",
+      "file_type": "code",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L80",
       "_callable": true,
       "_origin": "ast"
     },
@@ -12865,6 +12952,14 @@
       "source_file": ""
     },
     {
+      "id": "ref_node_child_process",
+      "label": "ref_node_child_process",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
       "id": "ref_node_assert",
       "label": "ref_node_assert",
       "file_type": "concept",
@@ -12891,14 +12986,6 @@
     {
       "id": "ref_node_test",
       "label": "ref_node_test",
-      "file_type": "concept",
-      "type": "external",
-      "external": true,
-      "source_file": ""
-    },
-    {
-      "id": "ref_node_child_process",
-      "label": "ref_node_child_process",
       "file_type": "concept",
       "type": "external",
       "external": true,
@@ -28920,6 +29007,79 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_helpers_chromium",
+      "target": "ref_node_child_process",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_chromium",
+      "target": "ref_node_fs",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_chromium",
+      "target": "tests_helpers_chromium_standard_paths",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_chromium",
+      "target": "tests_helpers_chromium_locatechrome",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_chromium",
+      "target": "tests_helpers_chromium_chromiumgate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_chromium",
+      "target": "tests_helpers_chromium_launchchromium",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_chromium_chromiumgate",
+      "target": "tests_helpers_chromium_locatechrome",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_helpers_fixtures_sdk_resolve",
       "target": "tests_helpers_fixtures_sdk_resolve_resolve",
       "relation": "contains",
@@ -32247,6 +32407,166 @@
       "source_file": "tests/test_fmt_dates.mjs",
       "source_location": "L22",
       "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "ref_node_test",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "ref_node_module",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "ref_node_fs",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "tests_helpers_chromium",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "tests_helpers_chromium_chromiumgate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "tests_helpers_chromium_launchchromium",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "tests_test_host_border_chromium_expected",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "tests_test_host_border_chromium_record",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "tests_test_host_border_chromium_gate",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "tests_test_host_border_chromium_harvestheatmapmarkup",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L80",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "tests_test_host_border_chromium_harvestheatmapmarkup",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L136",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "tests_helpers_fixtures_sdk_resolve",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "desktop_src_card",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "tests_helpers_render",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium",
+      "target": "client",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_host_border_chromium.mjs",
       "_origin": "ast"
     },
     {
@@ -44197,6 +44517,18 @@
       "confidence_score": 0.85,
       "source_file": "tests/test_expansion_integration.mjs",
       "source_location": "L67",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_host_border_chromium_harvestheatmapmarkup",
+      "target": "desktop_src_card_cardbody",
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_host_border_chromium.mjs",
+      "source_location": "L87",
       "weight": 1.0,
       "_origin": "ast"
     },
