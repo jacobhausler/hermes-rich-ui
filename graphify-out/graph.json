@@ -7697,7 +7697,7 @@
       "label": "computedCellEdge()",
       "file_type": "code",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L57",
+      "source_location": "L59",
       "_callable": true,
       "_origin": "ast"
     },
@@ -28125,6 +28125,17 @@
     },
     {
       "source": "scripts_screenshots_ru_shots_sh__entry",
+      "target": "scripts_screenshots_ru_cdp",
+      "relation": "invokes",
+      "confidence": "INFERRED",
+      "source_file": "scripts/screenshots/ru-shots.sh",
+      "source_location": "L29",
+      "weight": 1.0,
+      "context": "script_invocation",
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_screenshots_ru_shots_sh__entry",
       "target": "scripts_screenshots_ru_shots_e",
       "relation": "calls",
       "confidence": "EXTRACTED",
@@ -30838,7 +30849,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L57",
+      "source_location": "L59",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -30850,7 +30861,7 @@
       "deferred": true,
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L83",
+      "source_location": "L86",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -30861,7 +30872,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L101",
+      "source_location": "L104",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -30872,7 +30883,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L114",
+      "source_location": "L166",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -30884,7 +30895,7 @@
       "deferred": true,
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L346",
+      "source_location": "L398",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -30896,7 +30907,7 @@
       "deferred": true,
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L359",
+      "source_location": "L411",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -30908,7 +30919,7 @@
       "deferred": true,
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L375",
+      "source_location": "L427",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -30920,7 +30931,7 @@
       "deferred": true,
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L376",
+      "source_location": "L428",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44101,7 +44112,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_components.mjs",
-      "source_location": "L87",
+      "source_location": "L90",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44113,7 +44124,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_components.mjs",
-      "source_location": "L228",
+      "source_location": "L280",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44125,7 +44136,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_components.mjs",
-      "source_location": "L360",
+      "source_location": "L412",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44137,7 +44148,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_components.mjs",
-      "source_location": "L466",
+      "source_location": "L518",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44149,7 +44160,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_components.mjs",
-      "source_location": "L507",
+      "source_location": "L559",
       "weight": 1.0,
       "_origin": "ast"
     },
