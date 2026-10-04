@@ -54,13 +54,17 @@ async function renderSpec(spec, initialState) {
 // Chromium). Complete that computed-style observation with matched CSSOM priorities:
 // an important author rule beats a non-important inline edge in the real cascade.
 // Evaluate only rules matching this rendered cell, never a CSS-source snapshot.
+// Both sides check the full longhand+shorthand set — an important LONGHAND zero
+// ('td{border-top-width:0px !important}') zeroes the cell's top edge in real
+// Chromium and jsdom alike, so the resolver must see it (issue #47's gap: the
+// shorthand-only scan stayed green on that mutant class).
+const EDGE_PROPS = ['border', 'border-top', 'border-bottom', 'border-top-width', 'border-bottom-width']
 function computedCellEdge(cell) {
   const computed = getComputedStyle(cell)
-  const inlineImportant = cell.style.getPropertyPriority('border') === 'important' ||
-    cell.style.getPropertyPriority('border-top') === 'important'
+  const inlineImportant = EDGE_PROPS.some(prop => cell.style.getPropertyPriority(prop) === 'important')
   const importantReset = [...document.styleSheets].some(sheet => [...(sheet.cssRules || [])].some(rule =>
     rule.selectorText && cell.matches(rule.selectorText) &&
-    ['border', 'border-top'].some(prop => rule.style?.getPropertyPriority(prop) === 'important' &&
+    EDGE_PROPS.some(prop => rule.style?.getPropertyPriority(prop) === 'important' &&
       /^(0|none)(?:px)?$/.test(rule.style.getPropertyValue(prop).trim()))))
   // jsdom also leaves var(--ui-stroke-tertiary) unresolved in computed borders.
   // Use the rendered declaration as its fallback only after the matching-rule
@@ -101,6 +105,28 @@ test('saved 97cb HeatMap clears host row/header/corner borders, not heat-cell ed
       const edge = computedCellEdge(cell)
       assert.equal(edge.width, '1px', 'rendered heat-cell edge survives host/reset cascade')
       assert.equal(edge.style, 'solid', 'rendered heat-cell edge remains solid')
+    }
+    // Symmetric case (issue #47, blocker 1): an important LONGHAND zeroing of the
+    // cell's top edge is cascade-effective in real Chromium — the resolver must
+    // report 0px/none, not fall through to the declared shorthand. A resolver
+    // that only inspects `border`/`border-top` SHORTHANDs stays green here (RED).
+    const longhandMutant = document.createElement('style')
+    longhandMutant.textContent = '.prose [data-ru="HeatMap"] td{border-top-width:0px !important}'
+    document.head.append(longhandMutant)
+    try {
+      for (const cell of cells) {
+        const edge = computedCellEdge(cell)
+        assert.equal(edge.width, '0px', `important longhand zeroes heat cell "${cell.textContent.trim()}" top edge`)
+        assert.equal(edge.style, 'none', `important longhand clears heat cell "${cell.textContent.trim()}" edge style`)
+      }
+    } finally {
+      longhandMutant.remove()
+    }
+    // Recovery: with the temp rule gone the intentional 1px solid edge returns.
+    for (const cell of cells) {
+      const edge = computedCellEdge(cell)
+      assert.equal(edge.width, '1px', 'heat-cell edge recovers to declared 1px after mutant removal')
+      assert.equal(edge.style, 'solid', 'heat-cell edge recovers to solid after mutant removal')
     }
   } finally {
     host.remove()
