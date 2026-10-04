@@ -54,14 +54,17 @@ async function renderSpec(spec, initialState) {
 // Chromium). Complete that computed-style observation with matched CSSOM priorities:
 // an important author rule beats a non-important inline edge in the real cascade.
 // Evaluate only rules matching this rendered cell, never a CSS-source snapshot.
+// Scan the full longhand+shorthand set (#45 round-3 dissent): a reset that zeroes
+// cell edges via an important longhand (border-top-width) must be visible too.
 function computedCellEdge(cell) {
   const computed = getComputedStyle(cell)
-  const inlineImportant = cell.style.getPropertyPriority('border') === 'important' ||
-    cell.style.getPropertyPriority('border-top') === 'important'
+  const EDGE_PROPS = ['border', 'border-top', 'border-top-width', 'border-bottom-width']
+  const importantZeroIn = style => style &&
+    EDGE_PROPS.some(prop => style.getPropertyPriority(prop) === 'important' &&
+      /^(0|none)(?:px)?$/.test(style.getPropertyValue(prop).trim()))
+  const inlineImportant = importantZeroIn(cell.style)
   const importantReset = [...document.styleSheets].some(sheet => [...(sheet.cssRules || [])].some(rule =>
-    rule.selectorText && cell.matches(rule.selectorText) &&
-    ['border', 'border-top'].some(prop => rule.style?.getPropertyPriority(prop) === 'important' &&
-      /^(0|none)(?:px)?$/.test(rule.style.getPropertyValue(prop).trim()))))
+    rule.selectorText && cell.matches(rule.selectorText) && importantZeroIn(rule.style)))
   // jsdom also leaves var(--ui-stroke-tertiary) unresolved in computed borders.
   // Use the rendered declaration as its fallback only after the matching-rule
   // priority check; Chromium resolves that variable before getComputedStyle.
@@ -103,6 +106,55 @@ test('saved 97cb HeatMap clears host row/header/corner borders, not heat-cell ed
       assert.equal(edge.style, 'solid', 'rendered heat-cell edge remains solid')
     }
   } finally {
+    host.remove()
+    await act(async () => { cardRoot.unmount() })
+    shell.remove()
+  }
+})
+
+test('saved 97cb: an important author LONGHAND reset clears heat-cell edges (cascade-aware resolver)', async () => {
+  // The suite-FAIL-0-green mutant class from the #45 round-3 dissent: a reset that
+  // zeroes cell edges via an important longhand (border-top-width) instead of the
+  // shorthands. jsdom's getComputedStyle ignores it; only the CSSOM priority scan
+  // sees it. RED before the resolver scans longhands, GREEN after.
+  const host = document.createElement('style')
+  host.textContent = '.prose tr,.prose th{border-bottom:1px solid rgb(209, 213, 219)}'
+  const mutant = document.createElement('style')
+  mutant.textContent = '[data-ru-card] td{border-top-width:0px !important}'
+  const shell = document.createElement('div')
+  shell.className = 'prose'
+  shell.style.width = '720px'
+  document.body.append(shell)
+  document.head.append(host)
+  const { createRoot } = await import('react-dom/client')
+  const cardRoot = createRoot(shell)
+  try {
+    const record = JSON.parse(readFileSync(new URL('./fixtures/saved/ru-97cb020cd21b.json', import.meta.url), 'utf8'))
+    await act(async () => { cardRoot.render(React.createElement(CardBody, { record, registry })) })
+    const heat = shell.querySelector('[data-ru="HeatMap"]')
+    assert.ok(heat, 'saved 97cb HeatMap rendered')
+    const cells = [...heat.querySelectorAll('td')]
+    assert.ok(cells.length > 0, 'heat cells present')
+
+    document.head.append(mutant)
+    assert.ok([...document.styleSheets].some(sheet => [...(sheet.cssRules || [])].some(rule =>
+      rule.selectorText === '[data-ru-card] td' &&
+      rule.style?.getPropertyPriority('border-top-width') === 'important')),
+      'longhand important mutant is live in the CSSOM')
+    for (const cell of cells) {
+      const edge = computedCellEdge(cell)
+      assert.equal(edge.width, '0px', 'important longhand reset zeroes the cell edge width')
+      assert.equal(edge.style, 'none', 'important longhand reset clears the cell edge style')
+    }
+
+    mutant.remove()
+    for (const cell of cells) {
+      const edge = computedCellEdge(cell)
+      assert.equal(edge.width, '1px', 'edge returns to 1px once the mutant is removed')
+      assert.equal(edge.style, 'solid', 'edge returns to solid once the mutant is removed')
+    }
+  } finally {
+    mutant.remove()
     host.remove()
     await act(async () => { cardRoot.unmount() })
     shell.remove()
