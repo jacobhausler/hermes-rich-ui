@@ -50,7 +50,8 @@ R4 **Stdlib backend** — no new Python dependency (no PyYAML/jsonschema/request
     must import under CPython 3.13 and macOS system python 3.9; no self-updater.
 R5 **Manifest parity** — `plugin.yaml` `provides_*` matches `register()` exactly;
     catalog file is the single source of truth for the 18 types; version bumped
-    only by the release lane.
+    only by the release lane (PUBLIC release only — never a gate on local dogfood
+    installs of our own packages, see release-train scope).
 R6 **Tests** — a behaviour change ships its check (one failing-if-broken test);
     no snapshot/change-detector tests; no test reads source text.
 R7 **Docs drift** — user-visible strings changed → README/AGENTS.md/SKILL.md
