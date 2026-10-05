@@ -62,7 +62,11 @@ export const HOUSE = Object.freeze({
   CALLOUT: Object.freeze({ tone: 'info', gap: S.hair, padding: '8px 10px', radius: R.control, railW: 3 }),
   CODEBLOCK: Object.freeze({ gutterW: 26, gutterPad: S.sm, linePadL: 34 }),
   SPARKLINE_DIRECTION: 'line', SPARKLINE_TONE: 'default',
-  BARLIST_FORMAT: 'number', BARLIST_SORT: 'desc', HEATMAP_SHOW_VALUES: true
+  BARLIST_FORMAT: 'number', BARLIST_SORT: 'desc', HEATMAP_SHOW_VALUES: true,
+  // #29 (slice 6): the number tiles' shared geometry table. Label truncation is the
+  // ONLY line-breaking rule for Metric labels; the delta row flips to an n× face
+  // beyond this percent (rates stay pp below it).
+  NUMBER_TILES: Object.freeze({ LABEL_ELLIPSIS_PX: 160, DELTA_MULT_FROM: 999 })
 })
 export const TONE_TEXT = Object.freeze(Object.fromEntries(Object.entries(TONE).map(([name, color]) =>
   [name, `color-mix(in srgb, ${color} ${HOUSE.TONE_TEXT_MIX}%, ${INK.value})`])))

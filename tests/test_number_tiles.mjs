@@ -68,10 +68,10 @@ test('#29 Metric delta: caption in TONE_TEXT, same face as the value, rates in p
   await renderComponent({ id: 'r', component: 'Metric', props: { label: 'Rate', value: 12.4, previous: 12.15, format: 'percent' } })
   const rate = $('[data-ru="Metric"] [data-ru-delta-line]')
   assert.ok(rate.textContent.includes('0.25' + NBSP + 'pp'), 'rate delta in pp: ' + rate.textContent)
-  // huge delta: n× face above +999%
+  // huge delta: n× face above +999% (24 vs 2 = +1100% -> 12×)
   await renderComponent({ id: 'h', component: 'Metric', props: { label: 'Signups', value: 24, previous: 2 } })
   const big = $('[data-ru="Metric"] [data-ru-delta-line]')
-  assert.ok(/11×/.test(big.textContent), 'n× above +999%: ' + big.textContent)
+  assert.ok(/12×/.test(big.textContent), 'n× above +999%: ' + big.textContent)
   assert.ok(!/\+1100%/.test(big.textContent), 'never the raw +1100%')
 })
 test('#29 Metric equal-to-baseline delta reads a neutral 0', async () => {
