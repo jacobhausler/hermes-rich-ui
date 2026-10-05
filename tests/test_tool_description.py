@@ -264,6 +264,99 @@ def test_generated_description_keeps_the_grammar_pins():
     assert "hermes-rich-ui/1" in COMPONENTS_DESC
 
 
+# ---------------------------------------------------------------------------
+# est-2ek.1.173 (spool key b3aa31795d3a19fe, 2026-09-26): the signature lines
+# printed prop NAMES + enums only — the item-level required keys (Chart series
+# {label,data}, Timeline item {label}) and numeric caps (Grid columns 1..4)
+# lived only in skill/SKILL.md, so an agent writing from the tool description
+# burned publishes on "missing required property 'label'" / "above maximum 4".
+# Fix is generated from the catalog (J12): item shapes render as
+# `prop [{req1,req2,...}]` and integer props with min/max as `prop? 1..4`.
+# Derived from the catalog at assert time — never a hard-coded snapshot.
+
+
+def _array_item(node):
+    """The literal-array items schema of a prop, or None."""
+    for cand in [node] + list(node.get("oneOf", []) or []):
+        if isinstance(cand, dict) and cand.get("type") == "array":
+            it = cand.get("items")
+            if isinstance(it, dict) and it.get("type") == "object" and it.get("properties"):
+                return it
+    return None
+
+
+def test_nested_item_required_keys_are_on_the_signature_line():
+    lines = _sig_lines()
+    for name, schema in COMPS.items():
+        for prop, sub in schema.get("properties", {}).items():
+            it = _array_item(sub)
+            if it is None:
+                continue
+            req = it.get("required", [])
+            if not req:
+                continue
+            for key in req:
+                assert key in lines[name], (
+                    "%s.%s: item-required key %r missing from the signature line"
+                    % (name, prop, key)
+                )
+
+
+def test_chart_series_and_timeline_label_are_stated():
+    # The exact agent-failure keys from the row: series carries label+data,
+    # Timeline items carry label FIRST (NOT title — title is the component prop).
+    lines = _sig_lines()
+    assert re.search(r"series\s*\[\{label,data\}\]", lines["Chart"]), lines["Chart"]
+    assert re.search(r"items\s*\[\{label(,|\})", lines["Timeline"]), lines["Timeline"]
+
+
+def test_bounded_integer_props_state_their_range():
+    lines = _sig_lines()
+    for name, schema in COMPS.items():
+        for prop, sub in schema.get("properties", {}).items():
+            if not isinstance(sub, dict):
+                continue
+            if sub.get("type") == "integer" and "minimum" in sub and "maximum" in sub \
+                    and "enum" not in sub:
+                want = "%s..%s" % (sub["minimum"], sub["maximum"])
+                assert want in lines[name], (
+                    "%s.%s: numeric range %s missing from the signature line"
+                    % (name, prop, want)
+                )
+
+
+def test_grid_columns_cap_is_stated():
+    assert "columns 1..4" in _sig_lines()["Grid"]
+
+
+def test_validator_shapes_the_description_states_admit_cleanly():
+    # The whole point: text written exactly as the new description states must
+    # pass the real validator, not just look similar.
+    lines = _sig_lines()
+    m = re.search(r"series\s*\[\{([^}]+)\}\]", lines["Chart"])
+    keys = [k.strip() for k in m.group(1).split(",")]
+    assert keys == ["label", "data"], keys
+    # Build the payload from the keys the DESCRIPTION states — if the line ever
+    # drifts back to {data}-only or gains an unknown key, admit() fails here.
+    series_item = {}
+    for k in keys:
+        series_item[k] = "s" if k == "label" else [{"label": "a", "value": 1}]
+    comps = _root(["c"]) + [{"id": "c", "component": "Chart", "kind": "bar",
+                             "series": [series_item]}]
+    errors, _norm = admit(comps, {"data": {}, "meta": {}})
+    assert errors == [], errors
+
+    m = re.search(r"items\s*\[\{([^}]+)\}\]", lines["Timeline"])
+    tkeys = [k.strip().rstrip("?") for k in m.group(1).split(",")]
+    assert "label" in tkeys, tkeys
+    item = {"label": "step"}
+    if "status" in tkeys:
+        item["status"] = "done"
+    comps = _root(["t"]) + [{"id": "t", "component": "Timeline", "items": [item]}]
+    errors, _norm = admit(comps, {"data": {}, "meta": {}})
+    assert errors == [], errors
+
+
 if __name__ == "__main__":
     r = Runner()
     for t in (test_every_catalog_component_type_named, test_chart_kind_enums,
@@ -280,6 +373,11 @@ if __name__ == "__main__":
               test_one_defaults_sentence,
               test_sparkline_tone_signature_lists_default_success_danger_only,
               test_j16_literal_only_rule_replaces_the_inline_array_rule,
-              test_generated_description_keeps_the_grammar_pins):
+              test_generated_description_keeps_the_grammar_pins,
+              test_nested_item_required_keys_are_on_the_signature_line,
+              test_chart_series_and_timeline_label_are_stated,
+              test_bounded_integer_props_state_their_range,
+              test_grid_columns_cap_is_stated,
+              test_validator_shapes_the_description_states_admit_cleanly):
         r.run(t)
     r.finish()
