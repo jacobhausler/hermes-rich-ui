@@ -81,11 +81,36 @@ def _enum_values(node, seen):
     return seen
 
 
+def _array_items(node):
+    """The `items` object schema of a prop's literal-array branch, or None."""
+    if not isinstance(node, dict):
+        return None
+    for cand in [node] + list(node.get("oneOf", []) or []):
+        if isinstance(cand, dict) and cand.get("type") == "array":
+            it = cand.get("items")
+            if isinstance(it, dict) and it.get("type") == "object" and it.get("properties"):
+                return it
+    return None
+
+
+def _item_shape(items):
+    """`[{req1,req2,opt?}]` from an array-items object schema — the item keys an
+    agent must write, required first in catalog order, optional keys `?`-marked.
+    est-2ek.1.173: series {label,data} / Timeline {label} / etc. were validator
+    requirements the signature lines never stated."""
+    props = items.get("properties", {})
+    required = [r for r in items.get("required", []) if r in props]
+    optional = [p for p in props if p not in required]
+    keys = list(required) + [p + "?" for p in optional]
+    return "[" + "{" + ",".join(keys) + "}]" if keys else None
+
+
 def _signature_line(name, schema):
     """`Name req1, req2 (enum…), opt1?, opt2? (enum…)` — props in catalog
     order; required props unmarked, optional props carry `?`; enum values ride
-    the prop they belong to (nested item enums too). Generated from the schema
-    alone — never a hand-written sentence."""
+    the prop they belong to (nested item enums too); array-of-object props state
+    their item shape, bounded integer props state `min..max` (est-2ek.1.173 —
+    all generated from the catalog, never hand-written)."""
     props = schema.get("properties", {})
     required = set(schema.get("required", []))
     tokens = []
@@ -93,11 +118,17 @@ def _signature_line(name, schema):
         if prop in COMMON_PROPS:
             continue
         token = prop if prop in required else prop + "?"
+        shape = _item_shape(_array_items(sub) or {})
+        if shape:
+            token += " " + shape
         vals = _enum_values(sub, [])
         if len(vals) == 1 and vals[0] == prop:
             vals = []
         if vals:
             token += " " + "|".join(vals)
+        elif isinstance(sub, dict) and sub.get("type") == "integer" \
+                and "minimum" in sub and "maximum" in sub:
+            token += " %s..%s" % (sub["minimum"], sub["maximum"])
         tokens.append(token)
     shown = set()
     for sub in (s for p, s in props.items() if p not in COMMON_PROPS):
