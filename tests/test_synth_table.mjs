@@ -78,6 +78,42 @@ test('E15/S10 barColumnViolations checks ROW VALUES (numeric-or-null)', () => {
   assert.deepEqual(barColumnViolations([], 'v'), [])
 })
 
+// ---- #34 defaults: rows-only inference + column fmtSet ----
+test('#34 rows-only: humanized headers, right-aligned numerics, no chrome at 5 rows', async () => {
+  await mountTable({ rows: [
+    { city: 'Austin', monthlyRent: 1750, listed: '2026-09-01' },
+    { city: 'Denver', monthlyRent: 990, listed: '2026-08-15' },
+    { city: 'Boise', monthlyRent: 1500, listed: '2026-09-10' },
+    { city: 'Reno', monthlyRent: null, listed: '2026-07-30' },
+    { city: 'Tulsa', monthlyRent: 1620.5, listed: '2026-06-01' }
+  ] })
+  const heads = $$('[data-ru="DataTable"] thead th button').map(b => b.textContent.replace(/ [▲▼]$/, ''))
+  assert.deepEqual(heads, ['City', 'Monthly Rent', 'Listed'], 'humanized from keys')
+  const rents = $$('[data-ru="DataTable"] tbody tr').map(tr => tr.children[1])
+  assert.ok(rents.every(td => td.style.textAlign === 'right'), 'numeric column right-aligned')
+  assert.equal($('[data-ru="DataTable"] [data-richui="table-filter"]'), null, 'no filter box within one page + grace')
+  assert.equal($('[data-ru="DataTable"] [data-richui="table-counter"]'), null, 'no counter within one page + grace')
+})
+test('#34 defaultSort dir optional: numeric -> desc, text -> asc', async () => {
+  const rows = [
+    { city: 'Austin', v: 10 }, { city: 'Boise', v: 40 }, { city: 'Denver', v: 25 },
+    { city: 'Reno', v: 5 }, { city: 'Tulsa', v: 30 }
+  ]
+  await mountTable({ rows, defaultSort: { key: 'v' } })
+  assert.ok($('[data-ru="DataTable"] tbody tr').textContent.includes('Boise'), 'largest numeric first')
+  await mountTable({ rows, defaultSort: { key: 'city' } })
+  assert.ok($('[data-ru="DataTable"] tbody tr').textContent.includes('Austin'), 'text asc first')
+})
+test('#34 sources column: citeMarker numbers, [] renders —', async () => {
+  await renderComponent({ id: 'tblsrc' + (++_tn), component: 'DataTable', props: {
+    columns: [{ key: 'a', label: 'A', type: 'text' }, { key: 'src', label: 'Src', type: 'sources' }],
+    rows: [{ a: 'x', src: ['p1'] }, { a: 'y', src: [] }]
+  } }, { meta: { sources: [{ id: 'p1', kind: 'web', label: 'Paper one' }, { id: 'p2', kind: 'web', label: 'Paper two' }] } })
+  const marks = $$('[data-ru="DataTable"] [data-ru-citation]').map(s => s.textContent)
+  assert.deepEqual(marks, ['1'], 'renderer-derived index, not the raw id')
+  assert.equal($$('[data-ru="DataTable"] tbody tr')[1].children[1].textContent, '—', '[] -> —')
+})
+
 // ---- E17 Timeline ----
 const tlProps = (items) => ({ title: 'Log', items })
 test('E17 status=failed renders the --ui-red dot', async () => {
