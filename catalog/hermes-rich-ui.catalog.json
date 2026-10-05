@@ -5,7 +5,7 @@
   "catalogId": "hermes-rich-ui/1",
   "title": "Hermes Rich UI catalog",
   "description": "Read-only A2UI v1.0 catalog for hermes-rich-ui cards: 18 presentation components, zero functions. Single source of truth for admission (engine/admission.py) and the desktop renderer.",
-  "instructions": "hermes-rich-ui/1 is a READ-ONLY presentation catalog: 18 component types, no functions, no actions, no inputs. Compose ONE tree: exactly one component has id \"root\" (normally a Card). Containers (Card/Stack/Grid) reference children by id; Tabs/Accordion reference one child per tab/item; every other type is a leaf. Each id is used by exactly one parent; no cycles, no unreachable components. Bind values with {\"path\": \"/data/...\"} or {\"path\": \"/meta/...\"} (RFC 6901); every path must resolve. null means UNKNOWN and renders as unavailable — never write 0 for a missing number. Never invent series, rows, bins or history: chart/table data must come from the supplied data or a declared derivation. Cite: put sourceIds on claims and rows, end with a SourceList; state method and caveat in derivations. Budgets: <=64 components, depth <=8, series <=4x512 points, tables <=100x12, timeline <=30, key/value <=32, strings <=4 KiB. Admission rejects (never truncates) anything outside this catalog.",
+  "instructions": "hermes-rich-ui/1 is a READ-ONLY presentation catalog: 18 component types, no functions, no actions, no inputs. Compose ONE tree: exactly one component has id \"root\" (normally a Card). Containers (Card/Stack/Grid) reference children by id; Tabs/Accordion reference one child per tab/item; every other type is a leaf. Each id is used by exactly one parent; no cycles, no unreachable components. Bind values with {\"path\": \"/data/...\"} or {\"path\": \"/meta/...\"} (RFC 6901); every path must resolve. null means UNKNOWN and renders as unavailable \u2014 never write 0 for a missing number. Never invent series, rows, bins or history: chart/table data must come from the supplied data or a declared derivation. Cite: put sourceIds on claims and rows, end with a SourceList; state method and caveat in derivations. Budgets: <=64 components, depth <=8, series <=4x512 points, tables <=100x12, timeline <=30, key/value <=32, strings <=4 KiB. Admission rejects (never truncates) anything outside this catalog.",
   "components": {
     "Card": {
       "type": "object",
@@ -820,7 +820,8 @@
               },
               "label": {
                 "type": "string",
-                "maxLength": 4096
+                "maxLength": 4096,
+                "description": "Authored label renders byte-identical; omitted label is humanized from the key (#34)."
               },
               "type": {
                 "type": "string",
@@ -831,7 +832,8 @@
                   "percent",
                   "date",
                   "sources",
-                  "bar"
+                  "bar",
+                  "fraction"
                 ]
               },
               "unit": {
@@ -845,12 +847,11 @@
               }
             },
             "required": [
-              "key",
-              "label",
-              "type"
+              "key"
             ],
             "additionalProperties": false
-          }
+          },
+          "description": "Optional (#34): omit for rows-only inference \u2014 one column per row key, types inferred from cell JSON types (bar/sources are never inferred), humanized labels."
         },
         "rows": {
           "description": "Up to 100 row objects whose keys are declared column keys; cells are finite scalars. For a column of type `sources` the cell under that column's key is a string[] of source ids, each resolving in /meta/sources (dangling ids reject).",
@@ -887,17 +888,15 @@
             }
           },
           "required": [
-            "key",
-            "dir"
+            "key"
           ],
           "additionalProperties": false,
-          "description": "E15: seed sort (deletes agent pre-sorting). Unknown key falls back to unsorted. Nulls sort last in both directions; nonnumeric cells never Number()-coerced."
+          "description": "E15: seed sort (deletes agent pre-sorting). Unknown key falls back to unsorted. Nulls sort last in both directions; nonnumeric cells never Number()-coerced. dir optional: type-aware default (desc for numeric/date, asc for text) (#34)."
         }
       },
       "required": [
         "id",
         "component",
-        "columns",
         "rows"
       ],
       "additionalProperties": false
@@ -992,7 +991,7 @@
         },
         "sortDesc": {
           "type": "boolean",
-          "description": "Sort bar/histogram categories descending in the renderer (L6 — never hand-sort series). Only valid on kind bar/histogram; other kinds rejected at admission naming the valid kinds."
+          "description": "Sort bar/histogram categories descending in the renderer (L6 \u2014 never hand-sort series). Only valid on kind bar/histogram; other kinds rejected at admission naming the valid kinds."
         },
         "stack": {
           "type": "boolean",
@@ -1323,7 +1322,7 @@
     },
     "ImageGallery": {
       "type": "object",
-      "description": "Evidence strip of up to 8 tiles (one component replaces Image+alt+caption Text x N). Each src is https://-only; admission never fetched or verified any URL — tiles render exactly what fails to load.",
+      "description": "Evidence strip of up to 8 tiles (one component replaces Image+alt+caption Text x N). Each src is https://-only; admission never fetched or verified any URL \u2014 tiles render exactly what fails to load.",
       "properties": {
         "id": {
           "$ref": "#/$defs/ComponentId"
@@ -1408,7 +1407,7 @@
     },
     "AsOf": {
       "type": "object",
-      "description": "Evidence-law caption line: Observed/Published timestamps (Accessed is source-scoped in SourceList, F8). Only publish timestamps you actually observed — date-only precision is honest when that is all you observed; leave absent if unknown.",
+      "description": "Evidence-law caption line: Observed/Published timestamps (Accessed is source-scoped in SourceList, F8). Only publish timestamps you actually observed \u2014 date-only precision is honest when that is all you observed; leave absent if unknown.",
       "properties": {
         "id": {
           "$ref": "#/$defs/ComponentId"
@@ -1441,7 +1440,7 @@
               "$ref": "#/$defs/DataBinding"
             }
           ],
-          "description": "ISO-8601 timestamp you ACTUALLY OBSERVED; leave absent if unknown — never publish a timestamp you did not observe."
+          "description": "ISO-8601 timestamp you ACTUALLY OBSERVED; leave absent if unknown \u2014 never publish a timestamp you did not observe."
         },
         "publishedAt": {
           "oneOf": [
@@ -1456,7 +1455,7 @@
               "$ref": "#/$defs/DataBinding"
             }
           ],
-          "description": "ISO-8601 timestamp the source ACTUALLY PUBLISHED; leave absent if unknown — never publish a timestamp you did not observe."
+          "description": "ISO-8601 timestamp the source ACTUALLY PUBLISHED; leave absent if unknown \u2014 never publish a timestamp you did not observe."
         },
         "note": {
           "type": "string",
@@ -1675,7 +1674,7 @@
     },
     "HeatMap": {
       "type": "object",
-      "description": "rows x cols matrix as a DOM grid (max 12 rows x 12 cols, max 144 cells — the single reachable cap; no separate engine constant). The color ramp across the OBSERVED min/max is computed by the renderer; the caption prints observed min/max with the unit. null/missing cells hatch as an em-dash, never a guessed color.",
+      "description": "rows x cols matrix as a DOM grid (max 12 rows x 12 cols, max 144 cells \u2014 the single reachable cap; no separate engine constant). The color ramp across the OBSERVED min/max is computed by the renderer; the caption prints observed min/max with the unit. null/missing cells hatch as an em-dash, never a guessed color.",
       "properties": {
         "id": {
           "$ref": "#/$defs/ComponentId"
@@ -2073,7 +2072,7 @@
     "anyFunction": false,
     "ChartPoint_area": {
       "$ref": "#/$defs/ChartPoint_line",
-      "description": "area point: same shape as line ({x: ISO|string|number, y:number|null}) — $ref alias to ChartPoint_line; the fill toward zero is a renderer concern."
+      "description": "area point: same shape as line ({x: ISO|string|number, y:number|null}) \u2014 $ref alias to ChartPoint_line; the fill toward zero is a renderer concern."
     },
     "ChartPoint_range": {
       "type": "object",
@@ -2109,7 +2108,7 @@
         "high"
       ],
       "additionalProperties": false,
-      "description": "range point: {label, low: number|null, high: number|null}; low <= high (equality allowed, RATIFY S3); both null renders 'unavailable' — exactly-one-null is rejected."
+      "description": "range point: {label, low: number|null, high: number|null}; low <= high (equality allowed, RATIFY S3); both null renders 'unavailable' \u2014 exactly-one-null is rejected."
     },
     "ChartPoint_waterfall": {
       "type": "object",
