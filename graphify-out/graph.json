@@ -139,6 +139,7 @@
     "tests/test_synth_table.mjs",
     "tests/test_synth_text_enums.mjs",
     "tests/test_table.mjs",
+    "tests/test_text_defaults.mjs",
     "tests/test_tokens.mjs",
     "tests/test_tool.py",
     "tests/test_tool_description.py",
@@ -588,7 +589,7 @@
       "label": "TONE_TEXT",
       "file_type": "code",
       "source_file": "desktop/src/components/_house.mjs",
-      "source_location": "L59",
+      "source_location": "L64",
       "_origin": "ast"
     },
     {
@@ -889,7 +890,7 @@
       "label": "TONE",
       "file_type": "code",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L5",
+      "source_location": "L6",
       "_origin": "ast"
     },
     {
@@ -897,7 +898,7 @@
       "label": "Callout()",
       "file_type": "code",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L7",
+      "source_location": "L8",
       "_callable": true,
       "_origin": "ast"
     },
@@ -8258,6 +8259,14 @@
       "_origin": "ast"
     },
     {
+      "id": "tests_test_text_defaults",
+      "label": "test_text_defaults.mjs",
+      "file_type": "code",
+      "source_file": "tests/test_text_defaults.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
       "id": "tests_test_tokens",
       "label": "test_tokens.mjs",
       "file_type": "code",
@@ -10794,7 +10803,7 @@
       "label": "{ SIG, COMPACT_FROM, TIERS, SCI_BELOW, LOCALE, MINUS }",
       "file_type": "code",
       "source_file": "desktop/src/components/_house.mjs",
-      "source_location": "L61",
+      "source_location": "L66",
       "_origin": "ast"
     },
     {
@@ -12017,7 +12026,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_house.mjs",
-      "source_location": "L59",
+      "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12941,11 +12950,33 @@
     },
     {
       "source": "desktop_src_components_callout",
+      "target": "desktop_src_components_house",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/callout.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_callout",
+      "target": "desktop_src_components_house_house",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/callout.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_callout",
       "target": "desktop_src_components_callout_tone",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12955,7 +12986,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L7",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -32931,6 +32962,105 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_text_defaults",
+      "target": "ref_node_test",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_text_defaults.mjs",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_text_defaults",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_text_defaults.mjs",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_text_defaults",
+      "target": "tests_helpers_render",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_text_defaults.mjs",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_text_defaults",
+      "target": "tests_helpers_render_rendercomponent",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_text_defaults.mjs",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_text_defaults",
+      "target": "tests_helpers_render",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_text_defaults.mjs",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_text_defaults",
+      "target": "desktop_src_components_house",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_text_defaults.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_text_defaults",
+      "target": "desktop_src_components_house_house",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_text_defaults.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_text_defaults",
+      "target": "desktop_src_components_house_r",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_text_defaults.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_text_defaults",
+      "target": "desktop_src_components_house_s",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_text_defaults.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_tokens",
       "target": "ref_node_test",
       "relation": "imports_from",
@@ -37732,7 +37862,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L10",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -37743,7 +37873,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L13",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -37754,7 +37884,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L13",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -37765,7 +37895,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L13",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -37776,7 +37906,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L13",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast"
     },
