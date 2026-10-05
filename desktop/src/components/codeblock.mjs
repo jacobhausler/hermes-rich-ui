@@ -23,9 +23,9 @@ const preStyle = {
   whiteSpace: 'pre-wrap', wordBreak: 'break-all', overflow: 'auto',
   minWidth: 0, fontFamily: MONO
 }
-const lineStyle = { display: 'block', position: 'relative', paddingLeft: 34 }
+const lineStyle = { display: 'block', position: 'relative', paddingLeft: HOUSE.CODEBLOCK.linePadL }
 const gutterStyle = {
-  position: 'absolute', left: 0, width: 26, paddingRight: 8, textAlign: 'right',
+  position: 'absolute', left: 0, width: HOUSE.CODEBLOCK.gutterW, paddingRight: HOUSE.CODEBLOCK.gutterPad, textAlign: 'right',
   color: V.text3, fontStyle: 'normal', fontVariantNumeric: 'tabular-nums', userSelect: 'none'
 }
 
