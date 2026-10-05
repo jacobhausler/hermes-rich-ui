@@ -372,8 +372,8 @@ test('D2/D8: DataTable + Chart aria-label from accessibility.label; sourceIds su
   assert.equal(table.querySelector('[data-ru-sources]').getAttribute('aria-label'), 'sources: Example site')
   assert.equal(chart.querySelector('[data-ru-sources]').textContent, 'ⓘ 2')
   assert.equal(chart.querySelector('[data-ru-sources]').getAttribute('aria-label'), 'sources: Example site, Local computation')
-  // row-level sources column still reads under the declared key
-  assert.deepEqual([...table.querySelectorAll('[data-source-id]')].map(b => b.getAttribute('data-source-id')), ['s1'])
+  // row-level sources column renders the shared citeMarker (renderer-derived index)
+  assert.deepEqual([...table.querySelectorAll('[data-ru-citation]')].map(s => s.textContent), ['1'])
 })
 
 test('D2/D8: without accessibility.label, aria-label falls back to title; no sourceIds → no superscript', async () => {
