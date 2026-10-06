@@ -4,8 +4,10 @@
 // self-contained: spawns its own chrome-headless-shell on an ephemeral port.
 //
 // Binary discovery (no silent skips — the whole point of this control is no
-// false greens): RUI_CHROME_BIN (then CHROME_BIN) env, then standard
-// chrome/chromium paths. When none exist, chromiumGate() decides:
+// false greens): RUI_CHROME_BIN (then CHROME_BIN) env, then the playwright
+// browser caches under $HOME (~/.cache/ms-playwright, ~/.pw-browsers,
+// ~/.hermes/*, newest chromium-* build wins), then standard chrome/chromium
+// paths. When none exist, chromiumGate() decides:
 //   RUI_SKIP_CHROMIUM=1  -> recorded skip + stored expected-set fallback (issue
 //                          option B; keeps the Chromium-less CI runner at FAIL 0)
 //   otherwise            -> hard FAIL 'CHROME MISSING — set RUI_CHROME_BIN'
@@ -16,7 +18,9 @@
 // Stable channel, 2026-10-03 manifest), unpacked under a work dir as
 // chrome-shell/154.0.8037.92/ and pointed at via RUI_CHROME_BIN.
 import { spawn } from 'node:child_process'
-import { existsSync } from 'node:fs'
+import { existsSync, readdirSync } from 'node:fs'
+import { join } from 'node:path'
+import { homedir } from 'node:os'
 
 const STANDARD_PATHS = [
   '/usr/bin/google-chrome-stable', '/usr/bin/google-chrome',
@@ -25,13 +29,41 @@ const STANDARD_PATHS = [
   '/snap/bin/chromium'
 ]
 
-// First executable-looking path from env then the standard list; null when no binary exists.
+// Playwright-style browser caches, newest chromium-<build>/chrome-linux64/chrome
+// wins. Roots in order: $PLAYWRIGHT_BROWSERS_PATH, ~/.cache/ms-playwright,
+// ~/.pw-browsers, ~/.hermes/pw-browsers (the Hermes lane caches).
+function newestPlaywrightChrome() {
+  const home = process.env.HOME || homedir()
+  const roots = [process.env.PLAYWRIGHT_BROWSERS_PATH,
+    join(home, '.cache', 'ms-playwright'),
+    join(home, '.pw-browsers'),
+    join(home, '.hermes', 'pw-browsers')].filter(Boolean)
+  for (const root of roots) {
+    if (!existsSync(root)) continue
+    let dirs
+    try { dirs = readdirSync(root) } catch { continue }
+    const builds = dirs
+      .map(d => ({ d, m: d.match(/^chromium-(\d+)$/) }))
+      .filter(x => x.m)
+      .sort((a, b) => Number(b.m[1]) - Number(a.m[1]))
+    for (const { d } of builds) {
+      for (const leaf of ['chrome-linux64/chrome', 'chrome-mac/Chromium.app/Contents/MacOS/Chromium']) {
+        const p = join(root, d, leaf)
+        if (existsSync(p)) return p
+      }
+    }
+  }
+  return null
+}
+
+// First executable-looking path from env, then playwright caches, then the
+// standard list; null when no binary exists.
 export function locateChrome() {
   for (const key of ['RUI_CHROME_BIN', 'CHROME_BIN']) {
     const v = process.env[key]
     if (v && existsSync(v)) return v
   }
-  return STANDARD_PATHS.find(p => existsSync(p)) || null
+  return newestPlaywrightChrome() || STANDARD_PATHS.find(p => existsSync(p)) || null
 }
 
 // Honest self-gate: {run:true} | {run:false, skip:true, reason} | {run:false, fail:true, reason}.
