@@ -60,4 +60,10 @@ export const HOUSE = Object.freeze({
 })
 export const TONE_TEXT = Object.freeze(Object.fromEntries(Object.entries(TONE).map(([name, color]) =>
   [name, `color-mix(in srgb, ${color} ${HOUSE.TONE_TEXT_MIX}%, ${INK.value})`])))
+// #33: the ONE mark-fill expression every drawn bar/fill rides (BarList bar, DataTable bar
+// cell, Progress fill). The mix constant lives above and the contrast rule (>= 3:1 vs the
+// card, both themes) is pinned by tests/helpers/mark_fill.mjs — the constant may move, the
+// rule never does.
+export const MARK_FILL = (color = 'var(--ui-accent)', surface = 'var(--ui-bg-tertiary)') =>
+  `color-mix(in srgb, ${color} ${HOUSE.MARK_FILL_MIX}%, ${surface})`
 export const { SIG, COMPACT_FROM, TIERS, SCI_BELOW, LOCALE, MINUS } = HOUSE

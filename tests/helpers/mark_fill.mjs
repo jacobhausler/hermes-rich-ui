@@ -21,16 +21,20 @@ export function hexToRgb(hex) {
 }
 
 export function mixInSrgb(a, b, pct) {
+  // Hex channels are 0..1 from hexToRgb; scale to 0..255 AFTER the mix, once.
   const [ar, ag, ab] = hexToRgb(a), [br, bg, bb] = hexToRgb(b)
-  const ch = (x, y) => Math.round(x * pct / 100 + y * (100 - pct) / 100)
-  return `rgb(${ch(ar, br) * 255 | 0}, ${ch(ag, bg) * 255 | 0}, ${ch(ab, bb) * 255 | 0})`.replace(/(\d+), (\d+), (\d+)/, (_, r, g, b) =>
-    `rgb(${Math.round(ar * 255 * pct / 100 + br * 255 * (100 - pct) / 100)}, ${Math.round(ag * 255 * pct / 100 + bg * 255 * (100 - pct) / 100)}, ${Math.round(ab * 255 * pct / 100 + bb * 255 * (100 - pct) / 100)})`)
+  const ch = (x, y) => Math.round((x * pct + y * (100 - pct)) / 100 * 255)
+  return `rgb(${ch(ar, br)}, ${ch(ag, bg)}, ${ch(ab, bb)})`
 }
 
 export function contrastRatio(fg, bg) {
+  // Accepts both #rrggbb and rgb(...) — the pinned theme table is hex, component fills
+  // resolve through mixInSrgb to rgb().
   const lum = (rgb) => {
-    const m = /rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)/.exec(rgb)
-    const [r, g, b] = [m[1], m[2], m[3]].map(v => Number(v) / 255).map(c =>
+    let tri = /^#([0-9a-f]{6})$/i.test(rgb)
+      ? [0, 2, 4].map(i => parseInt(/#([0-9a-f]{6})/i.exec(rgb)[1].slice(i, i + 2), 16))
+      : (() => { const m = /rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)/.exec(rgb); assert.ok(m, `unresolvable color: ${rgb}`); return [Number(m[1]), Number(m[2]), Number(m[3])] })()
+    const [r, g, b] = tri.map(v => v / 255).map(c =>
       c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
   }
