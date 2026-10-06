@@ -105,7 +105,7 @@ test('T1–T5: one frozen space/radius/border/surface/tone/ink/series vocabulary
 
 test('S18: layout floors/caps and mark/heat mixes have one house home', () => {
   assert.deepEqual(Object.fromEntries(['TILE_FLOOR', 'BLOCK_FLOOR', 'WIDE_FLOOR', 'CAP', 'CAP_WHOLE', 'FADE', 'MEASURE', 'MARK_FILL_MIX', 'HEAT_MIX'].map(k => [k, house.HOUSE?.[k]])),
-    { TILE_FLOOR: 140, BLOCK_FLOOR: 240, WIDE_FLOOR: 280, CAP: 480, CAP_WHOLE: 600, FADE: 32, MEASURE: '72ch', MARK_FILL_MIX: 55, HEAT_MIX: [12, 60] })
+    { TILE_FLOOR: 140, BLOCK_FLOOR: 240, WIDE_FLOOR: 280, CAP: 480, CAP_WHOLE: 600, FADE: 32, MEASURE: '72ch', MARK_FILL_MIX: 85, HEAT_MIX: [12, 60] }) // #33: mark-fill mix moved 55->85 to pass the 3:1 both-themes pin (helpers/mark_fill.mjs); the rule never moved
   assert.ok(Object.isFrozen(house.HOUSE) && Object.isFrozen(house.HOUSE?.HEAT_MIX))
 })
 
