@@ -82,12 +82,14 @@ test('playwright caches are searched newest-build-first, env beats cache', () =>
 
 test('no binary anywhere: RUI_SKIP_CHROMIUM=1 records a skip, otherwise hard FAIL', () => {
   const emptyHome = mkdtempSync(join(root, 'empty-home-'))
+  // standardPaths:[] keeps this hermetic: CI runners (ubuntu-latest) ship a
+  // system chrome at a STANDARD_PATHS entry — the absent case must pin it out.
   withEnv({ ...CLEAN, HOME: emptyHome, RUI_SKIP_CHROMIUM: '1' }, () => {
-    const g = chromiumGate()
+    const g = chromiumGate({ standardPaths: [] })
     assert.equal(g.run, false); assert.equal(g.skip, true); assert.match(g.reason, /CHROMIUM SKIPPED/)
   })
   withEnv({ ...CLEAN, HOME: emptyHome, RUI_SKIP_CHROMIUM: undefined }, () => {
-    const g = chromiumGate()
+    const g = chromiumGate({ standardPaths: [] })
     assert.equal(g.run, false); assert.equal(g.fail, true); assert.match(g.reason, /CHROME MISSING/)
   })
 })
@@ -95,7 +97,7 @@ test('no binary anywhere: RUI_SKIP_CHROMIUM=1 records a skip, otherwise hard FAI
 test('RUI_SKIP_CHROMIUM=0 does NOT unlock the skip path (only literal 1)', () => {
   const emptyHome = mkdtempSync(join(root, 'empty-home-2-'))
   withEnv({ ...CLEAN, HOME: emptyHome, RUI_SKIP_CHROMIUM: '0' }, () => {
-    assert.equal(chromiumGate().fail, true)
+    assert.equal(chromiumGate({ standardPaths: [] }).fail, true)
   })
 })
 

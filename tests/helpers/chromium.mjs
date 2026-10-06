@@ -57,18 +57,21 @@ function newestPlaywrightChrome() {
 }
 
 // First executable-looking path from env, then playwright caches, then the
-// standard list; null when no binary exists.
-export function locateChrome() {
+// standard list; null when no binary exists. `standardPaths` is injectable so
+// the "binary truly absent" tests stay hermetic on hosts that ship a system
+// chrome (GitHub ubuntu-latest preinstalls /usr/bin/google-chrome-stable);
+// production callers pass nothing and get the real STANDARD_PATHS.
+export function locateChrome({ standardPaths = STANDARD_PATHS } = {}) {
   for (const key of ['RUI_CHROME_BIN', 'CHROME_BIN']) {
     const v = process.env[key]
     if (v && existsSync(v)) return v
   }
-  return newestPlaywrightChrome() || STANDARD_PATHS.find(p => existsSync(p)) || null
+  return newestPlaywrightChrome() || standardPaths.find(p => existsSync(p)) || null
 }
 
 // Honest self-gate: {run:true} | {run:false, skip:true, reason} | {run:false, fail:true, reason}.
-export function chromiumGate() {
-  const bin = locateChrome()
+export function chromiumGate(opts = {}) {
+  const bin = locateChrome(opts)
   if (bin) return { run: true, bin }
   if (process.env.RUI_SKIP_CHROMIUM === '1') {
     return { run: false, skip: true, reason: 'CHROMIUM SKIPPED (RUI_SKIP_CHROMIUM=1): expected-set fallback only — live getComputedStyle NOT run' }
