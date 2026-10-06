@@ -100,6 +100,7 @@
     "tests/test_api.py",
     "tests/test_bundle_scan.mjs",
     "tests/test_chart.mjs",
+    "tests/test_chromium_gate.mjs",
     "tests/test_cite_marker.mjs",
     "tests/test_components.mjs",
     "tests/test_directive_grammar.py",
@@ -4782,7 +4783,16 @@
       "label": "STANDARD_PATHS",
       "file_type": "code",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L21",
+      "source_location": "L25",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_helpers_chromium_newestplaywrightchrome",
+      "label": "newestPlaywrightChrome()",
+      "file_type": "code",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L35",
+      "_callable": true,
       "_origin": "ast"
     },
     {
@@ -4790,7 +4800,7 @@
       "label": "locateChrome()",
       "file_type": "code",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L29",
+      "source_location": "L64",
       "_callable": true,
       "_origin": "ast"
     },
@@ -4799,7 +4809,7 @@
       "label": "chromiumGate()",
       "file_type": "code",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L38",
+      "source_location": "L73",
       "_callable": true,
       "_origin": "ast"
     },
@@ -4808,7 +4818,7 @@
       "label": "launchChromium()",
       "file_type": "code",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L50",
+      "source_location": "L85",
       "_callable": true,
       "_origin": "ast"
     },
@@ -5653,6 +5663,64 @@
       "source_file": "tests/test_chart.mjs",
       "source_location": "L108",
       "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_chromium_gate",
+      "label": "test_chromium_gate.mjs",
+      "file_type": "code",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_chromium_gate_withenv",
+      "label": "withEnv()",
+      "file_type": "code",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L14",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_chromium_gate_fakebin",
+      "label": "fakeBin()",
+      "file_type": "code",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L23",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_chromium_gate_root",
+      "label": "root",
+      "file_type": "code",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L31",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_chromium_gate_bina",
+      "label": "binA",
+      "file_type": "code",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L33",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_chromium_gate_binb",
+      "label": "binB",
+      "file_type": "code",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L34",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_chromium_gate_clean",
+      "label": "CLEAN",
+      "file_type": "code",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L38",
       "_origin": "ast"
     },
     {
@@ -11194,6 +11262,22 @@
       "source_file": ""
     },
     {
+      "id": "ref_node_path",
+      "label": "ref_node_path",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "ref_node_os",
+      "label": "ref_node_os",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
       "id": "ref_node_assert",
       "label": "ref_node_assert",
       "file_type": "concept",
@@ -11210,24 +11294,8 @@
       "source_file": ""
     },
     {
-      "id": "ref_node_path",
-      "label": "ref_node_path",
-      "file_type": "concept",
-      "type": "external",
-      "external": true,
-      "source_file": ""
-    },
-    {
       "id": "ref_node_test",
       "label": "ref_node_test",
-      "file_type": "concept",
-      "type": "external",
-      "external": true,
-      "source_file": ""
-    },
-    {
-      "id": "ref_node_os",
-      "label": "ref_node_os",
       "file_type": "concept",
       "type": "external",
       "external": true,
@@ -24140,7 +24208,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L18",
+      "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24151,7 +24219,29 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L19",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_chromium",
+      "target": "ref_node_path",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_chromium",
+      "target": "ref_node_os",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24161,7 +24251,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L21",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_chromium",
+      "target": "tests_helpers_chromium_newestplaywrightchrome",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24171,7 +24271,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L29",
+      "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24181,7 +24281,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L38",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24191,7 +24291,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L50",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_helpers_chromium_locatechrome",
+      "target": "tests_helpers_chromium_newestplaywrightchrome",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/helpers/chromium.mjs",
+      "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24202,7 +24313,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L39",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -25891,6 +26002,176 @@
       "relation": "dynamic_import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_chart.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "ref_node_test",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "ref_node_fs",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "ref_node_os",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "ref_node_path",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "tests_helpers_chromium",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "tests_helpers_chromium_locatechrome",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "tests_helpers_chromium_chromiumgate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "tests_test_chromium_gate_withenv",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "tests_test_chromium_gate_fakebin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "tests_test_chromium_gate_root",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "tests_test_chromium_gate_bina",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "tests_test_chromium_gate_binb",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "tests_test_chromium_gate_clean",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "tests_test_chromium_gate_withenv",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_chromium_gate",
+      "target": "tests_test_chromium_gate_fakebin",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_chromium_gate.mjs",
+      "source_location": "L66",
+      "weight": 1.0,
       "_origin": "ast"
     },
     {
