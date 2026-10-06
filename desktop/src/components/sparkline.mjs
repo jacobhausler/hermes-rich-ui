@@ -9,13 +9,16 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useEffect, useMemo, useRef } from 'react'
 import uPlot from 'uplot'
-import { ownSources, type } from './_shared.mjs'
+import { ownSources, type, StatusMark } from './_shared.mjs'
 import { HOUSE } from './_house.mjs'
+import { fmt } from './fmt.mjs'
 import { UPLOT_CSS, UPLOT_CSS_HREF } from './chart.mjs'
 
 const MAX_POINTS = 512
 const FALLBACK = { '--ui-accent': '#3b82f6', '--ui-green': '#22c55e', '--ui-red': '#ef4444' }
-const TONE_TOKEN = { default: '--ui-accent', success: '--ui-green', danger: '--ui-red' }
+// #33 (E-S5): tone ≡ stroke token — error/danger are one and the same red, success is
+// the house green; 'default' colors by trend instead (up green / down red / flat muted).
+const TONE_TOKEN = { default: '--ui-accent', success: '--ui-green', danger: '--ui-red', error: '--ui-red', caution: '--ui-yellow', info: '--ui-accent' }
 const isNum = (v) => typeof v === 'number' && Number.isFinite(v)
 
 // Pure: {values|series: (number|null)[]} -> the computed model the renderer draws.
@@ -88,7 +91,13 @@ function Host({ model, opts, propsKey }) {
     if (!el || model.points === 0) return undefined
     const color = readToken(el, TONE_TOKEN[opts.tone] || TONE_TOKEN.default)
     let u = null
-    try { u = new uPlot(buildSparkOpts(model, { ...opts, color }), [model.values.map((_, i) => i), model.values], el) }
+    try {
+      u = new uPlot(buildSparkOpts(model, { ...opts, color }), [model.values.map((_, i) => i), model.values], el)
+      // E-S2 (RED pin): no axes chrome ever. uPlot builds empty .u-axis containers per
+      // scale even with axes: []; the sparkline strips them right after init — the
+      // strip is the pin, so it lives here, not in a CSS trick.
+      for (const ax of el.querySelectorAll('.u-axis')) ax.remove()
+    }
     catch (e) { el.textContent = 'sparkline engine failed: ' + (e && e.message ? e.message : String(e)); return undefined }
     return () => { if (u) u.destroy(); u = null }
   }, [propsKey]) // model/opts derive from propsKey (JSON.stringify of element.props)
@@ -96,8 +105,13 @@ function Host({ model, opts, propsKey }) {
     style: { width: clamp(opts.width, 60, 400, HOUSE.SPARK_W) + 'px', height: clamp(opts.height, 14, 48, HOUSE.SPARK_H) + 'px', position: 'relative', flex: '0 0 auto', overflow: 'hidden' } })
 }
 
-const CHIP = { up: '▲', down: '▼', flat: '–', unavailable: '' }
-const CHIP_COLOR = { up: 'var(--ui-green)', down: 'var(--ui-red)', flat: 'var(--ui-text-secondary)', unavailable: 'var(--ui-text-tertiary)' }
+// #33 (E-S4): the trend chip is the shared StatusMark SVG arrow riding the stroke
+// color — never a text glyph (▲/▼ render inconsistently across fonts). E-S5: an
+// explicit tone pins the stroke (error ≡ danger ≡ red); default follows the trend.
+function chipStroke(tone, trend) {
+  if (tone && tone !== 'default') return `var(${TONE_TOKEN[tone]})`
+  return trend === 'up' ? 'var(--ui-green)' : trend === 'down' ? 'var(--ui-red)' : 'var(--ui-text-secondary)'
+}
 
 export function Sparkline({ element }) {
   const props = (element && element.props) || {}
@@ -109,7 +123,16 @@ export function Sparkline({ element }) {
     width: props.width, height: props.height,
     tone: TONE_TOKEN[props.tone] ? props.tone : HOUSE.SPARKLINE_TONE
   }
-  const accLabel = typeof props.accessibility?.label === 'string' && props.accessibility.label ? props.accessibility.label : 'sparkline'
+  // E-S6: the computed readout IS the accessibility — `label: first → last, low, high`
+  // (faces via fmt; a single point collapses to first==last==low==high). An explicit
+  // accessibility.label still wins.
+  const seen = model.values.filter(v => v !== null)
+  const f = (v) => fmt(v, { format: props.format, unit: props.unit }) ?? String(v)
+  const readout = model.points === 0 ? 'unavailable'
+    : `${f(seen[0])} \u2192 ${f(seen[seen.length - 1])}, low ${f(model.min)}, high ${f(model.max)}`
+  const accLabel = typeof props.accessibility?.label === 'string' && props.accessibility.label
+    ? props.accessibility.label
+    : typeof props.label === 'string' && props.label ? `${props.label}: ${readout}` : readout
 
   const body = model.points === 0
     ? h('span', { 'data-ru-null': '', role: 'status', style: { color: 'var(--ui-text-tertiary)', fontStyle: 'italic', ...type('caption'), alignSelf: 'center' } }, 'unavailable')
@@ -117,10 +140,15 @@ export function Sparkline({ element }) {
 
   const children = [
     h('style', { href: UPLOT_CSS_HREF, precedence: 'default', 'data-richui-uplot-css': '1' }, UPLOT_CSS, 'css'),
+    // E-S6: the label prints as the title beside the strip.
+    typeof props.label === 'string' && props.label
+      ? h('span', { 'data-ru-sparkline-title': '', style: { ...type('small'), color: 'var(--ui-text-secondary)', marginRight: 4 } }, props.label, 'title')
+      : null,
     body,
     model.points === 0
       ? null
-      : h('span', { 'data-ru-chip': model.trend, style: { marginLeft: 4, ...type('micro'), color: CHIP_COLOR[model.trend] }, 'aria-hidden': 'true' }, CHIP[model.trend] || 'unavailable', 'chip')
+      : h('span', { 'data-ru-chip': model.trend, style: { marginLeft: 4, display: 'inline-flex', alignItems: 'center', ...type('micro') }, 'aria-hidden': 'true' },
+        StatusMark(model.trend === 'unavailable' ? 'flat' : model.trend, chipStroke(opts.tone, model.trend), 'arrow'), 'chip')
   ]
   return jsx('span', {
     style: { display: 'inline-flex', alignItems: 'center', gap: 4, minWidth: 0, verticalAlign: 'middle' },
@@ -131,7 +159,7 @@ export function Sparkline({ element }) {
     'data-ru-min': model.min === null ? 'unavailable' : String(model.min),
     'data-ru-max': model.max === null ? 'unavailable' : String(model.max),
     role: 'img',
-    'aria-label': accLabel + ': ' + model.points + ' points, trend ' + model.trend,
+    'aria-label': accLabel,
     children
   })
 }

@@ -1,5 +1,6 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { common, isNil, unavailable, ownSources, V, type } from './_shared.mjs'
+import { MARK_FILL } from './_house.mjs'
 
 export const Progress = ({ element }) => {
   const p = element.props ?? {}
@@ -37,7 +38,7 @@ export const Progress = ({ element }) => {
         children: jsx('div', {
           style: indeterminate
             ? { position: 'absolute', left: 0, top: 0, bottom: 0, width: '40%', borderRadius: 3, background: V.stroke2, backgroundImage: `repeating-linear-gradient(45deg, ${V.stroke2} 0 6px, transparent 6px 12px)` }
-            : { height: '100%', width: `${pct}%`, borderRadius: 3, background: V.accent }
+            : { height: '100%', width: `${pct}%`, borderRadius: 3, background: MARK_FILL() } // #33: shared mark-fill (3:1 rule pinned by tests/helpers/mark_fill.mjs)
         })
       }, 'bar'),
       tickPct !== null ? jsx('div', { 'data-ru-target-tick': '', 'aria-hidden': 'true',

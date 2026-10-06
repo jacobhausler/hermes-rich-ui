@@ -42,7 +42,9 @@ export const HOUSE = Object.freeze({
   CAP: 480, CAP_WHOLE: 600, FADE: 32, MEASURE: '72ch',
   CHART_PLOT_H: 180, PAGE: 10, PAGE_GRACE: 1.5,
   SPARK_W: 120, SPARK_H: 24, IMAGE_MAX_H: 320,
-  MARK_FILL_MIX: 55, HEAT_MIX: Object.freeze([12, 60]), TONE_TEXT_MIX: 72,
+  // #33 (harness mark-fill pin): 55 failed 3:1 vs the card in dark (2.61); the constant
+  // moves, the RULE (3:1 both themes) does not — tests/helpers/mark_fill.mjs proves 85 passes.
+  MARK_FILL_MIX: 85, HEAT_MIX: Object.freeze([12, 60]), TONE_TEXT_MIX: 72,
   CITE_RUN_MIN: 3, CITE_TOKEN_LIMIT: 4, CITE_VISIBLE: 3,
   // #27 (J9/J13, spec §2 layer 1): the 22 door defaults. An absent prop takes THESE
   // at render; the catalog `default` annotations are documentation of exactly these
@@ -63,4 +65,10 @@ export const HOUSE = Object.freeze({
 })
 export const TONE_TEXT = Object.freeze(Object.fromEntries(Object.entries(TONE).map(([name, color]) =>
   [name, `color-mix(in srgb, ${color} ${HOUSE.TONE_TEXT_MIX}%, ${INK.value})`])))
+// #33: the ONE mark-fill expression every drawn bar/fill rides (BarList bar, DataTable bar
+// cell, Progress fill). The mix constant lives above and the contrast rule (>= 3:1 vs the
+// card, both themes) is pinned by tests/helpers/mark_fill.mjs — the constant may move, the
+// rule never does.
+export const MARK_FILL = (color = 'var(--ui-accent)', surface = 'var(--ui-bg-tertiary)') =>
+  `color-mix(in srgb, ${color} ${HOUSE.MARK_FILL_MIX}%, ${surface})`
 export const { SIG, COMPACT_FROM, TIERS, SCI_BELOW, LOCALE, MINUS } = HOUSE

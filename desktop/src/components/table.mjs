@@ -7,6 +7,7 @@ import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo, useState } from 'react'
 import { ownSources, citeMarker, type } from './_shared.mjs'
 import { fmtColumn, fmtDate, unitLabel } from './fmt.mjs'
+import { MARK_FILL } from './_house.mjs'
 
 // E15: column type 'bar' (width ∝ column max, computed in the RENDERER — L6). 'bar' sorts
 // and formats like 'number'. defaultSort?: {key,dir?} seeds the sort (deletes agent pre-sorting);
@@ -192,7 +193,7 @@ function BarCell({ col, row, maxAbs, face }) {
   if (!isNum(v) || !(maxAbs > 0)) return h('span', { 'data-ru-bar': 'absent', style: { display: 'inline-flex', alignItems: 'center', gap: 6, width: '100%', justifyContent: 'flex-end' } }, label, 'lb')
   const frac = Math.abs(v) / maxAbs
   const wPct = Math.max(2, Math.round(frac * 100))
-  const barStyle = { height: 6, borderRadius: 2, background: 'var(--ui-accent)', position: 'absolute', ...(v < 0 ? { right: '50%' } : { left: '50%' }), width: `${wPct / 2}%` }
+  const barStyle = { height: 6, borderRadius: 2, background: MARK_FILL(), position: 'absolute', ...(v < 0 ? { right: '50%' } : { left: '50%' }), width: `${wPct / 2}%` }
   return h('span', { 'data-ru-bar': String(wPct), 'data-ru-bar-sign': v < 0 ? 'neg' : 'pos',
     style: { display: 'inline-flex', alignItems: 'center', gap: 6, width: '100%', justifyContent: 'flex-end' } },
     [h('span', {}, label, 'l'),

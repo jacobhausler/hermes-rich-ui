@@ -45,6 +45,25 @@ export const isNil = v => v === null || v === undefined
 
 export const unavailable = (key) => jsx('span', { 'data-ru-null': '', style: { color: V.text3, fontStyle: 'italic' }, children: 'unavailable' }, key)
 
+// #33 (E-S4/E-S5): the ONE status-mark primitive — a shared SVG arrow riding the given
+// stroke color. Sparkline's trend chip (and any future trend mark) uses THIS, never a
+// text glyph (▲/▼ render inconsistently across fonts/emoji fallbacks). The stroke rides
+// a --ui-* token: tone error/danger ≡ var(--ui-red), success ≡ var(--ui-green), default
+// follows the trend (up green / down red / flat secondary).
+export function StatusMark(trend, stroke, key) {
+  if (!Object.hasOwn(STATUS_ARROW, trend)) return null
+  return jsx('svg', {
+    'aria-hidden': 'true', width: 10, height: 10, viewBox: '0 0 10 10',
+    fill: 'none', stroke, strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round',
+    children: jsx('path', { d: STATUS_ARROW[trend] })
+  }, key)
+}
+const STATUS_ARROW = {
+  up: 'M2 7.5 L5 2.5 L8 7.5 M3.5 5.5 L6.5 5.5',
+  down: 'M2 2.5 L5 7.5 L8 2.5 M3.5 4.5 L6.5 4.5',
+  flat: 'M2 5 L8 5'
+}
+
 // Plain-text render of any resolved scalar; null/undefined -> 'unavailable', never 0.
 export function text(v) {
   if (isNil(v)) return unavailable()
