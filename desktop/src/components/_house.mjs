@@ -55,6 +55,11 @@ export const HOUSE = Object.freeze({
   METRIC_FORMAT: 'number', METRIC_INVERT_TONE: false,
   CHECKLIST_SHOW_TALLY: true, CHIPSET_TONE: 'neutral', CHIPSET_WRAP: true,
   CODEBLOCK_SHOW_LINES: false, GALLERY_COLUMNS: 2,
+  // #32 (slice 9): the text family's shared geometry table. Callout/CodeBlock used to
+  // carry their own literals; they read THESE (values are the measured pre-migration
+  // ones — a restyle edits this table once, no per-component drift).
+  CALLOUT: Object.freeze({ tone: 'info', gap: S.hair, padding: '8px 10px', radius: R.control, railW: 3 }),
+  CODEBLOCK: Object.freeze({ gutterW: 26, gutterPad: S.sm, linePadL: 34 }),
   SPARKLINE_DIRECTION: 'line', SPARKLINE_TONE: 'default',
   BARLIST_FORMAT: 'number', BARLIST_SORT: 'desc', HEATMAP_SHOW_VALUES: true
 })
