@@ -74,7 +74,7 @@ function h(type, props, children, key) {
 // theme-following (L7) and readable in BOTH themes — bg3 is dark in dark and light in
 // light, and color-mix interpolates in sRGB the same way chart.mjs reads its FALLBACK
 // tokens. mixPct is already bounded by HOUSE.HEAT_MIX (#33).
-const cellBg = (mix, signed) => `color-mix(in srgb, ${signed < 0 ? V.orange : V.accent} ${Math.round(mix * 10) / 10}%, ${V.bg3})`
+const cellBg = (mix, signed) => `color-mix(in srgb, ${signed < 0 ? V.orange : V.accent} ${Math.round(mix)}%, ${V.bg3})`
 
 const S = {
   box: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0, color: V.text },

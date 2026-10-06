@@ -77,7 +77,8 @@ test('sparkline render: inline-flex, single canvas, no legend, data-ru-trend, ho
   assert.equal(root.querySelector('.u-legend'), null, 'no legend chrome')
   const st = document.head.querySelector('style[data-richui-uplot-css]')
   assert.ok(st && (st.getAttribute('href') || st.getAttribute('data-href')) === UPLOT_CSS_HREF, 'same scoped uPlot style href as Chart, no leak')
-  assert.equal(root.querySelector('[data-ru-chip="up"]').textContent, '▲')
+  // #33 E-S4 replaces the text-glyph chip with the shared StatusMark SVG arrow.
+  assert.ok(root.querySelector('[data-ru-chip="up"] svg'), 'trend chip is the SVG arrow (glyph pin replaced by the #33 E-S4 pin)')
 })
 
 test('sparkline beside a Metric renders as a KPI row (ACCEPT: inline-flex beside a Metric)', async () => {
@@ -136,10 +137,13 @@ test('barlist render: widths ∝ value/max, sort applied, null row unavailable +
   assert.equal(root.getAttribute('data-ru-sort'), 'desc')
   const rows = [...root.querySelectorAll('[data-ru-item]')]
   assert.deepEqual(rows.map(r => r.querySelector('[title]').textContent), ['beta', 'alpha', 'down', 'missing'], 'desc applied, null sinks last')
-  assert.equal(pct(rows[0].querySelector('[aria-hidden] > div')), 100, 'width ∝ 10/10')
-  assert.equal(pct(rows[1].querySelector('[aria-hidden] > div')), 50, 'width ∝ 5/10')
-  assert.equal(rows[2].getAttribute('data-ru-item'), 'clipped', 'negative clipped at 0')
-  assert.equal(rows[2].querySelector('[aria-hidden]').children.length, 0, 'blank share for negatives')
+  // #33 replaces clip-to-blank: with a negative present the axis splits 0..50% per side
+  // (left of zero = negatives), so |10|/maxAbs draws half the track, |5| a quarter.
+  assert.equal(pct(rows[0].querySelector('[aria-hidden] > div')), 50, 'width ∝ |10|/10 on the split axis')
+  assert.equal(pct(rows[1].querySelector('[aria-hidden] > div')), 25, 'width ∝ |5|/10 on the split axis')
+  assert.equal(rows[2].getAttribute('data-ru-item'), 'negative', 'negative draws LEFT of zero (clip-blank pin replaced by the #33 pin)')
+  assert.ok(rows[2].querySelector('[data-ru-item-fill]'), 'negative draws a real fill, not a blank')
+  assert.match(rows[2].querySelector('[data-ru-item-fill]').getAttribute('style'), /right:\s*50%/, 'left-of-zero anchor')
   const nullRow = rows[3]
   assert.equal(nullRow.getAttribute('data-ru-item'), 'unavailable')
   assert.match(nullRow.textContent, /unavailable/, 'L1: null renders unavailable')

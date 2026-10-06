@@ -91,7 +91,13 @@ function Host({ model, opts, propsKey }) {
     if (!el || model.points === 0) return undefined
     const color = readToken(el, TONE_TOKEN[opts.tone] || TONE_TOKEN.default)
     let u = null
-    try { u = new uPlot(buildSparkOpts(model, { ...opts, color }), [model.values.map((_, i) => i), model.values], el) }
+    try {
+      u = new uPlot(buildSparkOpts(model, { ...opts, color }), [model.values.map((_, i) => i), model.values], el)
+      // E-S2 (RED pin): no axes chrome ever. uPlot builds empty .u-axis containers per
+      // scale even with axes: []; the sparkline strips them right after init — the
+      // strip is the pin, so it lives here, not in a CSS trick.
+      for (const ax of el.querySelectorAll('.u-axis')) ax.remove()
+    }
     catch (e) { el.textContent = 'sparkline engine failed: ' + (e && e.message ? e.message : String(e)); return undefined }
     return () => { if (u) u.destroy(); u = null }
   }, [propsKey]) // model/opts derive from propsKey (JSON.stringify of element.props)
@@ -141,7 +147,7 @@ export function Sparkline({ element }) {
     body,
     model.points === 0
       ? null
-      : h('span', { 'data-ru-chip': model.trend, style: { marginLeft: 4, display: 'inline-flex', alignItems: 'center' }, 'aria-hidden': 'true' },
+      : h('span', { 'data-ru-chip': model.trend, style: { marginLeft: 4, display: 'inline-flex', alignItems: 'center', ...type('micro') }, 'aria-hidden': 'true' },
         StatusMark(model.trend === 'unavailable' ? 'flat' : model.trend, chipStroke(opts.tone, model.trend), 'arrow'), 'chip')
   ]
   return jsx('span', {

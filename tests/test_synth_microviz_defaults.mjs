@@ -50,7 +50,9 @@ test('#33 BarList: items formatted as ONE fmtSet — USD [1234,950,0.5] -> $1,23
 test('#33 BarList: collision guard — 12,340 and 12,344 never share a face', async () => {
   await renderComponent({ id: 'b', component: 'BarList', props: { items: [{ label: 'a', value: 12340 }, { label: 'b', value: 12344 }] } })
   const faces = [...mount.querySelectorAll('[data-ru-item-value]')].map(el => el.textContent)
-  assert.deepEqual(faces, ['12,340', '12,344'], 'distinct values never collapse to one face')
+  // House default sort is desc (BARLIST_SORT pin in test_house_defaults), so DOM order
+  // is descending; the pin is that distinct values never collapse to one face.
+  assert.deepEqual([...faces].sort(), ['12,340', '12,344'], 'distinct values never collapse to one face')
 })
 
 test('#33 BarList: a smaller value never draws a longer bar; non-zero bars >= 3 px; fill = mark-fill helper', async () => {
@@ -179,7 +181,8 @@ test('#33 HeatMap: caption via fmtPair, optional title, every cell aria-label = 
   const cap = root.querySelector('[data-richui="heatmap-caption"]')
   assert.match(cap.textContent, /1 ms \/ 9 ms/, 'caption prints the fmtPair of observed min/max')
   const td = root.querySelector('td[data-ru-value]')
-  assert.equal(td.getAttribute('aria-label'), 'mon, a: 5 ms', 'cell aria-label = readout (E-H6)')
+  assert.equal(td.getAttribute('aria-label'), 'mon, a: 1 ms', 'cell aria-label = readout (E-H6)')
+  assert.equal(root.querySelectorAll('td[data-ru-value]')[2].getAttribute('aria-label'), 'tue, a: 5 ms', 'every cell rides its own readout')
 })
 
 // ------------------------------------------------ harness mark-fill pin (#33)
