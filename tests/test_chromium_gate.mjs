@@ -169,7 +169,12 @@ test('GitHub Actions lane: an explicit standardPaths opt-in is honored (only the
 test('non-CI lane keeps the hard FAIL when no binary exists (no silent skip off CI)', () => {
   const emptyHome = mkdtempSync(join(root, 'local-home-'))
   withEnv({ ...CLEAN, HOME: emptyHome, RUI_SKIP_CHROMIUM: undefined, GITHUB_ACTIONS: undefined }, () => {
-    const g = chromiumGate()
+    // standardPaths:[] keeps the case hermetic: this pins the off-CI
+    // skip-vs-FAIL DECISION branch, not the path scan (scan teeth live in the
+    // opt-in case above). Chrome-bearing hosts (CI runners bake
+    // /usr/bin/google-chrome-stable) would otherwise resolve the default list
+    // and flip the gate to run:true.
+    const g = chromiumGate({ standardPaths: [] })
     assert.equal(g.run, false); assert.equal(g.fail, true)
     assert.match(g.reason, /CHROME MISSING/)
   })
