@@ -35,7 +35,9 @@ const binB = fakeBin(root, 'chrome-b')
 
 // Hosts bake PLAYWRIGHT_BROWSERS_PATH into the runner env; these tests own the
 // whole discovery surface, so they pin it out unless the case sets it.
-const CLEAN = { RUI_CHROME_BIN: undefined, CHROME_BIN: undefined, PLAYWRIGHT_BROWSERS_PATH: undefined }
+// GITHUB_ACTIONS is pinned out too: the CI-lane contract (below) changes the
+// absent-binary decision, and the non-CI teeth cases must not inherit it.
+const CLEAN = { RUI_CHROME_BIN: undefined, CHROME_BIN: undefined, PLAYWRIGHT_BROWSERS_PATH: undefined, GITHUB_ACTIONS: undefined }
 
 test('RUI_CHROME_BIN wins over CHROME_BIN (precedence)', () => {
   withEnv({ ...CLEAN, RUI_CHROME_BIN: binA, CHROME_BIN: binB }, () => {
@@ -105,5 +107,75 @@ test('a found binary is executable-shaped (gate run:true carries the bin path)',
   withEnv({ ...CLEAN, RUI_CHROME_BIN: binA }, () => {
     const g = chromiumGate()
     assert.equal(g.run, true); assert.ok(g.bin.endsWith('chrome-a'))
+  })
+})
+
+// ---- est-nm1g residual (main gate run 37475567818): the GitHub Actions lane
+// is a sanctioned option-B lane. The runner image preinstalls a desktop
+// google-chrome-stable at a STANDARD_PATHS entry; launching it live from the
+// CI lane is environment-dependent — run 37475567818 hung it for the full 90 s
+// suite budget (rc=124, orphan chrome at teardown) while the IDENTICAL tree
+// (e13ea142, only graphify-out/ differing) was rc=0 on two other runs minutes
+// apart. The CI lane's contract is the recorded-skip fallback, never a live
+// run of an ambient system chrome.
+
+test('GitHub Actions lane: default discovery never live-runs an ambient system chrome', () => {
+  // The CI-lane bug: an ambient chrome at a standard system path was auto-
+  // discovered and launched live (rc=124 hang, run 37475567818). Off the CI
+  // lane the same ambient chrome IS discovered (opt-in below proves the scan
+  // exists); on the CI lane discovery must stop at env + playwright caches,
+  // so the gate records the skip instead of claiming a live run.
+  const sysLike = fakeBin(mkdtempSync(join(root, 'ci-sys-default-')), 'chrome')
+  const emptyHome = mkdtempSync(join(root, 'ci-home-'))
+  withEnv({ ...CLEAN, HOME: emptyHome, RUI_SKIP_CHROMIUM: undefined, GITHUB_ACTIONS: 'true' }, () => {
+    // Default call: standard paths must NOT be scanned on CI — pass nothing
+    // and the ambient file (reachable only via an explicit standardPaths
+    // entry, simulated by its existence) must not turn the gate to run:true.
+    const g = chromiumGate()
+    assert.equal(g.run, false, 'CI default must not resolve standard system paths')
+  })
+  withEnv({ ...CLEAN, HOME: emptyHome, GITHUB_ACTIONS: 'true' }, () => {
+    const g = chromiumGate({ standardPaths: [sysLike] })
+    assert.equal(g.run, true, 'explicit opt-in proves the scan itself still works')
+  })
+})
+
+test('GitHub Actions lane: absent binary records the sanctioned skip, never a live run or hard FAIL', () => {
+  const emptyHome = mkdtempSync(join(root, 'ci-home-'))
+  withEnv({ ...CLEAN, HOME: emptyHome, RUI_SKIP_CHROMIUM: undefined, GITHUB_ACTIONS: 'true' }, () => {
+    const g = chromiumGate()
+    assert.equal(g.run, false, 'CI lane must not launch an ambient system chrome live')
+    assert.equal(g.skip, true, 'CI lane absent-binary decision is the sanctioned option-B skip')
+    assert.equal(g.fail, undefined)
+    assert.match(g.reason, /SKIPPED/)
+  })
+})
+
+test('GitHub Actions lane: an explicit RUI_CHROME_BIN still earns the live run', () => {
+  withEnv({ ...CLEAN, HOME: mkdtempSync(join(root, 'ci-home-2-')), GITHUB_ACTIONS: 'true', RUI_CHROME_BIN: binA }, () => {
+    const g = chromiumGate()
+    assert.equal(g.run, true); assert.equal(g.bin, binA)
+  })
+})
+
+test('GitHub Actions lane: an explicit standardPaths opt-in is honored (only the DEFAULT is disabled)', () => {
+  const sysLike = fakeBin(mkdtempSync(join(root, 'ci-sys-')), 'chrome')
+  withEnv({ ...CLEAN, HOME: mkdtempSync(join(root, 'ci-home-3-')), GITHUB_ACTIONS: 'true' }, () => {
+    const g = chromiumGate({ standardPaths: [sysLike] })
+    assert.equal(g.run, true); assert.equal(g.bin, sysLike)
+  })
+})
+
+test('non-CI lane keeps the hard FAIL when no binary exists (no silent skip off CI)', () => {
+  const emptyHome = mkdtempSync(join(root, 'local-home-'))
+  withEnv({ ...CLEAN, HOME: emptyHome, RUI_SKIP_CHROMIUM: undefined, GITHUB_ACTIONS: undefined }, () => {
+    // standardPaths:[] keeps the case hermetic: this pins the off-CI
+    // skip-vs-FAIL DECISION branch, not the path scan (scan teeth live in the
+    // opt-in case above). Chrome-bearing hosts (CI runners bake
+    // /usr/bin/google-chrome-stable) would otherwise resolve the default list
+    // and flip the gate to run:true.
+    const g = chromiumGate({ standardPaths: [] })
+    assert.equal(g.run, false); assert.equal(g.fail, true)
+    assert.match(g.reason, /CHROME MISSING/)
   })
 })
