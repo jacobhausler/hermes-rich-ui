@@ -117,6 +117,7 @@
     "tests/test_lower.mjs",
     "tests/test_placeholder.py",
     "tests/test_public_strings.py",
+    "tests/test_readme_types.py",
     "tests/test_registration_repro.mjs",
     "tests/test_render_smoke.mjs",
     "tests/test_requires_hermes.py",
@@ -6748,6 +6749,31 @@
       "label": "CI gate: the publish scrub must be clean. Runs the same private-string guard…",
       "file_type": "rationale",
       "source_file": "tests/test_public_strings.py",
+      "source_location": "L2",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_readme_types",
+      "label": "test_readme_types.py",
+      "file_type": "code",
+      "source_file": "tests/test_readme_types.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_readme_types_check",
+      "label": "check()",
+      "file_type": "code",
+      "source_file": "tests/test_readme_types.py",
+      "source_location": "L29",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_readme_types_rationale_2",
+      "label": "Pin the README type table against the live catalog surface. The README carries…",
+      "file_type": "rationale",
+      "source_file": "tests/test_readme_types.py",
       "source_location": "L2",
       "_origin": "ast"
     },
@@ -28920,6 +28946,70 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_public_strings.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_readme_types",
+      "target": "json",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_readme_types.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_readme_types",
+      "target": "re",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_readme_types.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_readme_types",
+      "target": "sys",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_readme_types.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_readme_types",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_readme_types.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_readme_types",
+      "target": "tests_test_readme_types_check",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_readme_types.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_readme_types_rationale_2",
+      "target": "tests_test_readme_types",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_readme_types.py",
       "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast"
