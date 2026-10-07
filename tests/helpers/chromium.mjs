@@ -6,10 +6,21 @@
 // Binary discovery (no silent skips — the whole point of this control is no
 // false greens): RUI_CHROME_BIN (then CHROME_BIN) env, then the playwright
 // browser caches under $HOME (~/.cache/ms-playwright, ~/.pw-browsers,
-// ~/.hermes/*, newest chromium-* build wins), then standard chrome/chromium
-// paths. When none exist, chromiumGate() decides:
+// ~/.hermes/*, newest chromium-* build wins). Standard system paths are the
+// last resort and are DISABLED by default on the GitHub Actions lane
+// (GITHUB_ACTIONS=true): the runner image preinstalls a desktop
+// google-chrome-stable whose live launch is environment-dependent — main gate
+// run 37475567818 hung it for the full 90 s suite budget (rc=124, orphan
+// chrome at teardown) while the identical tree was rc=0 on two other runs
+// minutes apart. The CI lane's contract is the recorded-skip fallback (option
+// B); the live run lives on the dogfood lane via an explicit RUI_CHROME_BIN,
+// and callers that really want an ambient system chrome opt in with
+// chromiumGate({ standardPaths }). When no binary is found, chromiumGate()
+// decides:
+//   GITHUB_ACTIONS=true  -> recorded skip + stored expected-set fallback (the
+//                          sanctioned CI option-B lane, est-nm1g)
 //   RUI_SKIP_CHROMIUM=1  -> recorded skip + stored expected-set fallback (issue
-//                          option B; keeps the Chromium-less CI runner at FAIL 0)
+//                          option B; keeps a Chromium-less runner at FAIL 0)
 //   otherwise            -> hard FAIL 'CHROME MISSING — set RUI_CHROME_BIN'
 //
 // The dogfood lane binary this was authored against (pin for reproducibility):
@@ -57,11 +68,12 @@ function newestPlaywrightChrome() {
 }
 
 // First executable-looking path from env, then playwright caches, then the
-// standard list; null when no binary exists. `standardPaths` is injectable so
-// the "binary truly absent" tests stay hermetic on hosts that ship a system
-// chrome (GitHub ubuntu-latest preinstalls /usr/bin/google-chrome-stable);
-// production callers pass nothing and get the real STANDARD_PATHS.
-export function locateChrome({ standardPaths = STANDARD_PATHS } = {}) {
+// standard list; null when no binary exists. `standardPaths` is injectable:
+// production callers pass nothing and get STANDARD_PATHS off CI, but [] on
+// the GitHub Actions lane (see the header — the runner's ambient desktop
+// chrome must never be live-run there), so tests that exercise the real
+// default and callers that want a system chrome pass the list explicitly.
+export function locateChrome({ standardPaths = (process.env.GITHUB_ACTIONS === 'true' ? [] : STANDARD_PATHS) } = {}) {
   for (const key of ['RUI_CHROME_BIN', 'CHROME_BIN']) {
     const v = process.env[key]
     if (v && existsSync(v)) return v
@@ -73,6 +85,13 @@ export function locateChrome({ standardPaths = STANDARD_PATHS } = {}) {
 export function chromiumGate(opts = {}) {
   const bin = locateChrome(opts)
   if (bin) return { run: true, bin }
+  // The GitHub Actions lane is the sanctioned option-B lane (est-nm1g): an
+  // absent binary there records the skip — the CI runner is treated as
+  // Chromium-less by contract, and the runner's ambient chrome is deliberately
+  // out of reach (see header) so a flaky live launch can never hang the gate.
+  if (process.env.GITHUB_ACTIONS === 'true') {
+    return { run: false, skip: true, reason: 'CHROMIUM SKIPPED (GitHub Actions lane): expected-set fallback only — live getComputedStyle NOT run (dogfood lane runs it with RUI_CHROME_BIN)' }
+  }
   if (process.env.RUI_SKIP_CHROMIUM === '1') {
     return { run: false, skip: true, reason: 'CHROMIUM SKIPPED (RUI_SKIP_CHROMIUM=1): expected-set fallback only — live getComputedStyle NOT run' }
   }
