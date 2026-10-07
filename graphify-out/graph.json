@@ -4783,7 +4783,7 @@
       "label": "STANDARD_PATHS",
       "file_type": "code",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L25",
+      "source_location": "L36",
       "_origin": "ast"
     },
     {
@@ -4791,7 +4791,7 @@
       "label": "newestPlaywrightChrome()",
       "file_type": "code",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L35",
+      "source_location": "L46",
       "_callable": true,
       "_origin": "ast"
     },
@@ -4800,7 +4800,7 @@
       "label": "locateChrome()",
       "file_type": "code",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L64",
+      "source_location": "L76",
       "_callable": true,
       "_origin": "ast"
     },
@@ -4809,7 +4809,7 @@
       "label": "chromiumGate()",
       "file_type": "code",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L73",
+      "source_location": "L85",
       "_callable": true,
       "_origin": "ast"
     },
@@ -4818,7 +4818,7 @@
       "label": "launchChromium()",
       "file_type": "code",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L85",
+      "source_location": "L104",
       "_callable": true,
       "_origin": "ast"
     },
@@ -5720,7 +5720,7 @@
       "label": "CLEAN",
       "file_type": "code",
       "source_file": "tests/test_chromium_gate.mjs",
-      "source_location": "L38",
+      "source_location": "L40",
       "_origin": "ast"
     },
     {
@@ -24208,7 +24208,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L20",
+      "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24219,7 +24219,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L21",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24230,7 +24230,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L22",
+      "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24241,7 +24241,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L23",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24251,7 +24251,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L25",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24261,7 +24261,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L35",
+      "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24271,7 +24271,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L64",
+      "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24281,7 +24281,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L73",
+      "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24291,7 +24291,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L85",
+      "source_location": "L104",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24302,7 +24302,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L69",
+      "source_location": "L81",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -24313,7 +24313,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/helpers/chromium.mjs",
-      "source_location": "L74",
+      "source_location": "L86",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -26148,7 +26148,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_chromium_gate.mjs",
-      "source_location": "L38",
+      "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -26159,7 +26159,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_chromium_gate.mjs",
-      "source_location": "L41",
+      "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -26170,7 +26170,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_chromium_gate.mjs",
-      "source_location": "L66",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast"
     },
