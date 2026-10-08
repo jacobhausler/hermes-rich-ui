@@ -59,18 +59,41 @@ def directive(card_id: str) -> str:
     return '::richui{id="%s"}' % card_id
 
 
+# The core labels an unnamed home "custom" (and ~/.hermes "default"); neither is an attribution.
+_CORE_SENTINELS = ("custom", "default")
+
+
+def _env_pin():
+    for key in ("HERMES_PROFILE_NAME", "HERMES_PROFILE"):
+        name = (os.environ.get(key) or "").strip()
+        if name:
+            return name
+    return None
+
+
 def _profile_name():
-    """Prefer task-scoped core identity; older cores fall back to launcher pins/home."""
+    """Prefer task-scoped core identity; older cores fall back to launcher pins/home.
+
+    Never invent attribution: a core sentinel survives only when a launcher explicitly
+    pinned that same name (and no task-scoped home override is bound).
+    """
     try:
         from hermes_cli.profiles import current_profile_name
     except ImportError:
         pass
     else:
-        return current_profile_name(default=None)
-    for key in ("HERMES_PROFILE_NAME", "HERMES_PROFILE"):
-        name = (os.environ.get(key) or "").strip()
-        if name:
+        name = current_profile_name(default=None)
+        if name not in _CORE_SENTINELS:
             return name
+        try:
+            from hermes_constants import get_hermes_home_override
+            overridden = get_hermes_home_override() is not None
+        except ImportError:
+            overridden = False
+        return name if not overridden and _env_pin() == name else None
+    name = _env_pin()
+    if name:
+        return name
     home = store.hermes_home()
     return home.name if home.parent.name == "profiles" else None
 

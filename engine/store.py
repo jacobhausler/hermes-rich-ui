@@ -165,6 +165,8 @@ def save_view(view_id, title, components) -> Path:
         raise StoreError("invalid view id %r (expected ^[a-z][a-z0-9-]{0,63}$)" % (view_id,))
     if not isinstance(components, list):
         raise StoreError("view components must be a list")
+    if not isinstance(title, str):
+        raise StoreError("view title must be a string")
     payload = json.dumps({"view_id": view_id, "title": title, "components": components},
                          ensure_ascii=False, indent=2).encode("utf-8")
     path = views_dir() / (view_id + ".json")
@@ -184,7 +186,8 @@ def list_views() -> list[dict]:
             continue
         view = load_view(path.stem)
         if view is not None and view.get("view_id") == path.stem:
-            views.append({"view_id": path.stem, "title": view.get("title")})
+            title = view.get("title")  # hand-edited files may hold NaN/non-str; /views must stay JSON-safe
+            views.append({"view_id": path.stem, "title": title if isinstance(title, str) else None})
     return views
 
 
