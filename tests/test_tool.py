@@ -59,7 +59,10 @@ def test_happy_path_record_shape():
 
 
 def test_session_env_absent_is_null():
-    os.environ.pop("HERMES_SESSION_ID", None); os.environ.pop("HERMES_PROFILE", None)
+    # Contract since est-2ek.1.530: no session id and no profile identity -> both null, whether or
+    # not hermes_cli is importable (the core's 'custom'/'default' sentinels are never stamped).
+    for key in ("HERMES_SESSION_ID", "HERMES_PROFILE", "HERMES_PROFILE_NAME"):
+        os.environ.pop(key, None)
     out = tool.rich_present(dict(ARGS))
     env = store.read_card(out["card_id"])["envelope"]
     assert env["session_id"] is None and env["profile"] is None
