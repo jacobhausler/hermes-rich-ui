@@ -586,19 +586,19 @@ test('sortDesc histogram: uPlot keeps x ascending; DataAlt rows reorder by |coun
 })
 
 // ---------- prop: height clamp (F1) ----------
-test('height clamp 120..480, default 240 (F1)', () => {
-  assert.equal(clampHeight(undefined), 240)
+test('height clamp 120..480 kept, house default 180 (#35)', () => {
+  assert.equal(clampHeight(undefined), 180)
   assert.equal(clampHeight(240), 240)
   assert.equal(clampHeight(50), 120)
   assert.equal(clampHeight(119), 120)
   assert.equal(clampHeight(480), 480)
   assert.equal(clampHeight(9999), 480)
-  assert.equal(clampHeight(NaN), 240)
-  assert.equal(clampHeight('200'), 240)
-  assert.equal(clampHeight(Infinity), 240)
+  assert.equal(clampHeight(NaN), 180)
+  assert.equal(clampHeight('200'), 180)
+  assert.equal(clampHeight(Infinity), 180)
   const m = seriesToUplot('bar', [{ label: 's', data: [{ label: 'x', value: 1 }] }])
   assert.equal(buildOpts('bar', m, { height: 600 }, 400, COLORS).height, 480)
-  assert.equal(buildOpts('bar', m, {}, 400, COLORS).height, 240)
+  assert.equal(buildOpts('bar', m, {}, 400, COLORS).height, 180)
 })
 
 // ---------- jsdom render: fixtures through the real Renderer ----------
@@ -635,10 +635,10 @@ test('render waterfall: DataAlt shows authored value + renderer-computed running
   assert.deepEqual(ths, ['label', 'walk value', 'walk total'])
   const rows = $$('table[data-richui="chart-data"] tbody tr').map(tr => [...tr.children].map(td => td.textContent))
   assert.deepEqual(rows, [
-    ['Revenue', '100', '100'],
-    ['Costs', '-40', '60'],
-    ['Refunds', '25', '85'],
-    ['Net', 'unavailable', '85']
+    ['Revenue', '$100', '$100'],
+    ['Costs', '-$40', '$60'],
+    ['Refunds', '$25', '$85'],
+    ['Net', 'unavailable', '$85']
   ])
 })
 
@@ -649,8 +649,8 @@ test('render range: DataAlt shows BOTH endpoints per series, both-null row is un
   assert.deepEqual(ths, ['label', 'houses low', 'houses high', 'condos low', 'condos high'])
   const table = $('table[data-richui="chart-data"]')
   const rows = $$('table[data-richui="chart-data"] tbody tr').map(tr => [...tr.children].map(td => td.textContent))
-  assert.deepEqual(rows[0], ['Austin', '350000', '520000', '280000', '390000'])
-  assert.deepEqual(rows[2], ['Boise', 'unavailable', 'unavailable', '220000', '310000'])
+  assert.deepEqual(rows[0], ['Austin', '$350,000', '$520,000', '$280,000', '$390,000'])
+  assert.deepEqual(rows[2], ['Boise', 'unavailable', 'unavailable', '$220,000', '$310,000'])
   // the midpoint lie is impossible: (350000+520000)/2 and every other midpoint never appears
   assert.ok(!table.textContent.includes('435000'))
   assert.ok(table.textContent.includes('unavailable'))
@@ -676,7 +676,7 @@ test('render line stepped + sortDesc bar + height markers', async () => {
     kind: 'line', title: 'Stepped', stepped: true, series: [{ label: 's', data: [{ x: 1, y: 1 }, { x: 2, y: 2 }] }]
   } })
   assert.equal($('figure[data-ru="Chart"]').getAttribute('data-stepped'), '1')
-  assert.equal($('figure[data-ru="Chart"]').getAttribute('data-height'), '240')
+  assert.equal($('figure[data-ru="Chart"]').getAttribute('data-height'), '180')
   await renderComponent({ id: 'c2', component: 'Chart', props: {
     kind: 'bar', title: 'Sorted', sortDesc: true, height: 600,
     series: [{ label: 's', data: [{ label: 'a', value: 5 }, { label: 'b', value: 9 }] }]
