@@ -8,6 +8,18 @@ import { V, type, common, ownSources } from './components/_shared.mjs'
 import { INK, HOUSE, SURFACE } from './components/_house.mjs'
 import { CardChrome, CardHeader } from './components/card.mjs'
 import { fmtDate } from './components/fmt.mjs'
+import { VintageProvider } from './components/rowfmt.mjs'
+
+// L8 saved-card law (#24 x #29): a record STAMPED BEFORE the number-tiles slice
+// (test_number_tiles, fmt.mjs) renders byte-for-byte as the day it was saved — the
+// three number tiles take their pre-#29 components (formatMetric faces, old unit
+// join, old delta, old KV column). Records created from the cutover take the house
+// face; a record with no parseable stamp behaves as pre-cutover (saved-first).
+export const NUMBER_TILES_CUTOVER = '2026-10-07T00:00:00Z'
+export const vintageOf = (record) => {
+  const c = record?.envelope?.created_at
+  return typeof c !== 'string' || Number.isNaN(Date.parse(c)) || Date.parse(c) < Date.parse(NUMBER_TILES_CUTOVER) ? 'legacy' : 'house'
+}
 
 export const ID_RE = /^ru-[0-9a-f]{12}$/
 const Q = 'hermes-rich-ui'
@@ -172,12 +184,15 @@ export function CardBody({ record, registry }) {
               children: jsx(CardBoundary, {
                 // The boundary owns the frame and root chrome, not the first Card ancestor.
                 children: jsx(CardChrome.Provider, { value: { framed: true, rootAtBoundary: rootIsCard },
+                  children: jsx(VintageProvider, {
+                    value: vintageOf(record),
                   children: jsx(JSONUIProvider, {
                     registry, initialState: lowered.initialState,
                     children: jsx(Renderer, { spec: lowered.spec, registry, fallback: UnknownType })
                   })
                 })
               })
+            })
             }, 'body'),
             jsx('button', { type: 'button', 'data-ru-toggle': '', onClick: () => setExpanded(v => !v),
               style: { alignSelf: 'flex-start', marginTop: 4, background: 'none', border: `1px solid ${V.stroke3}`, borderRadius: 4, padding: '2px 8px', ...type('caption'), color: V.text2, cursor: 'pointer' },

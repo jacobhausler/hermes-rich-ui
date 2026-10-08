@@ -560,7 +560,8 @@
           "enum": [
             "number",
             "currency",
-            "percent"
+            "percent",
+            "fraction"
           ],
           "default": "number"
         },
@@ -641,6 +642,11 @@
         "component": {
           "const": "KeyValueList"
         },
+        "title": {
+          "type": "string",
+          "maxLength": 4096,
+          "description": "#29: additive optional heading rendered as an <h3> above the list (house path only)."
+        },
         "accessibility": {
           "$ref": "#/$defs/Accessibility"
         },
@@ -693,9 +699,10 @@
                     "enum": [
                       "number",
                       "currency",
-                      "percent"
+                      "percent",
+                      "fraction"
                     ],
-                    "description": "E13: routed through formatMetric ONLY when value is a JSON number; any string value + format renders the raw string verbatim (never coerced, L1)."
+                    "description": "E13: routed through formatMetric ONLY when value is a JSON number; any string value + format renders the raw string verbatim (never coerced, L1). #29: 'fraction' is house-path only (the legacy formatter never knew it) and always prints the house face."
                   },
                   "unit": {
                     "type": "string",
@@ -1651,7 +1658,8 @@
           "enum": [
             "number",
             "currency",
-            "percent"
+            "percent",
+            "fraction"
           ],
           "default": "number"
         },
