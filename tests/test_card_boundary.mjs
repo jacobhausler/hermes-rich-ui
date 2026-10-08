@@ -146,6 +146,23 @@ for (const path of ['CardBody', 'registered bundle']) {
     assert.equal(occurrences(body.text).length, 1, 'body unchanged')
     if (pair === 'summary/root title') assert.equal(directText(mount.querySelector('h2')), props.title.trim(), 'root h2 retained rather than discarded in favor of summary')
   })
+  test(`${path}: blank chrome titles do not hide root attribution`, async () => {
+    await render(path, record(components({ title: '' }), { title: '', summary: 'Separate introductory prose' }))
+    assert.deepEqual(markerLabels(), ['sources: Primary evidence'])
+    assert.equal(occurrences(body.text).length, 1)
+  })
+  test(`${path}: root body siblings retain their layout rhythm inside the boundary`, async () => {
+    await render(path, record([
+      ...components({ children: ['body', 'second'] }),
+      { id: 'second', component: 'Text', text: 'Second body block' }
+    ]))
+    const blocks = [...mount.querySelectorAll('[data-ru="Text"]')]
+    assert.equal(blocks.length, 2)
+    assert.equal(blocks[0].parentElement, blocks[1].parentElement, 'body siblings remain together')
+    assert.equal(blocks[0].parentElement.style.display, 'flex')
+    assert.equal(blocks[0].parentElement.style.flexDirection, 'column')
+    assert.equal(blocks[0].parentElement.style.gap, '8px')
+  })
   test(`${path}: distinct title, subtitle, summary and body remain even with similar wording`, async () => {
     await render(path, record(components({ title: 'Detail heading', subtitle: 'Detail heading!' }), { summary: 'Detail  heading' }))
     for (const text of ['ANNUAL OVERVIEW', 'Detail heading', 'Detail heading!', 'Detail  heading', body.text]) assert.equal(occurrences(text).length, 1, text)
