@@ -2,6 +2,40 @@
 
 All notable changes to hermes-rich-ui are documented here.
 
+## v0.1.5 — 2026-10-08
+
+Added
+- Shared number/money/unit/date formatter `fmt.mjs` with the frozen house
+  constants — golden faces pinned, collision/additivity guards (#42).
+- Nine-step type ramp through one token table `type()` (defaults slice 2) (#45).
+- One constants module: surfaces, tone, shared citation marker (defaults slice 3) (#49).
+- DataTable defaults: inferred columns, one rung per content class, type-aware
+  default sort, currency/percent headers (#75).
+- Text-family defaults (Callout/CodeBlock geometry through the house table),
+  microviz defaults for BarList/Sparkline/HeatMap (#78, #80).
+- Generated tool description states array item shapes and numeric caps
+  (`series [{label,data}]`, `columns 1..4`) — description/validator parity (#76).
+- Registration repro harness for #21: hot-swap baseline pin + counterfactual (#67).
+- Cascade-aware jsdom resolver sees `!important` LONGHAND mutants; Chromium-computed
+  host-border control kills the jsdom false-green (#70, #73).
+- Hermetic locator test for the composer-mount plugin registry (#86).
+- README type-table gate pinned to the live catalog surface (#91).
+
+Fixed
+- **ABSENT MEANS HOUSE:** admission stops baking catalog defaults into new records;
+  the tool description is generated from the catalog (#51).
+- Suite is a fail-closed merge gate; ledger invalidated at startup (#58).
+- `view-save` OSError keeps the publication receipt (#59).
+- Source-args rejection names only registered tools, gives embedded-only recovery (#61).
+- Store serializes quota check + commit under a cross-process store lock (#60).
+- CI never live-runs the runner's ambient system chrome; the chromium locator finds
+  playwright caches and the gate decision is mutant-tested (#86, #89).
+
+Changed
+- CI gates check renamed `build-test` → `gates` (team standard) (#44).
+- Graph regen lands via branch+PR+auto-merge under protect-main (#48).
+- R5 carve-out: version bumps gate PUBLIC releases only, never local dogfood installs (#77).
+
 ## v0.1.4 — 2026-09-29
 
 - **Waterfall balance walk (#15, #16):** sign-coded bars for single-series
