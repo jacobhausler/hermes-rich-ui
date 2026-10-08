@@ -154,8 +154,9 @@ export function CardBody({ record, registry }) {
             jsx('div', { 'data-ru-body': expanded ? 'expanded' : 'capped',
               style: { maxHeight: expanded ? 'none' : HEIGHT_CAP, overflow: 'hidden', position: 'relative' },
               children: jsx(CardBoundary, {
-                // J4/S7/S19: the root Card renders its ONE frame; its title lives in the header only.
-                children: jsx(CardChrome.Provider, { value: { rootTitleShown: typeof title === 'string' && title.trim() !== '', rootSubtitleShown: false },
+                // J4/S7/S19: the root Card renders its ONE frame; its title is suppressed ONLY when it
+                // casefold-equals the header title (C16: a distinct root title still renders, as h2).
+                children: jsx(CardChrome.Provider, { value: { rootTitleShown: typeof title === 'string' && typeof rootTitle === 'string' && folded(title) === folded(rootTitle), rootSubtitleShown: false },
                   children: jsx(JSONUIProvider, {
                     registry, initialState: lowered.initialState,
                     children: jsx(Renderer, { spec: lowered.spec, registry, fallback: UnknownType })
