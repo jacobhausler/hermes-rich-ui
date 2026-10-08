@@ -90,7 +90,7 @@ function Header({ title, meta, envelope, sources }) {
     style: { display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', ...type('caption'), color: INK.meta },
     children: [
       title || sources ? jsx('span', { style: { ...type('title'), color: V.text }, children: [title, sources] }, 't') : null,
-      metaBits.length ? jsx('span', { style: { marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'baseline', ...type('caption'), color: INK.meta }, children: metaBits }, 'm') : null
+      metaBits.length ? jsx('span', { style: { flexGrow: 1, display: 'flex', justifyContent: 'flex-end', gap: 8, alignItems: 'baseline', ...type('caption'), color: INK.meta }, children: metaBits }, 'm') : null
     ]
   })
 }
@@ -149,11 +149,13 @@ export function CardBody({ record, registry }) {
   if (!reasons.length) {
     try { lowered = lower(cs) } catch (e) { lowerError = e?.message || String(e) }
   }
-  return jsxs('section', {
-    ...(rootIsCard ? common({ type: 'Card', props: rootProps }) : {}),
+  return jsx('div', {
     'data-ru-card': record?.envelope?.card_id ?? '',
-    style: { display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0, margin: '6px 0', color: V.text, ...SURFACE.card },
-    children: [
+    style: { margin: '6px 0', color: V.text },
+    children: jsxs('section', {
+      ...(rootIsCard ? common({ type: 'Card', props: rootProps }) : {}),
+      style: { display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0, ...SURFACE.card },
+      children: [
       jsx('style', { href: PROSE_RESET_HREF, precedence: 'default', 'data-ru-prose-reset': '1', children: PROSE_RESET_CSS }, 'css'),
       jsx(Header, { title, meta, envelope: record?.envelope, sources: rootIsCard && (rootTitleShown || rootTitle === null) ? ownSources(rootProps) : null }, 'h'),
       rootIsCard ? jsx(CardHeader, { p: rootProps, titleShown: rootTitle !== null && !rootTitleShown, subtitleShown: showSubtitle }, 'rh') : null,
@@ -183,7 +185,8 @@ export function CardBody({ record, registry }) {
             }, 'toggle')
           ]
         }, 'b')
-    ]
+      ]
+    })
   })
 }
 
