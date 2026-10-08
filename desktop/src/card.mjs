@@ -4,7 +4,10 @@ import { Component, useState } from 'react'
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { JSONUIProvider, Renderer } from '@json-render/react'
 import { lower, unlowerable } from './lower.mjs'
-import { V, type } from './components/_shared.mjs'
+import { V, type, common, ownSources } from './components/_shared.mjs'
+import { INK, HOUSE, SURFACE } from './components/_house.mjs'
+import { CardChrome, CardHeader } from './components/card.mjs'
+import { fmtDate } from './components/fmt.mjs'
 
 export const ID_RE = /^ru-[0-9a-f]{12}$/
 const Q = 'hermes-rich-ui'
@@ -70,18 +73,24 @@ export class CardBoundary extends Component {
 // D6: every value is a real Badge cva variant (see _shared.mjs BADGE_VARIANTS_REAL).
 export const POLICY_TONE = { embedded: 'muted', capture: 'default', manual: 'warn', poll: 'success' }
 
-function Header({ title, meta, envelope }) {
-  const authored = meta?.authored_at
+// S7 (#30): the header is honest — the title prints ONCE here at title 16/600, the date goes
+// through fmtDate (no ISO/T..: on the face), 'rev N' only when N>1, the policy badge only when
+// != embedded. Meta rides right as caption meta-ink.
+function Header({ title, meta, envelope, sources }) {
+  const authored = fmtDate(meta?.authored_at)
   const rev = meta?.dataset?.revision ?? envelope?.revision
   const policy = envelope?.policy
+  const metaBits = [
+    authored ? jsx('span', { children: authored }, 'a') : null,
+    Number.isFinite(Number(rev)) && Number(rev) > 1 ? jsx('span', { children: `rev ${rev}` }, 'r') : null,
+    policy && policy !== 'embedded' ? jsx(Badge, { variant: POLICY_TONE[policy] ?? 'muted', size: 'xs', 'data-ru-policy': policy, children: String(policy) }, 'p') : null
+  ].filter(Boolean)
   return jsxs('div', {
     'data-ru-header': '',
-    style: { display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', ...type('caption'), color: V.text3 },
+    style: { display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', ...type('caption'), color: INK.meta },
     children: [
-      title ? jsx('span', { style: { ...type('title'), color: V.text }, children: title }, 't') : null,
-      authored ? jsx('span', { children: String(authored) }, 'a') : null,
-      rev !== undefined && rev !== null ? jsx('span', { children: `rev ${rev}` }, 'r') : null,
-      policy ? jsx(Badge, { variant: POLICY_TONE[policy] ?? 'muted', size: 'xs', 'data-ru-policy': policy, children: String(policy) }, 'p') : null
+      title || sources ? jsx('span', { style: { ...type('title'), color: V.text }, children: [title, sources] }, 't') : null,
+      metaBits.length ? jsx('span', { style: { flexGrow: 1, display: 'flex', justifyContent: 'flex-end', gap: 8, alignItems: 'baseline', ...type('caption'), color: INK.meta }, children: metaBits }, 'm') : null
     ]
   })
 }
@@ -99,36 +108,60 @@ export function getByPointer(obj, path) {
   return cur
 }
 
-function bindingText(v, dataModel) {
-  if (typeof v === 'string') return v
-  if (v && typeof v === 'object' && typeof v.path === 'string' && Object.keys(v).length === 1) {
-    const r = getByPointer(dataModel, v.path)
-    return typeof r === 'string' ? r : (typeof r === 'number' ? String(r) : null)
-  }
-  return null
+function bindingValue(v, dataModel) {
+  return v && typeof v === 'object' && typeof v.path === 'string' && Object.keys(v).length === 1
+    ? getByPointer(dataModel, v.path) : v
 }
+
+function bindingText(v, dataModel) {
+  const r = bindingValue(v, dataModel)
+  return typeof r === 'string' ? r : (typeof r === 'number' ? String(r) : null)
+}
+
+// S19: exact casefold duplicates among title/summary/subtitle render once.
+const folded = v => String(v).trim().toLowerCase()
 
 export function CardBody({ record, registry }) {
   const [expanded, setExpanded] = useState(false)
   const cs = record?.surface?.createSurface
   const meta = cs?.dataModel?.meta
   const root = Array.isArray(cs?.components) ? cs.components.find(c => c && c.id === 'root') : null
-  const rootTitle = root && root.component === 'Card' ? bindingText(root.title, cs?.dataModel) : null
+  const rootIsCard = root?.component === 'Card'
+  const rootTitle = rootIsCard ? bindingText(root.title, cs?.dataModel) : null
+  const rootSubtitle = rootIsCard ? bindingText(root.subtitle, cs?.dataModel) : null
   const title = (typeof meta?.title === 'string' && meta.title.trim()) ? meta.title : rootTitle
+  const same = (a, b) => typeof a === 'string' && typeof b === 'string' && folded(a) === folded(b)
+  // S19 precedence: header title, distinct root h2, summary, then subtitle.
+  // Compare only chrome; authored body content is never deduplicated.
+  const rootTitleShown = same(title, rootTitle)
+  const showSummary = typeof meta?.summary === 'string' && meta.summary.trim()
+    && !same(meta.summary, title) && !same(meta.summary, rootTitle)
+  const showSubtitle = rootSubtitle !== null && !same(rootSubtitle, title) && !same(rootSubtitle, rootTitle)
+    && !(showSummary && same(rootSubtitle, meta.summary))
+  const rootProps = rootIsCard ? {
+    title: rootTitle, subtitle: rootSubtitle, _sources: meta?.sources,
+    sourceIds: bindingValue(root.sourceIds, cs?.dataModel),
+    accessibility: { label: bindingText(root.accessibility?.label, cs?.dataModel) }
+  } : null
   const reasons = unlowerable(cs)
   let lowered = null
   let lowerError = null
   if (!reasons.length) {
     try { lowered = lower(cs) } catch (e) { lowerError = e?.message || String(e) }
   }
-  return jsxs('div', {
+  return jsx('div', {
     'data-ru-card': record?.envelope?.card_id ?? '',
-    style: { display: 'flex', flexDirection: 'column', gap: 8, margin: '6px 0', color: V.text },
-    children: [
+    style: { margin: '6px 0', color: V.text },
+    children: jsxs('section', {
+      ...(rootIsCard ? common({ type: 'Card', props: rootProps }) : {}),
+      style: { display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0, ...SURFACE.card },
+      children: [
       jsx('style', { href: PROSE_RESET_HREF, precedence: 'default', 'data-ru-prose-reset': '1', children: PROSE_RESET_CSS }, 'css'),
-      jsx(Header, { title, meta, envelope: record?.envelope }, 'h'),
+      jsx(Header, { title, meta, envelope: record?.envelope, sources: rootIsCard && (rootTitleShown || rootTitle === null) ? ownSources(rootProps) : null }, 'h'),
+      rootIsCard ? jsx(CardHeader, { p: rootProps, titleShown: rootTitle !== null && !rootTitleShown, subtitleShown: showSubtitle }, 'rh') : null,
       // Plain-text summary always renders ABOVE the rich body — the accessible fallback.
-      meta?.summary ? jsx('p', { 'data-ru-summary': '', style: { margin: 0, ...type('body'), color: V.text2, whiteSpace: 'pre-wrap' }, children: String(meta.summary) }, 's') : null,
+      // S19: keep distinct authored root titles; S8: prose capped at HOUSE.MEASURE.
+      showSummary ? jsx('p', { 'data-ru-summary': '', style: { margin: 0, maxWidth: HOUSE.MEASURE, ...type('body'), color: V.text2, whiteSpace: 'pre-wrap' }, children: String(meta.summary) }, 's') : null,
       reasons.length || lowerError
         ? jsx('ul', { 'data-ru-unlowerable': '', style: { margin: 0, paddingLeft: 18, ...type('small'), color: V.red },
           children: (lowerError ? [lowerError] : reasons).map((r, i) => jsx('li', { children: r }, i))
@@ -137,9 +170,12 @@ export function CardBody({ record, registry }) {
             jsx('div', { 'data-ru-body': expanded ? 'expanded' : 'capped',
               style: { maxHeight: expanded ? 'none' : HEIGHT_CAP, overflow: 'hidden', position: 'relative' },
               children: jsx(CardBoundary, {
-                children: jsx(JSONUIProvider, {
-                  registry, initialState: lowered.initialState,
-                  children: jsx(Renderer, { spec: lowered.spec, registry, fallback: UnknownType })
+                // The boundary owns the frame and root chrome, not the first Card ancestor.
+                children: jsx(CardChrome.Provider, { value: { framed: true, rootAtBoundary: rootIsCard },
+                  children: jsx(JSONUIProvider, {
+                    registry, initialState: lowered.initialState,
+                    children: jsx(Renderer, { spec: lowered.spec, registry, fallback: UnknownType })
+                  })
                 })
               })
             }, 'body'),
@@ -149,7 +185,8 @@ export function CardBody({ record, registry }) {
             }, 'toggle')
           ]
         }, 'b')
-    ]
+      ]
+    })
   })
 }
 
