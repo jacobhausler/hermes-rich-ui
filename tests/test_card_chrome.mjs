@@ -150,3 +150,50 @@ test('subtitle renders small text-secondary when distinct (S2)', async () => {
   assert.ok(sub, 'subtitle renders')
   assert.equal(sub.style.fontSize, '12px', 'subtitle small')
 })
+
+// Review fix (#64 changes verdict, C16): suppression is gated on casefold-EQUALITY with the
+// header title; a DISTINCT root Card title renders exactly once, inside the frame, as h2 14/600.
+const META = { summary: 'x', authored_at: '2026-09-29', dataset: { id: 'd', revision: 1, observed_at: null, published_at: null }, sources: [], derivations: [] }
+const frameTitle = t => [...cardMount.querySelectorAll('[data-ru="Card"] > header *')].filter(el => el.children.length === 0 && el.textContent.trim() === t)
+
+test('distinct literal root Card title renders ONCE in the frame as h2 14/600 (C16)', async () => {
+  await renderCard(cardRecord(
+    [{ id: 'root', component: 'Card', title: 'Quarterly detail', children: [] }],
+    { ...META, title: 'ACME status' }
+  ))
+  const hits = frameTitle('Quarterly detail')
+  assert.equal(hits.length, 1, 'distinct root title rendered exactly once in the frame')
+  assert.equal(hits[0].tagName, 'H2', 'distinct root title is an h2')
+  assert.equal(hits[0].style.fontSize, '14px')
+  assert.equal(hits[0].style.fontWeight, '600')
+  assert.ok(cardMount.querySelector('[data-ru-header]').textContent.includes('ACME status'), 'header keeps meta.title')
+})
+
+test('distinct BOUND root Card title renders once; casefold-equal bound title stays suppressed (C16/S19)', async () => {
+  const comps = [{ id: 'root', component: 'Card', title: { path: '/t' }, children: [] }]
+  const rec = (t) => { const r = cardRecord(comps, { ...META, title: 'ACME status' }); r.surface.createSurface.dataModel.t = t; return r }
+  await renderCard(rec('Bound detail'))
+  assert.equal(frameTitle('Bound detail').length, 1, 'distinct bound title rendered once')
+  await renderCard(rec('acme STATUS'))
+  assert.equal(frameTitle('acme STATUS').length, 0, 'casefold-equal bound title is suppressed (header owns it)')
+})
+
+test('casefold-equal literal root title is suppressed — the header carries it once (J4/S7)', async () => {
+  await renderCard(cardRecord(
+    [{ id: 'root', component: 'Card', title: 'acme STATUS', children: [] }],
+    { ...META, title: 'ACME status' }
+  ))
+  assert.equal(frameTitle('acme STATUS').length, 0)
+})
+
+test('S8: Card subtitle and footer carry the HOUSE.MEASURE cap', async () => {
+  await renderCard(cardRecord(
+    [{ id: 'root', component: 'Card', title: 'ACME status', subtitle: 'A distinct subtitle', footer: 'A footer line', children: [] }],
+    { ...META, title: 'ACME status' }
+  ))
+  const sub = leafWith('A distinct subtitle')
+  const foot = cardMount.querySelector('[data-ru-footer]')
+  assert.ok(sub && foot, 'subtitle + footer render')
+  assert.equal(sub.style.maxWidth, HOUSE.MEASURE, 'subtitle capped')
+  assert.equal(foot.style.maxWidth, HOUSE.MEASURE, 'footer capped')
+})
