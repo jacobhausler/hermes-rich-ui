@@ -1,7 +1,7 @@
 ---
 name: rich-ui-debugging
 description: "Use when a card is rejected, blank, or mis-rendered. Symptom -> where to look -> exact command, every command real."
-version: 0.1.4
+version: 0.1.5
 metadata:
   hermes:
     tags: [debugging, cards, charts, rest, gateway]
