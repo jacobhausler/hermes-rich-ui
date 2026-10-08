@@ -8,6 +8,32 @@ through a declared `{"key": "<k>", "label": "…", "type": "sources"}` column wh
 list of source ids. Every block below admits as written. These are starting shapes, not
 templates.
 
+## Authoring quick check
+
+DataTable columns need `key` (not `field`); rows are objects keyed by those keys,
+not positional arrays. Grid uses `columns`, not `cols`. Metric has no `tone`:
+use its computed delta (`previous` / `invertTone`) or a separate Badge/Callout.
+This complete example combines all three shapes; the counts are example data.
+
+```json
+{
+  "title": "Example counts",
+  "summary": "Two example counts in a two-column grid and a table.",
+  "components": [
+    {"id": "root", "component": "Card", "children": ["grid", "table"]},
+    {"id": "grid", "component": "Grid", "columns": 2, "children": ["one", "two"]},
+    {"id": "one", "component": "Metric", "label": "One", "value": {"path": "/data/one"}},
+    {"id": "two", "component": "Metric", "label": "Two", "value": {"path": "/data/two"}},
+    {"id": "table", "component": "DataTable", "columns": [{"key": "label", "label": "Label", "type": "text"}, {"key": "count", "label": "Count", "type": "number"}], "rows": {"path": "/data/rows"}}
+  ],
+  "data": {"one": 2, "two": 3, "rows": [{"label": "One", "count": 2}, {"label": "Two", "count": 3}]}
+}
+```
+
+Saved-view discovery: GET `/api/plugins/hermes-rich-ui/views` returns
+`{"ok":true,"views":[{"view_id":"example-view","title":"Example"}]}` (an empty list
+when none exist). Reuse a returned id with `rich_present`'s `view` argument.
+
 ## Compare
 
 ```json

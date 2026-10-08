@@ -59,6 +59,22 @@ def directive(card_id: str) -> str:
     return '::richui{id="%s"}' % card_id
 
 
+def _profile_name():
+    """Prefer task-scoped core identity; older cores fall back to launcher pins/home."""
+    try:
+        from hermes_cli.profiles import current_profile_name
+    except ImportError:
+        pass
+    else:
+        return current_profile_name(default=None)
+    for key in ("HERMES_PROFILE_NAME", "HERMES_PROFILE"):
+        name = (os.environ.get(key) or "").strip()
+        if name:
+            return name
+    home = store.hermes_home()
+    return home.name if home.parent.name == "profiles" else None
+
+
 def build_record(card_id, title, summary, components, data, sources, derivations, now=None):
     """The §1 record, key order exactly as the contract lists it."""
     now = now or _now_z()
@@ -78,7 +94,7 @@ def build_record(card_id, title, summary, components, data, sources, derivations
         "envelope": {
             "card_id": card_id,
             "session_id": os.environ.get("HERMES_SESSION_ID") or None,
-            "profile": os.environ.get("HERMES_PROFILE") or None,
+            "profile": _profile_name(),
             "created_at": now,
             "policy": POLICY,
             "source": None,

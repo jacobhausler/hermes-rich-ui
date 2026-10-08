@@ -56,7 +56,15 @@ def card_view(card_id):
     return 200, {"ok": True, "card": rec}
 
 
+def views_view():
+    return {"ok": True, "views": _store().list_views()}
+
+
 if router is not None:
+    @router.get("/views")
+    async def get_views():
+        return views_view()
+
     @router.get("/health")
     async def health():
         return health_view()

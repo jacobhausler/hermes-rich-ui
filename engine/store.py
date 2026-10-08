@@ -172,6 +172,22 @@ def save_view(view_id, title, components) -> Path:
     return path
 
 
+def list_views() -> list[dict]:
+    """Saved ids/titles in stable order; skip malformed files and never create the store."""
+    try:
+        paths = sorted(views_dir().iterdir())
+    except FileNotFoundError:
+        return []
+    views = []
+    for path in paths:
+        if path.suffix != ".json" or not valid_view_id(path.stem) or path.is_symlink() or not path.is_file():
+            continue
+        view = load_view(path.stem)
+        if view is not None and view.get("view_id") == path.stem:
+            views.append({"view_id": path.stem, "title": view.get("title")})
+    return views
+
+
 def load_view(view_id) -> Optional[dict]:
     """{view_id, title, components} or None (bad id, absent, malformed)."""
     if not valid_view_id(view_id):

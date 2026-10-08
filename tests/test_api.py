@@ -40,7 +40,7 @@ def test_router_routes_when_fastapi_present():
         print("  (fastapi not importable here — router=None path exercised)")
         return
     paths = sorted(r.path for r in api.router.routes)
-    assert paths == ["/cards/{card_id}", "/health"], paths
+    assert paths == ["/cards/{card_id}", "/health", "/views"], paths
     cid = publish()
     resp = asyncio.run(api.get_card(cid))
     assert resp.status_code == 200 and json.loads(resp.body)["card"]["envelope"]["card_id"] == cid
