@@ -28,6 +28,7 @@ npm ci                      # node_modules are pinned; node 22
 node scripts/build.mjs      # rebuilds desktop/plugin.js (+ .sha256)
 python3 scripts/suite.py . out   # serial runner: every tests/test_*.py + test_*.mjs, out/*.log + out/exits.json
 python3 scripts/make_public.py /tmp/public-tree   # publish gate: private-string audit + clean tree export
+python3 scripts/release_check.py [X.Y.Z]          # release gate: 9-literal version parity + publish scrub; prints `release_check: OK vX.Y.Z (9 literals, 0 scrub hits)`
 ```
 
 Single tests: `python3 tests/test_x.py` or `node --test tests/test_x.mjs`.

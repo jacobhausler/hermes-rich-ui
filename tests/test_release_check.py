@@ -123,9 +123,12 @@ try:
 
     # --- 5. planted LAN-address line: scrub failure relayed --------------------
     copy3 = make_copy(tmp / "c3")
-    # Assembled at runtime so this test file itself needs no scrub allow-list entry.
-    (copy3 / "planted.md").write_text("probe host " + "192." + "168.7.7\n",
-                                      encoding="utf-8")
+    # Assembled at runtime so this committed file carries no guard literal and
+    # needs no scrub allow-list entry; the planted file stays untracked, and
+    # make_public's git-less fallback walk still scans it.
+    (copy3 / "planted.md").write_text(
+        "probe host " + ".".join(("192", "168", "7", "7")) + "\n",
+        encoding="utf-8")
     rc, out = run_check(copy3)
     check("scrub_plant_exit_1", rc == 1, out.strip()[-200:])
     check("scrub_plant_relays_failed",
