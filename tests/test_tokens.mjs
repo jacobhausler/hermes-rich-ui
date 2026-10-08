@@ -23,9 +23,9 @@ const EXEMPT = new Set([
   'Accordion button border=medium', 'Accordion button gap=6px',
   'Accordion button padding=6px 10px', 'Accordion div border-top=medium',
   'BarList div gap=6px', 'Callout div padding=8px 10px',
-  'Chart div background=rgb(156, 163, 175)', 'Chart div background=rgb(59, 130, 246)',
-  'Chart div background=rgba(34, 197, 94, 0.18)', 'Chart div background=rgba(59, 130, 246, 0.18)',
-  'Chart div border=2px solid rgb(34, 197, 94)', 'Chart div border=2px solid rgb(59, 130, 246)',
+  // #35: one-series legends are gone; the second series swatch follows HOUSE.SERIES (orange).
+  'Chart div background=rgba(249, 115, 22, 0.18)', 'Chart div background=rgba(59, 130, 246, 0.18)',
+  'Chart div border=2px solid rgb(249, 115, 22)', 'Chart div border=2px solid rgb(59, 130, 246)',
   'Chart figure gap=6px', 'Checklist div gap=6px', 'Checklist sup margin-left=3px',
   'CodeBlock div gap=6px', 'CodeBlock pre padding=8px 10px',
   'CodeBlock span border-radius=999px', 'CodeBlock span padding-left=34px',
