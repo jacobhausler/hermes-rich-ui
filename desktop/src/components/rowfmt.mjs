@@ -8,7 +8,6 @@ import { createContext, useContext } from 'react'
 const RowFmtCtx = createContext(null)
 export const RowFmtProvider = RowFmtCtx.Provider
 export const useRowFmt = () => useContext(RowFmtCtx)
-export const RowFmt = { Provider: RowFmtCtx.Provider, use: () => useContext(RowFmtCtx) }
 
 // L8 (saved-card law, #24/#29): a SAVED record renders byte-for-byte as the day it
 // was stamped — CardBody provides 'legacy' around its Renderer and the three number

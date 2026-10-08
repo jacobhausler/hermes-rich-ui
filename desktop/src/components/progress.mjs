@@ -11,7 +11,7 @@ const NBSP = '\u00a0'
 // as a hard 0 and a near-complete bar never fakes done. Indeterminate keeps the
 // hatched bar and PRINTS '· total unavailable' (L1: never a fake 0). unit rides
 // both sides. Legacy raw digits without a unit keep their grouping (4,411).
-const HATCH = 'repeating-linear-gradient(45deg, var(--ru-ink-faint,#8b949e) 0 6px, transparent 6px 12px)'
+const HATCH = `repeating-linear-gradient(45deg, ${V.text3} 0 6px, transparent 6px 12px)`
 
 const HouseProgress = ({ element }) => {
   const p = element.props ?? {}
