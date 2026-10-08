@@ -62,10 +62,10 @@ const rootKinds = {
   Heading: { text: 'Heading content' }, Text: { text: 'Text content' }, Callout: { text: 'Callout content', tone: 'info' },
   Badge: { label: 'Badge content' }, Metric: { label: 'Amount', value: 7 }, Progress: { current: 7 },
   KeyValueList: { items: [{ label: 'Count', value: 7 }] }, Image: { src: 'https://example.com/image.png', alt: 'Evidence image' },
-  DataTable: { rows: [{ count: 7 }] }, Chart: { kind: 'bar', series: [{ label: 'Count', data: [{ x: 'A', y: 7 }] }] },
+  DataTable: { rows: [{ count: 7 }] }, Chart: { kind: 'bar', series: [{ label: 'Count', data: [{ label: 'A', value: 7 }] }] },
   Timeline: { items: [{ date: '2026-09-29', label: 'Event' }] }, SourceList: {}, Checklist: { items: [{ label: 'Step', done: true }] },
   ChipSet: { labels: ['Label'] }, CodeBlock: { code: 'value = 7' }, ImageGallery: { items: [{ src: 'https://example.com/image.png', alt: 'Evidence image' }] },
-  AsOf: {}, Sparkline: { values: [1, 2] }, BarList: { items: [{ label: 'Count', value: 7 }] }, HeatMap: { rows: [{ id: 'a', label: 'A' }], cols: [{ id: 'b', label: 'B' }], cells: [{ row: 'a', col: 'b', value: 7 }] }
+  AsOf: {}, Sparkline: { values: [1, 2] }, BarList: { items: [{ label: 'Count', value: 7 }] }, HeatMap: { rows: [{ label: 'A' }], cols: [{ label: 'B' }], cells: [{ row: 'A', col: 'B', value: 7 }] }
 }
 for (const path of ['CardBody', 'registered bundle']) {
   for (const bound of [false, true]) test(`${path}: ${bound ? 'bound' : 'literal'} matching title keeps root attribution exactly once`, async () => {
