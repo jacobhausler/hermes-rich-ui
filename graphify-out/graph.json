@@ -209,7 +209,7 @@
       "label": "ctxRest()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L38",
+      "source_location": "L45",
       "_callable": true,
       "_origin": "ast"
     },
@@ -218,7 +218,7 @@
       "label": "setRest()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L39",
+      "source_location": "L46",
       "_callable": true,
       "_origin": "ast"
     },
@@ -227,7 +227,7 @@
       "label": "api()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L40",
+      "source_location": "L47",
       "_callable": true,
       "_origin": "ast"
     },
@@ -236,7 +236,7 @@
       "label": "InlineError()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L50",
+      "source_location": "L57",
       "_callable": true,
       "_origin": "ast"
     },
@@ -245,7 +245,7 @@
       "label": "UnknownType()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L59",
+      "source_location": "L66",
       "_callable": true,
       "_origin": "ast"
     },
@@ -254,7 +254,7 @@
       "label": "CardBoundary",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L65",
+      "source_location": "L72",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast"
@@ -264,7 +264,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L66",
+      "source_location": "L73",
       "_callable": true,
       "_origin": "ast"
     },
@@ -273,7 +273,7 @@
       "label": ".getDerivedStateFromError()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L67",
+      "source_location": "L74",
       "_callable": true,
       "_origin": "ast"
     },
@@ -282,7 +282,7 @@
       "label": ".componentDidCatch()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L68",
+      "source_location": "L75",
       "_callable": true,
       "_origin": "ast"
     },
@@ -291,7 +291,7 @@
       "label": ".render()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L69",
+      "source_location": "L76",
       "_callable": true,
       "_origin": "ast"
     },
@@ -300,7 +300,7 @@
       "label": "POLICY_TONE",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L76",
+      "source_location": "L83",
       "_origin": "ast"
     },
     {
@@ -308,7 +308,7 @@
       "label": "Header()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L81",
+      "source_location": "L88",
       "_callable": true,
       "_origin": "ast"
     },
@@ -317,7 +317,7 @@
       "label": "getByPointer()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L101",
+      "source_location": "L108",
       "_callable": true,
       "_origin": "ast"
     },
@@ -326,7 +326,7 @@
       "label": "bindingValue()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L113",
+      "source_location": "L120",
       "_callable": true,
       "_origin": "ast"
     },
@@ -335,7 +335,7 @@
       "label": "bindingText()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L118",
+      "source_location": "L125",
       "_callable": true,
       "_origin": "ast"
     },
@@ -344,7 +344,7 @@
       "label": "folded()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L124",
+      "source_location": "L131",
       "_callable": true,
       "_origin": "ast"
     },
@@ -353,7 +353,7 @@
       "label": "CardBody()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L126",
+      "source_location": "L133",
       "_callable": true,
       "_origin": "ast"
     },
@@ -362,7 +362,7 @@
       "label": "makeRichCard()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L198",
+      "source_location": "L252",
       "_callable": true,
       "_origin": "ast"
     },
@@ -371,7 +371,7 @@
       "label": "RFC-6901",
       "file_type": "doc_ref",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L100",
+      "source_location": "L107",
       "_origin": "ast"
     },
     {
@@ -954,11 +954,20 @@
       "_origin": "ast"
     },
     {
+      "id": "desktop_src_components_card_cardfooterline",
+      "label": "CardFooterLine()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L16",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "desktop_src_components_card_cardheader",
       "label": "CardHeader()",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L13",
+      "source_location": "L19",
       "_callable": true,
       "_origin": "ast"
     },
@@ -967,7 +976,7 @@
       "label": "Card()",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L27",
+      "source_location": "L33",
       "_callable": true,
       "_origin": "ast"
     },
@@ -6285,6 +6294,50 @@
       "source_file": "tests/test_card_chrome.mjs",
       "source_location": "L157",
       "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_card_chrome_protostub",
+      "label": "protoStub()",
+      "file_type": "code",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L208",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_card_chrome_rendercapped",
+      "label": "renderCapped()",
+      "file_type": "code",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L214",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_card_chrome_blocks",
+      "label": "BLOCKS()",
+      "file_type": "code",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L225",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_card_chrome_block_ids",
+      "label": "BLOCK_IDS()",
+      "file_type": "code",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L226",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_card_chrome_geom_meta",
+      "label": "GEOM_META",
+      "file_type": "code",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L227",
       "_origin": "ast"
     },
     {
@@ -13373,6 +13426,17 @@
     },
     {
       "source": "desktop_src_card",
+      "target": "desktop_src_components_shared_isnil",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/card.mjs",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_card",
       "target": "desktop_src_components_house",
       "relation": "imports_from",
       "context": "import",
@@ -13440,6 +13504,17 @@
     {
       "source": "desktop_src_card",
       "target": "desktop_src_components_card_cardheader",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/card.mjs",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_card",
+      "target": "desktop_src_components_card_cardfooterline",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -13529,7 +13604,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L34",
+      "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13540,7 +13615,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L34",
+      "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13551,7 +13626,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L34",
+      "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13561,7 +13636,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L38",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13571,7 +13646,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L39",
+      "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13581,7 +13656,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L40",
+      "source_location": "L47",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13591,7 +13666,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L50",
+      "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13601,7 +13676,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L59",
+      "source_location": "L66",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13611,7 +13686,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L65",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13621,7 +13696,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L66",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13631,7 +13706,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L67",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13641,7 +13716,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L68",
+      "source_location": "L75",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13651,7 +13726,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L69",
+      "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13661,7 +13736,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L76",
+      "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13671,7 +13746,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L81",
+      "source_location": "L88",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13681,7 +13756,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L101",
+      "source_location": "L108",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13691,7 +13766,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L113",
+      "source_location": "L120",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13701,7 +13776,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L118",
+      "source_location": "L125",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13711,7 +13786,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L124",
+      "source_location": "L131",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13721,7 +13796,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L126",
+      "source_location": "L133",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13731,7 +13806,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L198",
+      "source_location": "L252",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13742,7 +13817,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L41",
+      "source_location": "L48",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13754,7 +13829,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L70",
+      "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13765,7 +13840,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L115",
+      "source_location": "L122",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13776,7 +13851,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L119",
+      "source_location": "L126",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13787,7 +13862,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L132",
+      "source_location": "L167",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13798,7 +13873,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L135",
+      "source_location": "L170",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13809,7 +13884,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L145",
+      "source_location": "L180",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13821,7 +13896,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L162",
+      "source_location": "L201",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13832,7 +13907,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L178",
+      "source_location": "L222",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13844,7 +13919,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L181",
+      "source_location": "L225",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13855,7 +13930,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L201",
+      "source_location": "L255",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13867,7 +13942,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L202",
+      "source_location": "L256",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13879,7 +13954,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L207",
+      "source_location": "L261",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13889,7 +13964,7 @@
       "relation": "cites",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L100",
+      "source_location": "L107",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15474,11 +15549,21 @@
     },
     {
       "source": "desktop_src_components_card",
+      "target": "desktop_src_components_card_cardfooterline",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card",
       "target": "desktop_src_components_card_cardheader",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L13",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15488,7 +15573,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L27",
+      "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15500,7 +15585,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L37",
+      "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15511,7 +15596,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L37",
+      "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -30081,6 +30166,56 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_card_chrome",
+      "target": "tests_test_card_chrome_protostub",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L208",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_card_chrome",
+      "target": "tests_test_card_chrome_rendercapped",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L214",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_card_chrome",
+      "target": "tests_test_card_chrome_blocks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L225",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_card_chrome",
+      "target": "tests_test_card_chrome_block_ids",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L226",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_card_chrome",
+      "target": "tests_test_card_chrome_geom_meta",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L227",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_card_chrome_leafwith",
       "target": "tests_test_card_chrome_in",
       "relation": "calls",
@@ -30143,6 +30278,61 @@
       "confidence": "EXTRACTED",
       "source_file": "tests/test_card_chrome.mjs",
       "source_location": "L164",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_card_chrome_rendercapped",
+      "target": "tests_test_card_chrome_rendercard",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L215",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_card_chrome_rendercapped",
+      "target": "tests_test_card_chrome_cardrecord",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L215",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_card_chrome",
+      "target": "tests_test_card_chrome_block_ids",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L230",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_card_chrome",
+      "target": "tests_test_card_chrome_blocks",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L230",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_card_chrome",
+      "target": "tests_test_card_chrome_rendercapped",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_card_chrome.mjs",
+      "source_location": "L231",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44161,7 +44351,7 @@
       "context": "export",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L35",
+      "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44920,7 +45110,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L52",
+      "source_location": "L59",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44931,7 +45121,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L60",
+      "source_location": "L67",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44942,7 +45132,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L82",
+      "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44953,7 +45143,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L92",
+      "source_location": "L99",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44964,7 +45154,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L148",
+      "source_location": "L183",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44975,7 +45165,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L152",
+      "source_location": "L187",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_card_cardbody",
+      "target": "desktop_src_components_shared_isnil",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/card.mjs",
+      "source_location": "L191",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44986,7 +45187,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L158",
+      "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44997,7 +45198,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L162",
+      "source_location": "L201",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45008,7 +45209,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L166",
+      "source_location": "L205",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45277,13 +45478,35 @@
       "_origin": "ast"
     },
     {
+      "source": "desktop_src_components_card_cardfooterline",
+      "target": "desktop_src_components_shared_type",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card_cardfooterline",
+      "target": "desktop_src_components_shared_text",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "desktop_src_components_card_cardheader",
       "target": "desktop_src_components_shared_type",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L16",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45294,7 +45517,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L16",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45305,7 +45528,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L16",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45316,7 +45539,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L33",
+      "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45327,7 +45550,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L34",
+      "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45338,7 +45561,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L41",
+      "source_location": "L47",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45349,7 +45572,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L46",
+      "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45360,7 +45583,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L46",
+      "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45371,7 +45594,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L49",
+      "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -47309,7 +47532,19 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L163",
+      "source_location": "L202",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_card_cardbody",
+      "target": "desktop_src_components_card_cardfooterline",
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "desktop/src/card.mjs",
+      "source_location": "L244",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -47885,7 +48120,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_components.mjs",
-      "source_location": "L519",
+      "source_location": "L521",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -47897,7 +48132,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_components.mjs",
-      "source_location": "L560",
+      "source_location": "L562",
       "weight": 1.0,
       "_origin": "ast"
     },
