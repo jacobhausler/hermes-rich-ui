@@ -69,7 +69,7 @@ const HouseProgress = ({ element }) => {
       }, 'bar'),
       tickPct !== null ? jsx('div', { 'data-ru-target-tick': '', 'aria-hidden': 'true',
         style: { position: 'relative', height: 0 },
-        children: jsx('div', { style: { position: 'absolute', left: `${tickPct}%`, top: -6, width: 2, height: 6, background: V.text3, borderRadius: 1 } })
+        children: jsx('div', { style: { position: 'absolute', left: `${tickPct}%`, top: -6, width: 2, height: 6, background: V.text3 } })
       }, 'tick') : null,
       tgtOk ? jsx('div', { 'data-ru-vs-target': targetExceedsTotal ? 'unavailable:target_exceeds_total' : 'ok',
         style: { ...type('caption'), color: V.text3, fontVariantNumeric: 'tabular-nums' },
@@ -123,7 +123,7 @@ export const LegacyProgress = ({ element }) => {
       }, 'bar'),
       tickPct !== null ? jsx('div', { 'data-ru-target-tick': '', 'aria-hidden': 'true',
         style: { position: 'relative', height: 0 },
-        children: jsx('div', { style: { position: 'absolute', left: `${tickPct}%`, top: -6, width: 2, height: 6, background: V.text3, borderRadius: 1 } })
+        children: jsx('div', { style: { position: 'absolute', left: `${tickPct}%`, top: -6, width: 2, height: 6, background: V.text3 } })
       }, 'tick') : null,
       tgtOk ? jsx('div', { 'data-ru-vs-target': targetExceedsTotal ? 'unavailable:target_exceeds_total' : 'ok',
         style: { ...type('caption'), color: V.text3, fontVariantNumeric: 'tabular-nums' },
