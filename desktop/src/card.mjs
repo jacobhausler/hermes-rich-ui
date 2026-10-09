@@ -31,18 +31,8 @@ const HEIGHT_CAP = 480
 // 2026-09-25: table margin 24px, li margin 6px, dt/dd margins, lh 20.57px). Scoped to
 // [data-ru-card] so nothing leaks into the app; React 19 hoists <style href precedence>
 // into <head> once per document.
-export const PROSE_RESET_HREF = 'hermes-rich-ui/prose-reset/3' // bump on every css edit (React dedupes by href)
-export const PROSE_RESET_CSS = [
-  '[data-ru-card] :is(table,thead,tbody,tr,th,td,ol,ul,li,dl,dt,dd,p,figure,figcaption,h1,h2,h3,h4,h5,h6){margin:0}',
-  '[data-ru-card] :is(ol,ul){padding-left:0}',
-  '[data-ru-card] li::marker{content:none}',
-  '[data-ru-card] :is(th,td){padding:0}',
-  '[data-ru-card] :is(table,thead,tbody,tr,th,td){border:0}',
-  '[data-ru-card] :is(dt,dd,th){font-weight:inherit}',
-  '[data-ru-card] button{font:inherit}',
-  // horizontal Stack: prose-like children (Text, Callout) share the row; chips (Badge, Metric) keep their size
-  '[data-ru-card] [data-ru-dir="horizontal"]>:is([data-ru="Text"],[data-ru="Callout"]){flex:1 1 200px}'
-].join('')
+import { PROSE_RESET_CSS, PROSE_RESET_HREF } from './prose-reset.mjs'
+export { PROSE_RESET_CSS, PROSE_RESET_HREF }
 
 // ctx.rest holder — set once by register(); api() keeps the {ok:false} -> throw wrapper.
 let ctxRest = async () => { throw new Error('rich-ui backend unavailable') }

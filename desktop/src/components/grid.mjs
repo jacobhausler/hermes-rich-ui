@@ -1,5 +1,5 @@
 import { Fragment, jsx } from 'react/jsx-runtime'
-import { common, GAP } from './_shared.mjs'
+import { common, GAP, RowContext, gridTracks, kidList, classOf } from './_shared.mjs'
 import { HOUSE } from './_house.mjs'
 import { fmtSet } from './fmt.mjs'
 import { RowFmtProvider, rowValuesFrom } from './rowfmt.mjs'
@@ -18,9 +18,15 @@ export const Grid = ({ element, children }) => {
   const tiles = (Array.isArray(children) ? children : [children]).filter(c => c && c.props && c.props.element)
   const values = rowValuesFrom(tiles.map(c => c.props.element))
   const body = values ? jsx(Fragment, { children: tiles.map((c, i) => jsx(RowFmtProvider, { value: { values, faces: fmtSet(values), index: i }, children: c }, 'r' + i)) }) : children
-  return jsx('div', {
+  // #28 (M3/G2): `columns` is a MAXIMUM — balanced auto-fit tracks over the class floor;
+  // an all-tile grid takes the 16px KPI gutters. columns ≥ 2 provides RowContext(true).
+  const classes = kidList(children).map(classOf)
+  const gap = GAP[p.gap ?? HOUSE.GRID_GAP] ?? GAP[HOUSE.GRID_GAP]
+  const colGap = classes.length && classes.every(c => c === 'tile') ? 16 : gap
+  const grid = jsx('div', {
     ...common(element),
-    style: { display: 'grid', gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`, gap: GAP[p.gap ?? HOUSE.GRID_GAP] ?? GAP[HOUSE.GRID_GAP] },
+    style: { display: 'grid', gridTemplateColumns: gridTracks(classes.length, cols, classes, colGap).template, columnGap: colGap, rowGap: gap },
     children: body
   })
+  return cols >= 2 ? jsx(RowContext.Provider, { value: true, children: grid }) : grid
 }

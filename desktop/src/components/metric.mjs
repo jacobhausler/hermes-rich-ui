@@ -1,6 +1,7 @@
+import { useContext } from 'react'
 import { Fragment, jsx, jsxs } from 'react/jsx-runtime'
 import { Tip } from '@hermes/plugin-sdk'
-import { common, isNil, unavailable, ownSources, V, type, formatMetric } from './_shared.mjs'
+import { common, isNil, unavailable, ownSources, V, type, formatMetric, RowContext } from './_shared.mjs'
 import { HOUSE, TONE_TEXT, INK } from './_house.mjs'
 import { num } from './fmt.mjs'
 import { useRowFmt, useVintage } from './rowfmt.mjs'
@@ -64,6 +65,8 @@ const fmtNumLegacy = (n) => n.toLocaleString('en-US', { maximumFractionDigits: 2
 // A KPI row inside a Grid shares one scale via RowFmt (fmtSet from fmt.mjs).
 const HouseMetric = ({ element }) => {
   const p = element.props ?? {}
+  // #28 (C1/AD-15): size comes from RowContext only — kpi 20 in a row, title 16 alone.
+  const inRow = useContext(RowContext)
   const format = p.format ?? HOUSE.METRIC_FORMAT
   const isRate = format === 'percent' || format === 'fraction'
   const row = useRowFmt()
@@ -111,7 +114,7 @@ const HouseMetric = ({ element }) => {
       jsxs('div', {
         'data-ru-value': face ?? 'unavailable',
         title: n.exact ?? undefined, 'aria-label': n.aria ?? undefined,
-        style: { ...type('kpi', { num: true }), color: V.text },
+        style: { ...type(inRow ? 'kpi' : 'title', { num: true }), color: V.text },
         children: [face === null
           ? jsx('span', { 'data-ru-null': '', style: { ...type('body'), fontStyle: 'italic', color: V.text2 }, children: 'unavailable' }, 'n')
           : face]

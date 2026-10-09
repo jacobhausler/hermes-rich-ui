@@ -1,5 +1,5 @@
 // Shared helpers for hermes-rich-ui components. Inline style + --ui-* vars only.
-import { useState } from 'react'
+import { createContext, useState } from 'react'
 import { Badge, Tip } from '@hermes/plugin-sdk'
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { TYPE, HOUSE, S, INK } from './_house.mjs'
@@ -31,6 +31,85 @@ export function type(step, mods = {}) {
 }
 
 export const GAP = { none: 0, sm: 4, md: 8, lg: 16 }
+
+// #28 (slice 5): the size-class table. Every catalog type has exactly one class; the
+// composer, Grid tracks and the h-Stack flex CSS all read it (a new type without a row
+// fails tests/test_layout_flow.mjs). tile = KPI-sized, atom = chip/rule, block = prose/list,
+// wide = needs room (charts, tables, galleries).
+export const SIZE_CLASS = Object.freeze({
+  Metric: 'tile', Progress: 'tile', Sparkline: 'tile',
+  Badge: 'atom', AsOf: 'atom', Divider: 'atom',
+  Card: 'block', Stack: 'block', Accordion: 'block', Heading: 'block', Text: 'block', Callout: 'block',
+  KeyValueList: 'block', Image: 'block', Timeline: 'block', SourceList: 'block', CodeBlock: 'block',
+  Checklist: 'block', ChipSet: 'block', BarList: 'block',
+  Grid: 'wide', Tabs: 'wide', DataTable: 'wide', Chart: 'wide', ImageGallery: 'wide', HeatMap: 'wide'
+})
+export const sizeClass = t => (Object.hasOwn(SIZE_CLASS, t) ? SIZE_CLASS[t] : 'block')
+export const FLEX_BASIS = { tile: 140, block: 240, wide: 320 }
+const FLOOR = { tile: 140, atom: 140, block: 240, wide: 280 }
+const MAX_COLS = 4
+const SHORT_ROWS = 8
+
+// Provided true by the three row providers (auto-row, Grid columns ≥ 2, horizontal Stack).
+export const RowContext = createContext(false)
+
+// n children into at most `max` columns: fewest rows, then balanced (5 → 3+2, never 4+1).
+export function balancedCols(n, max = MAX_COLS) {
+  const m = Math.min(MAX_COLS, Math.max(1, max))
+  if (!(n > 0)) return 1
+  return Math.ceil(n / Math.ceil(n / m))
+}
+
+// Grid `columns` is a maximum: auto-fit tracks, floor from the widest child class.
+export function gridTracks(n, cols, classes = [], gap = 16) {
+  const c = balancedCols(n, cols)
+  const floor = Math.max(FLOOR.tile, ...classes.map(k => FLOOR[k] ?? FLOOR.block))
+  const share = c === 1 ? '100%' : `calc((100% - ${(c - 1) * gap}px) / ${c})`
+  return { c, floor, template: `repeat(auto-fit, minmax(max(${floor}px, ${share}), 1fr))` }
+}
+
+// Renderer children are ElementRenderer elements carrying the raw spec element.
+export const kidList = children => [children].flat(Infinity).filter(k => k && typeof k === 'object')
+const typeOf = k => k?.props?.element?.type
+export const classOf = k => sizeClass(typeOf(k))
+const isTile = k => classOf(k) === 'tile'
+const isShort = k => { const e = k?.props?.element; return e?.type === 'KeyValueList' && Array.isArray(e.props?.items) && e.props.items.length <= SHORT_ROWS }
+const isBand = k => {
+  const e = k?.props?.element; const els = k?.props?.spec?.elements
+  if (!(e?.type === 'Grid' || (e?.type === 'Stack' && e.props?.direction === 'horizontal'))) return false
+  return Array.isArray(e.children) && e.children.length > 0 && !!els && e.children.every(id => sizeClass(els[id]?.type) === 'tile')
+}
+
+// compose(): the ONE owner of sibling rhythm. Above a Heading 20, below it 6, after a KPI
+// band 16, otherwise `otherwise` (Card body 12, a vertical Stack its authored gap).
+// rhythm:false (gap none) zeroes the margins; auto-rows still apply.
+export function compose(children, { otherwise = 12, rhythm = true } = {}) {
+  const kids = kidList(children)
+  const items = []
+  for (let i = 0; i < kids.length;) {
+    let j = i
+    if (isTile(kids[i])) { while (j < kids.length && isTile(kids[j])) j++; if (j - i >= 2) { items.push({ row: 'tile', kids: kids.slice(i, j) }); i = j; continue } }
+    j = i
+    while (j < kids.length && isShort(kids[j])) j++
+    if (j - i === 2) { items.push({ row: 'block', kids: kids.slice(i, j) }); i = j; continue }
+    // a short run of 3+ never pairs: emit the whole run singly
+    for (const k of kids.slice(i, Math.max(j, i + 1))) items.push({ kid: k })
+    i = Math.max(j, i + 1)
+  }
+  const head = it => !it.row && typeOf(it.kid) === 'Heading'
+  const band = it => it.row === 'tile' || (!it.row && isBand(it.kid))
+  return items.map((it, n) => {
+    const prev = items[n - 1]
+    const marginTop = !rhythm || !prev ? 0 : head(it) ? 20 : head(prev) ? 6 : band(prev) ? 16 : otherwise
+    if (!it.row) return jsx('div', { style: { display: 'flex', flexDirection: 'column', minWidth: 0, marginTop }, children: it.kid }, it.kid.key ?? n)
+    const { template } = gridTracks(it.kids.length, MAX_COLS, [it.row])
+    return jsx(RowContext.Provider, { value: true, children: jsx('div', {
+      'data-ru-autorow': String(it.kids.length), 'data-ru-autorow-class': it.row,
+      style: { display: 'grid', gridTemplateColumns: template, columnGap: 16, rowGap: 12, minWidth: 0, marginTop },
+      children: it.kids
+    }) }, 'row:' + (it.kids[0].key ?? n))
+  })
+}
 
 // Attributes common to every component root: aria-label from accessibility.label + a DOM marker.
 export function common(element, extra = {}) {
