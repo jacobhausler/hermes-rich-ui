@@ -144,7 +144,7 @@ test('G3: h-Stack [Timeline, Stack] is class-flexed — two equal-basis columns'
     const cs = window.getComputedStyle(el)
     assert.equal(cs.flexGrow, '1')
     assert.equal(cs.flexBasis, '240px', 'both are block class → equal basis (c69f 427/427 at 874 px)')
-    assert.equal(cs.minWidth, '0px')
+    assert.match(cs.minWidth, /^0(px)?$/, 'min-width 0 (jsdom keeps a unitless 0; browsers say 0px)')
   }
 })
 
@@ -213,7 +213,7 @@ test('M4: rhythm margins 0/16/20/6 — after a KPI band 16, above a Heading 20, 
     { id: 'h3', component: 'Heading', text: 'Section', level: 3 },
     { id: 't', component: 'Text', text: 'body' }
   ])
-  assert.equal($('[data-ru="Card"]').style.gap, '0px', 'compose owns the gap; no CSS heading margins (C18)')
+  assert.match($('[data-ru="Card"]').style.gap, /^0(px)?$/, 'compose owns the gap; no CSS heading margins (C18)')
   const flow = $('[data-ru-body-flow]')
   assert.ok(flow, 'the body flows through compose()')
   const kids = [...flow.children]
