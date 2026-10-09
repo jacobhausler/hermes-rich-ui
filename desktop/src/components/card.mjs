@@ -7,8 +7,14 @@ import { PROSE_RESET_CSS, PROSE_RESET_HREF } from '../prose-reset.mjs'
 // CardBody owns the whole-card frame. Count Card ancestry independently so
 // non-Card roots do not shift or suppress their descendants' title ladder.
 export const CardDepth = createContext(0)
-export const CardChrome = createContext({ framed: false, rootAtBoundary: false })
+export const CardChrome = createContext({ framed: false, rootAtBoundary: false, rootFooterHoisted: false })
 const folded = v => String(v).trim().toLowerCase()
+
+// #31 (G4/C17): the root Card footer is hoisted OUTSIDE the capped body so a long
+// card never hides its footer. CardBody renders this after the body/toggle; the
+// Card below skips its own footer when rootFooterHoisted is set (nested Cards keep theirs).
+export const CardFooterLine = ({ p }) =>
+  jsx('div', { 'data-ru-footer': '', style: { maxWidth: HOUSE.MEASURE, ...type('caption'), color: V.text2, whiteSpace: 'pre-wrap', marginTop: 12 }, children: text(p.footer) })
 
 export function CardHeader({ p, depth = 0, titleShown = !isNil(p.title), subtitleShown = !isNil(p.subtitle) }) {
   return titleShown || subtitleShown ? jsxs('header', { style: { display: 'flex', flexDirection: 'column', gap: 2 },
@@ -43,7 +49,8 @@ export const Card = ({ element, children }) => {
       : null,
     // Auto-Sources slot (census order body -> slot -> footer); filled by the evidence slice.
     jsx('div', { 'data-ru-sources-slot': '', style: { display: 'contents' } }, 'ss'),
-    isNil(p.footer) ? null : jsx('div', { 'data-ru-footer': '', style: { maxWidth: HOUSE.MEASURE, ...type('caption'), color: V.text2, whiteSpace: 'pre-wrap', marginTop: 12 }, children: text(p.footer) }, 'f')
+    // #31: the root Card's footer is hoisted to the boundary (outside the cap); nested Cards keep theirs.
+    isNil(p.footer) || (atBoundary && chrome.rootFooterHoisted) ? null : jsx('div', { 'data-ru-footer': '', style: { maxWidth: HOUSE.MEASURE, ...type('caption'), color: V.text2, whiteSpace: 'pre-wrap', marginTop: 12 }, children: text(p.footer) }, 'f')
   ]
   return jsxs(framed ? 'section' : 'div', {
     ...(atBoundary ? {} : common(element)),

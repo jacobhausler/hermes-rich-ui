@@ -1,12 +1,12 @@
 // RichCard — the ::richui{id} directive body. Fetches the record, lowers the surface, renders it.
 import { Badge, Skeleton, useQuery } from '@hermes/plugin-sdk'
-import { Component, useState } from 'react'
+import { Component, useEffect, useRef, useState } from 'react'
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { JSONUIProvider, Renderer } from '@json-render/react'
 import { lower, unlowerable } from './lower.mjs'
-import { V, type, common, ownSources } from './components/_shared.mjs'
+import { V, type, common, ownSources, isNil } from './components/_shared.mjs'
 import { INK, HOUSE, SURFACE } from './components/_house.mjs'
-import { CardChrome, CardHeader } from './components/card.mjs'
+import { CardChrome, CardHeader, CardFooterLine } from './components/card.mjs'
 import { fmtDate } from './components/fmt.mjs'
 import { VintageProvider } from './components/rowfmt.mjs'
 
@@ -23,7 +23,14 @@ export const vintageOf = (record) => {
 
 export const ID_RE = /^ru-[0-9a-f]{12}$/
 const Q = 'hermes-rich-ui'
-const HEIGHT_CAP = 480
+// #31 (slice 8, G4/C17): the card cap. A body measuring <= CAP_WHOLE shows WHOLE (no cap,
+// no fade, no toggle). Overflow cuts at the LARGEST top-level child offsetTop inside
+// [CUT_MIN, CUT_MAX] (else CUT_MAX); a FADE-height gradient sits at the cut; the toggle
+// reads `Show all · N more` (N = children clipped by the cut) and exists ONLY on overflow.
+// The root Card footer is hoisted outside the capped body (never hidden by the cut).
+const CAP_WHOLE = HOUSE.CAP_WHOLE // 600 (one home in _house.mjs, test_tokens pin)
+const CUT_MIN = 360, CUT_MAX = 576
+const FADE = HOUSE.FADE // 32
 
 // The card renders INSIDE the app's markdown `.prose` block, whose typography plugin puts
 // margins on table/li/dl/dt/dd/p/h* and a 1.71 line-height on every descendant. Inline styles
@@ -125,6 +132,34 @@ const folded = v => String(v).trim().toLowerCase()
 
 export function CardBody({ record, registry }) {
   const [expanded, setExpanded] = useState(false)
+  const [cap, setCap] = useState(null) // null = not yet measured | { cut, more }
+  const bodyRef = useRef(null)
+  // A fresh record identity is a fresh card: drop expanded + the stale measurement
+  // (jsdom tests re-render with a new record after instrumenting geometry; the browser
+  // never re-sees an old record identity).
+  const lastRecord = useRef(null)
+  if (lastRecord.current !== record) {
+    lastRecord.current = record
+    if (expanded) setExpanded(false)
+    if (cap !== null) setCap(null)
+  }
+  useEffect(() => {
+    // Measure on every non-expanded render: re-rendering with a fresh record identity
+    // re-measures (jsdom tests instrument the node between renders; the browser reflows).
+    if (expanded) return
+    const body = bodyRef.current
+    if (!body) return
+    if (!(Number(body.scrollHeight ?? 0) > CAP_WHOLE)) { setCap(prev => (prev === null ? prev : null)); return }
+    const flow = body.querySelector('[data-ru-body-flow]')
+    const kids = flow ? flow.children : body.children
+    // cut = largest top-level child offsetTop inside [CUT_MIN, CUT_MAX], else CUT_MAX.
+    let cut = null
+    for (const k of kids) { const t = k.offsetTop ?? 0; if (t >= CUT_MIN && t <= CUT_MAX && (cut === null || t > cut)) cut = t }
+    if (cut === null) cut = CUT_MAX
+    let more = 0
+    for (const k of kids) if ((k.offsetTop ?? 0) >= cut) more++
+    setCap(prev => (prev && prev.cut === cut && prev.more === more ? prev : { cut, more }))
+  })
   const cs = record?.surface?.createSurface
   const meta = cs?.dataModel?.meta
   const root = Array.isArray(cs?.components) ? cs.components.find(c => c && c.id === 'root') : null
@@ -141,7 +176,7 @@ export function CardBody({ record, registry }) {
   const showSubtitle = rootSubtitle !== null && !same(rootSubtitle, title) && !same(rootSubtitle, rootTitle)
     && !(showSummary && same(rootSubtitle, meta.summary))
   const rootProps = rootIsCard ? {
-    title: rootTitle, subtitle: rootSubtitle, _sources: meta?.sources,
+    title: rootTitle, subtitle: rootSubtitle, footer: root.footer, _sources: meta?.sources,
     sourceIds: bindingValue(root.sourceIds, cs?.dataModel),
     accessibility: { label: bindingText(root.accessibility?.label, cs?.dataModel) }
   } : null
@@ -151,6 +186,10 @@ export function CardBody({ record, registry }) {
   if (!reasons.length) {
     try { lowered = lower(cs) } catch (e) { lowerError = e?.message || String(e) }
   }
+  // #31: the root footer is hoisted to the boundary, outside the capped body, whenever
+  // the root IS a Card with a footer (the Card itself skips it — see components/card.mjs).
+  const hoistFooter = rootIsCard && !isNil(rootProps.footer)
+  const mode = expanded ? 'expanded' : cap ? 'capped' : 'whole'
   return jsx('div', {
     'data-ru-card': record?.envelope?.card_id ?? '',
     style: { margin: '6px 0', color: V.text },
@@ -169,25 +208,40 @@ export function CardBody({ record, registry }) {
           children: (lowerError ? [lowerError] : reasons).map((r, i) => jsx('li', { children: r }, i))
         }, 'u')
         : jsxs('div', { children: [
-            jsx('div', { 'data-ru-body': expanded ? 'expanded' : 'capped',
-              style: { maxHeight: expanded ? 'none' : HEIGHT_CAP, overflow: 'hidden', position: 'relative' },
-              children: jsx(CardBoundary, {
-                // The boundary owns the frame and root chrome, not the first Card ancestor.
-                children: jsx(CardChrome.Provider, { value: { framed: true, rootAtBoundary: rootIsCard },
-                  children: jsx(VintageProvider, {
-                    value: vintageOf(record),
-                  children: jsx(JSONUIProvider, {
-                    registry, initialState: lowered.initialState,
-                    children: jsx(Renderer, { spec: lowered.spec, registry, fallback: UnknownType })
+            jsx('div', { ref: bodyRef, 'data-ru-body': mode,
+              style: mode === 'capped'
+                ? { maxHeight: cap.cut + 'px', overflow: 'hidden', position: 'relative' }
+                : mode === 'expanded'
+                  ? { maxHeight: 'none', position: 'relative' }
+                  : { position: 'relative' },
+              children: [
+                jsx(CardBoundary, {
+                  // The boundary owns the frame and root chrome, not the first Card ancestor.
+                  children: jsx(CardChrome.Provider, { value: { framed: true, rootAtBoundary: rootIsCard, rootFooterHoisted: hoistFooter },
+                    children: jsx(VintageProvider, {
+                      value: vintageOf(record),
+                    children: jsx(JSONUIProvider, {
+                      registry, initialState: lowered.initialState,
+                      children: jsx(Renderer, { spec: lowered.spec, registry, fallback: UnknownType })
+                    })
                   })
                 })
-              })
-            })
+                }),
+                // Fade at the cut ONLY when capped — a whole or expanded card has no edge to soften.
+                mode === 'capped' ? jsx('div', { 'data-ru-fade': '', 'aria-hidden': 'true',
+                  style: { position: 'absolute', bottom: 0, left: 0, right: 0, height: FADE, pointerEvents: 'none',
+                    background: `linear-gradient(to bottom, transparent, ${SURFACE.card.background})` }
+                }, 'fade') : null
+              ]
             }, 'body'),
-            jsx('button', { type: 'button', 'data-ru-toggle': '', onClick: () => setExpanded(v => !v),
+            // Toggle exists ONLY on overflow (#31) — the phantom 'Show more' is gone.
+            cap === null && !expanded ? null : jsx('button', { type: 'button', 'data-ru-toggle': '', onClick: () => setExpanded(v => !v),
               style: { alignSelf: 'flex-start', marginTop: 4, background: 'none', border: `1px solid ${V.stroke3}`, borderRadius: 4, padding: '2px 8px', ...type('caption'), color: V.text2, cursor: 'pointer' },
-              children: expanded ? 'Show less' : 'Show more'
-            }, 'toggle')
+              children: expanded ? 'Show less' : `Show all · ${cap.more} more`
+            }, 'toggle'),
+            // Hoisted root footer: OUTSIDE the capped body, after it, in census order
+            // (body -> sources slot (inside) -> footer); the auto-Sources slot (#36) will sit above it.
+            hoistFooter ? jsx(CardFooterLine, { p: rootProps }, 'f') : null
           ]
         }, 'b')
       ]
