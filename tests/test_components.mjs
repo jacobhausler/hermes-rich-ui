@@ -455,7 +455,10 @@ test('unknown type -> fallback "unsupported component: <type>"', async () => {
   assert.equal($('[data-ru-unknown]').textContent, 'unsupported component: Button')
 })
 
-test('CardBody: summary above body, header (title/authored/rev/policy), 480px cap + Show more toggle', async () => {
+// #31 (slice 8, G4/C17): the phantom toggle is inverted. An UNSTUBBED jsdom body measures
+// scrollHeight 0 — under CAP_WHOLE — so the card shows whole: NO toggle, NO fade, no cap.
+// (was: data-ru-body='capped', maxHeight 480px, a 'Show more' toggle on every card.)
+test('CardBody: summary above body, header (title/authored/rev/policy); a whole body shows no toggle (#31)', async () => {
   const record = { envelope: { card_id: 'ru-0123456789ab', policy: 'embedded', revision: 1 }, surface: { version: 'v1.0', createSurface: fixture } }
   await act(async () => { root.render(React.createElement(CardBody, { record, registry })) })
   const card = $('[data-ru-card]')
@@ -468,14 +471,13 @@ test('CardBody: summary above body, header (title/authored/rev/policy), 480px ca
   assert.doesNotMatch(header.textContent, /T\d\d:|rev 1/)
   assert.equal(header.querySelector('[data-ru-policy]'), null, 'embedded policy badge hidden')
   const body = $('[data-ru-body]')
-  assert.equal(body.getAttribute('data-ru-body'), 'capped')
-  assert.equal(body.style.maxHeight, '480px')
-  assert.equal(body.style.overflow, 'hidden')
-  assert.equal($('[data-ru-toggle]').textContent, 'Show more')
-  await act(async () => { $('[data-ru-toggle]').dispatchEvent(new dom.window.MouseEvent('click', { bubbles: true })) })
-  assert.equal($('[data-ru-body]').getAttribute('data-ru-body'), 'expanded')
-  assert.equal($('[data-ru-body]').style.maxHeight, 'none')
-  assert.equal($('[data-ru-toggle]').textContent, 'Show less')
+  assert.ok(body, 'body renders')
+  assert.equal(body.getAttribute('data-ru-body'), 'whole', 'unstubbed jsdom measures 0 <= CAP_WHOLE: shows whole')
+  assert.equal(body.style.maxHeight, '', 'no cap on a whole body')
+  assert.equal($('[data-ru-toggle]'), null, 'NO phantom toggle on a card that does not overflow')
+  assert.equal($('[data-ru-fade]'), null, 'no fade on a whole body')
+  // The root Card footer now sits OUTSIDE the capped region (#31).
+  assert.ok(!$('[data-ru-body]').contains($('[data-ru-footer]')), 'footer is not inside the body node')
 })
 
 test('CardBody: unlowerable surface shows reasons instead of a body; summary still shown', async () => {

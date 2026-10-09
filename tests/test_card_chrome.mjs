@@ -197,3 +197,96 @@ test('S8: Card subtitle and footer carry the HOUSE.MEASURE cap', async () => {
   assert.equal(sub.style.maxWidth, HOUSE.MEASURE, 'subtitle capped')
   assert.equal(foot.style.maxWidth, HOUSE.MEASURE, 'footer capped')
 })
+
+// ---- #31 (slice 8, G4/C17, M-G4; AD-16): the card cap ----
+// Rule: scrollHeight <= CAP_WHOLE shows whole (no toggle, no fade, no cap). Overflow cuts at the
+// LARGEST top-level child offsetTop inside [CUT_MIN=360, CUT_MAX=576], else CUT_MAX; a 32px fade
+// sits at the cut; the toggle reads `Show all · N more` (N = children clipped by the cut) and
+// exists ONLY when overflowing; the footer renders OUTSIDE the capped region.
+// jsdom has no layout: scrollHeight/offsetTop/offsetHeight are stubbed off data-ru-* dataset
+// keys, so the card must be rendered once, instrumented, then re-rendered to re-measure.
+const protoStub = (proto, prop, read) => Object.defineProperty(proto, prop, { configurable: true, get() { return read(this) } })
+protoStub(Element.prototype, 'scrollHeight', el => Number(el?.dataset?.ruScrollHeight ?? 0))
+protoStub(HTMLElement.prototype, 'offsetTop', el => Number(el?.dataset?.ruOffsetTop ?? 0))
+protoStub(HTMLElement.prototype, 'offsetHeight', el => Number(el?.dataset?.ruOffsetHeight ?? 0))
+
+// one render + dataset instrumentation + re-render (fresh record identity forces re-measure)
+const renderCapped = async (components, meta, geom) => {
+  await renderCard(cardRecord(components, meta))
+  const body = cardMount.querySelector('[data-ru-body]')
+  const flow = body.querySelector('[data-ru-body-flow]')
+  body.dataset.ruScrollHeight = String(geom.scrollHeight)
+  const kids = [...(flow ? flow.children : body.children)]
+  assert.equal(kids.length, geom.children.length, `instrumented ${kids.length} children, spec had ${geom.children.length}`)
+  kids.forEach((k, i) => { k.dataset.ruOffsetTop = String(geom.children[i][0]); k.dataset.ruOffsetHeight = String(geom.children[i][1]) })
+  await renderCard(cardRecord(components, meta))
+  return cardMount.querySelector('[data-ru-body]')
+}
+const BLOCKS = (n) => Array.from({ length: n }, (_, i) => ({ id: 't' + i, component: 'Text', text: 'line ' + i }))
+const BLOCK_IDS = (n) => Array.from({ length: n }, (_, i) => 't' + i)
+const GEOM_META = { ...META, title: 'T' }
+
+test('#31 short body (scrollHeight 400): whole — no toggle, no fade, no cap', async () => {
+  const comps = [{ id: 'root', component: 'Card', title: 'T', children: BLOCK_IDS(3) }, ...BLOCKS(3)]
+  const body = await renderCapped(comps, GEOM_META, { scrollHeight: 400, children: [[0, 130], [130, 130], [260, 130]] })
+  assert.equal(body.getAttribute('data-ru-body'), 'whole')
+  assert.equal(body.style.maxHeight, '', 'no max-height on a whole body')
+  assert.equal(cardMount.querySelector('[data-ru-toggle]'), null, 'NO toggle when the body does not overflow')
+  assert.equal(cardMount.querySelector('[data-ru-fade]'), null, 'no fade when whole')
+})
+
+test('#31 scrollHeight exactly CAP_WHOLE (600) is still whole', async () => {
+  const comps = [{ id: 'root', component: 'Card', title: 'T', children: BLOCK_IDS(2) }, ...BLOCKS(2)]
+  const body = await renderCapped(comps, GEOM_META, { scrollHeight: 600, children: [[0, 300], [300, 300]] })
+  assert.equal(body.getAttribute('data-ru-body'), 'whole')
+  assert.equal(cardMount.querySelector('[data-ru-toggle]'), null)
+})
+
+test('#31 overflow cuts at a child boundary in [360,576], fades, and toggles `Show all · N more`', async () => {
+  const comps = [{ id: 'root', component: 'Card', title: 'T', children: BLOCK_IDS(5) }, ...BLOCKS(5)]
+  const body = await renderCapped(comps, GEOM_META, { scrollHeight: 1400, children: [[0, 200], [200, 220], [420, 280], [700, 300], [1000, 400]] })
+  assert.equal(body.getAttribute('data-ru-body'), 'capped')
+  assert.equal(body.style.maxHeight, '420px', 'cut = largest child offsetTop inside [360, 576]')
+  assert.equal(body.style.overflow, 'hidden')
+  const fade = cardMount.querySelector('[data-ru-fade]')
+  assert.ok(fade, 'fade renders at the cut')
+  assert.equal(fade.style.height, '32px', 'fade height HOUSE.FADE = 32')
+  const toggle = cardMount.querySelector('[data-ru-toggle]')
+  assert.ok(toggle, 'toggle exists when overflowing')
+  assert.equal(toggle.textContent, 'Show all · 3 more', 'N = top-level children clipped by the cut (420, 700, 1000)')
+  await act(async () => { toggle.click() })
+  const open = cardMount.querySelector('[data-ru-body]')
+  assert.equal(open.getAttribute('data-ru-body'), 'expanded')
+  assert.equal(open.style.maxHeight, 'none', 'expanded shows whole')
+  assert.equal(cardMount.querySelector('[data-ru-fade]'), null, 'fade gone when expanded')
+  assert.equal(cardMount.querySelector('[data-ru-toggle]').textContent, 'Show less')
+})
+
+test('#31 no child boundary inside [360,576]: the cut falls back to CUT_MAX (576)', async () => {
+  const comps = [{ id: 'root', component: 'Card', title: 'T', children: ['t0'] }, { id: 't0', component: 'Text', text: 'one tall block' }]
+  const body = await renderCapped(comps, GEOM_META, { scrollHeight: 1400, children: [[0, 1400]] })
+  assert.equal(body.style.maxHeight, '576px', 'fallback cut = CUT_MAX')
+})
+
+test('#31 overflowing root Card: the footer renders OUTSIDE the capped body, after it', async () => {
+  const comps = [{ id: 'root', component: 'Card', title: 'T', footer: 'Authored footer.', children: BLOCK_IDS(5) }, ...BLOCKS(5)]
+  const body = await renderCapped(comps, GEOM_META, { scrollHeight: 1400, children: [[0, 200], [200, 220], [420, 280], [700, 300], [1000, 400]] })
+  const foot = cardMount.querySelector('[data-ru-footer]')
+  assert.ok(foot, 'footer renders')
+  assert.equal(foot.textContent, 'Authored footer.')
+  assert.ok(!body.contains(foot), 'footer is NOT inside the capped body node')
+  assert.ok(body.compareDocumentPosition(foot) & Node.DOCUMENT_POSITION_FOLLOWING, 'footer follows the body in document order')
+  assert.equal(foot.style.maxWidth, HOUSE.MEASURE, 'hoisted footer keeps the HOUSE.MEASURE cap')
+})
+
+test('#31 nested Card keeps its own footer inside its own block (hoist is root-only)', async () => {
+  const comps = [
+    { id: 'root', component: 'Card', title: 'T', children: ['c2'] },
+    { id: 'c2', component: 'Card', title: 'Inner', footer: 'nested footer', children: [] }
+  ]
+  await renderCard(cardRecord(comps, GEOM_META))
+  const inner = [...cardMount.querySelectorAll('[data-ru="Card"]')].at(-1)
+  const foot = inner.querySelector('[data-ru-footer]')
+  assert.ok(foot, 'nested footer still renders in its own card')
+  assert.equal(foot.textContent, 'nested footer')
+})
