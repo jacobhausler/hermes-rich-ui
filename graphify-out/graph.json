@@ -104,6 +104,15 @@
       "_origin": "ast"
     },
     {
+      "id": "dashboard_plugin_api_views_view",
+      "label": "views_view()",
+      "file_type": "code",
+      "source_file": "dashboard/plugin_api.py",
+      "source_location": "L59",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "get",
       "label": "get",
       "file_type": "code",
@@ -112,11 +121,20 @@
       "_origin": "ast"
     },
     {
+      "id": "dashboard_plugin_api_get_views",
+      "label": "get_views()",
+      "file_type": "code",
+      "source_file": "dashboard/plugin_api.py",
+      "source_location": "L65",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "dashboard_plugin_api_health",
       "label": "health()",
       "file_type": "code",
       "source_file": "dashboard/plugin_api.py",
-      "source_location": "L61",
+      "source_location": "L69",
       "_callable": true,
       "_origin": "ast"
     },
@@ -125,7 +143,7 @@
       "label": "get_card()",
       "file_type": "code",
       "source_file": "dashboard/plugin_api.py",
-      "source_location": "L65",
+      "source_location": "L73",
       "_callable": true,
       "_origin": "ast"
     },
@@ -3494,11 +3512,20 @@
       "_origin": "ast"
     },
     {
+      "id": "engine_store_list_views",
+      "label": "list_views()",
+      "file_type": "code",
+      "source_file": "engine/store.py",
+      "source_location": "L177",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "engine_store_load_view",
       "label": "load_view()",
       "file_type": "code",
       "source_file": "engine/store.py",
-      "source_location": "L175",
+      "source_location": "L194",
       "_callable": true,
       "_origin": "ast"
     },
@@ -3543,11 +3570,19 @@
       "_origin": "ast"
     },
     {
-      "id": "engine_store_rationale_176",
+      "id": "engine_store_rationale_178",
+      "label": "Saved ids/titles in stable order; skip malformed files and never create the…",
+      "file_type": "rationale",
+      "source_file": "engine/store.py",
+      "source_location": "L178",
+      "_origin": "ast"
+    },
+    {
+      "id": "engine_store_rationale_195",
       "label": "{view_id, title, components} or None (bad id, absent, malformed).",
       "file_type": "rationale",
       "source_file": "engine/store.py",
-      "source_location": "L176",
+      "source_location": "L195",
       "_origin": "ast"
     },
     {
@@ -3586,11 +3621,29 @@
       "_origin": "ast"
     },
     {
+      "id": "engine_tool_env_pin",
+      "label": "_env_pin()",
+      "file_type": "code",
+      "source_file": "engine/tool.py",
+      "source_location": "L66",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "engine_tool_profile_name",
+      "label": "_profile_name()",
+      "file_type": "code",
+      "source_file": "engine/tool.py",
+      "source_location": "L74",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "engine_tool_build_record",
       "label": "build_record()",
       "file_type": "code",
       "source_file": "engine/tool.py",
-      "source_location": "L62",
+      "source_location": "L101",
       "_callable": true,
       "_origin": "ast"
     },
@@ -3599,7 +3652,7 @@
       "label": "_fail()",
       "file_type": "code",
       "source_file": "engine/tool.py",
-      "source_location": "L103",
+      "source_location": "L142",
       "_callable": true,
       "_origin": "ast"
     },
@@ -3608,7 +3661,7 @@
       "label": "_present()",
       "file_type": "code",
       "source_file": "engine/tool.py",
-      "source_location": "L107",
+      "source_location": "L146",
       "_callable": true,
       "_origin": "ast"
     },
@@ -3617,7 +3670,7 @@
       "label": "rich_present()",
       "file_type": "code",
       "source_file": "engine/tool.py",
-      "source_location": "L205",
+      "source_location": "L244",
       "_callable": true,
       "_origin": "ast"
     },
@@ -3626,7 +3679,7 @@
       "label": "handle_present()",
       "file_type": "code",
       "source_file": "engine/tool.py",
-      "source_location": "L215",
+      "source_location": "L254",
       "_callable": true,
       "_origin": "ast"
     },
@@ -3647,19 +3700,27 @@
       "_origin": "ast"
     },
     {
-      "id": "engine_tool_rationale_63",
-      "label": "The §1 record, key order exactly as the contract lists it.",
+      "id": "engine_tool_rationale_75",
+      "label": "Prefer task-scoped core identity; older cores fall back to launcher pins/home.…",
       "file_type": "rationale",
       "source_file": "engine/tool.py",
-      "source_location": "L63",
+      "source_location": "L75",
       "_origin": "ast"
     },
     {
-      "id": "engine_tool_rationale_206",
+      "id": "engine_tool_rationale_102",
+      "label": "The §1 record, key order exactly as the contract lists it.",
+      "file_type": "rationale",
+      "source_file": "engine/tool.py",
+      "source_location": "L102",
+      "_origin": "ast"
+    },
+    {
+      "id": "engine_tool_rationale_245",
       "label": "Never raises. REVIEW-C0 E2: an internal exception is logged, never returned —…",
       "file_type": "rationale",
       "source_file": "engine/tool.py",
-      "source_location": "L206",
+      "source_location": "L245",
       "_origin": "ast"
     },
     {
@@ -6278,6 +6339,184 @@
       "_origin": "ast"
     },
     {
+      "id": "tests_test_context_identity_views",
+      "label": "test_context_identity_views.py",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_profile_env",
+      "label": "profile_env()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L21",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_no_core",
+      "label": "no_core()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L29",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_publish_profile",
+      "label": "publish_profile()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L33",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_profile_name_pin_is_persisted",
+      "label": "test_profile_name_pin_is_persisted()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L39",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_legacy_pin_is_kept",
+      "label": "test_legacy_pin_is_kept()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L43",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_active_profile_directory_is_persisted",
+      "label": "test_active_profile_directory_is_persisted()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L47",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_unidentified_custom_home_remains_null",
+      "label": "test_unidentified_custom_home_remains_null()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L52",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_core_routed_identity_beats_launcher_env",
+      "label": "test_core_routed_identity_beats_launcher_env()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L56",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_fake_core",
+      "label": "fake_core()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L63",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_core_sentinels_for_unidentified_home_are_null",
+      "label": "test_core_sentinels_for_unidentified_home_are_null()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L68",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_core_explicit_default_pin_is_kept",
+      "label": "test_core_explicit_default_pin_is_kept()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L74",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_real_core_unidentified_home_is_null",
+      "label": "test_real_core_unidentified_home_is_null()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L78",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_non_string_view_title_is_never_listed",
+      "label": "test_non_string_view_title_is_never_listed()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L87",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_save_view_rejects_non_string_title",
+      "label": "test_save_view_rejects_non_string_title()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L98",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_missing_view_directory_is_empty_and_read_only",
+      "label": "test_missing_view_directory_is_empty_and_read_only()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L108",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_views_list_saved_ids_titles_and_skip_unusable_files",
+      "label": "test_views_list_saved_ids_titles_and_skip_unusable_files()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L113",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_views_follow_current_home",
+      "label": "test_views_follow_current_home()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L128",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_test_views_route_when_fastapi_present",
+      "label": "test_views_route_when_fastapi_present()",
+      "file_type": "code",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L136",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_context_identity_views_rationale_1",
+      "label": "Profile attribution and saved-view discovery: est-2ek.1.530.",
+      "file_type": "rationale",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
       "id": "tests_test_directive_grammar",
       "label": "test_directive_grammar.py",
       "file_type": "code",
@@ -6915,6 +7154,9 @@
       "file_type": "code",
       "source_file": "tests/test_hostile_admission.py",
       "source_location": "L364",
+      "metadata": {
+        "python_opaque_bases": true
+      },
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast"
@@ -8937,7 +9179,7 @@
       "label": "test_rejects_source_fields_before_admit()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L68",
+      "source_location": "L71",
       "_callable": true,
       "_origin": "ast"
     },
@@ -8946,7 +9188,7 @@
       "label": "spy()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L71",
+      "source_location": "L74",
       "_callable": true,
       "_origin": "ast"
     },
@@ -8955,7 +9197,7 @@
       "label": "test_rejection_guidance_only_names_registered_tools()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L95",
+      "source_location": "L98",
       "_callable": true,
       "_origin": "ast"
     },
@@ -8964,7 +9206,7 @@
       "label": "register_tool()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L103",
+      "source_location": "L106",
       "_callable": true,
       "_origin": "ast"
     },
@@ -8973,7 +9215,7 @@
       "label": "register_skill()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L106",
+      "source_location": "L109",
       "_callable": true,
       "_origin": "ast"
     },
@@ -8982,7 +9224,7 @@
       "label": "test_admit_errors_write_nothing()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L121",
+      "source_location": "L124",
       "_callable": true,
       "_origin": "ast"
     },
@@ -8991,7 +9233,7 @@
       "label": "test_admit_receives_data_model_and_normalized_is_stored()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L131",
+      "source_location": "L134",
       "_callable": true,
       "_origin": "ast"
     },
@@ -9000,7 +9242,7 @@
       "label": "spy()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L134",
+      "source_location": "L137",
       "_callable": true,
       "_origin": "ast"
     },
@@ -9009,7 +9251,7 @@
       "label": "test_missing_required_fields()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L147",
+      "source_location": "L150",
       "_callable": true,
       "_origin": "ast"
     },
@@ -9018,7 +9260,7 @@
       "label": "test_view_save_and_reuse()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L157",
+      "source_location": "L160",
       "_callable": true,
       "_origin": "ast"
     },
@@ -9027,7 +9269,7 @@
       "label": "test_quota_error_surfaces_no_raise()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L186",
+      "source_location": "L189",
       "_callable": true,
       "_origin": "ast"
     },
@@ -9036,7 +9278,7 @@
       "label": "test_handler_never_raises()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L196",
+      "source_location": "L199",
       "_callable": true,
       "_origin": "ast"
     },
@@ -9045,7 +9287,7 @@
       "label": "emit()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L203",
+      "source_location": "L206",
       "_callable": true,
       "_origin": "ast"
     },
@@ -9054,7 +9296,7 @@
       "label": "_capture_logs()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L226",
+      "source_location": "L229",
       "_callable": true,
       "_origin": "ast"
     },
@@ -9063,7 +9305,7 @@
       "label": "emit()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L232",
+      "source_location": "L235",
       "_callable": true,
       "_origin": "ast"
     },
@@ -9072,7 +9314,7 @@
       "label": "test_view_save_oserror_keeps_receipt()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L239",
+      "source_location": "L242",
       "_callable": true,
       "_origin": "ast"
     },
@@ -9081,7 +9323,7 @@
       "label": "test_card_write_failure_no_receipt()",
       "file_type": "code",
       "source_file": "tests/test_tool.py",
-      "source_location": "L271",
+      "source_location": "L274",
       "_callable": true,
       "_origin": "ast"
     },
@@ -9094,11 +9336,11 @@
       "_origin": "ast"
     },
     {
-      "id": "tests_test_tool_rationale_96",
+      "id": "tests_test_tool_rationale_99",
       "label": "issue #56 acceptance #4: a caller following the rejection text can only be…",
       "file_type": "rationale",
       "source_file": "tests/test_tool.py",
-      "source_location": "L96",
+      "source_location": "L99",
       "_origin": "ast"
     },
     {
@@ -11274,12 +11516,21 @@
       "_origin": "ast"
     },
     {
+      "id": "skill_references_recipes_authoring_quick_check",
+      "label": "Authoring quick check",
+      "file_type": "document",
+      "node_kind": "heading",
+      "source_file": "skill/references/recipes.md",
+      "source_location": "L11",
+      "_origin": "ast"
+    },
+    {
       "id": "skill_references_recipes_compare",
       "label": "Compare",
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L11",
+      "source_location": "L37",
       "_origin": "ast"
     },
     {
@@ -11288,7 +11539,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L36",
+      "source_location": "L62",
       "_origin": "ast"
     },
     {
@@ -11297,7 +11548,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L59",
+      "source_location": "L85",
       "_origin": "ast"
     },
     {
@@ -11306,7 +11557,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L79",
+      "source_location": "L105",
       "_origin": "ast"
     },
     {
@@ -11315,7 +11566,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L101",
+      "source_location": "L127",
       "_origin": "ast"
     },
     {
@@ -11324,7 +11575,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L127",
+      "source_location": "L153",
       "_origin": "ast"
     },
     {
@@ -11333,7 +11584,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L240",
+      "source_location": "L266",
       "_origin": "ast"
     },
     {
@@ -11342,7 +11593,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L314",
+      "source_location": "L340",
       "_origin": "ast"
     },
     {
@@ -11351,7 +11602,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L416",
+      "source_location": "L442",
       "_origin": "ast"
     },
     {
@@ -11360,7 +11611,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L475",
+      "source_location": "L501",
       "_origin": "ast"
     },
     {
@@ -11732,6 +11983,30 @@
       "source_file": ""
     },
     {
+      "id": "contextlib",
+      "label": "contextlib",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "types",
+      "label": "types",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
+      "id": "unittest",
+      "label": "unittest",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
       "id": "hermes_cli_plugins_manifest",
       "label": "hermes_cli_plugins_manifest",
       "file_type": "concept",
@@ -11977,28 +12252,17 @@
       "_origin": "ast"
     },
     {
-      "source": "dashboard_plugin_api_health",
-      "target": "get",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "source_file": "dashboard/plugin_api.py",
-      "source_location": "L60",
-      "weight": 1.0,
-      "context": "decorator",
-      "_origin": "ast"
-    },
-    {
       "source": "dashboard_plugin_api",
-      "target": "dashboard_plugin_api_health",
+      "target": "dashboard_plugin_api_views_view",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "dashboard/plugin_api.py",
-      "source_location": "L61",
+      "source_location": "L59",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dashboard_plugin_api_get_card",
+      "source": "dashboard_plugin_api_get_views",
       "target": "get",
       "relation": "references",
       "confidence": "EXTRACTED",
@@ -12010,11 +12274,53 @@
     },
     {
       "source": "dashboard_plugin_api",
-      "target": "dashboard_plugin_api_get_card",
+      "target": "dashboard_plugin_api_get_views",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "dashboard/plugin_api.py",
       "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dashboard_plugin_api_health",
+      "target": "get",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "dashboard/plugin_api.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "dashboard_plugin_api",
+      "target": "dashboard_plugin_api_health",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "dashboard/plugin_api.py",
+      "source_location": "L69",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dashboard_plugin_api_get_card",
+      "target": "get",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "dashboard/plugin_api.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "context": "decorator",
+      "_origin": "ast"
+    },
+    {
+      "source": "dashboard_plugin_api",
+      "target": "dashboard_plugin_api_get_card",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "dashboard/plugin_api.py",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12041,13 +12347,35 @@
       "_origin": "ast"
     },
     {
+      "source": "dashboard_plugin_api_views_view",
+      "target": "dashboard_plugin_api_store",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "dashboard/plugin_api.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dashboard_plugin_api_get_views",
+      "target": "dashboard_plugin_api_views_view",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "dashboard/plugin_api.py",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "dashboard_plugin_api_health",
       "target": "dashboard_plugin_api_health_view",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "dashboard/plugin_api.py",
-      "source_location": "L62",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12058,7 +12386,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "dashboard/plugin_api.py",
-      "source_location": "L66",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -22772,11 +23100,21 @@
     },
     {
       "source": "engine_store",
+      "target": "engine_store_list_views",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/store.py",
+      "source_location": "L177",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "engine_store",
       "target": "engine_store_load_view",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/store.py",
-      "source_location": "L175",
+      "source_location": "L194",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23018,7 +23356,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/store.py",
-      "source_location": "L170",
+      "source_location": "L172",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23029,7 +23367,40 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/store.py",
-      "source_location": "L171",
+      "source_location": "L173",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "engine_store_list_views",
+      "target": "engine_store_views_dir",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/store.py",
+      "source_location": "L180",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "engine_store_list_views",
+      "target": "engine_store_valid_view_id",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/store.py",
+      "source_location": "L185",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "engine_store_list_views",
+      "target": "engine_store_load_view",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/store.py",
+      "source_location": "L187",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23040,7 +23411,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/store.py",
-      "source_location": "L177",
+      "source_location": "L196",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23051,7 +23422,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/store.py",
-      "source_location": "L179",
+      "source_location": "L198",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23106,12 +23477,22 @@
       "_origin": "ast"
     },
     {
-      "source": "engine_store_rationale_176",
+      "source": "engine_store_rationale_178",
+      "target": "engine_store_list_views",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/store.py",
+      "source_location": "L178",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "engine_store_rationale_195",
       "target": "engine_store_load_view",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "engine/store.py",
-      "source_location": "L176",
+      "source_location": "L195",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23235,11 +23616,31 @@
     },
     {
       "source": "engine_tool",
+      "target": "engine_tool_env_pin",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/tool.py",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "engine_tool",
+      "target": "engine_tool_profile_name",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/tool.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "engine_tool",
       "target": "engine_tool_build_record",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L62",
+      "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23249,7 +23650,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L103",
+      "source_location": "L142",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23259,7 +23660,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L107",
+      "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23269,7 +23670,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L205",
+      "source_location": "L244",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23279,7 +23680,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L215",
+      "source_location": "L254",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "engine_tool_profile_name",
+      "target": "engine_tool_env_pin",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/tool.py",
+      "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23290,7 +23702,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L64",
+      "source_location": "L103",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "engine_tool_build_record",
+      "target": "engine_tool_profile_name",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/tool.py",
+      "source_location": "L120",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23301,7 +23724,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L109",
+      "source_location": "L148",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23312,7 +23735,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L164",
+      "source_location": "L203",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23323,7 +23746,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L198",
+      "source_location": "L237",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23334,7 +23757,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L209",
+      "source_location": "L248",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23345,7 +23768,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L222",
+      "source_location": "L261",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -23370,22 +23793,32 @@
       "_origin": "ast"
     },
     {
-      "source": "engine_tool_rationale_63",
-      "target": "engine_tool_build_record",
+      "source": "engine_tool_rationale_75",
+      "target": "engine_tool_profile_name",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L63",
+      "source_location": "L75",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "engine_tool_rationale_206",
+      "source": "engine_tool_rationale_102",
+      "target": "engine_tool_build_record",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "engine/tool.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "engine_tool_rationale_245",
       "target": "engine_tool_rich_present",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "engine/tool.py",
-      "source_location": "L206",
+      "source_location": "L245",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -28620,6 +29053,716 @@
       "relation": "dynamic_import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "asyncio",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "contextlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "json",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "os",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "sys",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "types",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "unittest",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_lane_backend",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_profile_env",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_no_core",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_publish_profile",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_profile_name_pin_is_persisted",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_legacy_pin_is_kept",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_active_profile_directory_is_persisted",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_unidentified_custom_home_remains_null",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_core_routed_identity_beats_launcher_env",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_fake_core",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_core_sentinels_for_unidentified_home_are_null",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_core_explicit_default_pin_is_kept",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_real_core_unidentified_home_is_null",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_non_string_view_title_is_never_listed",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_save_view_rejects_non_string_title",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_missing_view_directory_is_empty_and_read_only",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_views_list_saved_ids_titles_and_skip_unusable_files",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_views_follow_current_home",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_views_route_when_fastapi_present",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L136",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_profile_name_pin_is_persisted",
+      "target": "tests_test_context_identity_views_no_core",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_profile_name_pin_is_persisted",
+      "target": "tests_test_context_identity_views_profile_env",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_profile_name_pin_is_persisted",
+      "target": "tests_test_context_identity_views_publish_profile",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_legacy_pin_is_kept",
+      "target": "tests_test_context_identity_views_no_core",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_legacy_pin_is_kept",
+      "target": "tests_test_context_identity_views_profile_env",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_legacy_pin_is_kept",
+      "target": "tests_test_context_identity_views_publish_profile",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_active_profile_directory_is_persisted",
+      "target": "tests_test_context_identity_views_no_core",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_active_profile_directory_is_persisted",
+      "target": "tests_test_context_identity_views_profile_env",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_active_profile_directory_is_persisted",
+      "target": "tests_test_context_identity_views_publish_profile",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_unidentified_custom_home_remains_null",
+      "target": "tests_test_context_identity_views_no_core",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_unidentified_custom_home_remains_null",
+      "target": "tests_test_context_identity_views_profile_env",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_unidentified_custom_home_remains_null",
+      "target": "tests_test_context_identity_views_publish_profile",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_core_routed_identity_beats_launcher_env",
+      "target": "tests_test_context_identity_views_profile_env",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_core_routed_identity_beats_launcher_env",
+      "target": "tests_test_context_identity_views_publish_profile",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_core_sentinels_for_unidentified_home_are_null",
+      "target": "tests_test_context_identity_views_fake_core",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_core_sentinels_for_unidentified_home_are_null",
+      "target": "tests_test_context_identity_views_profile_env",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_core_sentinels_for_unidentified_home_are_null",
+      "target": "tests_test_context_identity_views_publish_profile",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_core_explicit_default_pin_is_kept",
+      "target": "tests_test_context_identity_views_fake_core",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_core_explicit_default_pin_is_kept",
+      "target": "tests_test_context_identity_views_profile_env",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_core_explicit_default_pin_is_kept",
+      "target": "tests_test_context_identity_views_publish_profile",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_real_core_unidentified_home_is_null",
+      "target": "tests_test_context_identity_views_profile_env",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_real_core_unidentified_home_is_null",
+      "target": "tests_test_context_identity_views_publish_profile",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_test_views_follow_current_home",
+      "target": "tests_test_context_identity_views_profile_env",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_profile_name_pin_is_persisted",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L160",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_legacy_pin_is_kept",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L160",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_active_profile_directory_is_persisted",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L161",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_unidentified_custom_home_remains_null",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L161",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_core_routed_identity_beats_launcher_env",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L162",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_core_sentinels_for_unidentified_home_are_null",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L162",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_core_explicit_default_pin_is_kept",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_real_core_unidentified_home_is_null",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_non_string_view_title_is_never_listed",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L164",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_save_view_rejects_non_string_title",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L164",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_missing_view_directory_is_empty_and_read_only",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L165",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_views_list_saved_ids_titles_and_skip_unusable_files",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L166",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_views_follow_current_home",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L166",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_test_context_identity_views_test_views_route_when_fastapi_present",
+      "relation": "indirect_call",
+      "context": "collection",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L167",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views_rationale_1",
+      "target": "tests_test_context_identity_views",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L1",
+      "weight": 1.0,
       "_origin": "ast"
     },
     {
@@ -36347,7 +37490,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L68",
+      "source_location": "L71",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36357,7 +37500,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L71",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36367,7 +37510,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L95",
+      "source_location": "L98",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36377,7 +37520,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L103",
+      "source_location": "L106",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36387,7 +37530,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L106",
+      "source_location": "L109",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36397,7 +37540,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L121",
+      "source_location": "L124",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36407,7 +37550,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L131",
+      "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36417,7 +37560,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L134",
+      "source_location": "L137",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36427,7 +37570,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L147",
+      "source_location": "L150",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36437,7 +37580,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L157",
+      "source_location": "L160",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36447,7 +37590,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L186",
+      "source_location": "L189",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36457,7 +37600,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L196",
+      "source_location": "L199",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36467,7 +37610,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L203",
+      "source_location": "L206",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36477,7 +37620,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L226",
+      "source_location": "L229",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36487,7 +37630,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L232",
+      "source_location": "L235",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36497,7 +37640,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L239",
+      "source_location": "L242",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36507,7 +37650,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L271",
+      "source_location": "L274",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36519,7 +37662,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L74",
+      "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36531,7 +37674,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L137",
+      "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36542,7 +37685,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L247",
+      "source_location": "L250",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36554,7 +37697,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L288",
+      "source_location": "L291",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36566,7 +37709,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L288",
+      "source_location": "L291",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36578,7 +37721,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L289",
+      "source_location": "L292",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36590,7 +37733,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L290",
+      "source_location": "L293",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36602,7 +37745,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L291",
+      "source_location": "L294",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36614,7 +37757,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L292",
+      "source_location": "L295",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36626,7 +37769,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L292",
+      "source_location": "L295",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36638,7 +37781,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L293",
+      "source_location": "L296",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36650,7 +37793,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L293",
+      "source_location": "L296",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36662,7 +37805,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L293",
+      "source_location": "L296",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36674,7 +37817,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L294",
+      "source_location": "L297",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36686,7 +37829,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L294",
+      "source_location": "L297",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -36701,12 +37844,12 @@
       "_origin": "ast"
     },
     {
-      "source": "tests_test_tool_rationale_96",
+      "source": "tests_test_tool_rationale_99",
       "target": "tests_test_tool_test_rejection_guidance_only_names_registered_tools",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L96",
+      "source_location": "L99",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -39713,7 +40856,7 @@
     },
     {
       "source": "skill_references_recipes_recipes_one_complete_minimal_rich_present_argument_each",
-      "target": "skill_references_recipes_compare",
+      "target": "skill_references_recipes_authoring_quick_check",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/references/recipes.md",
@@ -39723,11 +40866,21 @@
     },
     {
       "source": "skill_references_recipes_recipes_one_complete_minimal_rich_present_argument_each",
+      "target": "skill_references_recipes_compare",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "skill/references/recipes.md",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "skill_references_recipes_recipes_one_complete_minimal_rich_present_argument_each",
       "target": "skill_references_recipes_distribution",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L36",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -39737,7 +40890,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L59",
+      "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -39747,7 +40900,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L79",
+      "source_location": "L105",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -39757,7 +40910,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L101",
+      "source_location": "L127",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -39767,7 +40920,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L127",
+      "source_location": "L153",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -39777,7 +40930,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L240",
+      "source_location": "L266",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -39787,7 +40940,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L314",
+      "source_location": "L340",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -39797,7 +40950,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L416",
+      "source_location": "L442",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -39807,7 +40960,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/references/recipes.md",
-      "source_location": "L475",
+      "source_location": "L501",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -40017,6 +41170,28 @@
       "confidence": "EXTRACTED",
       "source_file": "tests/test_api.py",
       "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_lane_backend_runner",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_context_identity_views",
+      "target": "tests_lane_backend_load",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_context_identity_views.py",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42722,7 +43897,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tool.py",
-      "source_location": "L109",
+      "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43162,7 +44337,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "engine/tool.py",
-      "source_location": "L166",
+      "source_location": "L205",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43522,7 +44697,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L90",
+      "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43534,7 +44709,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L126",
+      "source_location": "L129",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43546,7 +44721,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L141",
+      "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43558,7 +44733,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L205",
+      "source_location": "L208",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43570,7 +44745,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L212",
+      "source_location": "L215",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43582,7 +44757,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tool.py",
-      "source_location": "L234",
+      "source_location": "L237",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43714,7 +44889,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "engine/store.py",
-      "source_location": "L168",
+      "source_location": "L170",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43726,7 +44901,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "engine/store.py",
-      "source_location": "L182",
+      "source_location": "L201",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43738,7 +44913,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "engine/tool.py",
-      "source_location": "L219",
+      "source_location": "L258",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44266,7 +45441,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_tool.py",
-      "source_location": "L117",
+      "source_location": "L120",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44278,7 +45453,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_tool.py",
-      "source_location": "L214",
+      "source_location": "L217",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -46127,6 +47302,18 @@
       "confidence_score": 0.95,
       "source_file": "skill/references/recipes.md",
       "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "skill_references_recipes_authoring_quick_check",
+      "target": "engine_tool_rich_present",
+      "relation": "references",
+      "context": "rich_present",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "skill/references/recipes.md",
+      "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast"
     }
