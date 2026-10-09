@@ -10596,7 +10596,43 @@
       "_origin": "ast"
     },
     {
-      "id": "github_pull_request_template",
+      "id": "github_pull_request_template_md_github_pull_request_template_b8baf2",
+      "label": "PULL_REQUEST_TEMPLATE.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "github_pull_request_template_pr_diagram",
+      "label": "pr-diagram",
+      "file_type": "document",
+      "node_kind": "heading",
+      "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
+      "id": "github_pull_request_template_md_github_pull_request_template_gates_b8baf2",
+      "label": "Gates",
+      "file_type": "document",
+      "node_kind": "heading",
+      "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
+      "source_location": "L9",
+      "_origin": "ast"
+    },
+    {
+      "id": "github_pull_request_template_md_github_pull_request_template_author_b8baf2",
+      "label": "Author",
+      "file_type": "document",
+      "node_kind": "heading",
+      "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
+      "source_location": "L12",
+      "_origin": "ast"
+    },
+    {
+      "id": "github_pull_request_template_md_github_pull_request_template_99d2d4",
       "label": "pull_request_template.md",
       "file_type": "document",
       "node_kind": "page",
@@ -10605,7 +10641,7 @@
       "_origin": "ast"
     },
     {
-      "id": "github_pull_request_template_gates",
+      "id": "github_pull_request_template_md_github_pull_request_template_gates_99d2d4",
       "label": "Gates",
       "file_type": "document",
       "node_kind": "heading",
@@ -10614,7 +10650,7 @@
       "_origin": "ast"
     },
     {
-      "id": "github_pull_request_template_author",
+      "id": "github_pull_request_template_md_github_pull_request_template_author_99d2d4",
       "label": "Author",
       "file_type": "document",
       "node_kind": "heading",
@@ -42207,8 +42243,38 @@
       "_origin": "ast"
     },
     {
-      "source": "github_pull_request_template",
-      "target": "github_pull_request_template_gates",
+      "source": "github_pull_request_template_md_github_pull_request_template_b8baf2",
+      "target": "github_pull_request_template_pr_diagram",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "github_pull_request_template_md_github_pull_request_template_b8baf2",
+      "target": "github_pull_request_template_md_github_pull_request_template_gates_b8baf2",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "github_pull_request_template_md_github_pull_request_template_b8baf2",
+      "target": "github_pull_request_template_md_github_pull_request_template_author_b8baf2",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".github/PULL_REQUEST_TEMPLATE.md",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "github_pull_request_template_md_github_pull_request_template_99d2d4",
+      "target": "github_pull_request_template_md_github_pull_request_template_gates_99d2d4",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".github/pull_request_template.md",
@@ -42217,8 +42283,8 @@
       "_origin": "ast"
     },
     {
-      "source": "github_pull_request_template",
-      "target": "github_pull_request_template_author",
+      "source": "github_pull_request_template_md_github_pull_request_template_99d2d4",
+      "target": "github_pull_request_template_md_github_pull_request_template_author_99d2d4",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".github/pull_request_template.md",
