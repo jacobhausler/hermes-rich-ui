@@ -205,27 +205,11 @@
       "_origin": "ast"
     },
     {
-      "id": "desktop_src_card_prose_reset_href",
-      "label": "PROSE_RESET_HREF",
-      "file_type": "code",
-      "source_file": "desktop/src/card.mjs",
-      "source_location": "L34",
-      "_origin": "ast"
-    },
-    {
-      "id": "desktop_src_card_prose_reset_css",
-      "label": "PROSE_RESET_CSS",
-      "file_type": "code",
-      "source_file": "desktop/src/card.mjs",
-      "source_location": "L35",
-      "_origin": "ast"
-    },
-    {
       "id": "desktop_src_card_ctxrest",
       "label": "ctxRest()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L48",
+      "source_location": "L38",
       "_callable": true,
       "_origin": "ast"
     },
@@ -234,7 +218,7 @@
       "label": "setRest()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L49",
+      "source_location": "L39",
       "_callable": true,
       "_origin": "ast"
     },
@@ -243,7 +227,7 @@
       "label": "api()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L50",
+      "source_location": "L40",
       "_callable": true,
       "_origin": "ast"
     },
@@ -252,7 +236,7 @@
       "label": "InlineError()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L60",
+      "source_location": "L50",
       "_callable": true,
       "_origin": "ast"
     },
@@ -261,7 +245,7 @@
       "label": "UnknownType()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L69",
+      "source_location": "L59",
       "_callable": true,
       "_origin": "ast"
     },
@@ -270,7 +254,7 @@
       "label": "CardBoundary",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L75",
+      "source_location": "L65",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast"
@@ -280,7 +264,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L76",
+      "source_location": "L66",
       "_callable": true,
       "_origin": "ast"
     },
@@ -289,7 +273,7 @@
       "label": ".getDerivedStateFromError()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L77",
+      "source_location": "L67",
       "_callable": true,
       "_origin": "ast"
     },
@@ -298,7 +282,7 @@
       "label": ".componentDidCatch()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L78",
+      "source_location": "L68",
       "_callable": true,
       "_origin": "ast"
     },
@@ -307,7 +291,7 @@
       "label": ".render()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L79",
+      "source_location": "L69",
       "_callable": true,
       "_origin": "ast"
     },
@@ -316,7 +300,7 @@
       "label": "POLICY_TONE",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L86",
+      "source_location": "L76",
       "_origin": "ast"
     },
     {
@@ -324,7 +308,7 @@
       "label": "Header()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L91",
+      "source_location": "L81",
       "_callable": true,
       "_origin": "ast"
     },
@@ -333,7 +317,7 @@
       "label": "getByPointer()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L111",
+      "source_location": "L101",
       "_callable": true,
       "_origin": "ast"
     },
@@ -342,7 +326,7 @@
       "label": "bindingValue()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L123",
+      "source_location": "L113",
       "_callable": true,
       "_origin": "ast"
     },
@@ -351,7 +335,7 @@
       "label": "bindingText()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L128",
+      "source_location": "L118",
       "_callable": true,
       "_origin": "ast"
     },
@@ -360,7 +344,7 @@
       "label": "folded()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L134",
+      "source_location": "L124",
       "_callable": true,
       "_origin": "ast"
     },
@@ -369,7 +353,7 @@
       "label": "CardBody()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L136",
+      "source_location": "L126",
       "_callable": true,
       "_origin": "ast"
     },
@@ -378,7 +362,7 @@
       "label": "makeRichCard()",
       "file_type": "code",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L208",
+      "source_location": "L198",
       "_callable": true,
       "_origin": "ast"
     },
@@ -387,7 +371,7 @@
       "label": "RFC-6901",
       "file_type": "doc_ref",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L110",
+      "source_location": "L100",
       "_origin": "ast"
     },
     {
@@ -521,11 +505,133 @@
       "_origin": "ast"
     },
     {
+      "id": "desktop_src_components_shared_size_class",
+      "label": "SIZE_CLASS",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L39",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_sizeclass",
+      "label": "sizeClass()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L47",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_flex_basis",
+      "label": "FLEX_BASIS",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L48",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_floor",
+      "label": "FLOOR",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L49",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_rowcontext",
+      "label": "RowContext",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L54",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_balancedcols",
+      "label": "balancedCols()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L57",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_gridtracks",
+      "label": "gridTracks()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L64",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_kidlist",
+      "label": "kidList()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L72",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_typeof",
+      "label": "typeOf()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L73",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_classof",
+      "label": "classOf()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L74",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_istile",
+      "label": "isTile()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L75",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_isshort",
+      "label": "isShort()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L76",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_isband",
+      "label": "isBand()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L77",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_compose",
+      "label": "compose()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L86",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "desktop_src_components_shared_common",
       "label": "common()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L36",
+      "source_location": "L115",
       "_callable": true,
       "_origin": "ast"
     },
@@ -534,7 +640,7 @@
       "label": "isNil()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L44",
+      "source_location": "L123",
       "_callable": true,
       "_origin": "ast"
     },
@@ -543,7 +649,7 @@
       "label": "unavailable()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L46",
+      "source_location": "L125",
       "_callable": true,
       "_origin": "ast"
     },
@@ -552,7 +658,7 @@
       "label": "StatusMark()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L53",
+      "source_location": "L132",
       "_callable": true,
       "_origin": "ast"
     },
@@ -561,7 +667,7 @@
       "label": "STATUS_ARROW",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L61",
+      "source_location": "L140",
       "_origin": "ast"
     },
     {
@@ -569,7 +675,7 @@
       "label": "text()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L68",
+      "source_location": "L147",
       "_callable": true,
       "_origin": "ast"
     },
@@ -578,7 +684,7 @@
       "label": "BADGE_VARIANTS_REAL",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L83",
+      "source_location": "L162",
       "_origin": "ast"
     },
     {
@@ -586,7 +692,7 @@
       "label": "BADGE_SIZES_REAL",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L84",
+      "source_location": "L163",
       "_origin": "ast"
     },
     {
@@ -594,7 +700,7 @@
       "label": "BADGE_VARIANT",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L87",
+      "source_location": "L166",
       "_origin": "ast"
     },
     {
@@ -602,7 +708,7 @@
       "label": "badge()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L88",
+      "source_location": "L167",
       "_callable": true,
       "_origin": "ast"
     },
@@ -611,7 +717,7 @@
       "label": "sourceLabels()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L91",
+      "source_location": "L170",
       "_callable": true,
       "_origin": "ast"
     },
@@ -620,7 +726,7 @@
       "label": "citeMarker()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L100",
+      "source_location": "L179",
       "_callable": true,
       "_origin": "ast"
     },
@@ -629,7 +735,7 @@
       "label": "sourceSup()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L128",
+      "source_location": "L207",
       "_callable": true,
       "_origin": "ast"
     },
@@ -638,7 +744,7 @@
       "label": "ownSources()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L144",
+      "source_location": "L223",
       "_callable": true,
       "_origin": "ast"
     },
@@ -647,7 +753,7 @@
       "label": "formatMetric()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L146",
+      "source_location": "L225",
       "_callable": true,
       "_origin": "ast"
     },
@@ -656,7 +762,7 @@
       "label": "row()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L166",
+      "source_location": "L245",
       "_callable": true,
       "_origin": "ast"
     },
@@ -665,7 +771,7 @@
       "label": "ImageTile()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L175",
+      "source_location": "L254",
       "_callable": true,
       "_origin": "ast"
     },
@@ -827,7 +933,7 @@
       "label": "CardDepth",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L8",
+      "source_location": "L9",
       "_origin": "ast"
     },
     {
@@ -835,7 +941,7 @@
       "label": "CardChrome",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L9",
+      "source_location": "L10",
       "_origin": "ast"
     },
     {
@@ -843,7 +949,7 @@
       "label": "folded()",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L10",
+      "source_location": "L11",
       "_callable": true,
       "_origin": "ast"
     },
@@ -852,7 +958,7 @@
       "label": "CardHeader()",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L12",
+      "source_location": "L13",
       "_callable": true,
       "_origin": "ast"
     },
@@ -861,7 +967,7 @@
       "label": "Card()",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L23",
+      "source_location": "L27",
       "_callable": true,
       "_origin": "ast"
     },
@@ -1879,7 +1985,7 @@
       "label": "computeDelta()",
       "file_type": "code",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L14",
+      "source_location": "L15",
       "_callable": true,
       "_origin": "ast"
     },
@@ -1888,7 +1994,7 @@
       "label": "clean()",
       "file_type": "code",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L28",
+      "source_location": "L29",
       "_callable": true,
       "_origin": "ast"
     },
@@ -1897,7 +2003,7 @@
       "label": "LegacyMetric()",
       "file_type": "code",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L34",
+      "source_location": "L35",
       "_callable": true,
       "_origin": "ast"
     },
@@ -1906,7 +2012,7 @@
       "label": "fmtNumLegacy()",
       "file_type": "code",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L56",
+      "source_location": "L57",
       "_callable": true,
       "_origin": "ast"
     },
@@ -1915,7 +2021,7 @@
       "label": "HouseMetric()",
       "file_type": "code",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L65",
+      "source_location": "L66",
       "_callable": true,
       "_origin": "ast"
     },
@@ -1924,7 +2030,7 @@
       "label": "Metric()",
       "file_type": "code",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L130",
+      "source_location": "L133",
       "_callable": true,
       "_origin": "ast"
     },
@@ -2199,7 +2305,7 @@
       "label": "Stack()",
       "file_type": "code",
       "source_file": "desktop/src/components/stack.mjs",
-      "source_location": "L8",
+      "source_location": "L12",
       "_callable": true,
       "_origin": "ast"
     },
@@ -2624,6 +2730,38 @@
       "source_file": "desktop/src/lower.mjs",
       "source_location": "L78",
       "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_prose_reset",
+      "label": "prose-reset.mjs",
+      "file_type": "code",
+      "source_file": "desktop/src/prose-reset.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_prose_reset_prose_reset_href",
+      "label": "PROSE_RESET_HREF",
+      "file_type": "code",
+      "source_file": "desktop/src/prose-reset.mjs",
+      "source_location": "L6",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_prose_reset_h_stack_flex",
+      "label": "H_STACK_FLEX",
+      "file_type": "code",
+      "source_file": "desktop/src/prose-reset.mjs",
+      "source_location": "L9",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_prose_reset_prose_reset_css",
+      "label": "PROSE_RESET_CSS",
+      "file_type": "code",
+      "source_file": "desktop/src/prose-reset.mjs",
+      "source_location": "L11",
       "_origin": "ast"
     },
     {
@@ -7648,6 +7786,75 @@
       "_origin": "ast"
     },
     {
+      "id": "tests_test_layout_flow",
+      "label": "test_layout_flow.mjs",
+      "file_type": "code",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_layout_flow_flush",
+      "label": "flush()",
+      "file_type": "code",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L25",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_layout_flow_render",
+      "label": "render()",
+      "file_type": "code",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L26",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_layout_flow_metric",
+      "label": "metric()",
+      "file_type": "code",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L30",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_layout_flow_valuefontpx",
+      "label": "valueFontPx()",
+      "file_type": "code",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L31",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_layout_flow_kv",
+      "label": "kv()",
+      "file_type": "code",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L105",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_layout_flow_root",
+      "label": "ROOT",
+      "file_type": "code",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L279",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_layout_flow_savedfiles",
+      "label": "savedFiles",
+      "file_type": "code",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L280",
+      "_origin": "ast"
+    },
+    {
       "id": "tests_test_lower",
       "label": "test_lower.mjs",
       "file_type": "code",
@@ -12415,6 +12622,14 @@
       "source_file": ""
     },
     {
+      "id": "tests_helpers_render_lower",
+      "label": "tests_helpers_render_lower",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
       "id": "hermes_cli_plugins_manifest",
       "label": "hermes_cli_plugins_manifest",
       "file_type": "concept",
@@ -13102,8 +13317,9 @@
     },
     {
       "source": "desktop_src_card",
-      "target": "desktop_src_card_prose_reset_href",
-      "relation": "contains",
+      "target": "desktop_src_prose_reset",
+      "relation": "imports_from",
+      "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
       "source_location": "L34",
@@ -13112,11 +13328,23 @@
     },
     {
       "source": "desktop_src_card",
-      "target": "desktop_src_card_prose_reset_css",
-      "relation": "contains",
+      "target": "desktop_src_prose_reset_prose_reset_css",
+      "relation": "imports",
+      "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L35",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_card",
+      "target": "desktop_src_prose_reset_prose_reset_href",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/card.mjs",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13126,7 +13354,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L48",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13136,7 +13364,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L49",
+      "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13146,7 +13374,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L50",
+      "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13156,7 +13384,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L60",
+      "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13166,7 +13394,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L69",
+      "source_location": "L59",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13176,7 +13404,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L75",
+      "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13186,7 +13414,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L76",
+      "source_location": "L66",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13196,7 +13424,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L77",
+      "source_location": "L67",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13206,7 +13434,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L78",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13216,7 +13444,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L79",
+      "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13226,7 +13454,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L86",
+      "source_location": "L76",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13236,7 +13464,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L91",
+      "source_location": "L81",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13246,7 +13474,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L111",
+      "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13256,7 +13484,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L123",
+      "source_location": "L113",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13266,7 +13494,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L128",
+      "source_location": "L118",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13276,7 +13504,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L134",
+      "source_location": "L124",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13286,7 +13514,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L136",
+      "source_location": "L126",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13296,7 +13524,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L208",
+      "source_location": "L198",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13307,7 +13535,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L51",
+      "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13319,7 +13547,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L80",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13330,7 +13558,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L125",
+      "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13341,7 +13569,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L129",
+      "source_location": "L119",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13352,7 +13580,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L142",
+      "source_location": "L132",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13363,7 +13591,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L145",
+      "source_location": "L135",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13374,7 +13602,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L155",
+      "source_location": "L145",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13386,7 +13614,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L172",
+      "source_location": "L162",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13397,7 +13625,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L188",
+      "source_location": "L178",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13409,7 +13637,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L191",
+      "source_location": "L181",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13420,7 +13648,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L211",
+      "source_location": "L201",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13432,7 +13660,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L212",
+      "source_location": "L202",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13444,7 +13672,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L217",
+      "source_location": "L207",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13454,7 +13682,7 @@
       "relation": "cites",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L110",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13677,11 +13905,151 @@
     },
     {
       "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_size_class",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_sizeclass",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_flex_basis",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_floor",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_rowcontext",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_balancedcols",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_gridtracks",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_kidlist",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L72",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_typeof",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L73",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_classof",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_istile",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_isshort",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_isband",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L77",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_compose",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
       "target": "desktop_src_components_shared_common",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L36",
+      "source_location": "L115",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13691,7 +14059,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L44",
+      "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13701,7 +14069,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L46",
+      "source_location": "L125",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13711,7 +14079,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L53",
+      "source_location": "L132",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13721,7 +14089,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L61",
+      "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13731,7 +14099,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L68",
+      "source_location": "L147",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13741,7 +14109,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L83",
+      "source_location": "L162",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13751,7 +14119,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L84",
+      "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13761,7 +14129,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L87",
+      "source_location": "L166",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13771,7 +14139,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L88",
+      "source_location": "L167",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13781,7 +14149,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L91",
+      "source_location": "L170",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13791,7 +14159,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L100",
+      "source_location": "L179",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13801,7 +14169,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L128",
+      "source_location": "L207",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13811,7 +14179,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L144",
+      "source_location": "L223",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13821,7 +14189,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L146",
+      "source_location": "L225",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13831,7 +14199,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L166",
+      "source_location": "L245",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13841,7 +14209,128 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L175",
+      "source_location": "L254",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared_gridtracks",
+      "target": "desktop_src_components_shared_balancedcols",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared_classof",
+      "target": "desktop_src_components_shared_sizeclass",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared_classof",
+      "target": "desktop_src_components_shared_typeof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared_istile",
+      "target": "desktop_src_components_shared_classof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared_isband",
+      "target": "desktop_src_components_shared_sizeclass",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L80",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared_compose",
+      "target": "desktop_src_components_shared_kidlist",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L87",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared_compose",
+      "target": "desktop_src_components_shared_istile",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L91",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared_compose",
+      "target": "desktop_src_components_shared_isshort",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared_compose",
+      "target": "desktop_src_components_shared_typeof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L99",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared_compose",
+      "target": "desktop_src_components_shared_isband",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L100",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared_compose",
+      "target": "desktop_src_components_shared_gridtracks",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L105",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13852,7 +14341,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L69",
+      "source_location": "L148",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13863,7 +14352,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L69",
+      "source_location": "L148",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13874,7 +14363,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L130",
+      "source_location": "L209",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13885,7 +14374,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L144",
+      "source_location": "L223",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13896,7 +14385,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L147",
+      "source_location": "L226",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13907,7 +14396,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L180",
+      "source_location": "L259",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14605,6 +15094,28 @@
     },
     {
       "source": "desktop_src_components_card",
+      "target": "desktop_src_components_shared_compose",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card",
+      "target": "desktop_src_components_shared_kidlist",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card",
       "target": "desktop_src_components_shared_text",
       "relation": "imports",
       "context": "import",
@@ -14693,17 +15204,40 @@
     },
     {
       "source": "desktop_src_components_card",
-      "target": "desktop_src_components_card_carddepth",
-      "relation": "contains",
+      "target": "desktop_src_prose_reset",
+      "relation": "imports_from",
+      "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L8",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_card",
-      "target": "desktop_src_components_card_cardchrome",
+      "target": "desktop_src_prose_reset_prose_reset_css",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card",
+      "target": "desktop_src_prose_reset_prose_reset_href",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card",
+      "target": "desktop_src_components_card_carddepth",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
@@ -14713,7 +15247,7 @@
     },
     {
       "source": "desktop_src_components_card",
-      "target": "desktop_src_components_card_folded",
+      "target": "desktop_src_components_card_cardchrome",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
@@ -14723,11 +15257,21 @@
     },
     {
       "source": "desktop_src_components_card",
+      "target": "desktop_src_components_card_folded",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card",
       "target": "desktop_src_components_card_cardheader",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L12",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14737,7 +15281,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L23",
+      "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14749,7 +15293,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L30",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14760,7 +15304,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L30",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17357,6 +17901,50 @@
     },
     {
       "source": "desktop_src_components_grid",
+      "target": "desktop_src_components_shared_rowcontext",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/grid.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_grid",
+      "target": "desktop_src_components_shared_gridtracks",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/grid.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_grid",
+      "target": "desktop_src_components_shared_kidlist",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/grid.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_grid",
+      "target": "desktop_src_components_shared_classof",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/grid.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_grid",
       "target": "desktop_src_components_house",
       "relation": "imports_from",
       "context": "import",
@@ -18698,7 +19286,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L2",
+      "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18709,7 +19297,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18720,7 +19308,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18731,7 +19319,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18742,7 +19330,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18753,7 +19341,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18764,7 +19352,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18775,7 +19363,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L3",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18786,7 +19374,18 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L3",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_metric",
+      "target": "desktop_src_components_shared_rowcontext",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/metric.mjs",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18797,7 +19396,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18808,7 +19407,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18819,7 +19418,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18830,7 +19429,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18841,7 +19440,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18852,7 +19451,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18863,7 +19462,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L6",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18874,7 +19473,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L6",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18885,7 +19484,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L6",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18895,7 +19494,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L14",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18905,7 +19504,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L28",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18915,7 +19514,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L34",
+      "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18925,7 +19524,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L56",
+      "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18935,7 +19534,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L65",
+      "source_location": "L66",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18945,7 +19544,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L130",
+      "source_location": "L133",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18956,7 +19555,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L38",
+      "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18967,7 +19566,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L49",
+      "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18978,7 +19577,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L76",
+      "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18989,7 +19588,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L84",
+      "source_location": "L87",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -19840,7 +20439,51 @@
     },
     {
       "source": "desktop_src_components_stack",
+      "target": "desktop_src_components_shared_compose",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/stack.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_stack",
       "target": "desktop_src_components_shared_gap",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/stack.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_stack",
+      "target": "desktop_src_components_shared_rowcontext",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/stack.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_stack",
+      "target": "desktop_src_components_shared_kidlist",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/stack.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_stack",
+      "target": "desktop_src_components_shared_classof",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -19887,7 +20530,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/stack.mjs",
-      "source_location": "L8",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -21410,6 +22053,69 @@
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/lower.mjs",
       "source_location": "L97",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_prose_reset",
+      "target": "desktop_src_components_shared",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/prose-reset.mjs",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_prose_reset",
+      "target": "desktop_src_components_shared_size_class",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/prose-reset.mjs",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_prose_reset",
+      "target": "desktop_src_components_shared_flex_basis",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/prose-reset.mjs",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_prose_reset",
+      "target": "desktop_src_prose_reset_prose_reset_href",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/prose-reset.mjs",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_prose_reset",
+      "target": "desktop_src_prose_reset_h_stack_flex",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/prose-reset.mjs",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_prose_reset",
+      "target": "desktop_src_prose_reset_prose_reset_css",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/prose-reset.mjs",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -33216,6 +33922,293 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_layout_flow",
+      "target": "ref_node_test",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "ref_node_fs",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "ref_node_url",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "ref_node_path",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_helpers_render",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_helpers_render_react",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_helpers_render_act",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_helpers_render_lower",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_helpers_render_renderspec",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_test_layout_flow_flush",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_test_layout_flow_render",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_test_layout_flow_metric",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_test_layout_flow_valuefontpx",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_test_layout_flow_kv",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L105",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_test_layout_flow_root",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L279",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_test_layout_flow_savedfiles",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L280",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow_render",
+      "target": "tests_test_layout_flow_flush",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_test_layout_flow_render",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_test_layout_flow_metric",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_test_layout_flow_valuefontpx",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "tests_test_layout_flow_kv",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L109",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "ref_react_dom",
+      "relation": "imports_from",
+      "context": "import",
+      "deferred": true,
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L282",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "desktop_src_components_shared",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "desktop_src_card",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "desktop_src_index",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "desktop_src_lower",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "client",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_lower",
       "target": "ref_node_test",
       "relation": "imports_from",
@@ -38873,7 +39866,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tokens.mjs",
-      "source_location": "L101",
+      "source_location": "L102",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -38884,7 +39877,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tokens.mjs",
-      "source_location": "L119",
+      "source_location": "L120",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42493,6 +43486,17 @@
       "_origin": "ast"
     },
     {
+      "source": "desktop_src_card",
+      "target": "desktop_src_prose_reset",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/card.mjs",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "scripts_screenshots_seed_gallery",
       "target": "engine_tool_rich_present",
       "relation": "imports",
@@ -43247,7 +44251,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L62",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43258,7 +44262,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L70",
+      "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43269,7 +44273,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L92",
+      "source_location": "L82",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43280,7 +44284,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L102",
+      "source_location": "L92",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43291,7 +44295,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L158",
+      "source_location": "L148",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43302,7 +44306,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L162",
+      "source_location": "L152",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43313,7 +44317,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L168",
+      "source_location": "L158",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43324,7 +44328,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L172",
+      "source_location": "L162",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43335,7 +44339,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L176",
+      "source_location": "L166",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43610,7 +44614,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43621,7 +44625,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43632,7 +44636,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43643,7 +44647,29 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L30",
+      "source_location": "L33",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card_card",
+      "target": "desktop_src_components_shared_kidlist",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card_card",
+      "target": "desktop_src_components_shared_compose",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L41",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43654,7 +44680,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L34",
+      "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43665,7 +44691,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L34",
+      "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43676,7 +44702,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L37",
+      "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43979,12 +45005,34 @@
     },
     {
       "source": "desktop_src_components_grid_grid",
+      "target": "desktop_src_components_shared_kidlist",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/grid.mjs",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_grid_grid",
       "target": "desktop_src_components_shared_common",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/grid.mjs",
-      "source_location": "L22",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_grid_grid",
+      "target": "desktop_src_components_shared_gridtracks",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/grid.mjs",
+      "source_location": "L28",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44303,7 +45351,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44314,7 +45362,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L37",
+      "source_location": "L38",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44325,7 +45373,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L41",
+      "source_location": "L42",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44336,7 +45384,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L44",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44347,7 +45395,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L44",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44358,7 +45406,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L45",
+      "source_location": "L46",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44369,7 +45417,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L69",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44380,7 +45428,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L70",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44391,7 +45439,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L88",
+      "source_location": "L91",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44402,7 +45450,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L97",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44413,7 +45461,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L103",
+      "source_location": "L106",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44424,7 +45472,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L109",
+      "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44435,7 +45483,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/metric.mjs",
-      "source_location": "L131",
+      "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44705,12 +45753,45 @@
     },
     {
       "source": "desktop_src_components_stack_stack",
+      "target": "desktop_src_components_shared_kidlist",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/stack.mjs",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_stack_stack",
+      "target": "desktop_src_components_shared_classof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/stack.mjs",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_stack_stack",
       "target": "desktop_src_components_shared_common",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/stack.mjs",
-      "source_location": "L13",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_stack_stack",
+      "target": "desktop_src_components_shared_compose",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/stack.mjs",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -44975,6 +46056,28 @@
       "confidence": "EXTRACTED",
       "source_file": "tests/test_fmt_corpus.mjs",
       "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow_flush",
+      "target": "tests_helpers_render_renderspec",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow_render",
+      "target": "tests_helpers_render_renderspec",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L26",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45526,7 +46629,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/card.mjs",
-      "source_location": "L173",
+      "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45539,6 +46642,18 @@
       "confidence_score": 0.85,
       "source_file": "desktop/src/components/gallery.mjs",
       "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_grid_grid",
+      "target": "desktop_src_components_shared_classof",
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "desktop/src/components/grid.mjs",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -46191,6 +47306,30 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_layout_flow",
+      "target": "tests_helpers_render",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L39",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_layout_flow",
+      "target": "desktop_src_card_cardbody",
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_layout_flow.mjs",
+      "source_location": "L290",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_saved_cards_render",
       "target": "desktop_src_card_cardbody",
       "relation": "indirect_call",
@@ -46258,7 +47397,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tokens.mjs",
-      "source_location": "L117",
+      "source_location": "L118",
       "weight": 1.0,
       "_origin": "ast"
     },
