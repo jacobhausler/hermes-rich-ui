@@ -2,6 +2,18 @@
 
 All notable changes to hermes-rich-ui are documented here.
 
+## Unreleased
+
+- **DataTable aggregations (#40, G6 generalized):** `aggregations?: AggSpec[]`
+  (`{agg: sum|mean|median|min|max|count, label?, columns?}`) — every value computed
+  by the RENDERER (contract L6); rows pin at the bottom, excluded from sort, filter
+  and the bar scale; caption-ink label with a top hairline. `aggregations: true`
+  (or sugar `totals: true`) renders ONE smart row: sum for additive number/currency/bar,
+  mean for percent/fraction (never guessed from values), row-count for text/sources,
+  date silent. nulls are skipped by every agg; an all-null column shows the
+  unavailable glyph, never 0; unknown `columns` reject names the valid columns.
+  `countDistinct` is a documented v1 non-goal. Old tables render byte-identically.
+
 ## v0.1.4 — 2026-09-29
 
 - **Waterfall balance walk (#15, #16):** sign-coded bars for single-series

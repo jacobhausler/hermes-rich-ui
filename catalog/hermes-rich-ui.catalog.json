@@ -899,6 +899,56 @@
           ],
           "additionalProperties": false,
           "description": "E15: seed sort (deletes agent pre-sorting). Unknown key falls back to unsorted. Nulls sort last in both directions; nonnumeric cells never Number()-coerced. dir optional: type-aware default (desc for numeric/date, asc for text) (#34)."
+        },
+        "aggregations": {
+          "description": "#40 (G6, generalized): renderer-computed agg rows (contract L6 \u2014 agents never author aggregates). true = ONE smart row (sum for additive number/currency/bar, mean for percent/fraction, count for text/sources, date silent; label 'Total'); or explicit rows, each {agg, label?, columns?} pinned at the bottom, excluded from sort/filter/scale. Unknown column in columns rejects with the valid list named. nulls skipped by every agg; all-null column shows 'unavailable', never 0. count counts rows; countDistinct is a documented v1 non-goal.",
+          "oneOf": [
+            {
+              "const": true
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 6,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "agg": {
+                    "type": "string",
+                    "enum": [
+                      "sum",
+                      "mean",
+                      "median",
+                      "min",
+                      "max",
+                      "count"
+                    ]
+                  },
+                  "label": {
+                    "type": "string",
+                    "maxLength": 4096
+                  },
+                  "columns": {
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 12,
+                    "items": {
+                      "type": "string",
+                      "maxLength": 128
+                    }
+                  }
+                },
+                "required": [
+                  "agg"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "totals": {
+          "type": "boolean",
+          "description": "Sugar for aggregations:true (the ONE smart Total row)."
         }
       },
       "required": [

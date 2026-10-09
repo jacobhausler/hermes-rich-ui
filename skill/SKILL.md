@@ -46,7 +46,7 @@ All values flow through data bindings: write `{"path": "/data/x"}` (or `/meta/..
 | 12 | Progress | label?, current, total? (null total ⇒ indeterminate), target? (E12 vs-target line), unit? |
 | 13 | KeyValueList | items (DynamicArray ≤32): {label, value, sourceIds?} |
 | 14 | Image | src (https:// only), alt (required), caption?, maxHeight? 64..600 |
-| 15 | DataTable | title?, columns ≤12 {key, label, type: text\|number\|currency\|percent\|date\|sources, unit?, precision?}, rows ≤100 (row keys ⊆ column keys), pageSize? 5..50, defaultSort? {key, dir} (E15) |
+| 15 | DataTable | title?, columns ≤12 {key, label, type: text\|number\|currency\|percent\|date\|sources, unit?, precision?}, rows ≤100 (row keys ⊆ column keys), pageSize? 5..50, defaultSort? {key, dir} (E15), aggregations? true\|{agg: sum\|mean\|median\|min\|max\|count, label?, columns?}[] (#40: renderer-computed agg rows, L6 — totals:true / aggregations:true = ONE smart Total row) |
 | 16 | Chart | kind (bar\|line\|histogram\|scatter\|area\|waterfall\|range), title?, xLabel?, yLabel?, unit?, series 1..4 ×≤512 {label, data}, caveat?, stack? (bar\|area), stepped? (line), sortDesc? (bar\|histogram), height? 120..480 |
 | 17 | Timeline | title?, items ≤30 {date?, label, text?, status? done\|active\|pending\|failed, sourceIds?} |
 | 18 | SourceList | title?, sourceIds? (default: all /meta/sources) |
