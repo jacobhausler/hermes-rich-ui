@@ -1,6 +1,6 @@
 // Chart — ONE engine: uPlot 1.6.32 (bar | line | scatter | histogram | area | waterfall | range)
 // + props stack (renderer-computed cumulative baselines), stepped (uPlot.paths.stepped),
-// sortDesc (label-keyed |value| desc), height (clamped 120..480, default 240).
+// sortDesc (label-keyed |value| desc), height (clamped 120..480, default 180).
 // Contract: docs/CONTRACTS.md §2 row 16 + "Chart data shapes". Props arrive resolved on
 // element.props. Self-contained: no registry/index imports. Styling = inline + --ui-* only.
 //
@@ -13,9 +13,11 @@ import { jsx, jsxs } from 'react/jsx-runtime'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import uPlot from 'uplot'
 import { formatMetric, ownSources, type } from './_shared.mjs'
+import { fmt, fmtTicks, axisTitle, unitSpec } from './fmt.mjs'
+import { HOUSE, SERIES, TYPE, B } from './_house.mjs'
 
 const KINDS = ['bar', 'line', 'scatter', 'histogram', 'area', 'waterfall', 'range']
-const SERIES_TOKENS = ['--ui-accent', '--ui-green', '--ui-purple', '--ui-orange']
+const SERIES_TOKENS = SERIES.map(c => c.slice(4, -1))
 // #15: the three waterfall fill roles — same colour-source path as SERIES_TOKENS
 // (theme token at runtime, FALLBACK entry off-screen/tests; never a loose hex).
 const WF_ROLE_TOKENS = { up: '--ui-green', down: '--ui-red', total: '--ui-text-secondary' }
@@ -24,11 +26,11 @@ const WF_ROLE_ORDER = ['up', 'down', 'total']
 const FALLBACK = { '--ui-accent': '#3b82f6', '--ui-green': '#22c55e', '--ui-purple': '#a855f7', '--ui-orange': '#f97316',
   '--ui-red': '#ef4444',
   '--ui-text-secondary': '#9ca3af', '--ui-text-primary': '#e5e7eb', '--ui-stroke-tertiary': '#374151', '--ui-stroke-secondary': '#4b5563' }
-const HEIGHT = 240          // default chart height (F1: `height` prop clamps 120..480)
+const HEIGHT = HOUSE.CHART_PLOT_H          // default chart height (F1: `height` prop clamps 120..480)
 const HEIGHT_MIN = 120
 const HEIGHT_MAX = 480
 const AREA_FILL_ALPHA = 0.18
-// F1: height?: number → clamp 120..480, non-number/NaN → default 240.
+// F1: height?: number → clamp 120..480, non-number/NaN → default 180.
 export function clampHeight(v) {
   const n = typeof v === 'number' ? v : NaN
   return Number.isFinite(n) ? Math.min(HEIGHT_MAX, Math.max(HEIGHT_MIN, n)) : HEIGHT
@@ -50,7 +52,7 @@ let unstringifiableCount = 0
 // React 19 hoists a <style href precedence> into <head> and dedupes it by href (no document.* here).
 const UPLOT_SCOPE = '[data-richui="chart-canvas"] '
 // React 19 dedupes hoisted <style> by href and never swaps the text of a mounted one: bump on EVERY css edit.
-export const UPLOT_CSS_HREF = 'hermes-rich-ui/uplot-css/6'
+export const UPLOT_CSS_HREF = 'hermes-rich-ui/uplot-css/7'
 const UPLOT_RULES = [
   '.uplot,.uplot *,.uplot *::before,.uplot *::after{box-sizing:border-box}',
   '.uplot{font-family:inherit;line-height:1.5;width:min-content;color:var(--ui-text-secondary)}',
@@ -60,11 +62,11 @@ const UPLOT_RULES = [
   '.u-under{overflow:hidden}',
   '.uplot canvas{display:block;position:relative;width:100%;height:100%}',
   '.u-axis{position:absolute}',
-  '.u-legend{font-size:11px;margin:4px 0 0;text-align:left;color:var(--ui-text-secondary)}',
+  `.u-legend{font-size:${TYPE.small.fontSize}px;line-height:${TYPE.small.lineHeight};margin:4px 0 0;text-align:left;color:var(--ui-text-secondary)}`,
   '.u-inline{display:block}',
   '.u-inline *{display:inline-block}',
   '.u-inline tr{margin-right:12px}',
-  '.u-legend th{font-weight:600}',
+  '.u-legend th{font-weight:400}',
   '.u-legend th>*{vertical-align:middle;display:inline-block}',
   '.u-legend .u-marker{width:1em;height:1em;margin-right:4px;background-clip:padding-box!important}',
   '.u-inline.u-live th::after{content:":";vertical-align:middle}',
@@ -181,7 +183,7 @@ export function seriesToUplot(kind, series, opts = {}) {
   }
 
   if (kind === 'line' || kind === 'area') {
-    const parsed = ss.map(s => s.data.map(p => (p && typeof p === 'object') ? { x: parseX(p.x), y: isNum(p.y) ? p.y : null } : null).filter(p => p && p.x))
+    const parsed = ss.map(s => s.data.map(p => (p && typeof p === 'object') ? { x: parseX(p.x), y: isNum(p.y) ? p.y : null, authoredX: p.x } : null).filter(p => p && p.x))
     const allX = parsed.flat().map(p => p.x)
     if (allX.length === 0) return empty('no plottable x values')
     const xAxisIsTime = allX.every(p => p.time)
@@ -196,6 +198,7 @@ export function seriesToUplot(kind, series, opts = {}) {
     })
     if (points === 0) return empty('all y values are null')
     const out = { ok: true, data: [xs, ...ys], labels, xAxisIsTime, points }
+    if (xAxisIsTime) out.xDates = Object.fromEntries(parsed.flat().map(p => [p.x.v, p.authoredX]))
     if (kind === 'area' && opts.stack) {
       // Same custom stacking as bar (S7): cumulative columns; null → gap contributing 0 to series below.
       const bases = ys.map(c => c.map(() => null))
@@ -440,7 +443,7 @@ export function waterfallPlan(u, model, props, colors) {
         const x = l0(i) + slot * pxPerUnit / 2                       // bar-slot centre
         const half = text.length * WF_LABEL_HALF_PER_CHAR + WF_LABEL_HALF_PAD
         const topEdge = u.valToPos(Math.max(tops[i], bases[i]), 'y', true)   // visually upper edge (y grows down)
-        labelCandidates.push({ x, y: topEdge - WF_LABEL_GAP, text, color: colors.text || FALLBACK['--ui-text-secondary'], half })
+        labelCandidates.push({ x, y: topEdge - WF_LABEL_GAP, text, color: colors.primary || FALLBACK['--ui-text-primary'], half })
       }
     }
   }
@@ -475,7 +478,7 @@ export function drawWaterfallPlan(u, plan) {
   ctx.stroke && ctx.stroke()
   ctx.setLineDash && ctx.setLineDash([])
   for (const b of plan.bars) { ctx.fillStyle = b.fill; ctx.fillRect && ctx.fillRect(b.x, b.y, b.w, b.h) }
-  ctx.font = `${Math.round(11 * pr)}px system-ui, sans-serif`
+  ctx.font = `${Math.round(TYPE.small.fontSize * pr)}px system-ui, sans-serif`
   ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
   for (const l of plan.labels) { ctx.fillStyle = l.color; ctx.fillText && ctx.fillText(l.text, l.x, l.y) }
   // Key banner: Increase / Decrease / Total (single-series only; plan.key is empty for
@@ -527,7 +530,7 @@ export function drawWaterfallPlan(u, plan) {
 // Shared geometry for the floating-rect kinds (waterfall, range): one rect per category from
 // bases[i]→tops[i] on the y-scale, series i occupying slot i of a 0.8-wide group centred on each
 // integer x (same slot math as groupedBarsPaths, drawn directly like histogramPaths).
-function floatingRectPaths(seriesCount, seriesPos, basesOf) {
+function floatingRectPaths(seriesCount, seriesPos, basesOf, zeroHeight = 1) {
   const group = 0.8; const slot = group / seriesCount
   return (u, sidx, i0, i1) => {
     const p = new Path2D()
@@ -543,7 +546,10 @@ function floatingRectPaths(seriesCount, seriesPos, basesOf) {
       const centre = u.valToPos(xs[i], 'x', true)
       const l = centre + (seriesPos * slot - group / 2) * pxPerUnit
       const t = u.valToPos(top, 'y', true); const b = u.valToPos(bases[i], 'y', true)
-      p.rect(l, Math.min(t, b), Math.max(slot * pxPerUnit, 1), Math.max(Math.abs(b - t), 1))
+      const stub = top === bases[i] ? zeroHeight * (u.pxRatio || 1) : 1
+      const height = Math.max(Math.abs(b - t), stub)
+      // Zero bars rise from the baseline so the plot clip keeps the stub visible.
+      p.rect(l, Math.min(t, b) - (top === bases[i] ? height : 0), Math.max(slot * pxPerUnit, 1), height)
     }
     return { stroke: p, fill: p, clip: null, band: null, gaps: null, flags: 0 }
   }
@@ -551,14 +557,8 @@ function floatingRectPaths(seriesCount, seriesPos, basesOf) {
 
 // Grouped bars: series i occupies slot i of a 0.8-wide group centred on each integer x.
 function groupedBarsPaths(seriesCount, seriesPos) {
-  const group = 0.8; const slot = group / seriesCount
-  return uPlot.paths.bars({
-    size: [1, 100, 1],
-    disp: {
-      x0: { unit: 1, values: (u) => u.data[0].map(x => x - group / 2 + seriesPos * slot) },
-      size: { unit: 1, values: (u) => u.data[0].map(() => slot) }
-    }
-  })
+  const bases = [(new Array(MAX_POINTS)).fill(0)]
+  return floatingRectPaths(seriesCount, seriesPos, bases, 2)
 }
 
 function readToken(el, name) {
@@ -573,13 +573,28 @@ function readToken(el, name) {
 
 function zeroBaseline(u, min, max) { return [Math.min(0, min), Math.max(0, max)] }
 
-export function buildOpts(kind, model, props, width, colors) {
+// Readouts keep exact grouped values; whole currency omits redundant zero minors (#35).
+function readout(v, unit) {
+  const text = fmt(v, { unit, level: 'exact' })
+  return Number.isInteger(v) && unitSpec(undefined, unit).cls === 'currency'
+    ? text?.replace(/\.0+(?=[^\d]*$)/, '') : text
+}
+
+export function buildOpts(kind, model, props, width, colors, onReadout) {
   const { data, labels, xAxisIsTime } = model
   const unit = typeof props.unit === 'string' && props.unit ? props.unit : ''
-  const yLabel = [props.yLabel, unit ? `(${unit})` : ''].filter(Boolean).join(' ')
-  const axisBase = { stroke: colors.text, grid: { stroke: colors.grid, width: 1 }, ticks: { stroke: colors.grid, width: 1 }, font: '11px system-ui, sans-serif', labelFont: '12px system-ui, sans-serif', labelSize: 20 }
+  const yLabel = [props.yLabel, axisTitle({ unit })].filter(Boolean).join(' ')
+  const axisBase = { stroke: colors.text, grid: { stroke: colors.grid, width: 1 }, ticks: { stroke: colors.grid, width: 1 }, font: `${TYPE.small.fontSize}px system-ui, sans-serif`, labelFont: `${TYPE.small.fontSize}px system-ui, sans-serif`, labelSize: 20 }
+  // C14: calendar dates use UTC splits and print as authored, never in the viewer zone.
+  const calendar = xAxisIsTime && Object.values(model.xDates || {}).every(x => typeof x === 'string' && x.length === 10)
   const xAxis = { ...axisBase, label: props.xLabel || undefined }
-  const yAxis = { ...axisBase, label: yLabel || undefined, size: 56 }
+  if (calendar) xAxis.values = (u, ticks) => ticks.map(x => x == null ? '' : new Date(x * 1000).toISOString().slice(0, 10))
+  else if (!xAxisIsTime) xAxis.values = (u, ticks) => fmtTicks(ticks)
+  const yValues = (u, ticks) => fmtTicks(ticks, { unit })
+  // Canvas-free estimate (0.55ch + padding, floor 28); init installs real canvas measurement.
+  const estimate = yValues(null, data.slice(1).flat().filter(isNum))
+  const yAxis = { ...axisBase, label: yLabel || undefined, values: yValues,
+    size: Math.max(28, ...estimate.map(s => s.length * 0.55 + 8)) }
   const scales = { x: { time: (kind === 'line' || kind === 'area') && xAxisIsTime } }
   const categorical = kind === 'bar' || kind === 'waterfall' || kind === 'range'
   if (categorical) {
@@ -601,14 +616,17 @@ export function buildOpts(kind, model, props, width, colors) {
     // Fill runs toward zero — pin zero inside the y domain so mixed-sign series split at the axis (S/F risk).
     scales.y = { range: zeroBaseline }
   }
+  if (!categorical && !xAxisIsTime && data[0].every(Number.isInteger)) {
+    xAxis.filter = (u, splits) => splits.map(v => Number.isInteger(v) ? v : null)
+  }
   const series = [{ label: props.xLabel || ((kind === 'line' || kind === 'area') && xAxisIsTime ? 'time' : 'x') }]
   const stacked = !!model.stackBases && (kind === 'bar' || kind === 'area')
   labels.forEach((label, i) => {
     const color = colors.series[i % colors.series.length]
-    const s = { label: label + (unit ? ` (${unit})` : ''), stroke: color, width: 2, scale: 'y' }
+    const s = { label, stroke: color, width: 2, scale: 'y', value: (u, v) => readout(v, unit) ?? 'unavailable' }
     if (kind === 'bar') {
       // S7: stacked bars paint renderer-computed base→cumulative-top rects (single full slot, no uPlot stackGroup).
-      if (stacked) { s.paths = floatingRectPaths(1, 0, model.stackBases); s.fill = color }
+      if (stacked) { s.paths = floatingRectPaths(1, 0, model.stackBases, 2); s.fill = color }
       else { s.paths = groupedBarsPaths(labels.length, i); s.fill = color }
       s.width = 0; s.points = { show: false }
     }
@@ -639,11 +657,12 @@ export function buildOpts(kind, model, props, width, colors) {
   })
   return {
     width: Math.max(160, Math.floor(width)),
-    height: clampHeight(props.height),   // F1: props.height clamped 120..480, default 240
+    height: clampHeight(props.height),   // F1: props.height clamped 120..480, default 180
+    ...(calendar ? { tzDate: ts => uPlot.tzDate(new Date(ts * 1000), 'Etc/UTC') } : {}),
     scales, series,
     axes: [xAxis, yAxis],
     cursor: { show: true, x: true, y: true, drag: { x: false, y: false, setScale: false }, points: { show: true } },
-    legend: { show: true, live: false,
+    legend: { show: labels.length >= 2, live: false,
       // F3 ruling: in single-series waterfall mode the bars carry role colours, so the
       // uPlot series swatch must not show the (unused) SERIES_TOKENS colour — width 0
       // drops the border, fill paints the neutral --ui-text-secondary the key/labels use.
@@ -653,14 +672,33 @@ export function buildOpts(kind, model, props, width, colors) {
         : {}) },
     // #15: waterfall paints its role-coded bars, connectors, value labels and key here —
     // after uPlot's own draw pass, from the pure waterfallPlan(u, ...) layout.
-    ...(kind === 'waterfall' ? { hooks: { draw: [(u) => {
+    hooks: {
+      init: [(u) => { u.axes[1].size = (plot, values) => {
+        if (!values) return yAxis.size
+        const ctx = plot.ctx, pr = plot.pxRatio || 1
+        ctx.save(); ctx.font = `${TYPE.small.fontSize * pr}px system-ui, sans-serif`
+        const widest = Math.max(0, ...values.map(v => v == null ? 0 : ctx.measureText(String(v)).width / pr))
+        ctx.restore()
+        return Number.isFinite(widest) ? Math.max(28, widest + plot.axes[1].ticks.size + plot.axes[1].gap + 8) : yAxis.size
+      } }],
+      setCursor: [(u) => {
+        if (!onReadout) return
+        const idx = u.cursor.idx
+        const x = idx == null ? null : data[0][idx]
+        const head = model.xLabels?.[idx] ?? (x == null ? '' : fmtX(model, x))
+        const values = idx == null ? [] : labels.flatMap((label, i) => u.series[i + 1].show === false ? []
+          : [`${label}: ${readout(data[i + 1][idx], unit) ?? 'unavailable'}`])
+        onReadout(values.length ? [head, ...values].join(' · ') : '')
+      }],
+      ...(kind === 'waterfall' ? { draw: [(u) => {
       try {
         const plan = waterfallPlan(u, model, props, colors)
         plan.strokeStyle = colors.grid || FALLBACK['--ui-stroke-tertiary']
         plan.keyTextColor = colors.text || FALLBACK['--ui-text-secondary']
         drawWaterfallPlan(u, plan)
       } catch { /* a canvas-side failure must never blank the chart */ }
-    }] } } : {})
+    }] } : {})
+    }
   }
 }
 
@@ -670,8 +708,8 @@ const S = {
   title: { ...type('h3'), color: 'var(--ui-text-primary)' },
   toggle: (on) => ({ font: 'inherit', ...type('caption'), padding: '2px 8px', borderRadius: 6, cursor: 'pointer', border: '1px solid var(--ui-stroke-secondary)', background: on ? 'var(--ui-bg-tertiary)' : 'var(--ui-bg-elevated)', color: 'var(--ui-text-secondary)' }),
   caveat: { color: 'var(--ui-text-tertiary)', ...type('small'), whiteSpace: 'pre-wrap' },
-  caption: { ...type('caption'), color: 'var(--ui-text-tertiary)' },
-  nodata: { border: '1px dashed var(--ui-stroke-tertiary)', borderRadius: 8, padding: 16, color: 'var(--ui-text-tertiary)', background: 'var(--ui-bg-tertiary)', textAlign: 'center' },
+  readout: { ...type('small', { num: true }), color: 'var(--ui-text-primary)', minHeight: TYPE.small.lineHeight },
+  nodata: { border: B.absent, borderRadius: 8, padding: 16, color: 'var(--ui-text-tertiary)', background: 'var(--ui-bg-tertiary)', textAlign: 'center' },
   host: { width: '100%', minHeight: HEIGHT, overflow: 'hidden' },
   table: { ...type('small'), borderCollapse: 'collapse', width: '100%' },
   th: { ...type('h4'), textAlign: 'left', padding: '4px 8px', borderBottom: '1px solid var(--ui-stroke-secondary)', color: 'var(--ui-text-secondary)' },
@@ -680,12 +718,13 @@ const S = {
 }
 
 function fmtX(model, x) {
-  if (model.xAxisIsTime) { const d = new Date(x * 1000); return Number.isNaN(d.getTime()) ? String(x) : d.toISOString() }
-  return String(x)
+  if (x == null) return ''
+  if (model.xAxisIsTime) return model.xDates?.[x] || new Date(x * 1000).toISOString()
+  return readout(x)
 }
 
-function fmtCell(v) {
-  return isNullish(v) ? h('span', { style: S.unavailable }, 'unavailable') : String(v)
+function fmtCell(v, unit) {
+  return isNullish(v) ? h('span', { style: S.unavailable }, 'unavailable') : readout(v, unit)
 }
 
 // h(type, props, children, key): jsx/jsxs take children inside props; arrays go through jsxs.
@@ -700,6 +739,7 @@ function DataAlt({ kind, model, props }) {
   const xs = data[0]
   // E16: histogram sortDesc reorders the rows (uPlot keeps x ascending on the canvas itself).
   const rowIdx = model.altOrder ? model.altOrder : xs.map((_, i) => i)
+  const cell = v => fmtCell(v, props.unit)
   const header = kind === 'histogram'
     ? ['low', 'high', ...labels]
     : kind === 'range'
@@ -711,18 +751,18 @@ function DataAlt({ kind, model, props }) {
     const x = xs[i]
     if (kind === 'histogram') {
       const high = model.highs.map(hh => hh[i]).find(v => !isNullish(v))
-      return [String(x), fmtCell(high), ...labels.map((_, s) => fmtCell(data[s + 1][i]))]
+      return [String(x), fmtCell(high), ...labels.map((_, s) => cell(data[s + 1][i]))]
     }
     if (kind === 'range') {
       // BOTH endpoints are shown — never a collapsed midpoint (L1/S3).
-      return [model.xLabels[i], ...labels.flatMap((_, s) => [fmtCell(model.lows[s][i]), fmtCell(model.highs[s][i])])]
+      return [model.xLabels[i], ...labels.flatMap((_, s) => [cell(model.lows[s][i]), cell(model.highs[s][i])])]
     }
     if (kind === 'waterfall') {
       // value = the step the author supplied; total = the renderer-computed running position (L6).
-      return [model.xLabels[i], ...labels.flatMap((_, s) => [fmtCell(model.wf.steps[s][i]), fmtCell(data[s + 1][i])])]
+      return [model.xLabels[i], ...labels.flatMap((_, s) => [cell(model.wf.steps[s][i]), cell(data[s + 1][i])])]
     }
     const xCell = kind === 'bar' ? model.xLabels[i] : fmtX(model, x)
-    return [xCell, ...labels.map((_, s) => fmtCell(data[s + 1][i]))]
+    return [xCell, ...labels.map((_, s) => cell(data[s + 1][i]))]
   })
   return h('table', { style: S.table, 'data-richui': 'chart-data' }, [
     h('thead', {}, h('tr', {}, header.map((c, i) => h('th', { scope: 'col', style: S.th }, c, `h${i}`))), 'head'),
@@ -732,19 +772,22 @@ function DataAlt({ kind, model, props }) {
 
 function UplotHost({ kind, model, props, propsKey, height }) {
   const ref = useRef(null)
+  const [readoutLine, setReadoutLine] = useState('')
   useEffect(() => {
     const el = ref.current
     if (!el || !model.ok) return undefined
     const colors = {
       series: SERIES_TOKENS.map(t => readToken(el, t)),
       text: readToken(el, '--ui-text-secondary'),
+      primary: readToken(el, '--ui-text-primary'),
       grid: readToken(el, '--ui-stroke-tertiary'),
       // #15: the three waterfall fills ride the same colour-source path as SERIES_TOKENS.
       wf: Object.fromEntries(WF_ROLE_ORDER.map(r => [r, readToken(el, WF_ROLE_TOKENS[r])]))
     }
     let u = null
     const width = () => (el.clientWidth || el.getBoundingClientRect().width || 600)
-    try { u = new uPlot(buildOpts(kind, model, props, width(), colors), model.data, el) }
+    setReadoutLine('')
+    try { u = new uPlot(buildOpts(kind, model, props, width(), colors, setReadoutLine), model.data, el) }
     catch (e) { el.textContent = 'chart engine failed: ' + (e && e.message ? e.message : String(e)); return undefined }
     let ro = null
     if (typeof ResizeObserver !== 'undefined') {
@@ -753,7 +796,10 @@ function UplotHost({ kind, model, props, propsKey, height }) {
     }
     return () => { if (ro) ro.disconnect(); if (u) u.destroy(); u = null }
   }, [propsKey]) // model/props derive from propsKey (JSON.stringify of element.props)
-  return h('div', { ref, style: { ...S.host, minHeight: height }, 'data-richui': 'chart-canvas' })
+  return h('div', {}, [
+    h('div', { ref, style: { ...S.host, minHeight: height }, 'data-richui': 'chart-canvas' }, undefined, 'canvas'),
+    h('div', { style: S.readout, 'data-richui': 'chart-readout' }, readoutLine, 'readout')
+  ])
 }
 
 export function Chart({ element }) {
@@ -773,14 +819,11 @@ export function Chart({ element }) {
     sortDesc: props.sortDesc === true // E16 renderer half: bar/histogram categories label-keyed, |value| desc
   }), [propsKey]) // eslint-disable-line react-hooks/exhaustive-deps
   const [showData, setShowData] = useState(false)
-  const title = typeof props.title === 'string' ? props.title : ''
+  const title = typeof props.title === 'string' ? props.title : model.labels.length === 1 ? model.labels[0] : ''
   const caveat = typeof props.caveat === 'string' ? props.caveat : ''
-  const height = clampHeight(props.height) // F1: 120..480, default 240
+  const height = clampHeight(props.height) // F1: 120..480, default 180
   // D2: lower.mjs keeps `accessibility` INSIDE props (like every other component via common()).
   const accLabel = typeof props.accessibility?.label === 'string' && props.accessibility.label ? props.accessibility.label : ''
-  const caption = kind === 'histogram' && model.ok
-    ? `${model.binCount} bins (bin edges supplied by the author, not computed)`
-    : (model.ok ? `${model.points} points · ${model.labels.length} series` : '')
 
   const children = [
     h('style', { href: UPLOT_CSS_HREF, precedence: 'default', 'data-richui-uplot-css': '1' }, UPLOT_CSS, 'css'),
@@ -790,13 +833,12 @@ export function Chart({ element }) {
     ], 'head')
   ]
   if (!model.ok) {
-    children.push(h('div', { style: S.nodata, role: 'status' }, `No data to chart${model.reason ? ` (${model.reason})` : ''}.`, 'nodata'))
+    children.push(h('div', { style: S.nodata, role: 'status' }, /^all .* values are null$/.test(model.reason || '') ? 'No data to chart: every value is missing.' : `No data to chart${model.reason ? ` (${model.reason})` : ''}.`, 'nodata'))
   } else if (showData) {
     children.push(h(DataAlt, { kind, model, props }, undefined, 'alt'))
   } else {
     children.push(h(UplotHost, { kind, model, props, propsKey, height }, undefined, 'plot'))
   }
-  if (caption) children.push(h('div', { style: S.caption }, caption, 'caption'))
   if (caveat) children.push(h('div', { style: S.caveat, 'data-richui': 'chart-caveat' }, caveat, 'caveat'))
   return h('figure', { style: S.box, 'data-richui': 'chart', 'data-ru': 'Chart', 'data-kind': kind, 'data-stack': props.stack === true && (kind === 'bar' || kind === 'area') ? '1' : undefined, 'data-stepped': props.stepped === true && kind === 'line' ? '1' : undefined, 'data-sort-desc': props.sortDesc === true && (kind === 'bar' || kind === 'histogram') ? '1' : undefined, 'data-height': String(height), 'aria-label': accLabel || title || `${kind} chart` }, children)
 }
