@@ -6,7 +6,7 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo, useState } from 'react'
 import { ownSources, citeMarker, type } from './_shared.mjs'
-import { fmtColumn, fmtDate, unitLabel } from './fmt.mjs'
+import { fmtColumn, fmtDate, fmt, unitLabel } from './fmt.mjs'
 import { MARK_FILL } from './_house.mjs'
 
 // E15: column type 'bar' (width ∝ column max, computed in the RENDERER — L6). 'bar' sorts
@@ -139,6 +139,99 @@ export function barColumnViolations(rows, key) {
   return bad
 }
 
+// #40 (G6, generalized): DataTable aggregations — renderer-computed Total/Average/
+// Median/Min/Max/Count rows (contract L6: agents never author aggregates). Pure engine,
+// no DOM: aggregate(rows, col, agg) -> raw number|null; aggRows(cols, rows, spec) ->
+// labelled face rows. Old tables (no aggregations/totals prop) never reach this path.
+// countDistinct is a documented v1 non-goal (false-precision trap).
+const AGGS = ['sum', 'mean', 'median', 'min', 'max', 'count']
+const AGG_LABEL = { sum: 'Total', mean: 'Average', median: 'Median', min: 'Min', max: 'Max', count: 'Count' }
+// Additivity by declared kind, never guessed from values: percent/fraction are rates
+// (mean); currency/number/bar are additive (sum). text/sources count rows; date silent.
+const MEAN_TYPES = new Set(['percent', 'fraction'])
+const COUNT_TYPES = new Set(['text', 'sources'])
+
+export function aggregate(rows, col, agg) {
+  if (agg === 'count') return Array.isArray(rows) ? rows.length : 0
+  const vals = []
+  for (const row of (Array.isArray(rows) ? rows : [])) {
+    const v = own(row, col.key)
+    if (isNum(v)) vals.push(v)
+    else if (!isNullish(v)) { const n = Number(v); if (v !== '' && Number.isFinite(n)) vals.push(n) }
+  }
+  if (vals.length === 0) return null // all-null/empty column -> the unavailable glyph, never 0
+  if (agg === 'sum') return vals.reduce((a, b) => a + b, 0)
+  if (agg === 'mean') return vals.reduce((a, b) => a + b, 0) / vals.length
+  if (agg === 'min') return Math.min(...vals)
+  if (agg === 'max') return Math.max(...vals)
+  if (agg === 'median') {
+    const s = vals.slice().sort((a, b) => a - b), m = s.length >> 1
+    return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2
+  }
+  throw new Error(`unknown aggregation "${agg}" — valid: ${AGGS.join(', ')} (countDistinct is not in v1)`)
+}
+
+// A smart-default / explicit spec -> [{agg, label, values:{key: face}}]. values hold
+// rendered faces; '' means silent (no cell content). nulls are skipped by every agg.
+function faceOfAgg(col, rows, agg) {
+  if (agg === 'count' && COUNT_TYPES.has(col.type)) return String(Array.isArray(rows) ? rows.length : 0)
+  const v = aggregate(rows, col, agg)
+  if (v === null) return 'unavailable'
+  const format = col.type === 'bar' || col.type === 'number' ? 'number' : col.type
+  // Single-value fmt: exact-to-face; the cents rule already rode the column's data fmtSet.
+  const face = fmt(v, { format, unit: col.unit || undefined, precision: col.precision === null ? undefined : col.precision })
+  return face ?? String(v)
+}
+
+export function aggRows(cols, rows, spec) {
+  const smart = spec === true || (spec && typeof spec === 'object' && !Array.isArray(spec) && spec.totals === true)
+  if (smart) {
+    const values = {}
+    let any = false
+    for (const c of cols) {
+      if (c.type === 'date') { values[c.key] = ''; continue }
+      const agg = COUNT_TYPES.has(c.type) ? 'count' : MEAN_TYPES.has(c.type) ? 'mean' : NUMERIC.has(c.type) ? 'sum' : null
+      if (agg === null) { values[c.key] = ''; continue }
+      values[c.key] = faceOfAgg(c, rows, agg)
+      any = true
+    }
+    // ONE row; the smart row rides the sum face slot (label Total).
+    return any ? [{ agg: 'sum', label: 'Total', values }] : []
+  }
+  if (!Array.isArray(spec) || spec.length === 0) return []
+  const keys = cols.map(c => c.key)
+  const out = []
+  for (const s of spec) {
+    if (!s || typeof s !== 'object' || !AGGS.includes(s.agg)) {
+      throw new Error(`unknown aggregation "${s && s.agg}" — valid: ${AGGS.join(', ')}`)
+    }
+    if (s.columns !== undefined && !Array.isArray(s.columns)) throw new Error('aggregations.columns must be an array of column keys')
+    const numericAgg = s.agg !== 'count'
+    const applicable = (c) => !numericAgg || NUMERIC.has(c.type)
+    let scope
+    if (s.columns === undefined) scope = cols.filter(applicable)
+    else {
+      for (const k of s.columns) if (!keys.includes(k)) {
+        throw new Error(`unknown column "${k}" in aggregations.columns — valid columns: ${keys.join(', ')}`)
+      }
+      scope = cols.filter(c => s.columns.includes(c.key) && applicable(c))
+    }
+    const values = {}
+    const listed = new Set(scope.map(c => c.key))
+    // Unrestricted rows carry ONLY applicable columns (the renderer drops absent keys);
+    // an authored `columns` list names every column, unlisted cells print blank ('').
+    for (const c of (s.columns === undefined ? scope : cols)) values[c.key] = listed.has(c.key) ? faceOfAgg(c, rows, s.agg) : ''
+    out.push({ agg: s.agg, label: typeof s.label === 'string' ? s.label : AGG_LABEL[s.agg], values })
+  }
+  return out
+}
+
+function normAggSpec(props) {
+  if (props.aggregations === true || props.totals === true) return true
+  if (Array.isArray(props.aggregations) && props.aggregations.length) return props.aggregations
+  return null
+}
+
 function rowFace(c, row, faceOf) {
   if (c.type === 'sources') { const ids = own(row, c.key); return Array.isArray(ids) ? ids.join(' ') : '' }
   const f = faceOf.get(row)?.[c.key]
@@ -203,6 +296,11 @@ function BarCell({ col, row, maxAbs, face }) {
     , 'bar')
 }
 
+function AggCell({ face, numeric }) {
+  if (face === 'unavailable') return h('span', { style: S.unavailable }, 'unavailable')
+  return h('span', {}, face)
+}
+
 export function DataTable({ element }) {
   const props = (element && element.props) || {}
   const allRows = useMemo(() => (Array.isArray(props.rows) ? props.rows.filter(r => r && typeof r === 'object').slice(0, MAX_ROWS) : []), [props.rows])
@@ -259,6 +357,11 @@ export function DataTable({ element }) {
   const accLabel = typeof props.accessibility?.label === 'string' && props.accessibility.label ? props.accessibility.label : ''
   const sources = Array.isArray(props._sources) ? props._sources : []
 
+  // #40: agg rows are computed ONCE over ALL data rows (L6) — never over the sorted/
+  // filtered/page slice — and pin at the bottom in tfoot, outside sort/filter/scale.
+  const aggSpec = normAggSpec(props)
+  const aggRowsOut = useMemo(() => (aggSpec === null ? [] : aggRows(cols, allRows, aggSpec)), [cols, allRows, aggSpec])
+
   const header = h('tr', {}, cols.map(c => {
     const active = sort.key === c.key
     const arrow = active ? (sort.dir === 'asc' ? ' ▲' : ' ▼') : ''
@@ -281,12 +384,26 @@ export function DataTable({ element }) {
         return h('td', { style: S.td(NUMERIC.has(c.type)) }, h(Cell, { col: c, row, face, sources }), c.key)
       }), `r${curPage * pageSize + i}`))
 
+  // #40 tfoot: each agg row pins at the bottom, excluded from sort/filter/pagination and
+  // from the bar scale; the row's label opens the row (caption step only — no new size
+  // steps, row rhythm kept), caption-ink, top hairline on the first row; each column
+  // rides its own cell (unlisted/inapplicable cells print blank).
+  const tfoot = aggRowsOut.length === 0 ? null : h('tfoot', {}, aggRowsOut.map((ar, i) => {
+    const cells = [h('td', { style: { ...S.td(false), fontSize: 11, color: 'var(--ui-text-secondary)', ...(i === 0 ? { borderTop: '1px solid var(--ui-stroke-secondary)' } : {}) } }, h('span', {}, ar.label), 'label')]
+    for (const c of cols) {
+      const face = ar.values[c.key]
+      if (face === undefined) continue // inapplicable column (e.g. text under an explicit sum) — no cell at all
+      cells.push(h('td', { style: S.td(NUMERIC.has(c.type)) }, face === '' ? null : h(AggCell, { face, numeric: NUMERIC.has(c.type) }), c.key))
+    }
+    return h('tr', { 'data-ru-agg': ar.agg }, cells, `a${i}`)
+  }), 'tfoot')
+
   return h('div', { style: S.box, 'data-richui': 'table', 'data-ru': 'DataTable', role: 'region', 'aria-label': accLabel || title || 'data table' }, [
     h('div', { style: S.head }, [
       h('span', { style: S.title }, [title, ownSources(props)], 'title'),
       chromeShown ? h('input', { type: 'search', placeholder: 'Filter rows', 'aria-label': 'Filter rows', value: query, onChange: onFilter, style: S.input, 'data-richui': 'table-filter' }, undefined, 'filter') : null
     ], 'head'),
-    h('div', { style: S.wrap }, h('table', { style: S.table }, [authored || cols.length ? h('thead', {}, header, 'thead') : null, h('tbody', {}, body, 'tbody')]), 'wrap'),
+    h('div', { style: S.wrap }, h('table', { style: S.table }, [authored || cols.length ? h('thead', {}, header, 'thead') : null, h('tbody', {}, body, 'tbody'), tfoot]), 'wrap'),
     chromeShown ? h('div', { style: S.foot }, [
       h('span', { 'data-richui': 'table-counter' }, counter, 'counter'),
       pageCount > 1 ? h('span', { style: { display: 'inline-flex', gap: 6, alignItems: 'center' } }, [
