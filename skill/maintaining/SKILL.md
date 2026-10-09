@@ -84,12 +84,11 @@ merge gate; single tests are for iterating only.
 
 ## Release (release lane only)
 
-1. Version parity — all three must print the same version, or stop:
+1. Version parity — the 9 declared literals must agree, or stop:
    ```sh
-   grep -n "^version:" plugin.yaml
-   grep -n '"version"' package.json
-   grep -n "^VERSION = " dashboard/plugin_api.py
+   python3 scripts/release_check.py X.Y.Z   # expect: release_check: OK vX.Y.Z (9 literals, 0 scrub hits)
    ```
+   Publishing = PR → tag → GitHub release → catalog PR; nothing force-moves `main`.
 2. CHANGELOG entry built from merged PR titles since the last tag:
    `gh pr list --state merged --json number,title` → group Changed/Fixed/Added, cite the PR number on every line.
 3. Committed bundle ships with its sources: `node scripts/build.mjs` + commit
