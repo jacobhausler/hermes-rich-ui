@@ -158,10 +158,13 @@ for (const path of ['CardBody', 'registered bundle']) {
     ]))
     const blocks = [...mount.querySelectorAll('[data-ru="Text"]')]
     assert.equal(blocks.length, 2)
-    assert.equal(blocks[0].parentElement, blocks[1].parentElement, 'body siblings remain together')
-    assert.equal(blocks[0].parentElement.style.display, 'flex')
-    assert.equal(blocks[0].parentElement.style.flexDirection, 'column')
-    assert.equal(blocks[0].parentElement.style.gap, '8px')
+    // #28: compose() owns the rhythm — siblings share one body flow, block→block 12
+    const flow = blocks[0].closest('[data-ru-body-flow]')
+    assert.ok(flow, 'the body flows through compose()')
+    assert.equal(flow.contains(blocks[1]), true, 'body siblings remain together')
+    assert.equal(flow.style.display, 'flex')
+    assert.equal(flow.style.flexDirection, 'column')
+    assert.deepEqual([...flow.children].map(k => k.style.marginTop), ['0px', '12px'])
   })
   test(`${path}: distinct title, subtitle, summary and body remain even with similar wording`, async () => {
     await render(path, record(components({ title: 'Detail heading', subtitle: 'Detail heading!' }), { summary: 'Detail  heading' }))

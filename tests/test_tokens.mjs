@@ -61,7 +61,8 @@ function violations(node) {
           : /^(color|background(?:-color|-image)?|border(?:-(?:top|right|bottom|left)(?:-color)?)?|outline(?:-color)?|fill|stroke)$/.test(prop) ? 'paint' : null
       if (!kind) continue
       let ok = true
-      if (kind === 'space') ok = value.split(/\s+/).every(v => /^(?:0|0px|2px|4px|8px|12px|16px|20px|24px)$/.test(v))
+      // 6px: #28 (M4) compose() binds a Heading to its body (below a Heading 6)
+      if (kind === 'space') ok = value.split(/\s+/).every(v => /^(?:0|0px|2px|4px|6px|8px|12px|16px|20px|24px)$/.test(v))
       if (kind === 'radius') ok = value === '50%' || /^(3|4|6)px$/.test(value)
       if (kind === 'paint') {
         // Strip only CSS geometry/keywords and valid theme paints. Any residual
