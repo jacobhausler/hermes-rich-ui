@@ -59,6 +59,45 @@ def directive(card_id: str) -> str:
     return '::richui{id="%s"}' % card_id
 
 
+# The core labels an unnamed home "custom" (and ~/.hermes "default"); neither is an attribution.
+_CORE_SENTINELS = ("custom", "default")
+
+
+def _env_pin():
+    for key in ("HERMES_PROFILE_NAME", "HERMES_PROFILE"):
+        name = (os.environ.get(key) or "").strip()
+        if name:
+            return name
+    return None
+
+
+def _profile_name():
+    """Prefer task-scoped core identity; older cores fall back to launcher pins/home.
+
+    Never invent attribution: a core sentinel survives only when a launcher explicitly
+    pinned that same name (and no task-scoped home override is bound).
+    """
+    try:
+        from hermes_cli.profiles import current_profile_name
+    except ImportError:
+        pass
+    else:
+        name = current_profile_name(default=None)
+        if name not in _CORE_SENTINELS:
+            return name
+        try:
+            from hermes_constants import get_hermes_home_override
+            overridden = get_hermes_home_override() is not None
+        except ImportError:
+            overridden = False
+        return name if not overridden and _env_pin() == name else None
+    name = _env_pin()
+    if name:
+        return name
+    home = store.hermes_home()
+    return home.name if home.parent.name == "profiles" else None
+
+
 def build_record(card_id, title, summary, components, data, sources, derivations, now=None):
     """The §1 record, key order exactly as the contract lists it."""
     now = now or _now_z()
@@ -78,7 +117,7 @@ def build_record(card_id, title, summary, components, data, sources, derivations
         "envelope": {
             "card_id": card_id,
             "session_id": os.environ.get("HERMES_SESSION_ID") or None,
-            "profile": os.environ.get("HERMES_PROFILE") or None,
+            "profile": _profile_name(),
             "created_at": now,
             "policy": POLICY,
             "source": None,
