@@ -62,7 +62,10 @@ test('M1: a run broken by a non-tile does not auto-row; a trailing Chart is the 
   ])
   const row = $('[data-ru-autorow]')
   assert.ok(row, 'the two-tile run rows')
-  assert.equal($('[data-ru="Chart"]').parentElement, row.parentElement, 'Chart is a sibling of the auto-row, not inside it')
+  // compare booleans, never DOM nodes: a failing assert on jsdom nodes inspects the whole tree (OOM)
+  const chart = $('[data-ru="Chart"]')
+  assert.equal(row.contains(chart), false, 'Chart is not inside the auto-row')
+  assert.equal(row.parentElement.contains(chart), true, 'Chart sits in the same flow as the auto-row')
 })
 
 test('C1/M9: a lone Metric under a Card reads title 16 (size comes from RowContext only)', async () => {
