@@ -4230,6 +4230,119 @@
       "_origin": "ast"
     },
     {
+      "id": "scripts_release_check",
+      "label": "release_check.py",
+      "file_type": "code",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_read",
+      "label": "_read()",
+      "file_type": "code",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L32",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_re1",
+      "label": "_re1()",
+      "file_type": "code",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L40",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_json_key_version",
+      "label": "_json_key_version()",
+      "file_type": "code",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L46",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_lock_root_version",
+      "label": "_lock_root_version()",
+      "file_type": "code",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L55",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_frontmatter_version",
+      "label": "_frontmatter_version()",
+      "file_type": "code",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L65",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_changelog_head_version",
+      "label": "_changelog_head_version()",
+      "file_type": "code",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L73",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_declared_literals",
+      "label": "declared_literals()",
+      "file_type": "code",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L79",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_run_scrub",
+      "label": "run_scrub()",
+      "file_type": "code",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L100",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_main",
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L116",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_rationale_2",
+      "label": "Release gate: version parity over the 9 declared literals + publish scrub.…",
+      "file_type": "rationale",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L2",
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_rationale_81",
+      "label": "The 9 declared version surfaces in order: [(rel_file, found)], '' = missing.",
+      "file_type": "rationale",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L81",
+      "_origin": "ast"
+    },
+    {
+      "id": "scripts_release_check_rationale_102",
+      "label": "make_public.py against a fresh temp target; returns (rc, combined output).",
+      "file_type": "rationale",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L102",
+      "_origin": "ast"
+    },
+    {
       "id": "scripts_screenshots_crop",
       "label": "crop.py",
       "file_type": "code",
@@ -7834,6 +7947,75 @@
       "_origin": "ast"
     },
     {
+      "id": "tests_test_release_check",
+      "label": "test_release_check.py",
+      "file_type": "code",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_release_check_check",
+      "label": "check()",
+      "file_type": "code",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L34",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_release_check_run_check",
+      "label": "run_check()",
+      "file_type": "code",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L47",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_release_check_mismatch_lines",
+      "label": "mismatch_lines()",
+      "file_type": "code",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L53",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_release_check_repo_version",
+      "label": "repo_version()",
+      "file_type": "code",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L57",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_release_check_make_copy",
+      "label": "make_copy()",
+      "file_type": "code",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L64",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_release_check_rationale_2",
+      "label": "release_check gate (issue #43): version parity across the 9 declared literals +…",
+      "file_type": "rationale",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L2",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_release_check_rationale_65",
+      "label": "Copy of the publishable tree + git init -q (same listing semantics).",
+      "file_type": "rationale",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L65",
+      "_origin": "ast"
+    },
+    {
       "id": "tests_test_render_smoke",
       "label": "test_render_smoke.mjs",
       "file_type": "code",
@@ -10113,7 +10295,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "AGENTS.md",
-      "source_location": "L44",
+      "source_location": "L45",
       "_origin": "ast"
     },
     {
@@ -10122,7 +10304,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "AGENTS.md",
-      "source_location": "L71",
+      "source_location": "L72",
       "_origin": "ast"
     },
     {
@@ -11720,7 +11902,7 @@
       "file_type": "document",
       "node_kind": "heading",
       "source_file": "skill/maintaining/SKILL.md",
-      "source_location": "L100",
+      "source_location": "L99",
       "_origin": "ast"
     },
     {
@@ -12097,6 +12279,14 @@
       "source_file": ""
     },
     {
+      "id": "tempfile",
+      "label": "tempfile",
+      "file_type": "concept",
+      "type": "external",
+      "external": true,
+      "source_file": ""
+    },
+    {
       "id": "pil",
       "label": "pil",
       "file_type": "concept",
@@ -12107,14 +12297,6 @@
     {
       "id": "time",
       "label": "time",
-      "file_type": "concept",
-      "type": "external",
-      "external": true,
-      "source_file": ""
-    },
-    {
-      "id": "tempfile",
-      "label": "tempfile",
       "file_type": "concept",
       "type": "external",
       "external": true,
@@ -25167,6 +25349,313 @@
       "_origin": "ast"
     },
     {
+      "source": "scripts_release_check",
+      "target": "argparse",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "json",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "re",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "shutil",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "subprocess",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "sys",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "tempfile",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "scripts_release_check_read",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "scripts_release_check_re1",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "scripts_release_check_json_key_version",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "scripts_release_check_lock_root_version",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "scripts_release_check_frontmatter_version",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "scripts_release_check_changelog_head_version",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "scripts_release_check_declared_literals",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "scripts_release_check_run_scrub",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L100",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check",
+      "target": "scripts_release_check_main",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_frontmatter_version",
+      "target": "scripts_release_check_re1",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_declared_literals",
+      "target": "scripts_release_check_read",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_declared_literals",
+      "target": "scripts_release_check_re1",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_declared_literals",
+      "target": "scripts_release_check_json_key_version",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_declared_literals",
+      "target": "scripts_release_check_lock_root_version",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_declared_literals",
+      "target": "scripts_release_check_frontmatter_version",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_declared_literals",
+      "target": "scripts_release_check_changelog_head_version",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_main",
+      "target": "scripts_release_check_declared_literals",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L127",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_main",
+      "target": "scripts_release_check_run_scrub",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L139",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_rationale_2",
+      "target": "scripts_release_check",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_rationale_81",
+      "target": "scripts_release_check_declared_literals",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_rationale_102",
+      "target": "scripts_release_check_run_scrub",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/release_check.py",
+      "source_location": "L102",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "scripts_screenshots_crop",
       "target": "json",
       "relation": "imports",
@@ -33449,6 +33938,153 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_release_check",
+      "target": "importlib_util",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check",
+      "target": "re",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check",
+      "target": "shutil",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check",
+      "target": "subprocess",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check",
+      "target": "sys",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check",
+      "target": "tempfile",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check",
+      "target": "tests_test_release_check_check",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check",
+      "target": "tests_test_release_check_run_check",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check",
+      "target": "tests_test_release_check_mismatch_lines",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check",
+      "target": "tests_test_release_check_repo_version",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check",
+      "target": "tests_test_release_check_make_copy",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check_rationale_2",
+      "target": "tests_test_release_check",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check_rationale_65",
+      "target": "tests_test_release_check_make_copy",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_render_smoke",
       "target": "ref_node_test",
       "relation": "imports_from",
@@ -40040,7 +40676,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "AGENTS.md",
-      "source_location": "L44",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -40050,7 +40686,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "AGENTS.md",
-      "source_location": "L71",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -41710,7 +42346,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "skill/maintaining/SKILL.md",
-      "source_location": "L100",
+      "source_location": "L99",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45915,6 +46551,114 @@
       "_origin": "ast"
     },
     {
+      "source": "scripts_release_check_re1",
+      "target": "re",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/release_check.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_json_key_version",
+      "target": "json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/release_check.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_lock_root_version",
+      "target": "json",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/release_check.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_frontmatter_version",
+      "target": "re",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/release_check.py",
+      "source_location": "L67",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_changelog_head_version",
+      "target": "re",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/release_check.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_run_scrub",
+      "target": "tempfile",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/release_check.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_run_scrub",
+      "target": "subprocess",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/release_check.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_run_scrub",
+      "target": "shutil",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/release_check.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "scripts_release_check_main",
+      "target": "argparse",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/release_check.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "scripts_screenshots_crop_main",
       "target": "json",
       "relation": "calls",
@@ -46151,6 +46895,54 @@
       "confidence_score": 1.0,
       "source_file": "tests/test_hostile_admission.py",
       "source_location": "L220",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check_run_check",
+      "target": "subprocess",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check_repo_version",
+      "target": "re",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check_make_copy",
+      "target": "shutil",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_release_check_make_copy",
+      "target": "subprocess",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_release_check.py",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast"
     },
