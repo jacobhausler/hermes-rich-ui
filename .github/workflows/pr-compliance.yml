@@ -29,5 +29,5 @@ jobs:
           if printf '%s' "$BODY" | grep -qE '^pr-diagram:[[:space:]]*exempt.*\..*\.'; then
             echo "compliant: two-claim exemption token (C2)"; exit 0
           fi
-          echo "::error::needs docs/pr-diagrams/*.png on branch OR 'pr-diagram: exempt — <what>. <why>.' in the body (haus-docs rules/pr-diagram-standard.md v0.2 C1/C2)"
+          echo "::error::needs docs/pr-diagrams/*.png on branch OR 'pr-diagram: exempt — <what>. <why>.' in the body (workspace docs rules/pr-diagram-standard.md v0.2 C1/C2)"
           exit 1
