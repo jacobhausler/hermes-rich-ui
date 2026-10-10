@@ -42,23 +42,27 @@ const STANDARD_PATHS = [
 
 // Playwright-style browser caches, newest chromium-<build>/chrome-linux64/chrome
 // wins. Roots in order: $PLAYWRIGHT_BROWSERS_PATH, ~/.cache/ms-playwright,
-// ~/.pw-browsers, ~/.hermes/pw-browsers (the Hermes lane caches).
+// ~/.pw-browsers, ~/.hermes/pw-browsers (the Hermes lane caches), plus the
+// Hermes chrome cache ~/.hermes/cache/chromium (chrome-for-testing layout:
+// chrome-headless-shell-linux64/chrome-headless-shell, the binary the #47
+// control is authored against — chrome-headless-shell speaks CDP fine).
 function newestPlaywrightChrome() {
   const home = process.env.HOME || homedir()
   const roots = [process.env.PLAYWRIGHT_BROWSERS_PATH,
     join(home, '.cache', 'ms-playwright'),
     join(home, '.pw-browsers'),
-    join(home, '.hermes', 'pw-browsers')].filter(Boolean)
+    join(home, '.hermes', 'pw-browsers'),
+    join(home, '.hermes', 'cache', 'chromium')].filter(Boolean)
   for (const root of roots) {
     if (!existsSync(root)) continue
     let dirs
     try { dirs = readdirSync(root) } catch { continue }
     const builds = dirs
-      .map(d => ({ d, m: d.match(/^chromium-(\d+)$/) }))
+      .map(d => ({ d, m: d.match(/^(?:chromium-(\d+)|chrome-headless-shell-linux64)$/) }))
       .filter(x => x.m)
-      .sort((a, b) => Number(b.m[1]) - Number(a.m[1]))
+      .sort((a, b) => Number(b.m[1] ?? -1) - Number(a.m[1] ?? -1))
     for (const { d } of builds) {
-      for (const leaf of ['chrome-linux64/chrome', 'chrome-mac/Chromium.app/Contents/MacOS/Chromium']) {
+      for (const leaf of ['chrome-linux64/chrome', 'chrome-mac/Chromium.app/Contents/MacOS/Chromium', 'chrome-headless-shell']) {
         const p = join(root, d, leaf)
         if (existsSync(p)) return p
       }
