@@ -1,5 +1,5 @@
 import { jsxs } from 'react/jsx-runtime'
-import { common, text, ownSources, V, type } from './_shared.mjs'
+import { common, text, citeMarker, V, type } from './_shared.mjs'
 import { HOUSE } from './_house.mjs'
 
 export const Text = ({ element }) => {
@@ -12,6 +12,6 @@ export const Text = ({ element }) => {
     ...common(element, { 'data-ru-variant': mono ? 'mono' : undefined }),
     // S8 (#30): prose capped at HOUSE.MEASURE (72ch).
     style: { margin: 0, minWidth: 0, maxWidth: HOUSE.MEASURE, whiteSpace: 'pre-wrap', ...type(mono ? 'small' : caption ? 'caption' : 'body', { mono, num: mono }), color: (p.tone ?? HOUSE.TEXT_TONE) === 'muted' || caption ? V.text2 : V.text },
-    children: [text(p.text), ownSources(p)]
+    children: [text(p.text), citeMarker(p.sourceIds, p._sources)]
   })
 }

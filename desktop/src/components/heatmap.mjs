@@ -11,7 +11,7 @@
 // step, never divide-by-zero (S9).
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo } from 'react'
-import { common, formatMetric, ownSources, isNil, V, type } from './_shared.mjs'
+import { common, formatMetric, withCite, isNil, V, type } from './_shared.mjs'
 import { HOUSE } from './_house.mjs'
 import { fmtSet, fmtPair } from './fmt.mjs'
 
@@ -131,15 +131,16 @@ export const HeatMap = ({ element }) => {
     ? 'no values observed — all cells unavailable'
     : `observed ${fmtPair(model.min, model.max, { ...fmtCtx, surface: 'readout' }).replace(/\u00a0/g, ' ')} · ${model.points} values`
 
+  const titleRow = p.title ? h('div', { 'data-ru-heatmap-title': '', style: type('h4') }, String(p.title), 'title') : null
   return jsxs('div', {
     ...common(element, { 'data-ru-cells': String(model.points) }),
     style: S.box,
-    children: [
-      p.title ? h('div', { 'data-ru-heatmap-title': '', style: type('h4') }, String(p.title), 'title') : null,
+    // #36 (withCite): the title row is the head row — the marker joins it as the
+    // last inline child; without a title it rides as a flex sibling after the body.
+    children: withCite(titleRow, [
       h('table', { style: S.table, 'data-richui': 'heatmap-grid' }, [h('thead', {}, head, 'th'), h('tbody', {}, body, 'tb')], 'tbl'),
-      h('div', { style: S.caption, 'data-richui': 'heatmap-caption' }, caption, 'cap'),
-      ownSources(p)
-    ]
+      h('div', { style: S.caption, 'data-richui': 'heatmap-caption' }, caption, 'cap')
+    ], p.sourceIds, p._sources)
   })
 }
 

@@ -12,7 +12,7 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import uPlot from 'uplot'
-import { formatMetric, ownSources, type } from './_shared.mjs'
+import { formatMetric, citeMarker, type } from './_shared.mjs'
 import { fmt, fmtTicks, axisTitle, unitSpec } from './fmt.mjs'
 import { HOUSE, SERIES, TYPE, B } from './_house.mjs'
 
@@ -828,7 +828,7 @@ export function Chart({ element }) {
   const children = [
     h('style', { href: UPLOT_CSS_HREF, precedence: 'default', 'data-richui-uplot-css': '1' }, UPLOT_CSS, 'css'),
     h('div', { style: S.head }, [
-      h('span', { style: S.title }, [title, ownSources(props)], 't'),
+      h('span', { style: S.title }, [title, citeMarker(props.sourceIds, props._sources)], 't'),
       model.ok ? h('button', { type: 'button', 'aria-pressed': showData, style: S.toggle(showData), onClick: () => setShowData(v => !v) }, showData ? 'Chart' : 'Data', 'toggle') : null
     ], 'head')
   ]

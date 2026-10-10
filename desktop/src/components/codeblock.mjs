@@ -1,5 +1,5 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { common, text, ownSources, row, V, type } from './_shared.mjs'
+import { common, text, withCite, row, V, type } from './_shared.mjs'
 import { HOUSE } from './_house.mjs'
 
 // CodeBlock (expansion N1, 2026-09-28): monospace literal code/config/shell output.
@@ -34,7 +34,7 @@ export const CodeBlock = ({ element }) => {
   // `code` arrives already resolved by the renderer ({ path } bindings lower to
   // $state; admission guarantees a string before this point — L3, never trust payload).
   const code = typeof p.code === 'string' ? p.code : null
-  const header = (typeof p.caption === 'string' && p.caption) || (typeof p.language === 'string' && p.language)
+  const headerRow_ = (typeof p.caption === 'string' && p.caption) || (typeof p.language === 'string' && p.language)
     ? row(headerRow,
         typeof p.caption === 'string' && p.caption
           ? jsx('span', { 'data-ru-caption': '', style: captionStyle, children: p.caption }, 'c')
@@ -44,6 +44,8 @@ export const CodeBlock = ({ element }) => {
           : null
       )
     : null
+  // row() is always truthy; the head row only exists when a caption/language is present.
+  const header = ((typeof p.caption === 'string' && p.caption) || (typeof p.language === 'string' && p.language)) ? headerRow_ : null
   const body = code === null
     ? jsx('div', { style: { ...preStyle, background: 'transparent', border: 'none', padding: 0 }, children: text(p.code) }, 'n')
     : (p.showLines ?? HOUSE.CODEBLOCK_SHOW_LINES) === true
@@ -54,5 +56,7 @@ export const CodeBlock = ({ element }) => {
           ] }, i))
         }, 'l')
       : jsx('pre', { style: preStyle, children: code }, 'p')
-  return jsxs('div', { ...common(element), style: { display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }, children: [header, body, ownSources(p)] })
+  // #36 (withCite): the caption/language row is the head row — the marker joins it as
+  // the last inline child; with no header it rides as a flex sibling after the body.
+  return jsxs('div', { ...common(element), style: { display: 'flex', flexDirection: 'column', gap: 4, minWidth: 0 }, children: withCite(header, body, p.sourceIds, p._sources) })
 }

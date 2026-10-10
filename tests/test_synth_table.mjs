@@ -116,23 +116,26 @@ test('#34 sources column: citeMarker numbers, [] renders —', async () => {
 
 // ---- E17 Timeline ----
 const tlProps = (items) => ({ title: 'Log', items })
-test('E17 status=failed renders the --ui-red dot', async () => {
+test('E17 status=failed renders the --ui-red dot (slice 13: only done/pending ride the StatusMark SVG)', async () => {
   await renderComponent({ id: 'tl', component: 'Timeline', props: tlProps([{ label: 'deploy', status: 'failed' }]) })
   const li = $('[data-ru="Timeline"] li')
   assert.equal(li.getAttribute('data-ru-status'), 'failed')
-  assert.ok(li.querySelector('span').style.background.includes('--ui-red'), li.querySelector('span').style.background)
+  const dot = li.querySelector('span')
+  assert.ok(dot && !dot.querySelector('svg'), 'failed keeps the filled dot, not the StatusMark SVG')
+  assert.ok(dot.style.background.includes('--ui-red'), 'failed rides --ui-red: ' + dot.style.background)
 })
-test('E17 ISO dates auto-format; non-ISO passes through VERBATIM (pin)', async () => {
+test('E17 ISO dates read the zoned fmtDate face; non-ISO passes through VERBATIM (pin)', async () => {
   await renderComponent({ id: 'tl', component: 'Timeline', props: tlProps([
     { label: 'a', date: '2026-09-25T10:00:00Z' },
     { label: 'b', date: 'yesterday' },
     { label: 'c', date: '42' }
   ]) })
-  const dts = $$('[data-ru="Timeline"] li > div > div:first-child > span:first-child')
-  assert.equal(dts[0].textContent, '2026-09-25', 'ISO timestamp normalises to the date')
+  const dts = $$('[data-ru="Timeline"] [data-ru-date]')
+  assert.equal(dts[0].textContent.includes('Sep 25, 2026'), true, 'zoned fmtDate face on the dated grid: ' + dts[0].textContent)
+  assert.ok(!/T\d\d:/.test(dts[0].textContent), 'no raw ISO T-face on the date column')
   assert.equal(dts[1].textContent, 'yesterday', 'non-ISO survives byte-exact (Chart rejects it; Timeline shows it)')
   assert.equal(dts[2].textContent, '42', 'bare number is not a calendar date -> verbatim')
-  assert.equal(formatTimelineDate('2026-09-25'), '2026-09-25')
+  assert.equal(formatTimelineDate('2026-09-25'), '2026-09-25', 'zone-less calendar date has no instant -> verbatim; only zoned instants read the fmtDate face')
   assert.equal(formatTimelineDate('not a date'), 'not a date')
 })
 // L1 pin: an absent status is NEUTRAL unclassified — never an invented 'pending'.
@@ -141,16 +144,19 @@ test('E17 PIN absent status -> unclassified neutral dot, never invented pending'
   const lis = $$('[data-ru="Timeline"] li')
   assert.equal(lis[0].getAttribute('data-ru-status'), 'unclassified', 'no fabricated pending')
   assert.equal(lis[1].getAttribute('data-ru-status'), 'unclassified', 'unknown status string also unclassified')
-  const dotColor = lis[0].querySelector('span').style.background
-  assert.ok(dotColor.includes('--ui-text-tertiary'), 'neutral dot: ' + dotColor)
-  assert.ok(!dotColor.includes('--ui-stroke-secondary'), 'must NOT reuse the pending dot color')
+  const dot = lis[0].querySelector('span')
+  assert.ok(dot && !dot.querySelector('svg'), 'unclassified keeps the filled dot (slice 13: only done/pending ride StatusMark)')
+  const mark = dot.style.background
+  assert.ok(mark.includes('--ui-text-tertiary'), 'neutral mark: ' + mark)
+  assert.ok(!mark.includes('--ui-stroke-secondary'), 'must NOT reuse the pending dot color')
 })
-test('E17 known statuses unchanged (done/active/pending keep their dots, L8)', async () => {
+test('E17 known statuses unchanged (done/active/pending keep their StatusMark SVGs, L8)', async () => {
   await renderComponent({ id: 'tl', component: 'Timeline', props: tlProps([
     { label: 'd', status: 'done' }, { label: 'a', status: 'active' }, { label: 'p', status: 'pending' }
   ]) })
   const lis = $$('[data-ru="Timeline"] li')
   assert.deepEqual(lis.map(l => l.getAttribute('data-ru-status')), ['done', 'active', 'pending'])
-  assert.ok(lis[0].querySelector('span').style.background.includes('--ui-green'))
-  assert.ok(lis[2].querySelector('span').style.background.includes('--ui-stroke-secondary'))
+  const strokeOf = li => { const s = li.querySelector('svg'); return s && (s.getAttribute('stroke') || s.outerHTML) }
+  assert.ok(strokeOf(lis[0])?.includes('--ui-green'), 'done rides --ui-green as an SVG StatusMark')
+  assert.ok(strokeOf(lis[2])?.includes('--ui-stroke-secondary'), 'pending rides --ui-stroke-secondary as an SVG StatusMark')
 })

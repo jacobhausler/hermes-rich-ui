@@ -26,7 +26,7 @@ const EXEMPT = new Set([
   // #35: one-series legends are gone; the second series swatch follows HOUSE.SERIES (orange).
   'Chart div background=rgba(249, 115, 22, 0.18)', 'Chart div background=rgba(59, 130, 246, 0.18)',
   'Chart div border=2px solid rgb(249, 115, 22)', 'Chart div border=2px solid rgb(59, 130, 246)',
-  'Chart figure gap=6px', 'Checklist div gap=6px', 'Checklist sup margin-left=3px',
+  'Chart figure gap=6px', 'Checklist div gap=6px', 'Checklist sup margin-left=2px',
   'CodeBlock div gap=6px', 'CodeBlock pre padding=8px 10px',
   'CodeBlock span border-radius=999px', 'CodeBlock span padding-left=34px',
   'CodeBlock span padding=0px 5px', 'DataTable button padding=5px 8px',
@@ -34,14 +34,16 @@ const EXEMPT = new Set([
   'DataTable span border-radius=2px',
   'DataTable span gap=6px',
   'HeatMap div gap=6px',
-  'HeatMap sup margin-left=3px', 'HeatMap td padding=4px 6px',
+  'HeatMap sup margin-left=2px', 'HeatMap td padding=4px 6px',
   'HeatMap th padding=3px 6px', 'ImageGallery div gap=6px',
   'SourceList li gap=6px',
   'SourceList ol gap=3px', 'Tabs button border-left=medium',
   'Tabs button border-right=medium', 'Tabs button border-top=medium',
   'Tabs button margin-bottom=-1px', 'Tabs button padding=4px 10px',
   'Timeline div gap=1px', 'Timeline div gap=6px',
-  'Timeline sup margin-left=3px'
+  'Timeline sup margin-left=2px',
+  // AutoSources block spacing (reviewed design face, #36)
+  'Card div gap=3px', 'Card ol gap=3px'
 ])
 
 // Own inline styles only: host prose/SDK CSS and canvas are not renderer tokens.

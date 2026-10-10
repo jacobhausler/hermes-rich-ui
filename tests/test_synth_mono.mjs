@@ -85,9 +85,9 @@ test('CodeBlock: bound code resolves from the data model', async () => {
 
 test('CodeBlock: sourceIds superscript renders (shared sources idiom)', async () => {
   await renderComponent({ id: 'root', component: 'CodeBlock', props: { code: 'ls', sourceIds: ['s1'], _sources: [{ id: 's1', label: 'runbook' }] } })
-  const sup = $('[data-ru-sources]')
+  const sup = $('[data-ru-citation]')
   assert.ok(sup, 'sources superscript missing')
-  assert.equal(sup.getAttribute('aria-label'), 'sources: runbook', 'resolved source label appears')
+  assert.equal(sup.getAttribute('aria-label'), 'sources 1', 'resolved source renders its numbered citation')
 })
 
 test('CodeBlock: renderer never truncates long code (admission owns the cap)', async () => {

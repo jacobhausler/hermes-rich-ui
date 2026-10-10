@@ -17,7 +17,7 @@ export const AsOf = ({ element }) => {
   const note = !isNil(p.note) && String(p.note) !== '' ? String(p.note) : null
   const caption = parts.length || note
     ? jsxs('span', { style: { fontStyle: 'italic' }, children: [parts.join(' · '), parts.length && note ? ' · ' : '', note ?? ''] }, 'c')
-    : jsxs('span', { 'data-ru-null': '', style: { fontStyle: 'italic' }, children: ['no timestamps published'] }, 'c')
+    : jsxs('span', { 'data-ru-null': '', style: { fontStyle: 'italic' }, children: ['No timestamps published'] }, 'c')
   return jsxs('div', {
     ...common(element, { 'data-ru-fields': parts.length }),
     style: { display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: 4, ...type('caption'), color: V.text3 },

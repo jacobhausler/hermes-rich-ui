@@ -1,5 +1,5 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { common, text, isNil, sourceSup, ownSources, V, type, formatMetric } from './_shared.mjs'
+import { common, text, isNil, citeMarker, ownSources, V, type, formatMetric } from './_shared.mjs'
 import { useVintage } from './rowfmt.mjs'
 import { fmt } from './fmt.mjs'
 
@@ -53,7 +53,7 @@ const HouseKeyValueList = ({ element }) => {
           return [
             jsx('dt', { style: { color: V.text3 }, children: String(it?.label ?? '') }, 'k' + i),
             // Unformatted items keep the pre-E13 dd style exactly (L8 additive law).
-            jsxs('dd', { style: { margin: 0, color: V.text, wordBreak: 'break-word', ...(fv.numeric ? { fontVariantNumeric: 'tabular-nums' } : null) }, children: [fv.node, sourceSup(it?.sourceIds, p._sources, 's' + i)] }, 'v' + i)
+            jsxs('dd', { style: { margin: 0, color: V.text, wordBreak: 'break-word', ...(fv.numeric ? { fontVariantNumeric: 'tabular-nums' } : null) }, children: [fv.node, citeMarker(it?.sourceIds, p._sources)] }, 'v' + i)
           ]
         })
       }, 'dl'),
@@ -92,7 +92,7 @@ export const LegacyKeyValueList = ({ element }) => {
           return [
             jsx('dt', { style: { color: V.text3 }, children: String(it?.label ?? '') }, 'k' + i),
             // Unformatted items keep the pre-E13 dd style exactly (L8 additive law).
-            jsxs('dd', { style: { margin: 0, color: V.text, wordBreak: 'break-word', ...(fv.numeric ? { fontVariantNumeric: 'tabular-nums' } : null) }, children: [fv.node, sourceSup(it?.sourceIds, p._sources, 's' + i)] }, 'v' + i)
+            jsxs('dd', { style: { margin: 0, color: V.text, wordBreak: 'break-word', ...(fv.numeric ? { fontVariantNumeric: 'tabular-nums' } : null) }, children: [fv.node, citeMarker(it?.sourceIds, p._sources)] }, 'v' + i)
           ]
         })
       }, 'dl'),

@@ -9,7 +9,7 @@
 // test_synth_microviz_defaults names the replacement explicitly).
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo } from 'react'
-import { common, unavailable, ownSources, sourceSup, isNil, V, type } from './_shared.mjs'
+import { common, unavailable, withCite, citeMarker, isNil, V, type } from './_shared.mjs'
 import { HOUSE, MARK_FILL } from './_house.mjs'
 import { fmtSet } from './fmt.mjs'
 
@@ -109,24 +109,22 @@ export const BarList = ({ element }) => {
               : h('div', { 'data-ru-item-fill': '', 'data-ru-fill-min': String(FILL_MIN_PX), style: { ...S.fill(width, negative ? 'left' : hasNeg ? 'mid' : 'base'), minWidth: FILL_MIN_PX } }), 't' + i),
         jsxs('span', { 'data-ru-item-value': '', style: S.value, children: [
           formatted === null ? unavailable('v' + i) : formatted,
-          sourceSup(it?.sourceIds, p._sources, 's' + i)
+          citeMarker(it?.sourceIds, p._sources)
         ] }, 'v' + i)
       ]
     }, 'r' + i)
   })
+  const head = p.title ? h('div', { 'data-ru-itemlist-title': '', style: type('h4') }, String(p.title), 'title') : null
   return jsxs('div', {
     ...common(element, { 'data-ru-count': String(counted), 'data-ru-sort': sort }),
     style: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0, margin: 0 },
     role: 'list',
-    children: [
-      rows.length === 0
-        ? h('div', { 'data-ru-empty': '', style: { ...type('small'), color: V.text3, fontStyle: 'italic' } }, 'No items', 'empty') // J7: says No items, never a blank box
-        : [
-          p.title ? h('div', { 'data-ru-itemlist-title': '', style: type('h4') }, String(p.title), 'title') : null, // E-B5: optional title
-          h('div', { style: S.list, role: 'presentation' }, rows, 'rows')
-        ],
-      ownSources(p)
-    ]
+    children: rows.length === 0
+      // J7: says No items, never a blank box (an empty list gets no head row to ride).
+      ? [h('div', { 'data-ru-empty': '', style: { ...type('small'), color: V.text3, fontStyle: 'italic' } }, 'No items', 'empty')]
+      // #36 (withCite): the title row is the head row — the marker joins it as the
+      // last inline child; without a title it rides as a flex sibling after the body.
+      : withCite(head, h('div', { style: S.list, role: 'presentation' }, rows, 'rows'), p.sourceIds, p._sources)
   })
 }
 
