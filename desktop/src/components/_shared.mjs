@@ -150,7 +150,7 @@ export function StatusMark(kind, stroke, key) {
   if (mark.glyph) kids.push(jsx('text', { x: 6, y: 8.5, textAnchor: 'middle', fontSize: 7, fill: V.text2, stroke: 'none', children: '?' }, 'g'))
   return jsxs('svg', {
     'aria-label': kind, role: 'img', width: 12, height: 12, viewBox: '0 0 12 12',
-    fill: 'none', stroke, strokeWidth: 1.25, ...(mark.dashed ? { strokeDasharray: '2 2' } : null),
+    fill: 'none', stroke, strokeWidth: 1.25, ...(mark.dashed ? { strokeDasharray: mark.dashArray || '2 2' } : null),
     children: kids
   }, key)
 }
@@ -169,6 +169,64 @@ const STATUS_MARK = {
   unknown: { dashed: true, glyph: true },
   pending: { stroke2: true }
 }
+
+// Stage-state vocabulary (est-6i54 S1, rich-ui#57 ruling 2026-10-03, amendment
+// 1): the ONE state+color source for stage-ordered components — Checklist items
+// (S2), DataTable status cells and PhaseTracker (S3) all render through it. No
+// second badge primitive (StateBadge ruled out; the #36 StatusMark table is
+// extended, not duplicated). Shape + dash + semantic kind carry the state —
+// greyscale reads it (the #18 law). `blocked` never equals `skipped`: blocked
+// is an error-flavoured waiting state, skipped is gone. Unknown state -> null:
+// admission rejects it at author time naming the five tokens (the #38
+// discipline); the renderer never coerces. Timeline's done/active/pending/
+// failed stays separate — event vocabulary, not stage vocabulary.
+export const STAGE_STATE = ['pending', 'active', 'done', 'blocked', 'skipped']
+
+const STAGE_TABLE = {
+  pending: { shape: 'ring', kind: 'muted', dash: false },
+  active: { shape: 'ring', kind: 'info', dash: true, dashArray: '4.5 3' },
+  done: { shape: 'check', kind: 'ok' },
+  blocked: { shape: 'cross', kind: 'error', dash: true, dashArray: '4.5 3' },
+  skipped: { shape: 'dash', kind: 'muted', dash: true, dashArray: '4.5 3' }
+}
+
+// Inner-path geometry per stage shape (ring = none).
+const STAGE_SHAPE = {
+  ring: null,
+  check: 'M3.6 6.2 L5.3 7.9 L8.4 4.3',
+  cross: 'M4 4 L8 8 M8 4 L4 8',
+  dash: 'M3.5 6 L8.5 6'
+}
+
+// Extend the #36 STATUS_MARK table with the stage-only tokens from the SAME
+// table (ruling: extend the StatusMark state table, one source). `pending`
+// and `done` are already there — legacy marks stay byte-stable for stored
+// cards; `active|blocked|skipped` are added once, derived from STAGE_TABLE.
+for (const tok of ['active', 'blocked', 'skipped']) {
+  const s = STAGE_TABLE[tok]
+  STATUS_MARK[tok] = { dashed: s.dash, dashArray: s.dashArray, path: STAGE_SHAPE[s.shape] }
+}
+
+// stageMark(state, key) -> {shape, kind, stroke, aria, dash, dashArray, key} or
+// null for an unknown state. `stroke` is a --ui-* custom-property name (never
+// a literal colour, #15); components resolve the kind through STAGE_COLOR.
+export function stageMark(state, key) {
+  const spec = Object.hasOwn(STAGE_TABLE, state) ? STAGE_TABLE[state] : null
+  if (!spec) return null
+  return {
+    shape: spec.shape,
+    kind: spec.kind,
+    stroke: '--ui-' + spec.kind,
+    aria: state,
+    dash: !!spec.dash,
+    dashArray: spec.dashArray,
+    key
+  }
+}
+
+// The one colour map for stage marks — components resolve a stageMark's kind
+// through THIS (never a literal, #15) before handing the var to StatusMark.
+export const STAGE_COLOR = { ok: V.green, warn: V.yellow, error: V.red, muted: V.stroke2, info: V.accent }
 
 // Plain-text render of any resolved scalar; null/undefined -> 'unavailable', never 0.
 export function text(v) {
