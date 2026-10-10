@@ -658,7 +658,7 @@
       "label": "StatusMark()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L132",
+      "source_location": "L136",
       "_callable": true,
       "_origin": "ast"
     },
@@ -667,7 +667,15 @@
       "label": "STATUS_ARROW",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L140",
+      "source_location": "L157",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_shared_status_mark",
+      "label": "STATUS_MARK",
+      "file_type": "code",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L166",
       "_origin": "ast"
     },
     {
@@ -675,7 +683,7 @@
       "label": "text()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L147",
+      "source_location": "L174",
       "_callable": true,
       "_origin": "ast"
     },
@@ -684,7 +692,7 @@
       "label": "BADGE_VARIANTS_REAL",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L162",
+      "source_location": "L189",
       "_origin": "ast"
     },
     {
@@ -692,7 +700,7 @@
       "label": "BADGE_SIZES_REAL",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L163",
+      "source_location": "L190",
       "_origin": "ast"
     },
     {
@@ -700,7 +708,7 @@
       "label": "BADGE_VARIANT",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L166",
+      "source_location": "L193",
       "_origin": "ast"
     },
     {
@@ -708,7 +716,7 @@
       "label": "badge()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L167",
+      "source_location": "L194",
       "_callable": true,
       "_origin": "ast"
     },
@@ -717,7 +725,7 @@
       "label": "sourceLabels()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L170",
+      "source_location": "L197",
       "_callable": true,
       "_origin": "ast"
     },
@@ -726,16 +734,16 @@
       "label": "citeMarker()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L179",
+      "source_location": "L206",
       "_callable": true,
       "_origin": "ast"
     },
     {
-      "id": "desktop_src_components_shared_sourcesup",
-      "label": "sourceSup()",
+      "id": "desktop_src_components_shared_withcite",
+      "label": "withCite()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L207",
+      "source_location": "L238",
       "_callable": true,
       "_origin": "ast"
     },
@@ -744,7 +752,7 @@
       "label": "ownSources()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L223",
+      "source_location": "L249",
       "_callable": true,
       "_origin": "ast"
     },
@@ -753,7 +761,7 @@
       "label": "formatMetric()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L225",
+      "source_location": "L251",
       "_callable": true,
       "_origin": "ast"
     },
@@ -762,7 +770,7 @@
       "label": "row()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L245",
+      "source_location": "L271",
       "_callable": true,
       "_origin": "ast"
     },
@@ -771,7 +779,7 @@
       "label": "ImageTile()",
       "file_type": "code",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L254",
+      "source_location": "L280",
       "_callable": true,
       "_origin": "ast"
     },
@@ -933,7 +941,7 @@
       "label": "CardDepth",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L9",
+      "source_location": "L10",
       "_origin": "ast"
     },
     {
@@ -941,7 +949,7 @@
       "label": "CardChrome",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L10",
+      "source_location": "L11",
       "_origin": "ast"
     },
     {
@@ -949,7 +957,7 @@
       "label": "folded()",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L11",
+      "source_location": "L12",
       "_callable": true,
       "_origin": "ast"
     },
@@ -958,7 +966,7 @@
       "label": "CardFooterLine()",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L16",
+      "source_location": "L17",
       "_callable": true,
       "_origin": "ast"
     },
@@ -967,7 +975,16 @@
       "label": "CardHeader()",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L19",
+      "source_location": "L20",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_card_autosources",
+      "label": "AutoSources()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L33",
       "_callable": true,
       "_origin": "ast"
     },
@@ -976,7 +993,7 @@
       "label": "Card()",
       "file_type": "code",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L33",
+      "source_location": "L50",
       "_callable": true,
       "_origin": "ast"
     },
@@ -1306,7 +1323,7 @@
       "label": "STATE",
       "file_type": "code",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L10",
+      "source_location": "L12",
       "_origin": "ast"
     },
     {
@@ -1314,7 +1331,7 @@
       "label": "stateOf()",
       "file_type": "code",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L15",
+      "source_location": "L17",
       "_callable": true,
       "_origin": "ast"
     },
@@ -1323,7 +1340,7 @@
       "label": "Checklist()",
       "file_type": "code",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L17",
+      "source_location": "L19",
       "_callable": true,
       "_origin": "ast"
     },
@@ -2180,11 +2197,29 @@
       "_origin": "ast"
     },
     {
+      "id": "desktop_src_components_sourcelist_hostof",
+      "label": "hostOf()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L24",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_sourcelist_sourcerow",
+      "label": "sourceRow()",
+      "file_type": "code",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L25",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "desktop_src_components_sourcelist_sourcelist",
       "label": "SourceList()",
       "file_type": "code",
       "source_file": "desktop/src/components/sourcelist.mjs",
-      "source_location": "L20",
+      "source_location": "L51",
       "_callable": true,
       "_origin": "ast"
     },
@@ -2635,7 +2670,15 @@
       "label": "DOT",
       "file_type": "code",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L5",
+      "source_location": "L7",
+      "_origin": "ast"
+    },
+    {
+      "id": "desktop_src_components_timeline_marked",
+      "label": "MARKED",
+      "file_type": "code",
+      "source_file": "desktop/src/components/timeline.mjs",
+      "source_location": "L10",
       "_origin": "ast"
     },
     {
@@ -2643,7 +2686,7 @@
       "label": "formatTimelineDate()",
       "file_type": "code",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L13",
+      "source_location": "L20",
       "_callable": true,
       "_origin": "ast"
     },
@@ -2652,7 +2695,7 @@
       "label": "Timeline()",
       "file_type": "code",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L22",
+      "source_location": "L33",
       "_callable": true,
       "_origin": "ast"
     },
@@ -7277,6 +7320,178 @@
       "_origin": "ast"
     },
     {
+      "id": "tests_test_evidence_primitives",
+      "label": "test_evidence_primitives.mjs",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_dom",
+      "label": "dom",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L29",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_mm",
+      "label": "mm()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L36",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_swallow",
+      "label": "swallow",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L38",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_moveto",
+      "label": "moveTo()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_lineto",
+      "label": "lineTo()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_rect",
+      "label": "rect()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_arc",
+      "label": "arc()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_closepath",
+      "label": "closePath()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_addpath",
+      "label": "addPath()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_observe",
+      "label": "observe()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L44",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_disconnect",
+      "label": "disconnect()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L44",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_here",
+      "label": "HERE",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L52",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_loadsaved",
+      "label": "loadSaved()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L53",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_c69f",
+      "label": "c69f",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L54",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_f97",
+      "label": "f97",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L55",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_mount",
+      "label": "mount",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L57",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_root",
+      "label": "root",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L59",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_renderrecord",
+      "label": "renderRecord()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L63",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_evidence_primitives_c69frepro",
+      "label": "c69fRepro()",
+      "file_type": "code",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L70",
+      "_callable": true,
+      "_origin": "ast"
+    },
+    {
       "id": "tests_test_expansion_integration",
       "label": "test_expansion_integration.mjs",
       "file_type": "code",
@@ -9974,7 +10189,7 @@
       "label": "violations()",
       "file_type": "code",
       "source_file": "tests/test_tokens.mjs",
-      "source_location": "L50",
+      "source_location": "L52",
       "_callable": true,
       "_origin": "ast"
     },
@@ -14361,7 +14576,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L132",
+      "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14371,43 +14586,13 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L140",
+      "source_location": "L157",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_shared",
-      "target": "desktop_src_components_shared_text",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L147",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "desktop_src_components_shared",
-      "target": "desktop_src_components_shared_badge_variants_real",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L162",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "desktop_src_components_shared",
-      "target": "desktop_src_components_shared_badge_sizes_real",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L163",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "desktop_src_components_shared",
-      "target": "desktop_src_components_shared_badge_variant",
+      "target": "desktop_src_components_shared_status_mark",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
@@ -14417,11 +14602,51 @@
     },
     {
       "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_text",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L174",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_badge_variants_real",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L189",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_badge_sizes_real",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L190",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
+      "target": "desktop_src_components_shared_badge_variant",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/_shared.mjs",
+      "source_location": "L193",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_shared",
       "target": "desktop_src_components_shared_badge",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L167",
+      "source_location": "L194",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14431,7 +14656,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L170",
+      "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14441,17 +14666,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L179",
+      "source_location": "L206",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_shared",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_withcite",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L207",
+      "source_location": "L238",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14461,7 +14686,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L223",
+      "source_location": "L249",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14471,7 +14696,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L225",
+      "source_location": "L251",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14481,7 +14706,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L245",
+      "source_location": "L271",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14491,7 +14716,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L254",
+      "source_location": "L280",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14623,7 +14848,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L148",
+      "source_location": "L175",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14634,29 +14859,29 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L148",
+      "source_location": "L175",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "desktop_src_components_shared_sourcesup",
-      "target": "desktop_src_components_shared_sourcelabels",
+      "source": "desktop_src_components_shared_withcite",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L209",
+      "source_location": "L239",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_shared_ownsources",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L223",
+      "source_location": "L249",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14667,18 +14892,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L226",
+      "source_location": "L252",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_shared_imagetile",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/_shared.mjs",
-      "source_location": "L259",
+      "source_location": "L285",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14912,7 +15137,7 @@
     },
     {
       "source": "desktop_src_components_badge",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -14999,7 +15224,7 @@
     },
     {
       "source": "desktop_src_components_barlist",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_withcite",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -15010,7 +15235,7 @@
     },
     {
       "source": "desktop_src_components_barlist",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -15268,7 +15493,7 @@
     },
     {
       "source": "desktop_src_components_callout",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_withcite",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -15420,7 +15645,7 @@
     },
     {
       "source": "desktop_src_components_card",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -15453,12 +15678,34 @@
     },
     {
       "source": "desktop_src_components_card",
-      "target": "desktop_src_components_house",
+      "target": "desktop_src_components_sourcelist",
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
       "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card",
+      "target": "desktop_src_components_sourcelist_sourcerow",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card",
+      "target": "desktop_src_components_house",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15469,7 +15716,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15480,7 +15727,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L4",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15491,7 +15738,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15502,7 +15749,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15513,7 +15760,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15523,7 +15770,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L9",
+      "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15533,7 +15780,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L10",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15543,7 +15790,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L11",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15553,7 +15800,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L16",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15563,7 +15810,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L19",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card",
+      "target": "desktop_src_components_card_autosources",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15573,7 +15830,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L33",
+      "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15585,7 +15842,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L43",
+      "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15596,7 +15853,19 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L43",
+      "source_location": "L61",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card_card",
+      "target": "desktop_src_components_card_autosources",
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L70",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15646,7 +15915,7 @@
     },
     {
       "source": "desktop_src_components_chart",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -16616,7 +16885,7 @@
     },
     {
       "source": "desktop_src_components_checklist",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_withcite",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -16627,7 +16896,18 @@
     },
     {
       "source": "desktop_src_components_checklist",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/checklist.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_checklist",
+      "target": "desktop_src_components_shared_statusmark",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -16686,7 +16966,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L10",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16696,7 +16976,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L15",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16706,7 +16986,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L17",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16717,7 +16997,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L33",
+      "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16767,7 +17047,7 @@
     },
     {
       "source": "desktop_src_components_chipset",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -16854,7 +17134,7 @@
     },
     {
       "source": "desktop_src_components_codeblock",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_withcite",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -18073,7 +18353,7 @@
     },
     {
       "source": "desktop_src_components_gallery",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_withcite",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -18368,7 +18648,7 @@
     },
     {
       "source": "desktop_src_components_heading",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -18487,7 +18767,7 @@
     },
     {
       "source": "desktop_src_components_heatmap",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_withcite",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -19370,7 +19650,7 @@
     },
     {
       "source": "desktop_src_components_keyvaluelist",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -19628,7 +19908,7 @@
     },
     {
       "source": "desktop_src_components_metric",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -19941,7 +20221,7 @@
     },
     {
       "source": "desktop_src_components_progress",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -20302,22 +20582,86 @@
     },
     {
       "source": "desktop_src_components_sourcelist",
-      "target": "desktop_src_components_sourcelist_sourcelist",
-      "relation": "contains",
+      "target": "desktop_src_components_fmt",
+      "relation": "imports_from",
+      "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/sourcelist.mjs",
-      "source_location": "L20",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "desktop_src_components_sourcelist_sourcelist",
+      "source": "desktop_src_components_sourcelist",
+      "target": "desktop_src_components_fmt_fmtdate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_sourcelist",
+      "target": "desktop_src_components_sourcelist_hostof",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_sourcelist",
+      "target": "desktop_src_components_sourcelist_sourcerow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_sourcelist",
+      "target": "desktop_src_components_sourcelist_sourcelist",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L51",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_sourcelist_sourcerow",
+      "target": "desktop_src_components_sourcelist_hostof",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_sourcelist_sourcerow",
       "target": "desktop_src_components_sourcelist_openexternal",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/sourcelist.mjs",
-      "source_location": "L43",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_sourcelist_sourcelist",
+      "target": "desktop_src_components_sourcelist_sourcerow",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L66",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -20850,7 +21194,7 @@
     },
     {
       "source": "desktop_src_components_table",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -20861,7 +21205,7 @@
     },
     {
       "source": "desktop_src_components_table",
-      "target": "desktop_src_components_shared_citemarker",
+      "target": "desktop_src_components_shared_ownsources",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -21912,7 +22256,7 @@
     },
     {
       "source": "desktop_src_components_text",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -22032,7 +22376,7 @@
     },
     {
       "source": "desktop_src_components_timeline",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_withcite",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -22043,7 +22387,18 @@
     },
     {
       "source": "desktop_src_components_timeline",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/timeline.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_timeline",
+      "target": "desktop_src_components_shared_statusmark",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -22076,11 +22431,65 @@
     },
     {
       "source": "desktop_src_components_timeline",
+      "target": "desktop_src_components_house",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/timeline.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_timeline",
+      "target": "desktop_src_components_house_s",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/timeline.mjs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_timeline",
+      "target": "desktop_src_components_fmt",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/timeline.mjs",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_timeline",
+      "target": "desktop_src_components_fmt_fmtdate",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/timeline.mjs",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_timeline",
       "target": "desktop_src_components_timeline_dot",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L5",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_timeline",
+      "target": "desktop_src_components_timeline_marked",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/timeline.mjs",
+      "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -22090,7 +22499,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L13",
+      "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -22100,7 +22509,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L22",
+      "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -22111,7 +22520,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L42",
+      "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -31646,7 +32055,7 @@
       "deferred": true,
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L398",
+      "source_location": "L402",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -31658,7 +32067,7 @@
       "deferred": true,
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L411",
+      "source_location": "L415",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -31670,7 +32079,7 @@
       "deferred": true,
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L427",
+      "source_location": "L431",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -31682,7 +32091,7 @@
       "deferred": true,
       "confidence": "EXTRACTED",
       "source_file": "tests/test_components.mjs",
-      "source_location": "L428",
+      "source_location": "L432",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -32767,6 +33176,371 @@
       "relation": "dynamic_import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_e2e_record.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "ref_node_test",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "ref_node_assert",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "ref_node_module",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "ref_node_fs",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "ref_node_url",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "ref_node_path",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "ref_jsdom",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_dom",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_mm",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_swallow",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_moveto",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_lineto",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_rect",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_arc",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_closepath",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_addpath",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_observe",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_disconnect",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_here",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_loadsaved",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_c69f",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L54",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_f97",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_mount",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_root",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_renderrecord",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_c69frepro",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_renderrecord",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_test_evidence_primitives_c69frepro",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "desktop_src_components_timeline",
+      "relation": "imports_from",
+      "context": "import",
+      "deferred": true,
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L125",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "desktop_src_components_sourcelist",
+      "relation": "imports_from",
+      "context": "import",
+      "deferred": true,
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L141",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "desktop_src_components_asof",
+      "relation": "imports_from",
+      "context": "import",
+      "deferred": true,
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L173",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "tests_fixtures_sdk_loader",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "react",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "client",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "desktop_src_index",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "desktop_src_card",
+      "relation": "dynamic_import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_evidence_primitives.mjs",
       "_origin": "ast"
     },
     {
@@ -40663,7 +41437,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tokens.mjs",
-      "source_location": "L50",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -40685,7 +41459,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tokens.mjs",
-      "source_location": "L102",
+      "source_location": "L104",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -40696,7 +41470,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_tokens.mjs",
-      "source_location": "L120",
+      "source_location": "L122",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45325,7 +46099,7 @@
     },
     {
       "source": "desktop_src_components_badge_badge",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -45380,7 +46154,7 @@
     },
     {
       "source": "desktop_src_components_barlist_barlist",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -45391,45 +46165,34 @@
     },
     {
       "source": "desktop_src_components_barlist_barlist",
-      "target": "desktop_src_components_shared_common",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "desktop/src/components/barlist.mjs",
-      "source_location": "L118",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "desktop_src_components_barlist_barlist",
       "target": "desktop_src_components_shared_type",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/barlist.mjs",
-      "source_location": "L123",
+      "source_location": "L117",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_barlist_barlist",
-      "target": "desktop_src_components_shared_ownsources",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "desktop/src/components/barlist.mjs",
-      "source_location": "L128",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "desktop_src_components_callout_callout",
       "target": "desktop_src_components_shared_common",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L12",
+      "source_file": "desktop/src/components/barlist.mjs",
+      "source_location": "L119",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_barlist_barlist",
+      "target": "desktop_src_components_shared_withcite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/barlist.mjs",
+      "source_location": "L127",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45440,7 +46203,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L15",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45451,7 +46214,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L15",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45462,18 +46225,29 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L15",
+      "source_location": "L13",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_callout_callout",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_common",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/callout.mjs",
-      "source_location": "L15",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_callout_callout",
+      "target": "desktop_src_components_shared_withcite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/callout.mjs",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45484,7 +46258,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L17",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45495,7 +46269,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L17",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45506,7 +46280,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L22",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45517,35 +46291,35 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L22",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_card_cardheader",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L22",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "desktop_src_components_card_card",
-      "target": "desktop_src_components_shared_isnil",
+      "source": "desktop_src_components_card_autosources",
+      "target": "desktop_src_components_shared_type",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L39",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "desktop_src_components_card_card",
-      "target": "desktop_src_components_shared_kidlist",
+      "source": "desktop_src_components_card_autosources",
+      "target": "desktop_src_components_sourcelist_sourcerow",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -45556,12 +46330,34 @@
     },
     {
       "source": "desktop_src_components_card_card",
+      "target": "desktop_src_components_shared_isnil",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card_card",
+      "target": "desktop_src_components_shared_kidlist",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/card.mjs",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_card_card",
       "target": "desktop_src_components_shared_compose",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L47",
+      "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45572,7 +46368,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L53",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45583,7 +46379,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L53",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45594,7 +46390,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/card.mjs",
-      "source_location": "L56",
+      "source_location": "L75",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45655,7 +46451,7 @@
     },
     {
       "source": "desktop_src_components_chart_chart",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -45666,23 +46462,12 @@
     },
     {
       "source": "desktop_src_components_checklist_checklist",
-      "target": "desktop_src_components_shared_common",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L24",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "desktop_src_components_checklist_checklist",
       "target": "desktop_src_components_shared_isnil",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L27",
+      "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45693,7 +46478,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L28",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_checklist_checklist",
+      "target": "desktop_src_components_shared_statusmark",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/checklist.mjs",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45704,29 +46500,40 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L37",
+      "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_checklist_checklist",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L37",
+      "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_checklist_checklist",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_common",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/checklist.mjs",
-      "source_location": "L41",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_checklist_checklist",
+      "target": "desktop_src_components_shared_withcite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/checklist.mjs",
+      "source_location": "L44",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45754,7 +46561,7 @@
     },
     {
       "source": "desktop_src_components_chipset_chipset",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -45781,7 +46588,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/codeblock.mjs",
-      "source_location": "L48",
+      "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45792,18 +46599,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/codeblock.mjs",
-      "source_location": "L57",
+      "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_codeblock_codeblock",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_withcite",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/codeblock.mjs",
-      "source_location": "L57",
+      "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45831,23 +46638,12 @@
     },
     {
       "source": "desktop_src_components_gallery_imagegallery",
-      "target": "desktop_src_components_shared_common",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "desktop/src/components/gallery.mjs",
-      "source_location": "L17",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "desktop_src_components_gallery_imagegallery",
       "target": "desktop_src_components_shared_isnil",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/gallery.mjs",
-      "source_location": "L20",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45858,18 +46654,29 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/gallery.mjs",
-      "source_location": "L20",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_gallery_imagegallery",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_common",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/gallery.mjs",
-      "source_location": "L20",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_gallery_imagegallery",
+      "target": "desktop_src_components_shared_withcite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/gallery.mjs",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -45963,7 +46770,7 @@
     },
     {
       "source": "desktop_src_components_heading_heading",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -46018,34 +46825,34 @@
     },
     {
       "source": "desktop_src_components_heatmap_heatmap",
-      "target": "desktop_src_components_shared_common",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "desktop/src/components/heatmap.mjs",
-      "source_location": "L135",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "desktop_src_components_heatmap_heatmap",
       "target": "desktop_src_components_shared_type",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/heatmap.mjs",
-      "source_location": "L138",
+      "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_heatmap_heatmap",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_common",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/heatmap.mjs",
-      "source_location": "L141",
+      "source_location": "L136",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_heatmap_heatmap",
+      "target": "desktop_src_components_shared_withcite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/heatmap.mjs",
+      "source_location": "L140",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -46128,7 +46935,7 @@
     },
     {
       "source": "desktop_src_components_keyvaluelist_housekeyvaluelist",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -46205,7 +47012,7 @@
     },
     {
       "source": "desktop_src_components_keyvaluelist_legacykeyvaluelist",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -46282,7 +47089,7 @@
     },
     {
       "source": "desktop_src_components_metric_legacymetric",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -46359,7 +47166,7 @@
     },
     {
       "source": "desktop_src_components_metric_housemetric",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -46458,7 +47265,7 @@
     },
     {
       "source": "desktop_src_components_progress_houseprogress",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -46535,7 +47342,7 @@
     },
     {
       "source": "desktop_src_components_progress_legacyprogress",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -46567,13 +47374,57 @@
       "_origin": "ast"
     },
     {
+      "source": "desktop_src_components_sourcelist_sourcerow",
+      "target": "desktop_src_components_shared_isnil",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_sourcelist_sourcerow",
+      "target": "desktop_src_components_fmt_fmtdate",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_sourcelist_sourcerow",
+      "target": "desktop_src_components_shared_type",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_sourcelist_sourcerow",
+      "target": "desktop_src_components_shared_badge",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/sourcelist.mjs",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "desktop_src_components_sourcelist_sourcelist",
       "target": "desktop_src_components_shared_common",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/sourcelist.mjs",
-      "source_location": "L28",
+      "source_location": "L59",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -46584,7 +47435,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/sourcelist.mjs",
-      "source_location": "L31",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -46595,18 +47446,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/sourcelist.mjs",
-      "source_location": "L31",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "desktop_src_components_sourcelist_sourcelist",
-      "target": "desktop_src_components_shared_badge",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "desktop/src/components/sourcelist.mjs",
-      "source_location": "L48",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -46854,7 +47694,7 @@
     },
     {
       "source": "desktop_src_components_text_text",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -46864,8 +47704,8 @@
       "_origin": "ast"
     },
     {
-      "source": "desktop_src_components_timeline_timeline",
-      "target": "desktop_src_components_shared_common",
+      "source": "desktop_src_components_timeline_formattimelinedate",
+      "target": "desktop_src_components_fmt_fmtdate",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -46881,7 +47721,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L30",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -46892,18 +47732,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L30",
+      "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_timeline_timeline",
-      "target": "desktop_src_components_shared_ownsources",
+      "target": "desktop_src_components_shared_statusmark",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L30",
+      "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -46914,18 +47754,40 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L43",
+      "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "desktop_src_components_timeline_timeline",
-      "target": "desktop_src_components_shared_sourcesup",
+      "target": "desktop_src_components_shared_citemarker",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "desktop/src/components/timeline.mjs",
-      "source_location": "L43",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_timeline_timeline",
+      "target": "desktop_src_components_shared_common",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/timeline.mjs",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "desktop_src_components_timeline_timeline",
+      "target": "desktop_src_components_shared_withcite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "desktop/src/components/timeline.mjs",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -47556,7 +48418,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "desktop/src/components/gallery.mjs",
-      "source_location": "L24",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -48108,7 +48970,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_components.mjs",
-      "source_location": "L412",
+      "source_location": "L416",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -48120,7 +48982,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_components.mjs",
-      "source_location": "L521",
+      "source_location": "L525",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -48132,7 +48994,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_components.mjs",
-      "source_location": "L562",
+      "source_location": "L566",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -48169,6 +49031,30 @@
       "confidence_score": 0.85,
       "source_file": "tests/test_e2e_record.mjs",
       "source_location": "L82",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives_renderrecord",
+      "target": "desktop_src_card_cardbody",
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_evidence_primitives",
+      "target": "desktop_src_components_sourcelist_setopenexternal",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_evidence_primitives.mjs",
+      "source_location": "L142",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -48276,7 +49162,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_synth_lists.mjs",
-      "source_location": "L79",
+      "source_location": "L87",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -48324,7 +49210,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.85,
       "source_file": "tests/test_tokens.mjs",
-      "source_location": "L118",
+      "source_location": "L120",
       "weight": 1.0,
       "_origin": "ast"
     },
