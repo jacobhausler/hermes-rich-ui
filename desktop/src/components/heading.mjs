@@ -1,5 +1,5 @@
 import { jsxs } from 'react/jsx-runtime'
-import { common, text, ownSources, V, type } from './_shared.mjs'
+import { common, text, citeMarker, V, type } from './_shared.mjs'
 import { HOUSE } from './_house.mjs'
 
 const STEP = { 1: 'title', 2: 'h2', 3: 'h3', 4: 'h4', 5: 'eyebrow' }
@@ -10,6 +10,6 @@ export const Heading = ({ element }) => {
   return jsxs('h' + level, {
     ...common(element),
     style: { ...type(STEP[level]), margin: 0, color: V.text },
-    children: [text(p.text), ownSources(p)]
+    children: [text(p.text), citeMarker(p.sourceIds, p._sources)]
   })
 }

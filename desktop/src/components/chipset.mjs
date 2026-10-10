@@ -1,5 +1,5 @@
 import { jsxs } from 'react/jsx-runtime'
-import { common, badge, ownSources } from './_shared.mjs'
+import { common, badge, citeMarker } from './_shared.mjs'
 import { HOUSE } from './_house.mjs'
 
 // N4 ChipSet — one component renders a flex-wrap row of N badges (the SDK Badge via
@@ -14,7 +14,7 @@ export const ChipSet = ({ element }) => {
     style: { display: 'flex', flexWrap: (p.wrap ?? HOUSE.CHIPSET_WRAP) === false ? 'nowrap' : 'wrap', gap: 4, minWidth: 0 },
     children: [
       labels.map((l, i) => badge(String(l ?? ''), p.tone ?? HOUSE.CHIPSET_TONE, { 'data-ru-tone': p.tone ?? HOUSE.CHIPSET_TONE, 'data-ru-chip': String(i) }, i)),
-      ownSources(p)
+      citeMarker(p.sourceIds, p._sources)
     ]
   })
 }

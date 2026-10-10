@@ -98,7 +98,7 @@ test('saved-card rendered text pairs are ramp-only or named shrinking exemptions
     }
     // Citation markers are provenance chrome: micro (10px) is permitted below the
     // content floor, but the full rendered quad is not exempt from the ramp.
-    for (const sup of cardMount.querySelectorAll('sup[data-ru-sources]')) {
+    for (const sup of cardMount.querySelectorAll('sup[data-ru-citation]')) {
       assert.deepEqual([sup.style.fontSize, sup.style.fontWeight, sup.style.lineHeight, sup.style.letterSpacing],
         ['10px', '400', '12px', '0em'], `${name} citation marker micro quad`)
       markers++
@@ -116,7 +116,7 @@ test('saved-card rendered text pairs are ramp-only or named shrinking exemptions
       }
       assert.ok(size && weight, `${name} ${el.outerHTML.slice(0, 140)} has explicit size and weight`)
       assert.ok(pairs.has(`${parseFloat(size)}/${weight}`), `${name} ${el.textContent.slice(0, 40)}: ${size}/${weight}`)
-      if (!el.closest('sup[data-ru-sources]') && ![...PINNED_MICRO.values()].some(sel => el.closest(sel)))
+      if (!el.closest('sup[data-ru-citation]') && ![...PINNED_MICRO.values()].some(sel => el.closest(sel)))
         assert.ok(parseFloat(size) >= 11, `${name} content floor: ${el.textContent.slice(0, 40)}`)
       checked++
     }

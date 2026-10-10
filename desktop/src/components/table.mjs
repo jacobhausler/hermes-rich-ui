@@ -5,7 +5,7 @@
 // "N of M rows" counter that reflects the filter. Nulls sort LAST in both directions and render "unavailable".
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo, useState } from 'react'
-import { ownSources, citeMarker, type } from './_shared.mjs'
+import { citeMarker, ownSources, type } from './_shared.mjs'
 import { fmtColumn, fmtDate, fmt, unitLabel } from './fmt.mjs'
 import { MARK_FILL } from './_house.mjs'
 

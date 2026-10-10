@@ -55,7 +55,7 @@ async function render(path, r) {
   assert.equal(mount.querySelectorAll('[data-ru-error],[data-ru-unlowerable],[data-ru-unknown]').length, 0, 'actual rendering succeeds')
   assert.equal(JSON.stringify(r), before, 'rendering never mutates the record')
 }
-const markerLabels = () => [...mount.querySelectorAll('[data-ru-sources]')].map(el => el.getAttribute('aria-label')).sort()
+const markerLabels = () => [...mount.querySelectorAll('[data-ru-citation]')].map(el => el.getAttribute('aria-label')).sort()
 const rootKinds = {
   Card: { children: ['body'] }, Stack: { children: ['body'] }, Grid: { columns: 2, children: ['body'] }, Divider: {},
   Tabs: { tabs: [{ title: 'One', child: 'body' }] }, Accordion: { items: [{ title: 'One', child: 'body' }] },
@@ -72,8 +72,8 @@ for (const path of ['CardBody', 'registered bundle']) {
     const r = record(components({ title: bound ? { path: '/data/title' } : ' annual OVERVIEW ' }), {}, { title: ' annual OVERVIEW ' })
     await render(path, r)
     assert.equal(occurrences('annual overview').length, 1, 'title deduplicated')
-    assert.deepEqual(markerLabels(), ['sources: Primary evidence'], 'root citation retained and label resolved')
-    assert.ok(mount.querySelector('[data-ru-header] [data-ru-sources]'), 'replacement header owns root attribution')
+    assert.deepEqual(markerLabels(), ['sources 1'], 'root citation retained and label resolved')
+    assert.ok(mount.querySelector('[data-ru-header] [data-ru-citation]'), 'replacement header owns root attribution')
   })
   test(`${path}: distinct root title retains h2 and attribution`, async () => {
     await render(path, record(components({ title: 'Detail heading' })))
@@ -82,8 +82,8 @@ for (const path of ['CardBody', 'registered bundle']) {
     assert.equal(directText(heading), 'Detail heading')
     assert.equal(heading.style.fontSize, '14px')
     assert.equal(heading.style.fontWeight, '600')
-    assert.deepEqual(markerLabels(), ['sources: Primary evidence'])
-    assert.ok(heading.querySelector('[data-ru-sources]'))
+    assert.deepEqual(markerLabels(), ['sources 1'])
+    assert.ok(heading.querySelector('[data-ru-citation]'))
   })
   test(`${path}: nested cited cards keep both markers and title ladder`, async () => {
     await render(path, record([
@@ -91,7 +91,7 @@ for (const path of ['CardBody', 'registered bundle']) {
       { id: 'middle', component: 'Card', title: 'Middle heading', sourceIds: ['detail'], children: ['inner'] },
       { id: 'inner', component: 'Card', title: 'Inner heading', children: ['body'] }, body
     ]))
-    assert.deepEqual(markerLabels(), ['sources: Detail evidence', 'sources: Primary evidence'])
+    assert.deepEqual(markerLabels(), ['sources 1', 'sources 2'])
     for (const [tag, title, size] of [['h3', 'Middle heading', '13px'], ['h4', 'Inner heading', '12px']]) {
       const h = mount.querySelector(tag)
       assert.equal(directText(h), title)
@@ -123,7 +123,7 @@ for (const path of ['CardBody', 'registered bundle']) {
       { id: 'inner', component: 'Card', title: 'Deeper heading', children: ['body'] }, body
     ]))
     assert.equal([...mount.querySelectorAll('section')].filter(el => /^1px solid/.test(el.style.border)).length, 1)
-    assert.deepEqual(markerLabels(), ['sources: Detail evidence', 'sources: Primary evidence'])
+    assert.deepEqual(markerLabels(), ['sources 1', 'sources 2'])
     assert.deepEqual([...mount.querySelectorAll('h2')].map(directText), ['ANNUAL OVERVIEW', 'Sibling heading'])
     assert.equal(directText(mount.querySelector('h3')), 'Deeper heading')
     for (const card of mount.querySelectorAll('[data-ru="Card"]')) {
@@ -142,13 +142,13 @@ for (const path of ['CardBody', 'registered bundle']) {
     const authored = bound ? Object.fromEntries(Object.entries(props).map(([key, value]) => [key, { path: '/data/' + key }])) : props
     await render(path, record(components(authored), meta, data))
     assert.equal(occurrences(repeated).length, 1, 'only exact trimmed/casefold duplicate removed')
-    assert.deepEqual(markerLabels(), ['sources: Primary evidence'])
+    assert.deepEqual(markerLabels(), ['sources 1'])
     assert.equal(occurrences(body.text).length, 1, 'body unchanged')
     if (pair === 'summary/root title') assert.equal(directText(mount.querySelector('h2')), props.title.trim(), 'root h2 retained rather than discarded in favor of summary')
   })
   test(`${path}: blank chrome titles do not hide root attribution`, async () => {
     await render(path, record(components({ title: '' }), { title: '', summary: 'Separate introductory prose' }))
-    assert.deepEqual(markerLabels(), ['sources: Primary evidence'])
+    assert.deepEqual(markerLabels(), ['sources 1'])
     assert.equal(occurrences(body.text).length, 1)
   })
   test(`${path}: root body siblings retain their layout rhythm inside the boundary`, async () => {
@@ -169,6 +169,6 @@ for (const path of ['CardBody', 'registered bundle']) {
   test(`${path}: distinct title, subtitle, summary and body remain even with similar wording`, async () => {
     await render(path, record(components({ title: 'Detail heading', subtitle: 'Detail heading!' }), { summary: 'Detail  heading' }))
     for (const text of ['ANNUAL OVERVIEW', 'Detail heading', 'Detail heading!', 'Detail  heading', body.text]) assert.equal(occurrences(text).length, 1, text)
-    assert.deepEqual(markerLabels(), ['sources: Primary evidence'])
+    assert.deepEqual(markerLabels(), ['sources 1'])
   })
 }

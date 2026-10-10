@@ -129,8 +129,8 @@
        "label": "Suite 35/35 at the tag"
       },
       {
-       "done": true,
-       "label": "Bundle rebuilds byte-identical"
+        "done": false,
+        "label": "Bundle rebuilds byte-identical"
       },
       {
        "done": true,

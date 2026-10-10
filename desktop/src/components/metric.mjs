@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Fragment, jsx, jsxs } from 'react/jsx-runtime'
 import { Tip } from '@hermes/plugin-sdk'
-import { common, isNil, unavailable, ownSources, V, type, formatMetric, RowContext } from './_shared.mjs'
+import { common, isNil, unavailable, citeMarker, V, type, formatMetric, RowContext } from './_shared.mjs'
 import { HOUSE, TONE_TEXT, INK } from './_house.mjs'
 import { num } from './fmt.mjs'
 import { useRowFmt, useVintage } from './rowfmt.mjs'
@@ -42,7 +42,7 @@ export const LegacyMetric = ({ element }) => {
     ...common(element, { 'data-ru-format': format, 'data-ru-delta': delta ? delta.dir : undefined }),
     style: { display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0, paddingRight: 16 },
     children: [
-      jsxs('div', { style: { ...type('caption', { caps: true }), color: V.text3 }, children: [String(p.label ?? ''), ownSources(p)] }, 'l'),
+      jsxs('div', { style: { ...type('caption', { caps: true }), color: V.text3 }, children: [String(p.label ?? ''), citeMarker(p.sourceIds, p._sources)] }, 'l'),
       jsxs('div', { 'data-ru-value': formatted ?? 'unavailable', style: { ...type('kpi', { num: true }), color: V.text }, children: [formatted === null ? unavailable() : formatted] }, 'v'),
       delta ? jsxs('div', { 'data-ru-delta-line': delta.dir,
         'data-ru-delta-percent': delta.percent === null ? 'unavailable' : String(Math.round(delta.percent * 10) / 10),
@@ -109,7 +109,7 @@ const HouseMetric = ({ element }) => {
       jsxs('div', {
         'data-ru-label': '',
         style: { ...type('caption', { caps: true }), color: V.text2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: tn.LABEL_ELLIPSIS_PX },
-        children: [jsx(Tip, { label, children: [label, ownSources(p)] }, 't')]
+        children: [jsx(Tip, { label, children: [label, citeMarker(p.sourceIds, p._sources)] }, 't')]
       }, 'l'),
       jsxs('div', {
         'data-ru-value': face ?? 'unavailable',

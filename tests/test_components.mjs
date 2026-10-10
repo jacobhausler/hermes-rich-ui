@@ -235,7 +235,7 @@ test('KeyValueList: null value -> unavailable; item sourceIds superscript', asyn
   const kv = $('[data-ru="KeyValueList"]')
   assert.equal(kv.querySelectorAll('dt').length, 2)
   assert.ok(kv.querySelectorAll('dd')[1].querySelector('[data-ru-null]'))
-  assert.equal(kv.querySelectorAll('dd')[0].querySelector('[data-ru-sources]').textContent, 'ⓘ 1')
+  assert.equal(kv.querySelectorAll('dd')[0].querySelector('[data-ru-citation]').textContent, '1')
 })
 
 test('Image: https only, alt/maxHeight/caption; non-https degrades to alt text', async () => {
@@ -270,7 +270,7 @@ test('Timeline: status markers + item sources', async () => {
   const li = $$('[data-ru="Timeline"] li')
   assert.equal(li.length, 2)
   assert.equal(li[0].getAttribute('data-ru-status'), 'done')
-  assert.equal(li[0].querySelector('[data-ru-sources]').getAttribute('aria-label'), 'sources: Local computation')
+  assert.equal(li[0].querySelector('[data-ru-citation]').getAttribute('aria-label'), 'sources 2')
   assert.equal(li[1].getAttribute('data-ru-status'), 'pending')
 })
 
@@ -284,7 +284,11 @@ test('SourceList: reads /meta/sources via the registry wrapper; D4 link only whe
   assert.equal(sl.querySelector('a'), null, 'no openExternal → no <a>')
   const span = sl.querySelector('[data-ru-source] [data-ru-url]')
   assert.equal(span.getAttribute('data-ru-url'), 'https://example.com/')
-  assert.ok(span.textContent.includes('Example site') && span.textContent.includes('https://example.com/'), 'URL text shown as plain text')
+  const srow = span.closest('[data-ru-source]')
+  const rowFace = srow.textContent.replace(/\s+/g, ' ').trim()
+  assert.ok(rowFace.includes('Example site') && rowFace.includes('example.com'), 'sourceRow face: label + host, never a raw URL: ' + rowFace)
+  assert.ok(!rowFace.includes('https://'), 'no raw URL on the face')
+  assert.equal(span.textContent, 'Example site', 'the label span itself never prints the URL')
   assert.equal(sl.querySelector('[data-slot="badge"]').textContent, 'web')
   // osOpen wired → anchor with href, no target=_blank, click routes through ctx.os.openExternal and is prevented.
   const opened = []
@@ -338,13 +342,13 @@ test('D9: SourceList sourceIds [] → "No sources cited"; absent → all; subset
   } finally { console.error = origErr }
 })
 
-test('component sourceIds -> superscript "ⓘ n" with labels tip', async () => {
+test('component sourceIds -> citeMarker "n" with labels tip', async () => {
   const { spec, initialState } = lower(fixture)
   await renderSpec(spec, initialState)
-  const sup = $('[data-ru="Text"] [data-ru-sources]')
-  assert.equal(sup.textContent, 'ⓘ 2')
-  assert.equal(sup.getAttribute('aria-label'), 'sources: Example site, Local computation')
-  assert.equal($('[data-ru="Card"] > header [data-ru-sources]').textContent, 'ⓘ 1')
+  const sup = $('[data-ru="Text"] [data-ru-citation]')
+  assert.equal(sup.textContent, '1,2')
+  assert.equal(sup.getAttribute('aria-label'), 'sources 1 and 2')
+  assert.equal($('[data-ru="Card"] > header [data-ru-citation]').textContent, '1')
 })
 
 // D2 (desk P1-1 / sem F3) + D8 (sem F6): DataTable and Chart honour the common envelope —
@@ -368,12 +372,12 @@ test('D2/D8: DataTable + Chart aria-label from accessibility.label; sourceIds su
   const table = $('[data-ru="DataTable"]'); const chart = $('[data-ru="Chart"]')
   assert.equal(table.getAttribute('aria-label'), 'A11Y TABLE')
   assert.equal(chart.getAttribute('aria-label'), 'A11Y CHART')
-  assert.equal(table.querySelector('[data-ru-sources]').textContent, 'ⓘ 1')
-  assert.equal(table.querySelector('[data-ru-sources]').getAttribute('aria-label'), 'sources: Example site')
-  assert.equal(chart.querySelector('[data-ru-sources]').textContent, 'ⓘ 2')
-  assert.equal(chart.querySelector('[data-ru-sources]').getAttribute('aria-label'), 'sources: Example site, Local computation')
+  assert.equal(table.querySelector('[data-ru-citation]').textContent, '1')
+  assert.equal(table.querySelector('[data-ru-citation]').getAttribute('aria-label'), 'sources 1')
+  assert.equal(chart.querySelector('[data-ru-citation]').textContent, '1,2')
+  assert.equal(chart.querySelector('[data-ru-citation]').getAttribute('aria-label'), 'sources 1 and 2')
   // row-level sources column renders the shared citeMarker (renderer-derived index)
-  assert.deepEqual([...table.querySelectorAll('[data-ru-citation]')].map(s => s.textContent), ['1'])
+  assert.deepEqual([...table.querySelectorAll('tbody [data-ru-citation]')].map(s => s.textContent), ['1'])
 })
 
 test('D2/D8: without accessibility.label, aria-label falls back to title; no sourceIds → no superscript', async () => {
@@ -389,8 +393,8 @@ test('D2/D8: without accessibility.label, aria-label falls back to title; no sou
   await renderSpec(spec, initialState)
   assert.equal($('[data-ru="DataTable"]').getAttribute('aria-label'), 'Tbl')
   assert.equal($('[data-ru="Chart"]').getAttribute('aria-label'), 'Ch')
-  assert.equal($('[data-ru="DataTable"] [data-ru-sources]'), null)
-  assert.equal($('[data-ru="Chart"] [data-ru-sources]'), null)
+  assert.equal($('[data-ru="DataTable"] [data-ru-citation]'), null)
+  assert.equal($('[data-ru="Chart"] [data-ru-citation]'), null)
 })
 
 // D5 (desk P2-2): register() performs NO network call — no unconditional ctx.rest('/health') probe.
@@ -440,7 +444,7 @@ test('D6: every Badge variant/size we emit is in the real cva list; Tip gets lab
     assert.ok(REAL_SIZES.includes(b.getAttribute('data-size')), `rendered size ${b.getAttribute('data-size')}`)
   }
   // Tip: our superscript passes `label` (a ReactNode) — the stub records it; real Tip requires exactly this prop.
-  assert.ok($('[data-slot="tip"] [data-ru-sources]'), 'sourceSup wrapped in Tip with label')
+  assert.ok($('[data-slot="tip"] [data-ru-citation]'), 'sourceSup wrapped in Tip with label')
   // Skeleton: card.mjs passes style + data-ru-loading, both legal on ComponentProps<'div'>.
   const { RichCard } = await import('../desktop/src/index.mjs')
   await act(async () => { root.render(React.createElement(RichCard, { id: 'ru-0123456789ab' })) })

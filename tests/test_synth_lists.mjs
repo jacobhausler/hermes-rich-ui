@@ -48,7 +48,15 @@ test('Checklist: null ≠ false — UNKNOWN is styled distinctly from UNCHECKED 
   const nullMk = $$('[data-ru-state]')[1].querySelector('[data-ru-marker]')
   assert.equal(falseMk.getAttribute('data-ru-marker'), 'unchecked')
   assert.equal(nullMk.getAttribute('data-ru-marker'), 'unknown', 'a null must never become unchecked')
-  assert.notEqual(nullMk.getAttribute('style'), falseMk.getAttribute('style'), 'UNKNOWN and UNCHECKED styling must differ')
+  // The distinctness lives in the inner StatusMark SVG, not the wrapper span's style.
+  const V = { text2: /--ui-text-secondary/, text3: /--ui-text-tertiary/ }
+  const falseSvg = falseMk.querySelector('svg')
+  const nullSvg = nullMk.querySelector('svg')
+  assert.ok(falseSvg && nullSvg, 'both states render a StatusMark SVG')
+  assert.match(falseSvg.getAttribute('stroke') || falseSvg.outerHTML, V.text2, 'UNCHECKED rides text2')
+  assert.match(nullSvg.getAttribute('stroke') || nullSvg.outerHTML, V.text3, 'UNKNOWN rides text3')
+  assert.ok(nullSvg.outerHTML.includes('stroke-dasharray') || nullSvg.getAttribute('stroke-dasharray'), 'UNKNOWN carries the dashed ring')
+  assert.notEqual(nullSvg.outerHTML, falseSvg.outerHTML, 'UNKNOWN and UNCHECKED marks must differ (L1)')
   assert.equal(falseMk.getAttribute('aria-label'), 'not done')
   assert.equal(nullMk.getAttribute('aria-label'), 'unknown')
 })
@@ -68,11 +76,11 @@ test('Checklist: showTally false hides the tally; empty items tally is 0/0', asy
 })
 
 test('Checklist: per-item sourceIds render the superscript', async () => {
-  const state = { meta: { sources: [{ id: 's1', kind: 'web', label: 'Example source', url: 'https://example.org/x' }] } }
-  await renderComponent({ id: 'ck5', component: 'Checklist', props: { items: [{ label: 'Cited step', done: true, sourceIds: ['s1'] }] } }, state)
-  const sup = $('[data-ru-sources]')
+  const _sources = [{ id: 's1', kind: 'web', label: 'Example source', url: 'https://example.org/x' }]
+  await renderComponent({ id: 'ck5', component: 'Checklist', props: { items: [{ label: 'Cited step', done: true, sourceIds: ['s1'] }], _sources } })
+  const sup = $('[data-ru-citation]')
   assert.ok(sup, 'per-item sourceIds superscript missing')
-  assert.equal(sup.getAttribute('data-ru-sources'), '1')
+  assert.equal(sup.textContent.replace(/\s+/g, ''), '1')
 })
 
 test('ChipSet: renders N SDK badges from 1 component with data-ru-count', async () => {

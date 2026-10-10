@@ -1,5 +1,5 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { common, isNil, unavailable, ownSources, V, type, formatMetric } from './_shared.mjs'
+import { common, isNil, unavailable, citeMarker, V, type, formatMetric } from './_shared.mjs'
 import { MARK_FILL } from './_house.mjs'
 import { num, fmtPair, fmtSet, unitSpec } from './fmt.mjs'
 import { useVintage } from './rowfmt.mjs'
@@ -52,7 +52,7 @@ const HouseProgress = ({ element }) => {
         children: [
           jsx('div', { 'data-ru-label': '',
             style: { ...type('caption', { caps: true }), color: V.text2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 260 },
-            children: [String(p.label ?? ''), ownSources(p)] }, 'a'),
+            children: [String(p.label ?? ''), citeMarker(p.sourceIds, p._sources)] }, 'a'),
           jsx('div', { 'data-ru-counter': counter ?? 'unavailable',
             style: { ...type('body', { num: true }), color: V.text, whiteSpace: 'nowrap' },
             children: hasCur ? [counter, indeterminate && tot === null ? ' \u00b7 total unavailable' : null] : unavailable()
@@ -103,7 +103,7 @@ export const LegacyProgress = ({ element }) => {
     children: [
       jsxs('div', { style: { display: 'flex', justifyContent: 'space-between', ...type('caption'), color: V.text2 },
         children: [
-          jsxs('span', { children: [String(p.label ?? ''), ownSources(p)] }, 'a'),
+          jsxs('span', { children: [String(p.label ?? ''), citeMarker(p.sourceIds, p._sources)] }, 'a'),
           // E12/L1: current-null NEVER prints 0; a known current with a null/absent total
           // prints 'total unavailable' while the bar stays indeterminate.
           jsxs('span', { style: { fontVariantNumeric: 'tabular-nums' },

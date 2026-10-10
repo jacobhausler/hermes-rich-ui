@@ -62,9 +62,9 @@ test('E14: Image renders schema-legal sourceIds as attribution (dead prop closed
   const img = fig.querySelector('img')
   assert.equal(img.getAttribute('src'), 'https://example.com/ok.png')
   assert.equal(img.getAttribute('alt'), 'chart of sales')
-  const sup = fig.querySelector('figcaption [data-ru-sources]')
-  assert.equal(sup.textContent, 'ⓘ 1')
-  assert.equal(sup.getAttribute('aria-label'), 'sources: Example site')
+  const sup = fig.querySelector('figcaption [data-ru-citation]')
+  assert.equal(sup.textContent, '1')
+  assert.equal(sup.getAttribute('aria-label'), 'sources 1')
 })
 
 test('E14: onError swaps in the dashed unavailable frame — alt text AND attribution stay visible (S)', async () => {
@@ -79,9 +79,9 @@ test('E14: onError swaps in the dashed unavailable frame — alt text AND attrib
   assert.match(box.textContent, /gone/)
   assert.match(box.textContent, /image unavailable/)
   assert.match(box.style.border, /dashed/, 'unavailable frame is dashed')
-  const sup = fig.querySelector('[data-ru-sources]')
+  const sup = fig.querySelector('[data-ru-citation]')
   assert.ok(sup, 'attribution stays visible when the image fails')
-  assert.equal(sup.textContent, 'ⓘ 2')
+  assert.equal(sup.textContent, '1,2')
 })
 
 test('E14: non-https degrades to the blocked alt box; default render stays additive (no attribution, no figcaption without caption)', async () => {
@@ -93,7 +93,7 @@ test('E14: non-https degrades to the blocked alt box; default render stays addit
   assert.ok(box.style.border.includes('dashed'))
   // No caption, no sourceIds → no figcaption at all (byte-additive vs the pre-E14 render).
   assert.equal($('[data-ru="Image"] figcaption'), null)
-  assert.equal($('[data-ru="Image"] [data-ru-sources]'), null)
+  assert.equal($('[data-ru="Image"] [data-ru-citation]'), null)
 })
 
 // ----------------------------------------------------------- N6 ImageGallery
@@ -116,9 +116,9 @@ test('N6: ImageGallery renders one tile per item with alt, caption, columns, cou
   assert.equal(tiles[0].querySelector('img').getAttribute('alt'), 'first evidence')
   assert.equal(tiles[1].querySelector('figcaption'), null, 'item without caption gets no figcaption (L1: nothing invented)')
   assert.equal(tiles[0].querySelector('figcaption').textContent.includes('panel A'), true)
-  assert.equal(tiles[0].querySelector('figcaption [data-ru-sources]').getAttribute('aria-label'), 'sources: Example site')
-  assert.equal(tiles[2].querySelector('figcaption [data-ru-sources]').getAttribute('aria-label'), 'sources: Local computation')
-  assert.equal(root.querySelector('div [data-ru-sources]') !== null, true, 'gallery-level sourceIds render by the title')
+  assert.equal(tiles[0].querySelector('figcaption [data-ru-citation]').getAttribute('aria-label'), 'sources 1')
+  assert.equal(tiles[2].querySelector('figcaption [data-ru-citation]').getAttribute('aria-label'), 'sources 2')
+  assert.equal(root.querySelector('div [data-ru-citation]') !== null, true, 'gallery-level sourceIds render by the title')
 })
 
 test('N6: per-tile error handler → dashed frame with visible alt + attribution, other tiles untouched', async () => {
@@ -130,9 +130,9 @@ test('N6: per-tile error handler → dashed frame with visible alt + attribution
   assert.match(box.textContent, /first evidence/, 'alt text stays visible in the broken frame')
   assert.match(box.style.border, /dashed/)
   assert.equal(tiles[0].querySelector('img'), null)
-  const sup = tiles[0].querySelector('[data-ru-sources]')
+  const sup = tiles[0].querySelector('[data-ru-citation]')
   assert.ok(sup, 'attribution survives the failed image (S)')
-  assert.equal(sup.textContent, 'ⓘ 1')
+  assert.equal(sup.textContent, '1')
   // The healthy tile is untouched.
   assert.equal(tiles[1].querySelector('[data-ru-image-blocked]'), null)
   assert.ok(tiles[1].querySelector('img'), 'second tile still renders its <img>')
@@ -169,14 +169,14 @@ test('N5: AsOf renders the caption line and omits absent/null segments (accessed
   await renderComponent({ id: 'a3', component: 'AsOf', props: { observedAt: '2026-09-26', note: 'audited by hand', sourceIds: ['s2'], _sources } }, dm)
   const r3 = $('[data-ru="AsOf"]')
   assert.equal(r3.textContent.startsWith('Observed 2026-09-26 · audited by hand'), true)
-  assert.ok(r3.querySelector('[data-ru-sources]'), 'AsOf-level sourceIds resolve')
+  assert.ok(r3.querySelector('[data-ru-citation]'), 'AsOf-level sourceIds resolve')
 })
 
 test('N5: AsOf with no timestamps publishes nothing — honest empty caption, never a clock', async () => {
   await renderComponent({ id: 'a4', component: 'AsOf', props: {} }, dm)
   const root = $('[data-ru="AsOf"]')
   assert.equal(root.getAttribute('data-ru-fields'), '0')
-  assert.equal(root.textContent, 'no timestamps published')
+  assert.equal(root.textContent, 'No timestamps published')
 })
 
 test('N5 grep-pin: asof.mjs (and the media files) contain no clock calls — the card stays a static artifact', () => {

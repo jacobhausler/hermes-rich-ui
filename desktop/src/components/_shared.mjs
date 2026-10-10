@@ -124,23 +124,50 @@ export const isNil = v => v === null || v === undefined
 
 export const unavailable = (key) => jsx('span', { 'data-ru-null': '', style: { color: V.text3, fontStyle: 'italic' }, children: 'unavailable' }, key)
 
-// #33 (E-S4/E-S5): the ONE status-mark primitive — a shared SVG arrow riding the given
+// #33 (E-S4/E-S5): the ONE status-mark primitive — a shared SVG riding the given
 // stroke color. Sparkline's trend chip (and any future trend mark) uses THIS, never a
 // text glyph (▲/▼ render inconsistently across fonts/emoji fallbacks). The stroke rides
 // a --ui-* token: tone error/danger ≡ var(--ui-red), success ≡ var(--ui-green), default
 // follows the trend (up green / down red / flat secondary).
-export function StatusMark(trend, stroke, key) {
-  if (!Object.hasOwn(STATUS_ARROW, trend)) return null
-  return jsx('svg', {
-    'aria-hidden': 'true', width: 10, height: 10, viewBox: '0 0 10 10',
-    fill: 'none', stroke, strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round',
-    children: jsx('path', { d: STATUS_ARROW[trend] })
+// #36 (slice 13, supersedes #18): the same primitive owns the status STATES — done check,
+// not-done ring, unknown dashed ring carrying a `?` in text-secondary (aria-label
+// `unknown`), pending hollow secondary ring. State marks are shape-distinct (greyscale
+// safe); colours never discriminate.
+export function StatusMark(kind, stroke, key) {
+  if (Object.hasOwn(STATUS_ARROW, kind)) {
+    return jsx('svg', {
+      'aria-hidden': 'true', width: 10, height: 10, viewBox: '0 0 10 10',
+      fill: 'none', stroke, strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round',
+      children: jsx('path', { d: STATUS_ARROW[kind] })
+    }, key)
+  }
+  const mark = STATUS_MARK[kind]
+  if (!mark) return null
+  // Stroke geometry rides the SVG root (stroke-dasharray INHERITS into the ring), so a
+  // reader (and the test) sees the dashed ring on the mark element itself.
+  const kids = [jsx('circle', { cx: 6, cy: 6, r: 4.5, fill: 'none' }, 'r')]
+  if (mark.path) kids.push(jsx('path', { d: mark.path, fill: 'none', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round' }, 'p'))
+  if (mark.glyph) kids.push(jsx('text', { x: 6, y: 8.5, textAnchor: 'middle', fontSize: 7, fill: V.text2, stroke: 'none', children: '?' }, 'g'))
+  return jsxs('svg', {
+    'aria-label': kind, role: 'img', width: 12, height: 12, viewBox: '0 0 12 12',
+    fill: 'none', stroke, strokeWidth: 1.25, ...(mark.dashed ? { strokeDasharray: '2 2' } : null),
+    children: kids
   }, key)
 }
 const STATUS_ARROW = {
   up: 'M2 7.5 L5 2.5 L8 7.5 M3.5 5.5 L6.5 5.5',
   down: 'M2 2.5 L5 7.5 L8 2.5 M3.5 4.5 L6.5 4.5',
   flat: 'M2 5 L8 5'
+}
+// #36: the state vocabulary (named to pair with #57's five-state work). Each renders a
+// shape-distinct SVG around the ring: done fills the ring with a check, not-done is a
+// bare ring, unknown dashes the ring and prints `?` in text-secondary, pending is the
+// hollow secondary ring.
+const STATUS_MARK = {
+  done: { path: 'M3.6 6.2 L5.3 7.9 L8.4 4.3' },
+  notDone: {},
+  unknown: { dashed: true, glyph: true },
+  pending: { stroke2: true }
 }
 
 // Plain-text render of any resolved scalar; null/undefined -> 'unavailable', never 0.
@@ -203,24 +230,23 @@ export function citeMarker(ids, sources) {
   })
 }
 
-// Superscript 'ⓘ n' badge with a Tip listing the resolved source labels.
-export function sourceSup(ids, sources, key) {
-  if (!Array.isArray(ids) || !ids.length) return null
-  const labels = sourceLabels(ids, sources)
-  const tip = jsx('div', { style: { whiteSpace: 'pre-line' }, children: labels.map((l, i) => `${i + 1}. ${l}`).join('\n') })
-  return jsx(Tip, {
-    label: tip,
-    children: jsx('sup', {
-      'data-ru-sources': ids.length,
-      'aria-label': 'sources: ' + labels.join(', '),
-      style: { ...type('micro'), marginLeft: 3, color: V.text3, cursor: 'help', verticalAlign: 'super' },
-      children: `ⓘ ${ids.length}`
-    })
-  }, key)
+// #36 (slice 13, supersedes #17): the old 'ⓘ n' sourceSup is GONE — every citation
+// marker is the shared citeMarker (slice 3), never a ⓘ glyph. withCite is the ONE
+// placement rule: the marker is the last inline child of the head row when a head
+// exists, else a flex sibling of the body; never alone on a line. ownSources is the
+// thin no-head form (flex sibling after the body) so call sites stay one line each.
+export function withCite(head, body, ids, sources) {
+  const mark = citeMarker(ids, sources)
+  if (!mark) return [head, body].filter(Boolean)
+  if (!head) return [body, mark]
+  const prev = head.props.children
+  const kids = prev === undefined ? [mark] : (Array.isArray(prev) ? [...prev, mark] : [prev, mark])
+  return [{ ...head, props: { ...head.props, children: kids } }, body].filter(Boolean)
 }
 
-// Component-level sources (element.props.sourceIds) rendered after the body.
-export const ownSources = (props, key = 'src') => sourceSup(props?.sourceIds, props?._sources, key)
+// Component-level sources (element.props.sourceIds) as the citation marker, placed as
+// a flex sibling after the body (withCite covers the head-row case).
+export const ownSources = (props, key = 'src') => citeMarker(props?.sourceIds, props?._sources)
 
 export function formatMetric(value, { format = 'number', precision, unit } = {}) {
   if (isNil(value)) return null
@@ -256,7 +282,7 @@ export function ImageTile({ src, alt, caption, maxHeight, sourceIds, sources, ex
   const maxH = Math.min(600, Math.max(64, Number(maxHeight) || 320))
   const [failed, setFailed] = useState(false)
   const label = String(alt ?? '')
-  const attr = sourceSup(sourceIds, sources, 'a')
+  const attr = citeMarker(sourceIds, sources)
   return jsxs('figure', {
     ...extra,
     style: { margin: 0, display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start', minWidth: 0 },
