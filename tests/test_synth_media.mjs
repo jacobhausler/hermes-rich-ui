@@ -6,7 +6,8 @@ import { test } from 'node:test'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import { assert, renderComponent, registerLane, act, $ } from './helpers/render.mjs'
+import { assert, renderComponent, renderSpec, fixtureJson, lower, registerLane, act, $ } from './helpers/render.mjs'
+import { B, R, HOUSE } from '../desktop/src/components/_house.mjs'
 
 // Dynamic imports: the sdk-resolve hook only exists after helpers/render.mjs evaluates.
 const { ImageGallery } = await import('../desktop/src/components/gallery.mjs')
@@ -149,6 +150,128 @@ test('N6: non-https tile degrades like Image (scheme posture shared via ImageTil
   const empty = $('[data-ru="ImageGallery"] [data-ru-empty]')
   assert.ok(empty, 'empty gallery shows an honest empty state')
   assert.equal(empty.textContent, 'no images')
+})
+
+// ---------------------------------------------------------- #37 media defaults
+const click = async el => { await act(async () => el.dispatchEvent(new window.MouseEvent('click', { bubbles: true }))) }
+const fireLoad = async el => { await act(async () => el.dispatchEvent(new window.Event('load'))) }
+// The shared harness reuses its React root, so unmount the previous leaf's state.
+const renderFresh = async component => {
+  await renderComponent({ id: 'reset-media', component: 'Text', props: { text: '' } }, dm)
+  await renderComponent(component, dm)
+}
+
+test('#37 Image: empty-alt failed image is a full-width absent frame naming the host, without fill', async () => {
+  await renderFresh({ id: 'defaults-image-host', component: 'Image', props: { src: 'https://cdn.example.org/x.png', alt: '' } }, dm)
+  await fireError($('[data-ru="Image"] img'))
+  const frame = $('[data-ru-image-blocked]')
+  assert.match(frame.textContent, /cdn\.example\.org/)
+  assert.equal(frame.style.width, '100%')
+  assert.equal(frame.style.boxSizing, 'border-box', 'padding and border must stay within the figure width')
+  const expected = document.createElement('div')
+  expected.style.border = B.absent
+  assert.equal(frame.style.border, expected.style.border)
+  assert.equal(frame.style.borderRadius, `${R.box}px`)
+  assert.ok(['', 'none', 'transparent'].includes(frame.style.background))
+  assert.notEqual(frame.style.display, 'inline-block', 'never an inline alt-text pill')
+})
+
+test('#37 Image: failed label precedence is alt, caption, host; scheme-blocked images follow it too', async () => {
+  const cases = [
+    { src: 'https://cdn.example.org/a.png', alt: 'authored alt', caption: 'authored caption', label: 'authored alt' },
+    { src: 'https://cdn.example.org/b.png', alt: '', caption: 'authored caption', label: 'authored caption' },
+    { src: 'https://cdn.example.org/c.png', alt: '', label: 'cdn.example.org' },
+    { src: 'http://cdn.example.org/d.png', alt: '', label: 'cdn.example.org' }
+  ]
+  for (const [i, { label, ...props }] of cases.entries()) {
+    await renderFresh({ id: `defaults-label-${i}`, component: 'Image', props }, dm)
+    const img = $('[data-ru="Image"] img')
+    if (img) await fireError(img)
+    assert.equal($('[data-ru-image-blocked]').textContent,
+      label + (img ? ' — image unavailable' : ' — image blocked (https only)'))
+  }
+})
+
+test('#37 Image: loaded image opens and closes the SDK lightbox with the same src; failed images have no trigger', async () => {
+  const src = 'https://example.com/lightbox.png'
+  await renderFresh({ id: 'defaults-lightbox', component: 'Image', props: { src, alt: 'detail' } }, dm)
+  const img = $('[data-ru="Image"] img')
+  assert.equal(img.style.borderRadius, `${R.box}px`)
+  assert.equal(img.style.maxHeight, `${HOUSE.IMAGE_MAX_H}px`)
+  await fireLoad(img)
+  const trigger = img.closest('button')
+  assert.ok(trigger, 'keyboard-accessible image trigger')
+  assert.equal(trigger.getAttribute('type'), 'button')
+  assert.match(trigger.getAttribute('aria-label'), /detail/)
+  await click(trigger)
+  const dialog = document.querySelector('[role="dialog"]')
+  assert.ok(dialog, 'SDK Dialog content opens')
+  assert.equal(dialog.querySelector('img').getAttribute('src'), src)
+  assert.equal(dialog.querySelector('img').getAttribute('alt'), 'detail')
+  await click(dialog.querySelector('button[aria-label="Close"]'))
+  assert.equal(document.querySelector('[role="dialog"]'), null)
+  await fireError(img)
+  assert.equal($('[data-ru="Image"] button'), null, 'no lightbox for failed/blocked media')
+})
+
+test('#37 Gallery: count defaults 1/2/3/5/8 map to 1/2/3/3/4; uniform contain boxes align captions', async () => {
+  for (const [n, columns] of [[1, 1], [2, 2], [3, 3], [5, 3], [8, 4]]) {
+    const items = Array.from({ length: n }, (_, i) => ({ src: `https://example.com/${i}.png`, alt: `tile ${i}`, caption: i % 2 ? 'two\nlines' : 'one' }))
+    await renderFresh({ id: `defaults-gallery-${n}`, component: 'ImageGallery', props: { items } }, dm)
+    const grid = $('[data-ru="ImageGallery"] [data-ru-columns]')
+    assert.equal(grid.getAttribute('data-ru-columns'), String(columns))
+    assert.equal(grid.style.gridTemplateColumns, `repeat(${columns}, minmax(0, 1fr))`)
+    for (const tile of grid.querySelectorAll('[data-ru-tile]')) {
+      const img = tile.querySelector('img')
+      assert.equal(img.style.objectFit, 'contain')
+      assert.equal(img.closest('button').style.aspectRatio, '3 / 2')
+      assert.equal(img.style.width, '100%')
+      assert.equal(img.style.height, '100%')
+      assert.ok(tile.querySelector('figcaption'))
+    }
+    await fireError(grid.querySelector('img'))
+    assert.equal(grid.querySelector('[data-ru-image-blocked]').style.aspectRatio, '3 / 2', 'failed tile keeps the caption baseline')
+  }
+})
+
+test('#37 Gallery: original saved fixture columns:2 remains 2 through lower + render', async () => {
+  const saved = fixtureJson('expansion-gallery.json')
+  const original = JSON.stringify(saved)
+  const { spec, initialState } = lower(saved)
+  await renderSpec(spec, initialState)
+  assert.equal($('[data-ru="ImageGallery"] [data-ru-columns]').getAttribute('data-ru-columns'), '2')
+  assert.equal(JSON.stringify(saved), original, 'renderer never rewrites the saved record')
+})
+
+test('#37 Tabs: eight long labels stay small/one-line/capped with full titles in a scrolling strip', async () => {
+  const titles = Array.from({ length: 8 }, (_, i) => `${i} ${'long title '.repeat(4)}`)
+  await renderFresh({ id: 'defaults-tabs', component: 'Tabs', props: { tabs: titles.map(title => ({ title })) } }, dm)
+  const strip = $('[data-ru="Tabs"] [role="tablist"]')
+  assert.equal(strip.style.overflowX, 'auto')
+  assert.equal(strip.style.flexWrap, 'nowrap')
+  assert.equal(strip.style.minWidth, '0')
+  for (const [i, tab] of [...strip.querySelectorAll('[role="tab"]')].entries()) {
+    assert.equal(tab.style.fontSize, '12px')
+    assert.equal(tab.style.whiteSpace, 'nowrap')
+    assert.equal(tab.style.textOverflow, 'ellipsis')
+    assert.equal(tab.style.overflow, 'hidden')
+    assert.equal(tab.style.maxWidth, '24ch')
+    assert.equal(tab.style.flexShrink, '0', 'overflow scrolls rather than shrinking all labels')
+    assert.equal(tab.getAttribute('title'), titles[i])
+  }
+})
+
+test('#37 Accordion: absent open seeds first only; explicit false/true wins; SVG chevron toggles', async () => {
+  await renderFresh({ id: 'defaults-accordion', component: 'Accordion', props: { items: [{ title: 'one' }, { title: 'two' }, { title: 'three' }] } }, dm)
+  const buttons = [...$('[data-ru="Accordion"]').querySelectorAll('button')]
+  assert.deepEqual(buttons.map(b => b.getAttribute('aria-expanded')), ['true', 'false', 'false'])
+  assert.ok(buttons.every(b => b.querySelector('svg[aria-hidden="true"]')), 'SVG chevrons, not glyphs')
+  const before = buttons[0].querySelector('svg').style.transform
+  await click(buttons[0])
+  assert.equal(buttons[0].getAttribute('aria-expanded'), 'false')
+  assert.notEqual(buttons[0].querySelector('svg').style.transform, before)
+  await renderFresh({ id: 'explicit-accordion', component: 'Accordion', props: { items: [{ title: 'one', open: false }, { title: 'two', open: true }] } }, dm)
+  assert.deepEqual([...$('[data-ru="Accordion"]').querySelectorAll('button')].map(b => b.getAttribute('aria-expanded')), ['false', 'true'])
 })
 
 // -------------------------------------------------------------------- N5 AsOf
