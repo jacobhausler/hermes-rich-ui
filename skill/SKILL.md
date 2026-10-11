@@ -94,4 +94,7 @@ Structural: root exists, refs resolve, no cycles/shared children/unreachables, n
 
 ## How to read errors
 
-`ok:false` returns `errors: ["<component id or /path>: <reason>", …]` — fix exactly what each names and call again, at most 2 repairs. After that fall back to accurate prose. Never fabricate data to satisfy the validator.
+`ok:false` returns an `errors` list. Door field errors end in `— <fix>`; apply the named fix without changing the data.
+When `components` is an array, door field and component admission errors return in one reply; no card or view is written on failure.
+Other failures retain their existing messages. Repair exactly what each names and call again, at most 2 repairs, then fall back to accurate prose.
+Never fabricate data to satisfy the validator.
