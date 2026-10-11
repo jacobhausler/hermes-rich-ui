@@ -94,8 +94,8 @@ You are contributing on behalf of a user. Do this, in order:
 2. **Read `AGENTS.md`**, then build the code graph and navigate by it instead of
    grepping: `uvx --from graphifyy graphify update . --no-cluster` →
    `uvx --from graphifyy graphify query "<your question>"`. `graphify-out/` is
-   gitignored except the committed `graph.json` + `GRAPH_REPORT.md` (the
-   `graph.yml` workflow keeps them current on `main`).
+   gitignored except the committed `graph.json` (the
+   `graph.yml` workflow keeps it current on `main`).
 3. **Reproduce before fixing.** Point at the `file:line` where the bug manifests
    and show your fix changes that line's behaviour. A plausible rationale is not a repro.
 4. **Smallest diff that passes R1–R10.** No drive-by cleanups.
