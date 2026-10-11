@@ -7,8 +7,10 @@ out-desc/
 shots/
 tests/.suite-home/
 tests/.public-scratch/
-# Knowledge graph: commit graph.json + GRAPH_REPORT.md, gitignore the rest of graphify-out/
+# Knowledge graph: commit graph.json only. GRAPH_REPORT.md is clustering-path-only
+# output (`graphify update --no-cluster` never writes it), every regen PR here is
+# single-file, and the regen job's `git add` of a missing file aborts under
+# set -euo pipefail — an allow-list entry it can never satisfy is a trap.
 graphify-out/*
 !graphify-out/graph.json
-!graphify-out/GRAPH_REPORT.md
 pub-scrub-check/
