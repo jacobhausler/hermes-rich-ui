@@ -57,7 +57,7 @@ merge gate; single tests are for iterating only.
 - R2 Stock core: no patched-host imports; core imports soft; absent field → `unknown`, never invented.
 - R3 SDK-only desktop: `desktop/src/*` imports only `react`, `react/jsx-runtime`, `@hermes/plugin-sdk` — the content scan in `scripts/build.mjs` enforces.
 - R4 Stdlib backend: no new Python dependency; imports under CPython 3.13 and macOS system python 3.9; no self-updater.
-- R5 Manifest parity: `plugin.yaml` `provides_*` matches `register()` exactly; `catalog/hermes-rich-ui.catalog.json` is the single source of truth; version bumped only by the release lane.
+- R5 Manifest parity: `plugin.yaml` `provides_*` matches `register()` exactly; `catalog/hermes-rich-ui.catalog.json` is the single source of truth; version bumped only by the release lane (PUBLIC release only). Installing or dogfooding our own packages needs no version bump and no owner OK.
 - R6 Tests: a behaviour change ships one failing-if-broken test; no snapshot/change-detector tests; no test reads source text.
 - R7 Docs drift: user-visible string changed → grep `README.md`, `AGENTS.md`, `INSTALL.md`, `skill/**` for the old form; fixed in the same PR.
 - R8 Sibling completeness: grep the fixed pattern repo-wide; every sibling instance fixed or shown unaffected.
