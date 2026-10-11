@@ -172,31 +172,37 @@ def _present(args):
 
     errors = []
     if not isinstance(title, str) or not title.strip():
-        errors.append("title: required non-empty string")
+        errors.append('title: required non-empty string — add "title": "<short headline>"')
     summary = args.get("summary")
     if not isinstance(summary, str) or not summary.strip():
-        errors.append("summary: required non-empty string (plain-text fallback for the card)")
+        errors.append('summary: required non-empty string (plain-text fallback for the card)'
+                      ' — add "summary": "<plain-text fallback>"')
     if not isinstance(components, list) or not components:
-        errors.append("components: required non-empty array of A2UI components (one with id \"root\")")
+        errors.append('components: required non-empty array of A2UI components (one with id "root")'
+                      ' — use a non-empty components array with an id "root"')
     data = args.get("data", {})
     if data is None:
         data = {}
     if not isinstance(data, dict):
-        errors.append("data: must be an object (bound via {\"path\": \"/data/...\"})")
+        errors.append('data: must be an object (bound via {"path": "/data/..."})'
+                      ' — pass data as an object')
     sources = args.get("sources", [])
     if sources is None:
         sources = []
     if not isinstance(sources, list):
-        errors.append("sources: must be an array")
+        errors.append("sources: must be an array — pass sources as an array")
     derivations = args.get("derivations", [])
     if derivations is None:
         derivations = []
     if not isinstance(derivations, list):
-        errors.append("derivations: must be an array")
+        errors.append("derivations: must be an array — pass derivations as an array")
     save_as = args.get("save_view_as")
     if save_as is not None and not store.valid_view_id(save_as):
-        errors.append("save_view_as: invalid view id %r (expected ^[a-z][a-z0-9-]{0,63}$)" % (save_as,))
-    if errors:
+        errors.append("save_view_as: invalid view id %r (expected ^[a-z][a-z0-9-]{0,63}$)"
+                      " — use a lowercase view id matching ^[a-z][a-z0-9-]{0,63}$" % (save_as,))
+    # #38: a malformed list container cannot be admitted; all other door
+    # errors stay pending so component errors can join the same reply.
+    if not isinstance(components, list):
         return _fail(*errors)
 
     card_id = store.new_card_id()
@@ -206,9 +212,10 @@ def _present(args):
     try:
         adm_errors, normalized = result
     except (TypeError, ValueError):
-        return _fail("admission: returned an unexpected shape %r" % (type(result).__name__,))
-    if adm_errors:
-        return {"ok": False, "errors": [str(e) for e in adm_errors]}
+        return _fail(*errors, "admission: returned an unexpected shape %r" % (type(result).__name__,))
+    errors.extend(str(e) for e in adm_errors)
+    if errors:
+        return _fail(*errors)
     if isinstance(normalized, list):
         record["surface"]["createSurface"]["components"] = normalized
 

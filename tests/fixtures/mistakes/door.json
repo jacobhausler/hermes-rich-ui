@@ -1,0 +1,9 @@
+[
+  {"name": "missing-title", "remove": "title", "prefix": "title:", "fix": "add \"title\": \"<short headline>\""},
+  {"name": "missing-summary", "remove": "summary", "prefix": "summary:", "fix": "add \"summary\": \"<plain-text fallback>\""},
+  {"name": "wrong-components-shape", "set": {"components": {}}, "prefix": "components:", "fix": "use a non-empty components array with an id \"root\""},
+  {"name": "wrong-data-shape", "set": {"data": []}, "prefix": "data:", "fix": "pass data as an object"},
+  {"name": "wrong-sources-shape", "set": {"sources": {}}, "prefix": "sources:", "fix": "pass sources as an array"},
+  {"name": "wrong-derivations-shape", "set": {"derivations": {}}, "prefix": "derivations:", "fix": "pass derivations as an array"},
+  {"name": "invalid-save-view-id", "set": {"save_view_as": "Bad Id"}, "prefix": "save_view_as:", "fix": "use a lowercase view id matching ^[a-z][a-z0-9-]{0,63}$"}
+]
