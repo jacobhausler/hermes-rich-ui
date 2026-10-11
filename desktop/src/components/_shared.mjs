@@ -1,8 +1,8 @@
 // Shared helpers for hermes-rich-ui components. Inline style + --ui-* vars only.
 import { createContext, useState } from 'react'
-import { Badge, Tip } from '@hermes/plugin-sdk'
+import { Badge, Tip, Dialog, DialogTrigger, DialogContent, DialogTitle } from '@hermes/plugin-sdk'
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { TYPE, HOUSE, S, INK } from './_house.mjs'
+import { TYPE, HOUSE, S, R, B, INK } from './_house.mjs'
 
 export const V = {
   text: 'var(--ui-text-primary)',
@@ -270,26 +270,39 @@ export function formatMetric(value, { format = 'number', precision, unit } = {})
 
 export const row = (style, ...kids) => jsxs('div', { style: { display: 'flex', alignItems: 'center', gap: 6, ...style }, children: kids })
 
-// E14 + N6 (counsel 0928): the ONE tile implementation shared by Image and ImageGallery.
-// https posture (L3) untouched: a non-https src never reaches the network — it degrades
-// to the dashed alt box immediately; a failed https load swaps to that box via the img
-// error handler (never a broken-image glyph, Q-E13). Admission never fetched or verified
-// anything about the URL (L1) — this is presentation, not attestation. Attribution
-// (sourceSup) lives in the figcaption OUTSIDE the img/blocked swap, so it stays visible
-// when the image is blocked or unreachable (S-E14).
-export function ImageTile({ src, alt, caption, maxHeight, sourceIds, sources, extra = {} }) {
+// One media tile for Image and ImageGallery. A non-https URL never reaches the
+// network; failed loads replace the media, not its caption/attribution. #37:
+// absent frames name alt → caption → host, and loaded images use the SDK Dialog
+// (its trigger owns keyboard activation, focus restoration, and dismissal).
+export function ImageTile({ src, alt, caption, maxHeight, sourceIds, sources, aspectRatio, extra = {} }) {
   const https = typeof src === 'string' && src.startsWith('https://') ? src : null
-  const maxH = Math.min(600, Math.max(64, Number(maxHeight) || 320))
+  const maxH = Math.min(600, Math.max(64, Number(maxHeight) || HOUSE.IMAGE_MAX_H))
   const [failed, setFailed] = useState(false)
-  const label = String(alt ?? '')
+  const [loaded, setLoaded] = useState(false)
+  const [open, setOpen] = useState(false)
+  let host = ''
+  try { host = new URL(src).host } catch { /* invalid/absent URL has no host */ }
+  const label = String(alt || caption || host || 'image')
   const attr = citeMarker(sourceIds, sources)
+  const frame = { width: '100%', boxSizing: 'border-box', borderRadius: R.box, ...(aspectRatio ? { aspectRatio } : {}) }
   return jsxs('figure', {
     ...extra,
-    style: { margin: 0, display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start', minWidth: 0 },
+    style: { margin: 0, display: 'flex', flexDirection: 'column', gap: S.xs, minWidth: 0, width: '100%' },
     children: [
       https && !failed
-        ? jsx('img', { src: https, alt: label, loading: 'lazy', onError: () => setFailed(true), style: { maxHeight: maxH, maxWidth: '100%', objectFit: 'contain', borderRadius: 4, border: `1px solid ${V.stroke3}` } }, 'i')
-        : jsx('div', { 'data-ru-image-blocked': https ? 'unreachable' : 'scheme', style: { ...type('small'), color: V.text3, fontStyle: 'italic', border: `1px dashed ${V.stroke3}`, borderRadius: 4, padding: '8px 10px' }, children: (label || 'image') + (https ? ' — image unavailable' : ' — image blocked (https only)') }, 'i'),
+        ? jsxs(Dialog, { open: open && loaded, onOpenChange: setOpen, children: [
+            jsx(DialogTrigger, { asChild: true, children: jsx('button', {
+              type: 'button', disabled: !loaded, 'aria-label': `Open image: ${label}`,
+              style: { ...frame, display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 0, padding: 0, border: 0, background: 'none', cursor: loaded ? 'zoom-in' : 'default' },
+              children: jsx('img', { src: https, alt: String(alt ?? ''), loading: 'lazy', onLoad: () => setLoaded(true), onError: () => { setFailed(true); setOpen(false) },
+                style: { display: 'block', maxHeight: maxH, maxWidth: '100%', objectFit: 'contain', borderRadius: R.box, border: B.hair, boxSizing: 'border-box', ...(aspectRatio ? { width: '100%', height: '100%' } : {}) } })
+            }) }, 'trigger'),
+            jsxs(DialogContent, { fitContent: true, 'aria-describedby': undefined, children: [
+              jsx(DialogTitle, { style: { ...type('small'), color: V.text }, children: label }, 'title'),
+              jsx('img', { src: https, alt: String(alt ?? ''), style: { maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain', borderRadius: R.box } }, 'image')
+            ] }, 'lightbox')
+          ] }, 'i')
+        : jsx('div', { 'data-ru-image-blocked': https ? 'unreachable' : 'scheme', style: { ...frame, ...type('small'), display: 'flex', alignItems: 'center', color: V.text3, fontStyle: 'italic', border: B.absent, padding: `${S.sm}px ${S.md}px`, overflowWrap: 'anywhere' }, children: label + (https ? ' — image unavailable' : ' — image blocked (https only)') }, 'i'),
       caption || attr
         ? jsxs('figcaption', { style: { ...type('caption'), color: V.text2 }, children: [caption ? String(caption) : null, attr] }, 'c')
         : null
