@@ -6,7 +6,7 @@
 #     committed one, the commit step is skipped entirely (no churn commits on no-op rebuilds).
 #
 # Local equivalent:
-#   uvx --from graphifyy graphify update . --no-cluster
+#   uvx --from graphifyy==0.9.89 graphify update . --no-cluster
 #   git add graphify-out/graph.json && git commit
 name: graph
 
@@ -30,11 +30,16 @@ jobs:
       - name: Rebuild knowledge graph (AST only, FULL rebuild)
         run: |
           set -euo pipefail
+          # graphifyy is PINNED (nightly pass 2026-10-13): an unpinned uvx let the
+          # graph schema and node extraction drift silently with upstream releases
+          # (0.9.89 adds graph.schema_version and extracts package.json deps as
+          # nodes; the uv cache masked the diff on CI). Bump the pin deliberately,
+          # never implicitly.
           # Full rebuild: a stale/empty committed graph.json kills graphify's
           # incremental merge ("Cannot read graphify-out/graph.json for
           # incremental merge"), so drop it and rebuild from scratch.
           rm -f graphify-out/graph.json
-          uvx --from graphifyy graphify update . --no-cluster
+          uvx --from graphifyy==0.9.89 graphify update . --no-cluster
 
       - name: De-absolutize paths (runner workspace paths must never be committed)
         run: |
