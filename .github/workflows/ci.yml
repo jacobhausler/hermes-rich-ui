@@ -7,17 +7,14 @@ on:
 
 env:
   # Floor: 0.21.5 (requires_hermes in plugin.yaml) = the v2026.9.24 release;
-  # core's version gate compares semver base versions, so the floor matrix row
-  # below is the commit of that release and the manifest floor is its semver,
+  # core's version gate compares semver base versions, so the floor pin below
+  # is the commit sha of that release and the manifest floor is its semver,
   # not the date tag.
   HERMES_PIN: f97608f178d1ffeca59860195ab7da295f7c8e5f
-  # Latest stable, kept current by the upstream-drift lane (repo-admin law:
-  # measure the floor, don't guess it — and never let an upgrading user be the
-  # first to discover contract drift). Proven green locally at this branch
-  # point: scratch venv (Python 3.14) editable install at tag v0.21.6
-  # (commit f27cdbce5ab63eafe8633b293a75151409da5769) -> `hermes plugins
-  # validate .` rc=0, 2026-10-12. Re-pinned to v0.21.7 per review N1
-  # (releases/latest as of this PR); compat job proves it at head.
+  # Latest stable. Re-pinned by hand (owner/human) when a new hermes release
+  # is cut — no automation lane updates this value. Asymmetric with the floor
+  # above on purpose: this end pins the release tag name, the floor pins a
+  # commit sha. The compat-latest job below validates against this tag.
   HERMES_LATEST: v0.21.7
 
 jobs:
@@ -78,8 +75,8 @@ jobs:
         with:
           # v0.21.6+ release metadata gates all core deps on Python >=3.14;
           # 3.11 installs hermes-agent with zero deps and validate dies on
-          # 'import ruamel' (job 114783692561, review B1). The floor sibling
-          # above legitimately stays 3.11 — its pin predates the markers.
+          # 'import ruamel'. The floor job above legitimately stays 3.11 —
+          # its pin predates the markers.
           python-version: "3.14"
 
       - name: Checkout hermes-agent @ ${{ env.HERMES_LATEST }}
