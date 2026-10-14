@@ -62,7 +62,6 @@ const EXEMPT = new Map([
 ])
 const PINNED_MICRO = new Map([
   ['sparkline trend glyph', '[data-ru="Sparkline"] [data-ru-chip][aria-hidden="true"]'],
-  ['Accordion chevron', '[data-ru="Accordion"] button > span:first-child'],
   ['CodeBlock language pill', '[data-ru="CodeBlock"] [data-ru-lang]'],
   ['DataTable citation', '[data-ru="DataTable"] [data-ru-citation]']
 ])

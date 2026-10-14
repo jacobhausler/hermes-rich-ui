@@ -20,8 +20,6 @@ const paint = value => theme(value) || /^color-mix\(in srgb, var\(--ui-[a-z-]+\)
 // Measured on the four saved cards at 3beb897. A later restyle removes entries;
 // adding an entry requires a separately reviewed, named before→after pair.
 const EXEMPT = new Set([
-  'Accordion button border=medium', 'Accordion button gap=6px',
-  'Accordion button padding=6px 10px', 'Accordion div border-top=medium',
   'BarList div gap=6px', 'Callout div padding=8px 10px',
   // #35: one-series legends are gone; the second series swatch follows HOUSE.SERIES (orange).
   'Chart div background=rgba(249, 115, 22, 0.18)', 'Chart div background=rgba(59, 130, 246, 0.18)',
