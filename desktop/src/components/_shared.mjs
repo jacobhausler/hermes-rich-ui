@@ -1,8 +1,8 @@
 // Shared helpers for hermes-rich-ui components. Inline style + --ui-* vars only.
 import { createContext, useState } from 'react'
-import { Badge, Tip } from '@hermes/plugin-sdk'
+import { Badge, Dialog, DialogContent, DialogTitle, Tip } from '@hermes/plugin-sdk'
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { TYPE, HOUSE, S, INK } from './_house.mjs'
+import { TYPE, HOUSE, S, R, INK } from './_house.mjs'
 
 export const V = {
   text: 'var(--ui-text-primary)',
@@ -328,6 +328,23 @@ export function formatMetric(value, { format = 'number', precision, unit } = {})
 
 export const row = (style, ...kids) => jsxs('div', { style: { display: 'flex', alignItems: 'center', gap: 6, ...style }, children: kids })
 
+// #37 (slice 14): a loaded Image opens an SDK Dialog lightbox showing the same src. The
+// Dialog is the SDK's own (Dialog*); Esc and the Dialog's close control both reach
+// onOpenChange(false). Mounted only while open (Radix semantics).
+const SR_ONLY = { position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' }
+export function Lightbox({ src, label, open, onOpenChange }) {
+  return jsx(Dialog, {
+    open, onOpenChange,
+    children: jsxs(DialogContent, {
+      'data-ru-lightbox': '', fitContent: true,
+      children: [
+        jsx(DialogTitle, { style: SR_ONLY, children: label || 'image' }, 't'),
+        jsx('img', { src, alt: label, style: { display: 'block', maxWidth: '100%', maxHeight: '90vh', objectFit: 'contain', borderRadius: R.box } }, 'i')
+      ]
+    })
+  })
+}
+
 // E14 + N6 (counsel 0928): the ONE tile implementation shared by Image and ImageGallery.
 // https posture (L3) untouched: a non-https src never reaches the network — it degrades
 // to the dashed alt box immediately; a failed https load swaps to that box via the img
@@ -335,19 +352,30 @@ export const row = (style, ...kids) => jsxs('div', { style: { display: 'flex', a
 // anything about the URL (L1) — this is presentation, not attestation. Attribution
 // (sourceSup) lives in the figcaption OUTSIDE the img/blocked swap, so it stays visible
 // when the image is blocked or unreachable (S-E14).
-export function ImageTile({ src, alt, caption, maxHeight, sourceIds, sources, extra = {} }) {
+// #37: lightbox is opt-in (Image passes it; ImageGallery tiles do not). A loaded img then
+// is a button trigger with radius R.box, and the lightbox Dialog is a sibling of the caption.
+export function ImageTile({ src, alt, caption, maxHeight, sourceIds, sources, lightbox = false, extra = {} }) {
   const https = typeof src === 'string' && src.startsWith('https://') ? src : null
   const maxH = Math.min(600, Math.max(64, Number(maxHeight) || 320))
   const [failed, setFailed] = useState(false)
+  const [open, setOpen] = useState(false)
   const label = String(alt ?? '')
   const attr = citeMarker(sourceIds, sources)
+  const loaded = https && !failed
+  const img = loaded
+    ? jsx('img', { src: https, alt: label, loading: 'lazy', onError: () => setFailed(true), style: { maxHeight: maxH, maxWidth: '100%', objectFit: 'contain', borderRadius: lightbox ? R.box : R.control, border: `1px solid ${V.stroke3}` } }, 'i')
+    : null
   return jsxs('figure', {
     ...extra,
     style: { margin: 0, display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start', minWidth: 0 },
     children: [
-      https && !failed
-        ? jsx('img', { src: https, alt: label, loading: 'lazy', onError: () => setFailed(true), style: { maxHeight: maxH, maxWidth: '100%', objectFit: 'contain', borderRadius: 4, border: `1px solid ${V.stroke3}` } }, 'i')
-        : jsx('div', { 'data-ru-image-blocked': https ? 'unreachable' : 'scheme', style: { ...type('small'), color: V.text3, fontStyle: 'italic', border: `1px dashed ${V.stroke3}`, borderRadius: 4, padding: '8px 10px' }, children: (label || 'image') + (https ? ' — image unavailable' : ' — image blocked (https only)') }, 'i'),
+      loaded
+        ? (lightbox
+          ? jsx('button', { type: 'button', 'data-ru-lightbox-trigger': '', 'aria-label': `Open ${label || 'image'}`, onClick: () => setOpen(true),
+            style: { display: 'block', maxWidth: '100%', padding: 0, margin: 0, border: 'none', background: 'none', cursor: 'zoom-in', lineHeight: 0, borderRadius: R.box }, children: img }, 'i')
+          : img)
+        : jsx('div', { 'data-ru-image-blocked': https ? 'unreachable' : 'scheme', style: { ...type('small'), color: V.text3, fontStyle: 'italic', border: `1px dashed ${V.stroke3}`, borderRadius: R.control, padding: '8px 10px' }, children: (label || 'image') + (https ? ' — image unavailable' : ' — image blocked (https only)') }, 'i'),
+      lightbox && loaded ? jsx(Lightbox, { src: https, label, open, onOpenChange: setOpen }, 'l') : null,
       caption || attr
         ? jsxs('figcaption', { style: { ...type('caption'), color: V.text2 }, children: [caption ? String(caption) : null, attr] }, 'c')
         : null

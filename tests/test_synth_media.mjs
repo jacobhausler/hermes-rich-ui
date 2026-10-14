@@ -190,3 +190,32 @@ test('N5 grep-pin: asof.mjs (and the media files) contain no clock calls — the
     }
   }
 })
+
+// ------------------------------------------- #37 Lightbox (Image; gallery unchanged)
+// A loaded Image is a keyboard-reachable button that opens an SDK Dialog showing the same
+// src; the loaded frame radius is 6 (R.box). ImageGallery tiles keep the plain frame — the
+// #37 gallery rule names no lightbox, so the gallery must not open one.
+test('#37 Lightbox: a loaded Image is a button that opens an SDK Dialog with the same src; radius 6', async () => {
+  await renderComponent({ id: 'lb1', component: 'Image', props: { src: 'https://example.com/ok.png', alt: 'chart of sales' } }, dm)
+  const fig = $('[data-ru="Image"]')
+  const trigger = fig.querySelector('button[data-ru-lightbox-trigger]')
+  assert.ok(trigger, 'loaded image is wrapped in a button trigger')
+  assert.equal(trigger.getAttribute('type'), 'button')
+  assert.match(trigger.getAttribute('aria-label'), /chart of sales/)
+  assert.equal(trigger.querySelector('img').style.borderRadius, '6px', 'loaded image radius is 6')
+  assert.equal($('[role="dialog"]'), null, 'no dialog before the click')
+  await act(async () => { trigger.click() })
+  const dlg = $('[role="dialog"]')
+  assert.ok(dlg, 'click opens the SDK Dialog lightbox')
+  assert.equal(dlg.querySelector('img').getAttribute('src'), 'https://example.com/ok.png', 'lightbox shows the same src')
+  assert.equal(dlg.querySelector('img').getAttribute('alt'), 'chart of sales')
+})
+
+test('#37 Lightbox is Image-only: ImageGallery tiles are not lightbox triggers and keep the plain frame', async () => {
+  await renderComponent({ id: 'lb2', component: 'ImageGallery', props: { items: [{ src: 'https://example.com/a.png', alt: 'a' }], _sources } }, dm)
+  const tile = $('[data-ru="ImageGallery"] [data-ru-tile]')
+  assert.equal(tile.querySelector('[data-ru-lightbox-trigger]'), null, 'gallery tile has no lightbox trigger')
+  assert.equal(tile.querySelector('img').style.borderRadius, '4px', 'gallery tile keeps radius 4')
+  await act(async () => { tile.querySelector('img').click() })
+  assert.equal($('[role="dialog"]'), null, 'clicking a gallery tile opens no dialog')
+})
