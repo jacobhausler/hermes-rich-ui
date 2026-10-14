@@ -6,10 +6,10 @@ import { test } from 'node:test'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import { assert, renderComponent, registerLane, act, $ } from './helpers/render.mjs'
+import { assert, renderComponent, registerLane, act, $, $$ } from './helpers/render.mjs'
 
 // Dynamic imports: the sdk-resolve hook only exists after helpers/render.mjs evaluates.
-const { ImageGallery } = await import('../desktop/src/components/gallery.mjs')
+const { ImageGallery, galleryColumns } = await import('../desktop/src/components/gallery.mjs')
 const { AsOf } = await import('../desktop/src/components/asof.mjs')
 const { BADGE_VARIANT, BADGE_VARIANTS_REAL, BADGE_SIZES_REAL } = await import('../desktop/src/components/_shared.mjs')
 
@@ -199,6 +199,58 @@ test('#37 Image: loaded image opens an SDK Dialog lightbox with the same src; ra
   const big = dlg.querySelector('img')
   assert.equal(big.getAttribute('src'), 'https://example.com/ok.png')
   assert.equal(big.style.borderRadius, '6px')
+})
+
+// ------------------------------------------------ #37 ImageGallery (slice 14, failing-first)
+const nItems = n => Array.from({ length: n }, (_, i) => ({ src: `https://example.com/${i}.png`, alt: `tile ${i}` }))
+
+test('#37: absent columns follow the count rule n≤3 ? n : min(4, ceil(n/2)); explicit columns win, clamped 1..4', () => {
+  const want = { 1: 1, 2: 2, 3: 3, 4: 2, 5: 3, 6: 3, 7: 4, 8: 4 }
+  for (const [n, cols] of Object.entries(want)) assert.equal(galleryColumns(Number(n), null), cols, `absent, n=${n}`)
+  assert.equal(galleryColumns(3, 2), 2, 'saved columns:2 is explicit and honoured')
+  assert.equal(galleryColumns(8, 9), 4, 'explicit columns clamp ≤4')
+})
+
+test('#37: post-J9 Gallery of 3 with no columns prop → one row of 3', async () => {
+  await renderComponent({ id: 'j1', component: 'ImageGallery', props: { items: galleryItems, _sources } }, dm)
+  const grid = $('[data-ru="ImageGallery"] [data-ru-columns]')
+  assert.equal(grid.getAttribute('data-ru-columns'), '3')
+  assert.equal(grid.querySelectorAll('[data-ru-tile]').length, 3)
+})
+
+test('#37: post-J9 counts 4..8 pack to min(4, ceil(n/2)); 9 items cap at 8 before packing', async () => {
+  const want = { 4: '2', 5: '3', 6: '3', 7: '4', 8: '4' }
+  for (const [n, cols] of Object.entries(want)) {
+    await renderComponent({ id: `jc${n}`, component: 'ImageGallery', props: { items: nItems(Number(n)), _sources } }, dm)
+    assert.equal($('[data-ru="ImageGallery"] [data-ru-columns]').getAttribute('data-ru-columns'), cols, `n=${n}`)
+  }
+  await renderComponent({ id: 'jc9', component: 'ImageGallery', props: { items: nItems(9), _sources } }, dm)
+  assert.equal($('[data-ru="ImageGallery"]').getAttribute('data-ru-count'), '8')
+  assert.equal($('[data-ru="ImageGallery"] [data-ru-columns]').getAttribute('data-ru-columns'), '4')
+})
+
+test('#37: saved Gallery columns:2 keeps data-ru-columns="2" (explicit, never re-derived by count)', async () => {
+  await renderComponent({ id: 'sv', component: 'ImageGallery', props: { items: galleryItems, columns: 2, _sources } }, dm)
+  assert.equal($('[data-ru="ImageGallery"] [data-ru-columns]').getAttribute('data-ru-columns'), '2')
+})
+
+test('#37: uniform 3:2 contain tiles — loaded and dashed frames share one 3 / 2 box; caption rides below it', async () => {
+  await renderComponent({ id: 'u1', component: 'ImageGallery', props: { items: [galleryItems[0], { src: 'http://example.com/x.png', alt: 'insecure' }, galleryItems[2]], _sources } }, dm)
+  const tiles = $$('[data-ru="ImageGallery"] [data-ru-tile]')
+  assert.equal(tiles.length, 3)
+  for (const t of tiles) {
+    const frame = t.firstElementChild
+    assert.equal(frame.style.aspectRatio, '3 / 2', `tile ${t.getAttribute('data-ru-tile')} frame is 3:2`)
+    assert.equal(frame.style.width, '100%')
+  }
+  assert.equal(tiles[0].querySelector('img').style.objectFit, 'contain')
+  assert.equal(tiles[1].firstElementChild.querySelector('[data-ru-image-blocked]').style.border.includes('dashed'), true)
+  assert.equal(tiles[0].lastElementChild.tagName, 'FIGCAPTION', 'captioned tile: caption sits below the frame')
+})
+
+test('#37: gallery outer gap is the scale token 8px (retires the off-scale 6px)', async () => {
+  await renderComponent({ id: 'gg', component: 'ImageGallery', props: { title: 'Evidence', items: galleryItems, _sources } }, dm)
+  assert.equal($('[data-ru="ImageGallery"]').style.gap, '8px')
 })
 
 // -------------------------------------------------------------------- N5 AsOf

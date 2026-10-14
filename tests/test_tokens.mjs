@@ -35,7 +35,7 @@ const EXEMPT = new Set([
   'DataTable span gap=6px',
   'HeatMap div gap=6px',
   'HeatMap sup margin-left=2px', 'HeatMap td padding=4px 6px',
-  'HeatMap th padding=3px 6px', 'ImageGallery div gap=6px',
+  'HeatMap th padding=3px 6px',
   'SourceList li gap=6px',
   'SourceList ol gap=3px', 'Tabs button border-left=medium',
   'Tabs button border-right=medium', 'Tabs button border-top=medium',
