@@ -190,3 +190,28 @@ test('N5 grep-pin: asof.mjs (and the media files) contain no clock calls — the
     }
   }
 })
+
+// ------------------------------------------------------------------ #37 Tabs
+// Slice 14 (issue #37): tab labels are the small (12) step, one line, ≤24ch with an
+// ellipsis; the full title rides title=; the strip scrolls instead of wrapping.
+test('#37 Tabs: 8 tabs with 40-char titles → one-line scrolling strip, full title in title=', async () => {
+  const titles = Array.from({ length: 8 }, (_, i) => `T${i}`.padEnd(40, 'x'))
+  await renderComponent({ id: 'tb1', component: 'Tabs', props: { tabs: titles.map(title => ({ title })) } }, dm)
+  const root = $('[data-ru="Tabs"]')
+  assert.ok(root, 'Tabs root marker missing')
+  const strip = root.querySelector('[role="tablist"]')
+  assert.ok(strip, 'tablist missing')
+  assert.equal(strip.style.overflowX, 'auto', 'strip scrolls rather than wrapping')
+  const tabs = [...strip.querySelectorAll('[role="tab"]')]
+  assert.equal(tabs.length, 8)
+  tabs.forEach((tab, i) => {
+    assert.equal(tab.textContent, titles[i], 'label keeps the full title; the cut is CSS')
+    assert.equal(tab.getAttribute('title'), titles[i], 'full title rides title=')
+    assert.equal(tab.style.fontSize, '12px', 'small (12) label step')
+    assert.equal(tab.style.whiteSpace, 'nowrap', 'one line')
+    assert.equal(tab.style.overflow, 'hidden')
+    assert.equal(tab.style.textOverflow, 'ellipsis')
+    assert.equal(tab.style.maxWidth, '24ch')
+    assert.equal(tab.style.flexShrink, '0', 'tabs never squeeze below their label; the strip scrolls')
+  })
+})

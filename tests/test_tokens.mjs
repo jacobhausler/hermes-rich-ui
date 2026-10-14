@@ -37,9 +37,7 @@ const EXEMPT = new Set([
   'HeatMap sup margin-left=2px', 'HeatMap td padding=4px 6px',
   'HeatMap th padding=3px 6px', 'ImageGallery div gap=6px',
   'SourceList li gap=6px',
-  'SourceList ol gap=3px', 'Tabs button border-left=medium',
-  'Tabs button border-right=medium', 'Tabs button border-top=medium',
-  'Tabs button margin-bottom=-1px', 'Tabs button padding=4px 10px',
+  'SourceList ol gap=3px',
   'Timeline div gap=1px', 'Timeline div gap=6px',
   'Timeline sup margin-left=2px',
   // AutoSources block spacing (reviewed design face, #36)
