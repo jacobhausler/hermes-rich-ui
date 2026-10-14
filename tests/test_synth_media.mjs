@@ -6,7 +6,7 @@ import { test } from 'node:test'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import { assert, renderComponent, registerLane, act, $ } from './helpers/render.mjs'
+import { assert, renderComponent, renderSpec, registerLane, act, $, $$, lower } from './helpers/render.mjs'
 
 // Dynamic imports: the sdk-resolve hook only exists after helpers/render.mjs evaluates.
 const { ImageGallery } = await import('../desktop/src/components/gallery.mjs')
@@ -189,4 +189,36 @@ test('N5 grep-pin: asof.mjs (and the media files) contain no clock calls — the
       assert.ok(!re.test(src), `${f} must never call ${re} — renderers are clock-free (Q)`)
     }
   }
+})
+
+// ------------------------------------------------------------ #37 Accordion
+// Slice 14 (issue #37): an absent `open` opens the first item only; an explicit
+// boolean always wins; the chevron is an inline SVG, not a glyph span.
+const accordionSurface = items => ({
+  surfaceId: 'ru-acc37', catalogId: 'hermes-rich-ui/1',
+  components: [
+    { id: 'root', component: 'Accordion', items: items.map((it, i) => ({ title: it.title, child: `body${i}`, ...(typeof it.open === 'boolean' ? { open: it.open } : {}) })) },
+    ...items.map((it, i) => ({ id: `body${i}`, component: 'Text', text: `accordion body ${i}` }))
+  ]
+})
+const accordionExpanded = () => $$('[data-ru="Accordion"] button').map(b => b.getAttribute('aria-expanded'))
+
+test('#37 Accordion: all-default → first item open, later closed; explicit open:false honoured; SVG chevron', async () => {
+  const allDefault = lower(accordionSurface([{ title: 'First' }, { title: 'Second' }, { title: 'Third' }]))
+  await renderSpec(allDefault.spec, allDefault.initialState)
+  assert.deepEqual(accordionExpanded(), ['true', 'false', 'false'], 'absent open: only item 0 is open')
+  const acc = $('[data-ru="Accordion"]')
+  assert.ok(acc.textContent.includes('accordion body 0'), 'item 0 body visible')
+  assert.ok(!acc.textContent.includes('accordion body 1'), 'item 1 body hidden')
+  assert.equal(acc.querySelectorAll('button > svg').length, 3, 'every item carries an SVG chevron')
+  assert.equal(acc.querySelectorAll('button > span:first-child').length, 0, 'no glyph-span chevron remains')
+
+  // Unmount the Accordion first so its useState initialiser runs again for the explicit case.
+  await renderComponent({ id: 'reset37', component: 'Divider', props: {} }, dm)
+  const explicit = lower(accordionSurface([{ title: 'First', open: false }, { title: 'Second' }, { title: 'Third', open: true }]))
+  await renderSpec(explicit.spec, explicit.initialState)
+  assert.deepEqual(accordionExpanded(), ['false', 'false', 'true'], 'explicit open:false on item 0 honoured; explicit open:true on item 2 wins over the index rule')
+  const acc2 = $('[data-ru="Accordion"]')
+  assert.ok(!acc2.textContent.includes('accordion body 0'), 'explicit-false item body hidden')
+  assert.ok(acc2.textContent.includes('accordion body 2'), 'explicit-true item body visible')
 })
