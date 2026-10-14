@@ -8,6 +8,11 @@ export const Tip = ({ label, children }) => h('span', { 'data-slot': 'tip', 'dat
 export const Tooltip = ({ children }) => children
 export const ScrollArea = ({ children, ...rest }) => h('div', rest, children)
 export const Skeleton = (props) => h('div', { 'data-slot': 'skeleton', ...props })
+// #37 lightbox: the real SDK re-exports components/ui/dialog (Radix). The stub shows the
+// content inline while open; the controlled open/onOpenChange contract is what Image uses.
+export const Dialog = ({ open, children }) => (open ? h('div', { role: 'dialog', 'data-slot': 'dialog' }, children) : null)
+export const DialogContent = ({ children, fitContent, ...rest }) => h('div', { 'data-slot': 'dialog-content', ...rest }, children)
+export const DialogTitle = ({ children, ...rest }) => h('div', { 'data-slot': 'dialog-title', ...rest }, children)
 export const Tabs = ({ children, ...rest }) => h('div', rest, children)
 export const TabsList = ({ children, ...rest }) => h('div', rest, children)
 export const TabsTrigger = ({ children, ...rest }) => h('button', rest, children)
