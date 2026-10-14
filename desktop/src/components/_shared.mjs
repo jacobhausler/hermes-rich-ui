@@ -361,7 +361,7 @@ export function ImageTile({ src, alt, caption, maxHeight, sourceIds, sources, ex
           ...(house ? { width: '100%', boxSizing: 'border-box' } : {}) },
         children: (named || 'image') + (https ? ' — image unavailable' : ' — image blocked (https only)') }, 'i')
     : house
-      ? jsx('button', { type: 'button', 'aria-label': `Enlarge image: ${named || 'image'}`, onClick: () => setOpen(true),
+      ? jsx('button', { type: 'button', 'data-ru-lightbox-trigger': '', 'aria-label': `Enlarge image: ${named || 'image'}`, onClick: () => setOpen(true),
           style: { display: 'block', maxWidth: '100%', margin: 0, padding: 0, border: 'none', background: 'none', lineHeight: 0, cursor: 'zoom-in' },
           children: jsx('img', imgProps) }, 'i')
       : jsx('img', imgProps, 'i')

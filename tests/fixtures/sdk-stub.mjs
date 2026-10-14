@@ -6,13 +6,13 @@ export const Badge = ({ children, variant, size, asChild, ...rest }) => h('span'
 export const Button = ({ children, ...rest }) => h('button', rest, children)
 export const Tip = ({ label, children }) => h('span', { 'data-slot': 'tip', 'data-tip': typeof label === 'string' ? label : '' }, children)
 export const Tooltip = ({ children }) => children
+// #37: the real SDK exports Dialog* (apps/desktop/src/sdk/index.ts: Dialog, DialogContent,
+// DialogTitle, …). Radix semantics: Dialog mounts its content only while open.
+export const Dialog = ({ open, children }) => (open ? children : null)
+export const DialogContent = ({ children, fitContent, ...rest }) => h('div', { role: 'dialog', ...rest }, children)
+export const DialogTitle = ({ children, ...rest }) => h('h2', rest, children)
 export const ScrollArea = ({ children, ...rest }) => h('div', rest, children)
 export const Skeleton = (props) => h('div', { 'data-slot': 'skeleton', ...props })
-// #37 lightbox: the real SDK re-exports components/ui/dialog (Radix). The stub shows the
-// content inline while open; the controlled open/onOpenChange contract is what Image uses.
-export const Dialog = ({ open, children }) => (open ? h('div', { role: 'dialog', 'data-slot': 'dialog' }, children) : null)
-export const DialogContent = ({ children, fitContent, ...rest }) => h('div', { 'data-slot': 'dialog-content', ...rest }, children)
-export const DialogTitle = ({ children, ...rest }) => h('div', { 'data-slot': 'dialog-title', ...rest }, children)
 export const Tabs = ({ children, ...rest }) => h('div', rest, children)
 export const TabsList = ({ children, ...rest }) => h('div', rest, children)
 export const TabsTrigger = ({ children, ...rest }) => h('button', rest, children)
