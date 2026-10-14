@@ -151,6 +151,56 @@ test('N6: non-https tile degrades like Image (scheme posture shared via ImageTil
   assert.equal(empty.textContent, 'no images')
 })
 
+// ------------------------------------------------------ #37 Image (defaults slice 14)
+const { B } = await import('../desktop/src/components/_house.mjs')
+// A Divider between cases unmounts the previous ImageTile, so its failed/open state never leaks.
+const mountImage = async (props) => {
+  await renderComponent({ id: 'reset37', component: 'Divider', props: {} }, dm)
+  await renderComponent({ id: 'img37', component: 'Image', props }, dm)
+}
+
+test('#37 Image: blocked empty-alt Image is a full-width dashed frame naming the host, never a pill', async () => {
+  await mountImage({ src: 'https://cdn.example.org/x.png', alt: '' })
+  const fig = $('[data-ru="Image"]')
+  await fireError(fig.querySelector('img'))
+  const box = fig.querySelector('[data-ru-image-blocked]')
+  assert.equal(box.getAttribute('data-ru-image-blocked'), 'unreachable')
+  assert.equal(box.style.width, '100%', 'frame spans the figure width')
+  assert.equal(box.style.border, B.absent, 'frame border is the B.absent token')
+  assert.equal(box.style.background, '', 'frame has no fill')
+  assert.equal(box.textContent, 'cdn.example.org — image unavailable')
+})
+
+test('#37 Image: blocked label precedence is alt, then caption, then host (https and scheme)', async () => {
+  const cases = [
+    [{ src: 'https://cdn.example.org/a.png', alt: 'Quarterly chart', caption: 'Q3 panel' }, 'Quarterly chart — image unavailable'],
+    [{ src: 'https://cdn.example.org/b.png', alt: '', caption: 'Q3 panel' }, 'Q3 panel — image unavailable'],
+    [{ src: 'https://cdn.example.org/c.png', alt: '' }, 'cdn.example.org — image unavailable']
+  ]
+  for (const [props, text] of cases) {
+    await mountImage(props)
+    const fig = $('[data-ru="Image"]')
+    await fireError(fig.querySelector('img'))
+    assert.equal(fig.querySelector('[data-ru-image-blocked]').textContent, text)
+  }
+  await mountImage({ src: 'http://plain.example.net/x.png', alt: '' })
+  assert.equal($('[data-ru-image-blocked]').textContent, 'plain.example.net — image blocked (https only)')
+})
+
+test('#37 Image: loaded image opens an SDK Dialog lightbox with the same src; radius 6; max height 320', async () => {
+  await mountImage({ src: 'https://example.com/ok.png', alt: 'chart of sales' })
+  const img = $('[data-ru="Image"] img')
+  assert.equal(img.style.maxHeight, '320px')
+  assert.equal(img.style.borderRadius, '6px')
+  assert.equal(document.querySelector('[role="dialog"]'), null, 'lightbox starts closed')
+  await act(async () => { img.click() })
+  const dlg = document.querySelector('[role="dialog"]')
+  assert.ok(dlg, 'click opens the lightbox dialog')
+  const big = dlg.querySelector('img')
+  assert.equal(big.getAttribute('src'), 'https://example.com/ok.png')
+  assert.equal(big.style.borderRadius, '6px')
+})
+
 // -------------------------------------------------------------------- N5 AsOf
 test('N5: AsOf renders the caption line and omits absent/null segments (accessedAt trimmed, F8)', async () => {
   await renderComponent({ id: 'a1', component: 'AsOf', props: { observedAt: '2026-09-26T10:00:00Z', publishedAt: '2026-09-01T08:00:00Z' } }, dm)
