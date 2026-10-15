@@ -285,7 +285,7 @@ export function citeMarker(ids, sources) {
     'data-ru-citation': '', 'aria-label': `sources ${spoken}`,
     style: { ...type('micro'), marginLeft: S.hair, color: INK.meta, verticalAlign: 'super' },
     children: face
-  })
+  }, 'cite')
 }
 
 // #36 (slice 13, supersedes #17): the old 'ⓘ n' sourceSup is GONE — every citation
