@@ -20,8 +20,6 @@ const paint = value => theme(value) || /^color-mix\(in srgb, var\(--ui-[a-z-]+\)
 // Measured on the four saved cards at 3beb897. A later restyle removes entries;
 // adding an entry requires a separately reviewed, named before→after pair.
 const EXEMPT = new Set([
-  'Accordion button border=medium', 'Accordion button gap=6px',
-  'Accordion button padding=6px 10px', 'Accordion div border-top=medium',
   'BarList div gap=6px', 'Callout div padding=8px 10px',
   // #35: one-series legends are gone; the second series swatch follows HOUSE.SERIES (orange).
   'Chart div background=rgba(249, 115, 22, 0.18)', 'Chart div background=rgba(59, 130, 246, 0.18)',
@@ -35,11 +33,9 @@ const EXEMPT = new Set([
   'DataTable span gap=6px',
   'HeatMap div gap=6px',
   'HeatMap sup margin-left=2px', 'HeatMap td padding=4px 6px',
-  'HeatMap th padding=3px 6px', 'ImageGallery div gap=6px',
+  'HeatMap th padding=3px 6px',
   'SourceList li gap=6px',
-  'SourceList ol gap=3px', 'Tabs button border-left=medium',
-  'Tabs button border-right=medium', 'Tabs button border-top=medium',
-  'Tabs button margin-bottom=-1px', 'Tabs button padding=4px 10px',
+  'SourceList ol gap=3px',
   'Timeline div gap=1px', 'Timeline div gap=6px',
   'Timeline sup margin-left=2px',
   // AutoSources block spacing (reviewed design face, #36)

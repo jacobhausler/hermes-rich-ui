@@ -1,8 +1,8 @@
 // Shared helpers for hermes-rich-ui components. Inline style + --ui-* vars only.
 import { createContext, useState } from 'react'
-import { Badge, Tip } from '@hermes/plugin-sdk'
+import { Badge, Dialog, DialogContent, DialogTitle, Tip } from '@hermes/plugin-sdk'
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { TYPE, HOUSE, S, INK } from './_house.mjs'
+import { TYPE, HOUSE, S, INK, B, R } from './_house.mjs'
 
 export const V = {
   text: 'var(--ui-text-primary)',
@@ -335,19 +335,48 @@ export const row = (style, ...kids) => jsxs('div', { style: { display: 'flex', a
 // anything about the URL (L1) — this is presentation, not attestation. Attribution
 // (sourceSup) lives in the figcaption OUTSIDE the img/blocked swap, so it stays visible
 // when the image is blocked or unreachable (S-E14).
-export function ImageTile({ src, alt, caption, maxHeight, sourceIds, sources, extra = {} }) {
+// #37 (Image slice): variant 'image' opts in to the Image house rules: a blocked frame that spans
+// the figure (B.absent, no fill) and names alt, else caption, else host; a loaded image that opens
+// an SDK Dialog lightbox at radius 6. The default 'tile' variant (ImageGallery) keeps its frame
+// until its own slice moves it.
+const hostOf = src => {
+  try { return typeof src === 'string' ? new URL(src).host : '' } catch { return '' }
+}
+
+export function ImageTile({ src, alt, caption, maxHeight, sourceIds, sources, extra = {}, variant = 'tile' }) {
   const https = typeof src === 'string' && src.startsWith('https://') ? src : null
   const maxH = Math.min(600, Math.max(64, Number(maxHeight) || 320))
+  const house = variant === 'image'
   const [failed, setFailed] = useState(false)
+  const [open, setOpen] = useState(false)
   const label = String(alt ?? '')
+  const named = house ? (label || (caption ? String(caption) : '') || hostOf(src)) : label
   const attr = citeMarker(sourceIds, sources)
+  const shown = https && !failed
+  const imgProps = { src: https, alt: label, loading: 'lazy', onError: () => setFailed(true),
+    style: { maxHeight: maxH, maxWidth: '100%', objectFit: 'contain', borderRadius: house ? R.box : 4, border: `1px solid ${V.stroke3}` } }
+  const media = !shown
+    ? jsx('div', { 'data-ru-image-blocked': https ? 'unreachable' : 'scheme',
+        style: { ...type('small'), color: V.text3, fontStyle: 'italic', border: B.absent, borderRadius: house ? R.box : 4, padding: '8px 10px',
+          ...(house ? { width: '100%', boxSizing: 'border-box' } : {}) },
+        children: (named || 'image') + (https ? ' — image unavailable' : ' — image blocked (https only)') }, 'i')
+    : house
+      ? jsx('button', { type: 'button', 'data-ru-lightbox-trigger': '', 'aria-label': `Enlarge image: ${named || 'image'}`, onClick: () => setOpen(true),
+          style: { display: 'block', maxWidth: '100%', margin: 0, padding: 0, border: 'none', background: 'none', lineHeight: 0, cursor: 'zoom-in' },
+          children: jsx('img', imgProps) }, 'i')
+      : jsx('img', imgProps, 'i')
+  const lightbox = house && shown
+    ? jsx(Dialog, { open, onOpenChange: setOpen, children: jsxs(DialogContent, { fitContent: true, children: [
+        jsx(DialogTitle, { style: { ...type('small'), color: V.text2, margin: 0 }, children: named || 'image' }, 't'),
+        jsx('img', { src: https, alt: label, style: { display: 'block', maxWidth: '100%', maxHeight: '80vh', objectFit: 'contain', borderRadius: R.box } }, 'b')
+      ] }) }, 'l')
+    : null
   return jsxs('figure', {
     ...extra,
     style: { margin: 0, display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-start', minWidth: 0 },
     children: [
-      https && !failed
-        ? jsx('img', { src: https, alt: label, loading: 'lazy', onError: () => setFailed(true), style: { maxHeight: maxH, maxWidth: '100%', objectFit: 'contain', borderRadius: 4, border: `1px solid ${V.stroke3}` } }, 'i')
-        : jsx('div', { 'data-ru-image-blocked': https ? 'unreachable' : 'scheme', style: { ...type('small'), color: V.text3, fontStyle: 'italic', border: `1px dashed ${V.stroke3}`, borderRadius: 4, padding: '8px 10px' }, children: (label || 'image') + (https ? ' — image unavailable' : ' — image blocked (https only)') }, 'i'),
+      media,
+      lightbox,
       caption || attr
         ? jsxs('figcaption', { style: { ...type('caption'), color: V.text2 }, children: [caption ? String(caption) : null, attr] }, 'c')
         : null

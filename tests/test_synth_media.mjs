@@ -6,10 +6,10 @@ import { test } from 'node:test'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import { assert, renderComponent, registerLane, act, $ } from './helpers/render.mjs'
+import { assert, renderComponent, renderSpec, registerLane, act, $, $$, lower } from './helpers/render.mjs'
 
 // Dynamic imports: the sdk-resolve hook only exists after helpers/render.mjs evaluates.
-const { ImageGallery } = await import('../desktop/src/components/gallery.mjs')
+const { ImageGallery, galleryColumns } = await import('../desktop/src/components/gallery.mjs')
 const { AsOf } = await import('../desktop/src/components/asof.mjs')
 const { BADGE_VARIANT, BADGE_VARIANTS_REAL, BADGE_SIZES_REAL } = await import('../desktop/src/components/_shared.mjs')
 
@@ -151,6 +151,108 @@ test('N6: non-https tile degrades like Image (scheme posture shared via ImageTil
   assert.equal(empty.textContent, 'no images')
 })
 
+// ------------------------------------------------------ #37 Image (defaults slice 14)
+const { B } = await import('../desktop/src/components/_house.mjs')
+// A Divider between cases unmounts the previous ImageTile, so its failed/open state never leaks.
+const mountImage = async (props) => {
+  await renderComponent({ id: 'reset37', component: 'Divider', props: {} }, dm)
+  await renderComponent({ id: 'img37', component: 'Image', props }, dm)
+}
+
+test('#37 Image: blocked empty-alt Image is a full-width dashed frame naming the host, never a pill', async () => {
+  await mountImage({ src: 'https://cdn.example.org/x.png', alt: '' })
+  const fig = $('[data-ru="Image"]')
+  await fireError(fig.querySelector('img'))
+  const box = fig.querySelector('[data-ru-image-blocked]')
+  assert.equal(box.getAttribute('data-ru-image-blocked'), 'unreachable')
+  assert.equal(box.style.width, '100%', 'frame spans the figure width')
+  assert.equal(box.style.border, B.absent, 'frame border is the B.absent token')
+  assert.equal(box.style.background, '', 'frame has no fill')
+  assert.equal(box.textContent, 'cdn.example.org — image unavailable')
+})
+
+test('#37 Image: blocked label precedence is alt, then caption, then host (https and scheme)', async () => {
+  const cases = [
+    [{ src: 'https://cdn.example.org/a.png', alt: 'Quarterly chart', caption: 'Q3 panel' }, 'Quarterly chart — image unavailable'],
+    [{ src: 'https://cdn.example.org/b.png', alt: '', caption: 'Q3 panel' }, 'Q3 panel — image unavailable'],
+    [{ src: 'https://cdn.example.org/c.png', alt: '' }, 'cdn.example.org — image unavailable']
+  ]
+  for (const [props, text] of cases) {
+    await mountImage(props)
+    const fig = $('[data-ru="Image"]')
+    await fireError(fig.querySelector('img'))
+    assert.equal(fig.querySelector('[data-ru-image-blocked]').textContent, text)
+  }
+  await mountImage({ src: 'http://plain.example.net/x.png', alt: '' })
+  assert.equal($('[data-ru-image-blocked]').textContent, 'plain.example.net — image blocked (https only)')
+})
+
+test('#37 Image: loaded image opens an SDK Dialog lightbox with the same src; radius 6; max height 320', async () => {
+  await mountImage({ src: 'https://example.com/ok.png', alt: 'chart of sales' })
+  const img = $('[data-ru="Image"] img')
+  assert.equal(img.style.maxHeight, '320px')
+  assert.equal(img.style.borderRadius, '6px')
+  assert.equal(document.querySelector('[role="dialog"]'), null, 'lightbox starts closed')
+  await act(async () => { img.click() })
+  const dlg = document.querySelector('[role="dialog"]')
+  assert.ok(dlg, 'click opens the lightbox dialog')
+  const big = dlg.querySelector('img')
+  assert.equal(big.getAttribute('src'), 'https://example.com/ok.png')
+  assert.equal(big.style.borderRadius, '6px')
+})
+
+// ------------------------------------------------ #37 ImageGallery (slice 14, failing-first)
+const nItems = n => Array.from({ length: n }, (_, i) => ({ src: `https://example.com/${i}.png`, alt: `tile ${i}` }))
+
+test('#37: absent columns follow the count rule n≤3 ? n : min(4, ceil(n/2)); explicit columns win, clamped 1..4', () => {
+  const want = { 1: 1, 2: 2, 3: 3, 4: 2, 5: 3, 6: 3, 7: 4, 8: 4 }
+  for (const [n, cols] of Object.entries(want)) assert.equal(galleryColumns(Number(n), null), cols, `absent, n=${n}`)
+  assert.equal(galleryColumns(3, 2), 2, 'saved columns:2 is explicit and honoured')
+  assert.equal(galleryColumns(8, 9), 4, 'explicit columns clamp ≤4')
+})
+
+test('#37: post-J9 Gallery of 3 with no columns prop → one row of 3', async () => {
+  await renderComponent({ id: 'j1', component: 'ImageGallery', props: { items: galleryItems, _sources } }, dm)
+  const grid = $('[data-ru="ImageGallery"] [data-ru-columns]')
+  assert.equal(grid.getAttribute('data-ru-columns'), '3')
+  assert.equal(grid.querySelectorAll('[data-ru-tile]').length, 3)
+})
+
+test('#37: post-J9 counts 4..8 pack to min(4, ceil(n/2)); 9 items cap at 8 before packing', async () => {
+  const want = { 4: '2', 5: '3', 6: '3', 7: '4', 8: '4' }
+  for (const [n, cols] of Object.entries(want)) {
+    await renderComponent({ id: `jc${n}`, component: 'ImageGallery', props: { items: nItems(Number(n)), _sources } }, dm)
+    assert.equal($('[data-ru="ImageGallery"] [data-ru-columns]').getAttribute('data-ru-columns'), cols, `n=${n}`)
+  }
+  await renderComponent({ id: 'jc9', component: 'ImageGallery', props: { items: nItems(9), _sources } }, dm)
+  assert.equal($('[data-ru="ImageGallery"]').getAttribute('data-ru-count'), '8')
+  assert.equal($('[data-ru="ImageGallery"] [data-ru-columns]').getAttribute('data-ru-columns'), '4')
+})
+
+test('#37: saved Gallery columns:2 keeps data-ru-columns="2" (explicit, never re-derived by count)', async () => {
+  await renderComponent({ id: 'sv', component: 'ImageGallery', props: { items: galleryItems, columns: 2, _sources } }, dm)
+  assert.equal($('[data-ru="ImageGallery"] [data-ru-columns]').getAttribute('data-ru-columns'), '2')
+})
+
+test('#37: uniform 3:2 contain tiles — loaded and dashed frames share one 3 / 2 box; caption rides below it', async () => {
+  await renderComponent({ id: 'u1', component: 'ImageGallery', props: { items: [galleryItems[0], { src: 'http://example.com/x.png', alt: 'insecure' }, galleryItems[2]], _sources } }, dm)
+  const tiles = $$('[data-ru="ImageGallery"] [data-ru-tile]')
+  assert.equal(tiles.length, 3)
+  for (const t of tiles) {
+    const frame = t.firstElementChild
+    assert.equal(frame.style.aspectRatio, '3 / 2', `tile ${t.getAttribute('data-ru-tile')} frame is 3:2`)
+    assert.equal(frame.style.width, '100%')
+  }
+  assert.equal(tiles[0].querySelector('img').style.objectFit, 'contain')
+  assert.equal(tiles[1].firstElementChild.querySelector('[data-ru-image-blocked]').style.border.includes('dashed'), true)
+  assert.equal(tiles[0].lastElementChild.tagName, 'FIGCAPTION', 'captioned tile: caption sits below the frame')
+})
+
+test('#37: gallery outer gap is the scale token 8px (retires the off-scale 6px)', async () => {
+  await renderComponent({ id: 'gg', component: 'ImageGallery', props: { title: 'Evidence', items: galleryItems, _sources } }, dm)
+  assert.equal($('[data-ru="ImageGallery"]').style.gap, '8px')
+})
+
 // -------------------------------------------------------------------- N5 AsOf
 test('N5: AsOf renders the caption line and omits absent/null segments (accessedAt trimmed, F8)', async () => {
   await renderComponent({ id: 'a1', component: 'AsOf', props: { observedAt: '2026-09-26T10:00:00Z', publishedAt: '2026-09-01T08:00:00Z' } }, dm)
@@ -189,4 +291,90 @@ test('N5 grep-pin: asof.mjs (and the media files) contain no clock calls — the
       assert.ok(!re.test(src), `${f} must never call ${re} — renderers are clock-free (Q)`)
     }
   }
+})
+
+// ------------------------------------------------------------------ #37 Tabs
+// Slice 14 (issue #37): tab labels are the small (12) step, one line, ≤24ch with an
+// ellipsis; the full title rides title=; the strip scrolls instead of wrapping.
+test('#37 Tabs: 8 tabs with 40-char titles → one-line scrolling strip, full title in title=', async () => {
+  const titles = Array.from({ length: 8 }, (_, i) => `T${i}`.padEnd(40, 'x'))
+  await renderComponent({ id: 'tb1', component: 'Tabs', props: { tabs: titles.map(title => ({ title })) } }, dm)
+  const root = $('[data-ru="Tabs"]')
+  assert.ok(root, 'Tabs root marker missing')
+  const strip = root.querySelector('[role="tablist"]')
+  assert.ok(strip, 'tablist missing')
+  assert.equal(strip.style.overflowX, 'auto', 'strip scrolls rather than wrapping')
+  const tabs = [...strip.querySelectorAll('[role="tab"]')]
+  assert.equal(tabs.length, 8)
+  tabs.forEach((tab, i) => {
+    assert.equal(tab.textContent, titles[i], 'label keeps the full title; the cut is CSS')
+    assert.equal(tab.getAttribute('title'), titles[i], 'full title rides title=')
+    assert.equal(tab.style.fontSize, '12px', 'small (12) label step')
+    assert.equal(tab.style.whiteSpace, 'nowrap', 'one line')
+    assert.equal(tab.style.overflow, 'hidden')
+    assert.equal(tab.style.textOverflow, 'ellipsis')
+    assert.equal(tab.style.maxWidth, '24ch')
+    assert.equal(tab.style.flexShrink, '0', 'tabs never squeeze below their label; the strip scrolls')
+  })
+})
+
+// ------------------------------------------------------------ #37 Accordion
+// Slice 14 (issue #37): an absent `open` opens the first item only; an explicit
+// boolean always wins; the chevron is an inline SVG, not a glyph span.
+const accordionSurface = items => ({
+  surfaceId: 'ru-acc37', catalogId: 'hermes-rich-ui/1',
+  components: [
+    { id: 'root', component: 'Accordion', items: items.map((it, i) => ({ title: it.title, child: `body${i}`, ...(typeof it.open === 'boolean' ? { open: it.open } : {}) })) },
+    ...items.map((it, i) => ({ id: `body${i}`, component: 'Text', text: `accordion body ${i}` }))
+  ]
+})
+const accordionExpanded = () => $$('[data-ru="Accordion"] button').map(b => b.getAttribute('aria-expanded'))
+
+test('#37 Accordion: all-default → first item open, later closed; explicit open:false honoured; SVG chevron', async () => {
+  const allDefault = lower(accordionSurface([{ title: 'First' }, { title: 'Second' }, { title: 'Third' }]))
+  await renderSpec(allDefault.spec, allDefault.initialState)
+  assert.deepEqual(accordionExpanded(), ['true', 'false', 'false'], 'absent open: only item 0 is open')
+  const acc = $('[data-ru="Accordion"]')
+  assert.ok(acc.textContent.includes('accordion body 0'), 'item 0 body visible')
+  assert.ok(!acc.textContent.includes('accordion body 1'), 'item 1 body hidden')
+  assert.equal(acc.querySelectorAll('button > svg').length, 3, 'every item carries an SVG chevron')
+  assert.equal(acc.querySelectorAll('button > span:first-child').length, 0, 'no glyph-span chevron remains')
+
+  // Unmount the Accordion first so its useState initialiser runs again for the explicit case.
+  await renderComponent({ id: 'reset37', component: 'Divider', props: {} }, dm)
+  const explicit = lower(accordionSurface([{ title: 'First', open: false }, { title: 'Second' }, { title: 'Third', open: true }]))
+  await renderSpec(explicit.spec, explicit.initialState)
+  assert.deepEqual(accordionExpanded(), ['false', 'false', 'true'], 'explicit open:false on item 0 honoured; explicit open:true on item 2 wins over the index rule')
+  const acc2 = $('[data-ru="Accordion"]')
+  assert.ok(!acc2.textContent.includes('accordion body 0'), 'explicit-false item body hidden')
+  assert.ok(acc2.textContent.includes('accordion body 2'), 'explicit-true item body visible')
+})
+
+// ------------------------------------------- #37 Lightbox (Image; gallery unchanged)
+// A loaded Image is a keyboard-reachable button that opens an SDK Dialog showing the same
+// src; the loaded frame radius is 6 (R.box). ImageGallery tiles keep the plain frame — the
+// #37 gallery rule names no lightbox, so the gallery must not open one.
+test('#37 Lightbox: a loaded Image is a button that opens an SDK Dialog with the same src; radius 6', async () => {
+  await renderComponent({ id: 'lb1', component: 'Image', props: { src: 'https://example.com/ok.png', alt: 'chart of sales' } }, dm)
+  const fig = $('[data-ru="Image"]')
+  const trigger = fig.querySelector('button[data-ru-lightbox-trigger]')
+  assert.ok(trigger, 'loaded image is wrapped in a button trigger')
+  assert.equal(trigger.getAttribute('type'), 'button')
+  assert.match(trigger.getAttribute('aria-label'), /chart of sales/)
+  assert.equal(trigger.querySelector('img').style.borderRadius, '6px', 'loaded image radius is 6')
+  assert.equal($('[role="dialog"]'), null, 'no dialog before the click')
+  await act(async () => { trigger.click() })
+  const dlg = $('[role="dialog"]')
+  assert.ok(dlg, 'click opens the SDK Dialog lightbox')
+  assert.equal(dlg.querySelector('img').getAttribute('src'), 'https://example.com/ok.png', 'lightbox shows the same src')
+  assert.equal(dlg.querySelector('img').getAttribute('alt'), 'chart of sales')
+})
+
+test('#37 Lightbox is Image-only: ImageGallery tiles are not lightbox triggers and keep the plain frame', async () => {
+  await renderComponent({ id: 'lb2', component: 'ImageGallery', props: { items: [{ src: 'https://example.com/a.png', alt: 'a' }], _sources } }, dm)
+  const tile = $('[data-ru="ImageGallery"] [data-ru-tile]')
+  assert.equal(tile.querySelector('[data-ru-lightbox-trigger]'), null, 'gallery tile has no lightbox trigger')
+  assert.equal(tile.querySelector('img').style.borderRadius, '4px', 'gallery tile keeps radius 4')
+  await act(async () => { tile.querySelector('img').click() })
+  assert.equal($('[role="dialog"]'), null, 'clicking a gallery tile opens no dialog')
 })

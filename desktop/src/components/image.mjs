@@ -6,10 +6,12 @@ import { common, ImageTile } from './_shared.mjs'
 // ImageGallery); the schema-legal sourceIds prop is now DISPLAYED as attribution in the
 // figcaption (it was a dead prop — image.mjs never rendered it). Default render of an
 // Image without sourceIds is byte-identical to the previous implementation.
+// #37 (Image slice): variant 'image' applies the house rules — a blocked frame spanning the
+// figure named alt → caption → host, and a loaded image that opens an SDK Dialog lightbox.
 export const Image = ({ element }) => {
   const p = element.props ?? {}
   return jsx(ImageTile, {
     src: p.src, alt: p.alt, caption: p.caption, maxHeight: p.maxHeight,
-    sourceIds: p.sourceIds, sources: p._sources, extra: common(element)
+    sourceIds: p.sourceIds, sources: p._sources, extra: common(element), variant: 'image'
   })
 }
