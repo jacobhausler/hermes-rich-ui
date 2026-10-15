@@ -31,6 +31,8 @@ python3 scripts/suite.py . out   # → "TOTAL N FAIL 0" (serial suite; run at me
 hermes plugins validate .        # → Validation passed.
 ```
 
+Suite Chromium controls resolve their binary in order: `RUI_CHROME_BIN` (then `CHROME_BIN`) env → harness chrome-cache pin (`~/.hermes/cache/chromium/chrome-headless-shell-linux64/chrome-headless-shell`, or that leaf one level above `$HOME` on the estate home-shim layout) → ambient discovery (playwright caches, then system paths; ambient system paths stay disabled on the CI lane).
+
 Every line must pass on your branch. If a test fails, run it on a clean `main` too
 — a failure that also fails on `main` is a baseline flake (say so in the PR), a
 failure only on your branch is yours. Single tests while iterating:

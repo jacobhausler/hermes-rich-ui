@@ -4,9 +4,19 @@
 // self-contained: spawns its own chrome-headless-shell on an ephemeral port.
 //
 // Binary discovery (no silent skips — the whole point of this control is no
-// false greens): RUI_CHROME_BIN (then CHROME_BIN) env, then the playwright
-// browser caches under $HOME (~/.cache/ms-playwright, ~/.pw-browsers,
-// ~/.hermes/*, newest chromium-* build wins). Standard system paths are the
+// false greens). Precedence (est-jqwuy): (1) RUI_CHROME_BIN (then CHROME_BIN)
+// env; (2) HARNESS CACHE PIN — chrome-headless-shell under the Hermes estate
+// chrome cache ($HOME/.hermes/cache/chromium/chrome-headless-shell-linux64/
+// chrome-headless-shell, or that same leaf one level above $HOME when $HOME
+// is the estate home-shim): the pinned headless-shell build is the one these
+// controls are authored against, while ambient chromium-* DESKTOP builds
+// core-dump on this launch path under suite load (suite run 20261014-141041:
+// 'chrome-headless-shell exited early (code null)' on an ambient
+// chromium-1208), so the default must never depend on which ambient build a
+// machine happens to carry; (3) ambient fallback — the playwright browser
+// caches under $HOME (~/.cache/ms-playwright, ~/.pw-browsers,
+// ~/.hermes/*, newest chromium-* build wins), then standard system paths.
+// Standard system paths remain the
 // last resort and are DISABLED by default on the GitHub Actions lane
 // (GITHUB_ACTIONS=true): the runner image preinstalls a desktop
 // google-chrome-stable whose live launch is environment-dependent — main gate
@@ -30,7 +40,7 @@
 // chrome-shell/154.0.8037.92/ and pointed at via RUI_CHROME_BIN.
 import { spawn } from 'node:child_process'
 import { existsSync, readdirSync } from 'node:fs'
-import { join } from 'node:path'
+import { dirname, join } from 'node:path'
 import { homedir } from 'node:os'
 
 const STANDARD_PATHS = [
@@ -39,6 +49,23 @@ const STANDARD_PATHS = [
   '/usr/bin/chromium-headless-shell', '/usr/bin/chrome-headless-shell',
   '/snap/bin/chromium'
 ]
+
+// est-jqwuy: the harness-cache headless-shell pin, probed BEFORE any ambient
+// discovery (see header). Derived from $HOME — never a machine literal (the
+// publish-string guard forbids them): the estate chrome cache resolves as
+// $HOME/.hermes/cache/chromium/... when $HOME *is* the estate .hermes home,
+// and as $HOME/../cache/chromium/... when $HOME is the home-shim directory
+// inside the estate root (this fleet's layout). Anywhere else the probe is a
+// harmless miss and discovery falls through to the ambient lanes unchanged.
+function harnessCachedHeadlessShell() {
+  const home = process.env.HOME || homedir()
+  const leaf = join('cache', 'chromium', 'chrome-headless-shell-linux64', 'chrome-headless-shell')
+  for (const base of [join(home, '.hermes'), dirname(home)]) {
+    const p = join(base, leaf)
+    if (existsSync(p)) return p
+  }
+  return null
+}
 
 // Playwright-style browser caches, newest chromium-<build>/chrome-linux64/chrome
 // wins. Roots in order: $PLAYWRIGHT_BROWSERS_PATH, ~/.cache/ms-playwright,
@@ -71,7 +98,8 @@ function newestPlaywrightChrome() {
   return null
 }
 
-// First executable-looking path from env, then playwright caches, then the
+// Resolution order (est-jqwuy): RUI_CHROME_BIN (then CHROME_BIN) env, then the
+// harness-cache headless-shell pin, then ambient — playwright caches, then the
 // standard list; null when no binary exists. `standardPaths` is injectable:
 // production callers pass nothing and get STANDARD_PATHS off CI, but [] on
 // the GitHub Actions lane (see the header — the runner's ambient desktop
@@ -82,7 +110,7 @@ export function locateChrome({ standardPaths = (process.env.GITHUB_ACTIONS === '
     const v = process.env[key]
     if (v && existsSync(v)) return v
   }
-  return newestPlaywrightChrome() || standardPaths.find(p => existsSync(p)) || null
+  return harnessCachedHeadlessShell() || newestPlaywrightChrome() || standardPaths.find(p => existsSync(p)) || null
 }
 
 // Honest self-gate: {run:true} | {run:false, skip:true, reason} | {run:false, fail:true, reason}.
