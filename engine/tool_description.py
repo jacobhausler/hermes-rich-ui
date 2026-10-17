@@ -2,7 +2,7 @@
 
 Everything the agent reads about components is GENERATED from
 catalog/hermes-rich-ui.catalog.json at import time — one signature line per
-type (all 26), every enum value on its own type's line, `?` for optional
+type (all 27), every enum value on its own type's line, `?` for optional
 (closes the #19 description half: every type that takes `title` says
 `title?`), plus the one defaults sentence and the literal-only rule (J16).
 Admitted-only aliases (Sparkline tone info/error) are catalog-silent and so

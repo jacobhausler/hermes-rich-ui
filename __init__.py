@@ -41,7 +41,7 @@ rich_present = _tool.rich_present
 handle_present = _tool.handle_present
 
 # J12/J16 (#27): every agent-visible component sentence is GENERATED from the
-# catalog at import — one signature line per type (all 26, every enum, `?` for
+# catalog at import — one signature line per type (all 27, every enum, `?` for
 # optional), the literal-only rule, the one defaults sentence. Aliases that
 # admission accepts but the catalog does not announce (Sparkline tone
 # info/error) never reach a signature (AD-10). A hand-written line here would

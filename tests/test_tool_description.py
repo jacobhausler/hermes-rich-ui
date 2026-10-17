@@ -114,7 +114,7 @@ def test_reject_chart_bound_series():
 
 # ---------------------------------------------------------------------------
 # #27 (J12/J13/J16 + AD-10): the tool description is GENERATED from the catalog —
-# one signature line per type (all 26), every enum on its own type's line, '?' for
+# one signature line per type (all 27), every enum on its own type's line, '?' for
 # optional, the one defaults sentence, Sparkline's admitted-only aliases
 # (info/error) absent from the signature; the sentences spec §4.3 deletes are gone.
 # Everything expected is derived from the catalog JSON at assert time — a

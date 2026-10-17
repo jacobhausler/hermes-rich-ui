@@ -68,9 +68,9 @@ for ex in ("research", "explanation"):
     a = load(f"examples/{ex}/present-args.json")
     GALLERY.append((ex, a))
 
-# 4. all 18 types from the admission fixture.
+# 4. all 27 types from the admission fixture.
 fx = load("tests/fixtures/surface-all-types.json")
-GALLERY.append(card("all-types", "All 18 component types", fx["dataModel"]["meta"]["summary"],
+GALLERY.append(card("all-types", "All 27 component types", fx["dataModel"]["meta"]["summary"],
                     fx["components"], fx["dataModel"]["data"], fx["dataModel"]["meta"]["sources"]))
 
 # 5. metric row stress: long labels, every format, a null.

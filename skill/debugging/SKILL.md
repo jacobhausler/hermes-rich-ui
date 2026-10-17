@@ -35,7 +35,7 @@ after any fix: `python3 scripts/suite.py . out` → `TOTAL N FAIL 0`.
   tool schema in `__init__.py` restates prop shapes. A prop that works on the desktop
   but rejects at admission (or vice versa) means one of the three drifted. Command:
   ```sh
-  python3 tests/test_skill_docs.py       # CONTRACTS §2 table vs skill/SKILL.md, 27 types
+  python3 tests/test_skill_docs.py       # CONTRACTS §2 table vs skill/SKILL.md, 18 types
   grep -n '"<Type>"' catalog/hermes-rich-ui.catalog.json   # what admission actually enforces
   ```
   Fix the drifting side toward the catalog file, never the other way; contracts changes
