@@ -55,11 +55,20 @@ test('Heading 1–5, absent level, and every quad defeat prose inheritance', asy
   }
 })
 
-// Only uPlot owns text outside our type() path. The remaining micro-sized
-// exceptions are pinned rendered quads, not exemptions from the census.
-const EXEMPT = new Map([
-  ['chart.mjs:580 uPlot canvas labels', '[data-richui="chart-canvas"]']
-])
+// #39 (slice 16): EXEMPT = [] — the uPlot exemption is retired. The canvas is not a census
+// loophole any more: its mount carries the inline ramp pair (every DOM text resolves on the
+// ramp through it), and the axis label font is pinned to the small step through the chart's
+// own config below. The remaining micro-sized faces are pinned rendered quads (PINNED_MICRO).
+const EXEMPT = new Map()
+
+// The config pin (teeth for the retired exemption): the axis font string is derived from
+// TYPE.small — a literal px there would drift off the ramp the day the ladder moves.
+const chartSource = readFileSync(path.join(fileURLToPath(new URL('..', import.meta.url)), 'desktop', 'src', 'components', 'chart.mjs'), 'utf8')
+test('#39: uPlot ink is pinned by config, not by exemption', () => {
+  assert.ok(/font: `\$\{TYPE\.small\.fontSize\}px/.test(chartSource), 'axis font derives from TYPE.small')
+  assert.ok(/labelFont: `\$\{TYPE\.small\.fontSize\}px/.test(chartSource), 'label font derives from TYPE.small')
+  assert.equal(EXEMPT.size, 0, 'no text census exemptions survive slice 16')
+})
 const PINNED_MICRO = new Map([
   ['sparkline trend glyph', '[data-ru="Sparkline"] [data-ru-chip][aria-hidden="true"]'],
   ['CodeBlock language pill', '[data-ru="CodeBlock"] [data-ru-lang]'],

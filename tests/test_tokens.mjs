@@ -17,30 +17,13 @@ const root = createRoot(mount)
 const theme = value => /^var\(--ui-[a-z-]+\)$/.test(value)
 const paint = value => theme(value) || /^color-mix\(in srgb, var\(--ui-[a-z-]+\) \d+%, var\(--ui-[a-z-]+\)\)$/.test(value)
 
-// Measured on the four saved cards at 3beb897. A later restyle removes entries;
-// adding an entry requires a separately reviewed, named before→after pair.
-const EXEMPT = new Set([
-  'BarList div gap=6px', 'Callout div padding=8px 10px',
-  // #35: one-series legends are gone; the second series swatch follows HOUSE.SERIES (orange).
-  'Chart div background=rgba(249, 115, 22, 0.18)', 'Chart div background=rgba(59, 130, 246, 0.18)',
-  'Chart div border=2px solid rgb(249, 115, 22)', 'Chart div border=2px solid rgb(59, 130, 246)',
-  'Chart figure gap=6px', 'Checklist div gap=6px', 'Checklist sup margin-left=2px',
-  'CodeBlock div gap=6px', 'CodeBlock pre padding=8px 10px',
-  'CodeBlock span border-radius=999px', 'CodeBlock span padding-left=34px',
-  'CodeBlock span padding=0px 5px', 'DataTable button padding=5px 8px',
-  'DataTable div gap=6px',
-  'DataTable span border-radius=2px',
-  'DataTable span gap=6px',
-  'HeatMap div gap=6px',
-  'HeatMap sup margin-left=2px', 'HeatMap td padding=4px 6px',
-  'HeatMap th padding=3px 6px',
-  'SourceList li gap=6px',
-  'SourceList ol gap=3px',
-  'Timeline div gap=1px', 'Timeline div gap=6px',
-  'Timeline sup margin-left=2px',
-  // AutoSources block spacing (reviewed design face, #36)
-  'Card div gap=3px', 'Card ol gap=3px'
-])
+// #39 (slice 16): the census stands at EXEMPT = [] — every named baseline exception was
+// retired by the restyle pairs named in the slice-16 PR body (Callout inset padding,
+// CodeBlock pill/pre, DataTable sort control + citation radius, HeatMap/SourceList/Card
+// spacing steps, Timeline rail spacing, and the Chart legend markers onto token mixes).
+// A new off-scale value must be fixed in the component, never registered here; an
+// exception returns only with a separately reviewed, named before→after pair.
+const EXEMPT = new Set()
 
 // Own inline styles only: host prose/SDK CSS and canvas are not renderer tokens.
 // A signature includes its component, tag, CSS property and actual value, so a
