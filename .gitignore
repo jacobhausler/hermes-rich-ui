@@ -14,3 +14,4 @@ tests/.public-scratch/
 graphify-out/*
 !graphify-out/graph.json
 pub-scrub-check/
+__pycache__/

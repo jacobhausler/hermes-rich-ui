@@ -14,7 +14,7 @@ byte is written to the card store.
 <p>
 <img src="assets/screenshot-1.png" alt="Rich card with five metric tiles: currency, percent, unit, precision, and an unavailable null value" width="600">
 <img src="assets/screenshot-2.png" alt="Rich card with a 2x2 grid of uPlot charts: bar, line, scatter, and histogram" width="600">
-<img src="assets/screenshot-3.png" alt="Rich card exercising all 18 component types, including a vertical timeline, table, chart, tabs, and sources" width="600">
+<img src="assets/screenshot-3.png" alt="Rich card exercising all 27 component types, including a vertical timeline, table, chart, tabs, and sources" width="600">
 </p>
 
 All three images are pixel-real captures of the renderer (no mockups): a

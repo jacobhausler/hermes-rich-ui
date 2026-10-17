@@ -161,7 +161,7 @@ test('saved 97cb: an important author LONGHAND reset clears heat-cell edges (cas
   }
 })
 
-test('every one of the 26 types renders its DOM marker through the real Renderer', async () => {
+test('every one of the 27 types renders its DOM marker through the real Renderer', async () => {
   const { spec, initialState } = lower(fixture)
   await renderSpec(spec, initialState)
   for (const t of TYPES) assert.ok($(`[data-ru="${t}"]`), `missing marker for ${t}`)

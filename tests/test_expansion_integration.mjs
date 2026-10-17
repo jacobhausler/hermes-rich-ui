@@ -1,4 +1,4 @@
-// L8 wave B1 (MANIFEST-L3 §5): the deferred-to-L8 asserts — full registry (26 types
+// L8 wave B1 (MANIFEST-L3 §5): the deferred-to-L8 asserts — full registry (27 types
 // from desktop/src/components/index.mjs) + the real Renderer render the extended
 // tests/fixtures/surface-all-types.json end-to-end; every type's DOM marker present;
 // deterministic double-render (byte-identical innerHTML); admission round-trip: the
@@ -47,7 +47,7 @@ const { components } = await import('../desktop/src/components/index.mjs')
 const { UnknownType } = await import('../desktop/src/card.mjs')
 const { setOpenExternal } = await import('../desktop/src/components/sourcelist.mjs')
 
-const ALL_26 = ['Card', 'Stack', 'Grid', 'Divider', 'Tabs', 'Accordion', 'Heading', 'Text', 'Callout', 'Badge', 'Metric', 'Progress', 'KeyValueList', 'Image', 'DataTable', 'Chart', 'Timeline', 'SourceList', 'CodeBlock', 'Checklist', 'ChipSet', 'AsOf', 'ImageGallery', 'Sparkline', 'BarList', 'HeatMap', 'PhaseTracker']
+const ALL_27 = ['Card', 'Stack', 'Grid', 'Divider', 'Tabs', 'Accordion', 'Heading', 'Text', 'Callout', 'Badge', 'Metric', 'Progress', 'KeyValueList', 'Image', 'DataTable', 'Chart', 'Timeline', 'SourceList', 'CodeBlock', 'Checklist', 'ChipSet', 'AsOf', 'ImageGallery', 'Sparkline', 'BarList', 'HeatMap', 'PhaseTracker']
 
 const fixture = JSON.parse(readFileSync(path.join(here, 'fixtures', 'surface-all-types.json'), 'utf8'))
 const expansionFixtures = readdirSync(path.join(here, 'fixtures'))
@@ -69,23 +69,23 @@ async function renderSpec(spec, initialState) {
 }
 const root = createRoot(mount)
 
-// 1. Full registry: all 26 component implementations registered; every fixture
+// 1. Full registry: all 27 component implementations registered; every fixture
 //    element type resolves in the registry the real Renderer consumes.
 test('registry: all 27 components registered, real Renderer consumes them', async () => {
-  assert.deepEqual(Object.keys(components).sort(), [...ALL_26].sort())
-  assert.deepEqual(Object.keys(registry).sort(), [...ALL_26].sort())
+  assert.deepEqual(Object.keys(components).sort(), [...ALL_27].sort())
+  assert.deepEqual(Object.keys(registry).sort(), [...ALL_27].sort())
   const { spec } = lower(fixture)
   for (const [id, el] of Object.entries(spec.elements)) {
     assert.ok(registry[el.type], `${id}: element type ${el.type} missing from the registry`)
   }
 })
 
-// 2. End-to-end render of the extended fixture: marker for every one of the 26 types.
+// 2. End-to-end render of the extended fixture: marker for every one of the 27 types.
 test('extended surface-all-types renders the marker for all 27 types', async () => {
   setOpenExternal(null)
   const { spec, initialState } = lower(fixture)
   await renderSpec(spec, initialState)
-  for (const t of ALL_26) assert.ok($(`[data-ru="${t}"]`), `missing marker for ${t}`)
+  for (const t of ALL_27) assert.ok($(`[data-ru="${t}"]`), `missing marker for ${t}`)
   assert.equal($$('[data-ru-unknown]').length, 0, 'no unknown types in fixture')
 })
 
