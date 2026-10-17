@@ -3,7 +3,7 @@
 **Publish rich, read-only answer cards from Hermes agents.** One `rich_present`
 tool call turns an agent's real, gathered data — table rows, chart series,
 metrics, a dated sequence, cited sources — into an A2UI v1.0 `createSurface`
-record against the read-only `hermes-rich-ui/1` catalog (26 component types).
+record against the read-only `hermes-rich-ui/1` catalog (27 component types).
 The agent's reply carries a `::richui{id="<card_id>"}` directive that the Hermes
 desktop transcript expands into an inline card, rendered by the zod-stubbed
 `Renderer` from `@json-render/react` 0.21.0 with uPlot 1.6.32 charts. Nothing
@@ -77,7 +77,7 @@ returned directive line into their reply.
 
 ## Philosophy: read-only, evidence-first
 
-- 26 read-only component types. No forms, no actions, no scripts, no network
+- 27 read-only component types. No forms, no actions, no scripts, no network
   calls from the card. Local interaction (sort/filter/page, chart hover, tabs,
   expand) is built into the renderer, never authored in the spec.
 - The agent authors only content; the gateway mints identities, admits the

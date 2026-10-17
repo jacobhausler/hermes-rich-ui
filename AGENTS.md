@@ -11,7 +11,7 @@ from catalog `hermes-rich-ui/1`, rendered by the zod-stubbed `Renderer` from
 ```
 dashboard/            gateway half: plugin entry, tools, REST (installs to ~/.hermes/plugins/hermes-rich-ui/)
 engine/               stdlib-only admission engine (Python)
-catalog/              hermes-rich-ui.catalog.json — single source of truth for the 18 types
+catalog/              hermes-rich-ui.catalog.json — single source of truth for the 27 types
 desktop/src/*.mjs     renderer sources (plain ESM, no JSX)
 desktop/plugin.js     committed esbuild bundle (scripts/build.mjs output; must equal a fresh build)
 skill/                agent-facing skill (SKILL.md) + references/recipes.md
