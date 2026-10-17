@@ -47,7 +47,7 @@ const { components } = await import('../desktop/src/components/index.mjs')
 const { UnknownType } = await import('../desktop/src/card.mjs')
 const { setOpenExternal } = await import('../desktop/src/components/sourcelist.mjs')
 
-const ALL_26 = ['Card', 'Stack', 'Grid', 'Divider', 'Tabs', 'Accordion', 'Heading', 'Text', 'Callout', 'Badge', 'Metric', 'Progress', 'KeyValueList', 'Image', 'DataTable', 'Chart', 'Timeline', 'SourceList', 'CodeBlock', 'Checklist', 'ChipSet', 'AsOf', 'ImageGallery', 'Sparkline', 'BarList', 'HeatMap']
+const ALL_26 = ['Card', 'Stack', 'Grid', 'Divider', 'Tabs', 'Accordion', 'Heading', 'Text', 'Callout', 'Badge', 'Metric', 'Progress', 'KeyValueList', 'Image', 'DataTable', 'Chart', 'Timeline', 'SourceList', 'CodeBlock', 'Checklist', 'ChipSet', 'AsOf', 'ImageGallery', 'Sparkline', 'BarList', 'HeatMap', 'PhaseTracker']
 
 const fixture = JSON.parse(readFileSync(path.join(here, 'fixtures', 'surface-all-types.json'), 'utf8'))
 const expansionFixtures = readdirSync(path.join(here, 'fixtures'))
@@ -71,7 +71,7 @@ const root = createRoot(mount)
 
 // 1. Full registry: all 26 component implementations registered; every fixture
 //    element type resolves in the registry the real Renderer consumes.
-test('registry: all 26 components registered, real Renderer consumes them', async () => {
+test('registry: all 27 components registered, real Renderer consumes them', async () => {
   assert.deepEqual(Object.keys(components).sort(), [...ALL_26].sort())
   assert.deepEqual(Object.keys(registry).sort(), [...ALL_26].sort())
   const { spec } = lower(fixture)
@@ -81,7 +81,7 @@ test('registry: all 26 components registered, real Renderer consumes them', asyn
 })
 
 // 2. End-to-end render of the extended fixture: marker for every one of the 26 types.
-test('extended surface-all-types renders the marker for all 26 types', async () => {
+test('extended surface-all-types renders the marker for all 27 types', async () => {
   setOpenExternal(null)
   const { spec, initialState } = lower(fixture)
   await renderSpec(spec, initialState)

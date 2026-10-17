@@ -2,7 +2,7 @@
   "surfaceId": "ru-0123456789ab",
   "catalogId": "hermes-rich-ui/1",
   "components": [
-    { "id": "root", "component": "Card", "title": { "path": "/data/title" }, "subtitle": "all 26 types", "sourceIds": ["s1"], "footer": "Fixture footer caption.", "children": ["h1", "stack", "grid", "div1", "tabs", "acc", "kv", "img", "table", "chart", "chart2", "chart3", "tl", "row2", "grid2", "gal", "hm", "h4", "code1", "asof", "co2", "bd2", "t2", "src"] },
+    { "id": "root", "component": "Card", "title": { "path": "/data/title" }, "subtitle": "all 26 types", "sourceIds": ["s1"], "footer": "Fixture footer caption.", "children": ["h1", "stack", "grid", "div1", "tabs", "acc", "kv", "img", "table", "chart", "chart2", "chart3", "tl", "row2", "grid2", "gal", "hm", "h4", "code1", "asof", "co2", "bd2", "t2", "src", "pt1"] },
     { "id": "h1", "component": "Heading", "text": "Fixture heading", "level": 2, "accessibility": { "label": "fixture heading" } },
     { "id": "stack", "component": "Stack", "direction": "horizontal", "gap": "sm", "align": "center", "children": ["t1", "co", "bd"] },
     { "id": "t1", "component": "Text", "text": { "path": "/data/note" }, "tone": "muted", "sourceIds": ["s1", "s2"] },
@@ -44,7 +44,7 @@
     { "id": "bd2", "component": "Badge", "label": "failed", "tone": "error" },
     { "id": "t2", "component": "Text", "text": "hermes-rich-ui/1", "variant": "mono", "tone": "muted" },
     { "id": "src", "component": "SourceList", "title": "Sources" }
-  ],
+  , {"id": "pt1", "component": "PhaseTracker", "stages": [{"label": "a", "state": "active"}, {"label": "b", "state": "blocked", "note": "n", "owner": "o"}]}],
   "dataModel": {
     "data": {
       "title": "Fixture card",
