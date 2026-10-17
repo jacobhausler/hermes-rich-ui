@@ -34,11 +34,11 @@ jobs:
             if printf '%s' "$BODY" | grep -qiE '^#{1,3}[[:space:]]*(Problem|User[ -]?Story|Story|Why|Context)([:.][[:space:]]|.*)?$|^[[:space:]]*\*\*[: ]?(Problem|User[ -]?Story|Story|Why|Context)'; then
               echo "compliant: archify explainer on branch + prose header in body (C1/C8)"; exit 0
             fi
-            echo "::error::diagram present but body lacks a leading '## Problem' or '## User story' prose section (v0.3 C8: reviewers must get the what/why before the canvas — haus-docs rules/pr-diagram-standard.md)"
+            echo "::error::diagram present but body lacks a leading '## Problem' or '## User story' prose section (v0.3 C8: reviewers must get the what/why before the canvas — workspace docs/rules/pr-diagram-standard.md)"
             exit 1
           fi
           if printf '%s' "$BODY" | grep -qE '^pr-diagram:[[:space:]]*exempt.*\..*\.'; then
             echo "compliant: two-claim exemption token (C2)"; exit 0
           fi
-          echo "::error::needs docs/pr-diagrams/*.png on branch OR 'pr-diagram: exempt — <what>. <why>.' in the body (haus-docs rules/pr-diagram-standard.md v0.2 C1/C2)"
+          echo "::error::needs docs/pr-diagrams/*.png on branch OR 'pr-diagram: exempt — <what>. <why>.' in the body (workspace docs/rules/pr-diagram-standard.md v0.2 C1/C2)"
           exit 1
