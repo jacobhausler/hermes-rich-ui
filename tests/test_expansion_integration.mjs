@@ -1,4 +1,4 @@
-// L8 wave B1 (MANIFEST-L3 §5): the deferred-to-L8 asserts — full registry (26 types
+// L8 wave B1 (MANIFEST-L3 §5): the deferred-to-L8 asserts — full registry (27 types
 // from desktop/src/components/index.mjs) + the real Renderer render the extended
 // tests/fixtures/surface-all-types.json end-to-end; every type's DOM marker present;
 // deterministic double-render (byte-identical innerHTML); admission round-trip: the
@@ -80,7 +80,7 @@ test('registry: all 27 components registered, real Renderer consumes them', asyn
   }
 })
 
-// 2. End-to-end render of the extended fixture: marker for every one of the 26 types.
+// 2. End-to-end render of the extended fixture: marker for every one of the 27 types.
 test('extended surface-all-types renders the marker for all 27 types', async () => {
   setOpenExternal(null)
   const { spec, initialState } = lower(fixture)
