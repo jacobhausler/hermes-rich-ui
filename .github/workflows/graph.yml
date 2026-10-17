@@ -122,11 +122,7 @@ jobs:
           # repo and gh fails the whole create. F3 nit: no bare `|| true` (and no
           # pipe, which would mask gh's exit code); the only tolerated create
           # failure is the already-exists case (same-sha re-run).
-<<<<<<< Updated upstream
-          if ! PR_CREATE_OUT=$(gh pr create --base main --head "${BR}" --title "chore(graph): rebuild graphify knowledge graph (${GITHUB_SHA::7})" --body "Automated graph rebuild from main ${GITHUB_SHA}; legit diff per the no-op cmp guard. Part of #46. pr-diagram: exempt - logic-only change. No topology change." 2>&1); then
-=======
-          if ! PR_CREATE_OUT=$(gh pr create --base main --head "${BR}" --title "chore(graph): rebuild graphify knowledge graph (${GITHUB_SHA::7})" --body "$(printf 'Automated graph rebuild from main %s; legit diff per the no-op cmp guard. Part of #46.\\n\\npr-diagram: exempt - logic-only change. No topology change.' "${GITHUB_SHA}")" 2>&1); then
->>>>>>> Stashed changes
+          if ! PR_CREATE_OUT=$(gh pr create --base main --head "${BR}" --title "chore(graph): rebuild graphify knowledge graph (${GITHUB_SHA::7})" --body "$(printf 'Automated graph rebuild from main %s; legit diff per the no-op cmp guard. Part of #46.\n\npr-diagram: exempt - logic-only change. No topology change.' "${GITHUB_SHA}")" 2>&1); then
             printf '%s\n' "${PR_CREATE_OUT}"
             printf '%s\n' "${PR_CREATE_OUT}" | grep -qi 'already exists' || { echo "::error::gh pr create failed"; exit 1; }
           fi
