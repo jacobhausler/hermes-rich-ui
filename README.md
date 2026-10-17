@@ -113,7 +113,7 @@ returned directive line into their reply.
 - **No self-updater.** Nothing downloads or swaps code at runtime. The
   committed bundle is the artifact, and CI rebuilds it and fails on any diff.
 
-## The 26 types (catalog `hermes-rich-ui/1`)
+## The 27 types (catalog `hermes-rich-ui/1`)
 
 | # | component | purpose |
 |---|---|---|
@@ -143,6 +143,7 @@ returned directive line into their reply.
 | 24 | Sparkline | inline KPI trend strip beside a Metric (trend chip computed) |
 | 25 | BarList | ranked list with inline bars (nulls sink last, never 0) |
 | 26 | HeatMap | rows × cols matrix (≤144 cells) with computed color ramp |
+| 27 | PhaseTracker | title?, density? (compact\|expanded), stages ≤12 {label, state: pending\|active\|done\|blocked\|skipped, note?, owner?} — current pointer computed by the renderer |
 
 Props are frozen in `docs/CONTRACTS.md` §2; authoring guidance lives in
 `skill/SKILL.md` with complete recipe examples in

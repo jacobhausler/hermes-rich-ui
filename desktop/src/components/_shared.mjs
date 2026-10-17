@@ -37,6 +37,7 @@ export const GAP = { none: 0, sm: 4, md: 8, lg: 16 }
 // fails tests/test_layout_flow.mjs). tile = KPI-sized, atom = chip/rule, block = prose/list,
 // wide = needs room (charts, tables, galleries).
 export const SIZE_CLASS = Object.freeze({
+  PhaseTracker: 'block',
   Metric: 'tile', Progress: 'tile', Sparkline: 'tile',
   Badge: 'atom', AsOf: 'atom', Divider: 'atom',
   Card: 'block', Stack: 'block', Accordion: 'block', Heading: 'block', Text: 'block', Callout: 'block',

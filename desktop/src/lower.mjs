@@ -14,7 +14,7 @@ const CHILD_LIST_TYPES = new Set(['Tabs', 'Accordion'])
 export const KNOWN_TYPES = new Set([
   'Card', 'Stack', 'Grid', 'Divider', 'Tabs', 'Accordion', 'Heading', 'Text', 'Callout', 'Badge',
   'Metric', 'Progress', 'KeyValueList', 'Image', 'DataTable', 'Chart', 'Timeline', 'SourceList',
-  'CodeBlock', 'Checklist', 'ChipSet', 'AsOf', 'ImageGallery', 'Sparkline', 'BarList', 'HeatMap'
+  'CodeBlock', 'Checklist', 'ChipSet', 'AsOf', 'ImageGallery', 'Sparkline', 'BarList', 'HeatMap', 'PhaseTracker'
 ])
 const SURFACE_KEYS = new Set(['surfaceId', 'catalogId', 'components', 'dataModel', 'metadata'])
 

@@ -1217,7 +1217,7 @@
           "$ref": "#/$defs/DynamicString"
         },
         "items": {
-          "description": "Up to 32 check items (literal or bound): {label, done? true|false|null, sourceIds?}.",
+          "description": "Up to 32 check items (literal or bound): {label, done? true|false|null | state? note?, sourceIds?}.",
           "oneOf": [
             {
               "type": "array",
@@ -1238,6 +1238,8 @@
                       }
                     ]
                   },
+              "state": { "enum": ["pending", "active", "done", "blocked", "skipped"], "description": "Stage token (rich-ui#57 S2); renders through the shared StatusMark table. Old boolean form unchanged — the renderer maps it at compose time; admission never rewrites." },
+              "note": { "type": "string", "maxLength": 512, "description": "Optional per-item note, rendered as caption text (never markup)." },
                   "sourceIds": {
                     "type": "array",
                     "items": {
@@ -1864,7 +1866,98 @@
         "cells"
       ],
       "additionalProperties": false
-    }
+    },
+"PhaseTracker": {
+    "type": "object",
+    "description": "Ordered stage pipeline over the five-token stage vocabulary (rich-ui#57). Renderer computes the current pointer (first active, else none); compact = segment bar, expanded = rows; blocked surfaces note/owner, blocked != skipped.",
+    "properties": {
+      "id": {
+        "$ref": "#/$defs/ComponentId"
+      },
+      "component": {
+        "const": "PhaseTracker"
+      },
+      "accessibility": {
+        "$ref": "#/$defs/Accessibility"
+      },
+      "sourceIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "maxItems": 32,
+        "description": "Evidence links; every id must resolve in /meta/sources."
+      },
+      "title": {
+        "$ref": "#/$defs/DynamicString"
+      },
+      "density": {
+        "enum": [
+          "compact",
+          "expanded"
+        ]
+      },
+      "stages": {
+        "description": "Up to 12 stages (literal or bound): {label, state pending|active|done|blocked|skipped, note?, owner?, sourceIds?}. An unknown state is REJECTED at author time naming the five tokens (the #38 discipline), never coerced.",
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "maxLength": 4096
+                },
+                "state": {
+                  "enum": [
+                    "pending",
+                    "active",
+                    "done",
+                    "blocked",
+                    "skipped"
+                  ]
+                },
+                "note": {
+                  "type": "string",
+                  "maxLength": 512
+                },
+                "owner": {
+                  "type": "string",
+                  "maxLength": 128
+                },
+                "sourceIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "maxLength": 4096
+                  },
+                  "maxItems": 32,
+                  "description": "Evidence links; every id must resolve in /meta/sources."
+                }
+              },
+              "required": [
+                "label",
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            "maxItems": 12
+          },
+          {
+            "$ref": "#/$defs/DataBinding"
+          }
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "component",
+      "stages"
+    ],
+    "additionalProperties": false
+  }
   },
   "functions": {},
   "$defs": {
@@ -2121,6 +2214,9 @@
         },
         {
           "$ref": "#/components/HeatMap"
+        },
+        {
+          "$ref": "#/components/PhaseTracker"
         }
       ],
       "discriminator": {
@@ -2147,6 +2243,7 @@
             {
               "type": "null"
             }
+           
           ]
         },
         "high": {

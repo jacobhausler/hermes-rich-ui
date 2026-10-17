@@ -71,7 +71,7 @@ cat = load_catalog()
 check("catalog id", cat["catalogId"] == CATALOG_ID == "hermes-rich-ui/1")
 check("catalog $id", cat["$id"] == "https://hermes.local/a2ui/hermes-rich-ui/1/catalog.json")
 check("catalog protocolVersion", cat["protocolVersion"] == "1.0")
-check("catalog has 26 components (v0.1.1 expansion)", len(cat["components"]) == 26, len(cat["components"]))
+check("catalog has 27 components (v0.1.1 expansion)", len(cat["components"]) == 27, len(cat["components"]))
 check("catalog functions empty", cat["functions"] == {})
 check("catalog anyFunction false", cat["$defs"]["anyFunction"] is False)
 check("catalog anyComponent covers all", sorted(r["$ref"].rsplit("/", 1)[-1] for r in cat["$defs"]["anyComponent"]["oneOf"]) == sorted(cat["components"]))
@@ -82,7 +82,7 @@ check("every component closed + common props", all(
 expected = ["Card", "Stack", "Grid", "Divider", "Tabs", "Accordion", "Heading", "Text", "Callout", "Badge", "Metric",
             "Progress", "KeyValueList", "Image", "DataTable", "Chart", "Timeline", "SourceList",
             # v0.1.1 expansion (ratified counsel-0927): CONTRACTS §2 rev pending owner gate
-            "CodeBlock", "Checklist", "ChipSet", "AsOf", "ImageGallery", "Sparkline", "BarList", "HeatMap"]
+            "CodeBlock", "Checklist", "ChipSet", "AsOf", "ImageGallery", "Sparkline", "BarList", "HeatMap", "PhaseTracker"]
 check("catalog component names (CONTRACTS §2 + v0.1.1 expansion)", sorted(cat["components"]) == sorted(expected))
 
 # ------------------------------------------------------------------ helpers
@@ -150,6 +150,7 @@ rejects("Heading level 6 rejects", [card("h"), {"id": "h", "component": "Heading
 
 # ------------------------------------------------- #27 (J9): absent means house, no baking
 BAKED_PROPS = {
+    "PhaseTracker": (),
     "Stack": ("direction", "gap"), "Grid": ("gap",), "Divider": ("orientation",),
     "Heading": ("level",), "Text": ("tone", "variant"), "Badge": ("tone",),
     "Metric": ("format", "invertTone"), "Checklist": ("showTally",),
@@ -177,6 +178,7 @@ BARE_CALLS = {
     "BarList": _bare("BarList", "bl", items=[{"label": "a", "value": 1}]),
     "HeatMap": _bare("HeatMap", "hm", rows=[{"label": "r"}], cols=[{"label": "c"}],
                      cells=[{"row": "r", "col": "c", "value": 1}]),
+    "PhaseTracker": _bare("PhaseTracker", "ptr", stages=[{"label": "a", "state": "active"}]),
 }
 for _t, _call in BARE_CALLS.items():
     _norm = admits("J9 bare %s admits" % _t, copy.deepcopy(_call), dm())

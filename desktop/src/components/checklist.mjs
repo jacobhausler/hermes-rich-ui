@@ -1,5 +1,5 @@
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { common, isNil, text, withCite, citeMarker, StatusMark, V, type } from './_shared.mjs'
+import { common, isNil, text, withCite, citeMarker, StatusMark, stageMark, V, type } from './_shared.mjs'
 import { HOUSE } from './_house.mjs'
 
 // N3 Checklist — undated booleans (Timeline is for dated events). Read-only card:
@@ -16,10 +16,19 @@ const STATE = {
 }
 const stateOf = (done) => (done === true ? 'done' : done === false ? 'unchecked' : 'unknown')
 
+// #57 S2 (re-cert): the tally resolves an item's state by the SAME path the
+// marker takes — a known state token wins over a contradicting `done`, else the
+// boolean form (unknown state falls back, never coerced). Counting only
+// `done === true` rendered 0/N under rows of green done marks.
+const isDone = (it) => {
+  const sg = typeof it?.state === 'string' ? stageMark(it.state, 'sg') : null
+  return (sg ? it.state : stateOf(it?.done)) === 'done'
+}
+
 export const Checklist = ({ element }) => {
   const p = element.props ?? {}
   const items = Array.isArray(p.items) ? p.items.slice(0, 32) : []
-  const doneCount = items.filter((it) => it && it.done === true).length
+  const doneCount = items.filter((it) => it && isDone(it)).length
   const tally = doneCount + '/' + items.length
   const showTally = (p.showTally ?? HOUSE.CHECKLIST_SHOW_TALLY) !== false
   const head = (isNil(p.title) && !showTally) ? null : jsxs('div', { 'data-ru-head': '', style: { display: 'flex', gap: 8, alignItems: 'baseline' }, children: [
@@ -28,11 +37,12 @@ export const Checklist = ({ element }) => {
   ] }, 'h')
   const list = jsx('ul', { style: { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 4 },
     children: items.map((it, i) => {
-      const st = stateOf(it?.done)
-      const conf = STATE[st]
+      const sg = typeof it?.state === 'string' ? stageMark(it.state, 'sg') : null
+      const st = sg ? it.state : stateOf(it?.done)
+      const conf = sg ? { mark: it.state, color: 'var(' + sg.stroke + ')', aria: it.state } : STATE[st]
       return jsxs('li', { 'data-ru-state': st, style: { display: 'flex', alignItems: 'baseline', gap: 8, ...type('small'), color: V.text }, children: [
         jsx('span', { 'data-ru-marker': st, 'aria-label': conf.aria, style: { display: 'inline-flex', width: 12, flexShrink: 0 }, children: StatusMark(conf.mark, conf.color, 'mk') }, 'm'),
-        jsxs('span', { style: { display: 'flex', alignItems: 'baseline', gap: 4, minWidth: 0 }, children: [text(it?.label), citeMarker(it?.sourceIds, p._sources)] }, 'l')
+        jsxs('span', { style: { display: 'flex', alignItems: 'baseline', gap: 4, minWidth: 0 }, children: [text(it?.label), it?.note ? jsx('span', { 'data-ru-note': '1', style: { ...type('caption'), color: V.text3 }, children: ' \u2014 ' + String(it.note) }, 'n') : null, citeMarker(it?.sourceIds, p._sources)] }, 'l')
       ] }, i)
     })
   }, 'ul')

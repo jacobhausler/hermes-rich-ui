@@ -71,7 +71,7 @@ for c in live_comps:
 # --- recipes.md validity ----------------------------------------------------
 rec_text = read("skill/references/recipes.md")
 blocks = re.findall(r"```json\n(.*?)```", rec_text, re.S)
-check("recipes_has_11_examples", len(blocks) == 11, "found=%d" % len(blocks))
+check("recipes_has_12_examples", len(blocks) == 12, "found=%d" % len(blocks))
 for i, block in enumerate(blocks):
     try:
         obj = json.loads(block)

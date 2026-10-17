@@ -1,5 +1,5 @@
 // #39 (defaults slice 16): the subset gate — required-only and each optional prop alone
-// look complete, for all 26 catalog types. This is the composed system locked as gates:
+// look complete, for all 27 catalog types. This is the composed system locked as gates:
 // five sole-owner modules (fmt, TYPE, tokens, compose, card chrome) leave no face raw.
 // Failing-first per the issue: this file adds the gate; the implementation follows.
 //
@@ -57,6 +57,7 @@ const SAMPLES = {
   ImageGallery: { req: { items: [{ src: 'https://example.com/1.png', alt: 'one' }, { src: 'https://example.com/2.png', alt: 'two' }] }, opt: { title: { title: 'Sites' }, columns: { columns: 2 }, sourceIds: { sourceIds: [S] } } },
   KeyValueList: { req: { items: [{ key: 'Region', value: 'eu-west' }, { key: 'Uptime', value: 99.997 }] }, opt: { title: { title: 'Service' }, sourceIds: { sourceIds: [S] } } },
   Metric: { req: { label: 'Requests', value: 9876543 }, opt: { unit: { unit: 'req/min' }, precision: { precision: 2 }, format: { format: 'currency' }, previous: { previous: 9300000 }, invertTone: { invertTone: true }, sourceIds: { sourceIds: [S] } } },
+  PhaseTracker: { req: { stages: [{ label: 'intake', state: 'done' }, { label: 'build', state: 'active' }, { label: 'sign-off', state: 'blocked', note: 'waiting on the gate', owner: 'ops' }, { label: 'ship', state: 'pending' }] }, opt: { title: { title: 'Ship pipeline' }, density: { density: 'expanded' }, sourceIds: { sourceIds: [S] } } },
   Progress: { req: { current: 12345 }, opt: { label: { label: 'Migration' }, total: { total: 98765 }, target: { target: 50000 }, unit: { unit: 'rows' }, sourceIds: { sourceIds: [S] } } },
   SourceList: { req: {}, opt: { title: { title: 'Sources' }, sourceIds: { sourceIds: [S] } } },
   Sparkline: { req: {}, opt: { values: { values: [900, 980, 1010, null, 1150, 1240] }, series: { series: [{ label: 'trend', data: [{ label: 'a', value: 900 }, { label: 'b', value: 1240 }] }] }, direction: { direction: 'bar' }, width: { width: 120 }, height: { height: 24 }, tone: { tone: 'danger' }, sourceIds: { sourceIds: [S] } } },
@@ -98,9 +99,9 @@ function scopedText(el, sel, exemptSel) {
   return textsIn(el, sel).filter((_, i) => !hit.has([...el.querySelectorAll(sel)][i])).join(' | ')
 }
 
-test('S0: the gate covers all 26 catalog types', () => {
+test('S0: the gate covers all 27 catalog types', () => {
   assert.deepEqual(types.sort(), Object.keys(CATALOG).sort(), 'SAMPLES covers every catalog type')
-  assert.equal(Object.keys(CATALOG).length, 26)
+  assert.equal(Object.keys(CATALOG).length, 27)
 })
 
 for (const type of types) {

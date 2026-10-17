@@ -51,13 +51,14 @@ All values flow through data bindings: write `{"path": "/data/x"}` (or `/meta/..
 | 17 | Timeline | title?, items ≤30 {date?, label, text?, status? done\|active\|pending\|failed, sourceIds?} |
 | 18 | SourceList | title?, sourceIds? (default: all /meta/sources) |
 | 19 | CodeBlock | code (≤4 KiB literal text), caption?, language? (LABEL only, never parsed), showLines? |
-| 20 | Checklist | title?, items (DynamicArray ≤32): {label, done? (true\|false\|null), sourceIds?}, showTally? (tally computed by the renderer). Checklist = undated booleans; Timeline = dated |
+| 20 | Checklist | title?, items (DynamicArray ≤32): {label, done? (true\|false\|null) \| state? (pending\|active\|done\|blocked\|skipped) + note?, sourceIds?}, showTally? (tally computed by the renderer). Checklist = undated booleans; Timeline = dated |
 | 21 | ChipSet | labels (DynamicArray ≤24 of string; duplicates allowed), tone? (neutral\|info\|success\|caution — Badge's four), wrap? |
 | 22 | AsOf | observedAt?, publishedAt?, note? — ISO-8601 only, publish only timestamps you actually observed, absent if unknown (Accessed lives in SourceList) |
 | 23 | ImageGallery | items ≤8 {src (https:// only), alt (required), caption?, sourceIds?}, title?, columns? 1..4 — one evidence strip; never claim admission fetched or verified a src |
 | 24 | Sparkline | values? (DynamicArray ≤512 number\|null; null = gap), direction? (line\|bar), width? 60..400, height? 14..48, tone? (default\|success\|danger) — trend chip computed, never hand-picked |
 | 25 | BarList | items (DynamicArray ≤30): {label, value(number\|null), sourceIds?}, unit?, precision?, format? (number\|currency\|percent), sort? (desc\|asc\|none; nulls last, never 0) |
 | 26 | HeatMap | rows ≤12 {label}, cols ≤12 {label}, cells ≤144 {row, col, value(number\|null)} (refs ⊆ declared labels, one cell per (row, col) pair — duplicates rejected), unit?, precision?, showValues? — ramp + caption min/max computed |
+| 27 | PhaseTracker | title?, density? (compact\|expanded, default compact), stages ≤12: {label, state (pending\|active\|done\|blocked\|skipped), note?, owner?, sourceIds?} — current pointer (first active) computed by the renderer |
 
 Chart data shapes: bar `[{label, value}]`; waterfall `[{label, value, total?}]` (signed
 steps, renderer owns the baseline; a FIRST point with `total: true` + numeric `value`

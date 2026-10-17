@@ -572,3 +572,20 @@ when none exist). Reuse a returned id with `rich_present`'s `view` argument.
 }
 ```
 
+
+## Tracker
+
+PhaseTracker (#57 S3): an ordered pipeline over the five stage tokens — `compact` segment bar (default) or `expanded` rows with `note`/`owner`. The `current` pointer is computed (first `active`), never authored. `blocked` is a dashed error ring (waiting on something), `skipped` is muted — never the same thing; a state outside the five tokens is rejected at author time, naming them.
+
+```json
+{"surfaceId": "auto", "components": [
+  {"id": "root", "component": "Card", "title": "Rollout", "children": ["phases"]},
+  {"id": "phases", "component": "PhaseTracker", "density": "expanded", "stages": [
+    {"label": "Design", "state": "done"},
+    {"label": "Build", "state": "active"},
+    {"label": "Keying", "state": "blocked", "note": "vault rotation pending", "owner": "ops"},
+    {"label": "Ship", "state": "pending"},
+    {"label": "Legacy migration", "state": "skipped"}
+  ]}
+], "dataModel": {"data": {}, "meta": {"title": "Rollout", "summary": "Five stages, blocked at Keying", "sources": [], "derivations": []}}}
+```
