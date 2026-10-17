@@ -72,7 +72,9 @@ function harvestFaces(node) {
   for (const sel of FACE_SELS) {
     for (const el of node.querySelectorAll(sel)) {
       if (el.parentElement?.closest(UNION)) continue // a face already counted through its ancestor
-      if (el.closest('[data-ru-exact]') && sel === '[data-ru-value]') continue
+      // A face wrapped *inside* a readout marker is the readout's own shadow — skip it.
+      // A face that carries the marker itself is a readout-blessed value: census it.
+      if (sel === '[data-ru-value]' && !el.hasAttribute('data-ru-exact') && el.closest('[data-ru-exact]')) continue
       const t = (el.textContent || '').trim()
       if (!t) continue
       const key = rootOf(el)
@@ -119,39 +121,45 @@ const DIFF_PAIRS = new Map(Object.entries({
 }))
 
 const corpus = []
+const counts = {}
+let harvestError = null
 // The all-types authored fixture joins the corpus: every face it renders is authored in
 // the house face (created after defaults), so it contributes identity pairs and widens
 // the census to the whole face surface, not just the four saved records.
-{
+test('corpus harvest: four saved records (legacy vs house) + the all-types fixture', async () => {
+  // The all-types authored fixture joins the corpus: every face it renders is authored
+  // in the house face (created after defaults), so it contributes identity pairs and
+  // widens the census to the whole face surface, not just the four saved records.
   const surface = JSON.parse(readFileSync(path.join(HERE, 'fixtures', 'surface-all-types.json'), 'utf8'))
   const { spec, initialState } = lower(surface)
   await act(async () => { renderSpec(spec, initialState) })
   await openEverything(mount)
   for (const [t, list] of harvestFaces(mount)) for (const [i, fc] of list.entries())
     corpus.push({ file: 'surface-all-types', root: t, i, kind: 'identical' })
-}
-for (const f of FILES) {
-  const record = JSON.parse(readFileSync(path.join(DIR, f), 'utf8'))
-  const { legacy, house } = await renderBoth(record)
-  const types = new Set([...legacy.keys(), ...house.keys()])
-  for (const t of [...types].sort()) {
-    const L = legacy.get(t) || []
-    const H = house.get(t) || []
-    assert.equal(L.length, H.length, `${f}: ${t} face count legacy ${L.length} vs house ${H.length}`)
-    for (let i = 0; i < L.length; i++) {
-      const before = L[i].text, after = H[i].text
-      if (before === after) { corpus.push({ file: f, root: t, i, kind: 'identical' }); continue }
-      const name = `${f}#${i}/${t}: ${before} -> ${after}`
-      corpus.push({ file: f, root: t, i, kind: DIFF_PAIRS.get(name) ?? 'UNLISTED', name })
+  for (const f of FILES) {
+    const record = JSON.parse(readFileSync(path.join(DIR, f), 'utf8'))
+    const { legacy, house } = await renderBoth(record)
+    const types = new Set([...legacy.keys(), ...house.keys()])
+    for (const t of [...types].sort()) {
+      const L = legacy.get(t) || []
+      const H = house.get(t) || []
+      assert.equal(L.length, H.length, `${f}: ${t} face count legacy ${L.length} vs house ${H.length}`)
+      for (let i = 0; i < L.length; i++) {
+        const before = L[i].text, after = H[i].text
+        if (before === after) { corpus.push({ file: f, root: t, i, kind: 'identical' }); continue }
+        const name = `${f}#${i}/${t}: ${before} -> ${after}`
+        corpus.push({ file: f, root: t, i, kind: DIFF_PAIRS.get(name) ?? 'UNLISTED', name })
+      }
     }
   }
-}
+  counts.identical = corpus.filter(c => c.kind === 'identical').length
+  counts['glyph-only'] = corpus.filter(c => c.kind === 'glyph-only').length
+  counts.visible = corpus.filter(c => c.kind === 'visible').length
+})
 
-const counts = {
-  identical: corpus.filter(c => c.kind === 'identical').length,
-  'glyph-only': corpus.filter(c => c.kind === 'glyph-only').length,
-  visible: corpus.filter(c => c.kind === 'visible').length
-}
+// If the harvest test errored, dependent tests surface that root cause instead of a
+// confusing zero-face census.
+const requireHarvest = () => assert.ok(corpus.length > 0, 'corpus harvest did not complete — see the harvest test')
 
 // The issue's idealized split (127 · 8 · 6) predates the landed slices: the eight
 // glyph-only pairs it counted are the pre-stamp citation-marker migration (ⓘ n -> the
@@ -160,10 +168,12 @@ const counts = {
 // faces move (the issue's six); the census asserts the shipped truth exactly, so any
 // future drift fails until a signed pair amends the table.
 test('corpus: the face census is complete (145 faces)', () => {
+  requireHarvest()
   assert.equal(corpus.length, 145, `measured ${corpus.length} faces (counts ${JSON.stringify(counts)})`)
 })
 
 test('corpus diff equals the listed pairs: 136 identical · 2 glyph-only · 7 visible', () => {
+  requireHarvest()
   const unlisted = corpus.filter(c => c.kind === 'UNLISTED').map(c => c.name)
   assert.deepEqual(unlisted, [], `UNLISTED restyles (L8 law — name the pair in the table):\n${unlisted.join('\n')}`)
   assert.deepEqual(counts, { identical: 136, 'glyph-only': 2, visible: 7 })
@@ -172,12 +182,12 @@ test('corpus diff equals the listed pairs: 136 identical · 2 glyph-only · 7 vi
 
 test('corpus visible faces all carry their exact readout (title + aria-label)', async () => {
   // Any face that shortened (k/M/B/T or n×) must ship data-ru-exact + title + aria-label.
-  const record = JSON.parse(readFileSync(path.join(DIR, 'ru-c69fc582e9a9.json'), 'utf8'))
+  const record = JSON.parse(readFileSync(path.join(DIR, 'ru-f3af0e45428d.json'), 'utf8'))
   const { spec, initialState } = lower(record.surface.createSurface)
   await act(async () => { renderSpec(spec, initialState) })
   await openEverything(mount)
-  const abbreviated = [...mount.querySelectorAll('[data-ru-value], [data-ru-item-value], [data-ru-target], [data-ru-vs-target], [data-ru-readout], [data-ru-delta-line]')]
-    .filter(el => /\d(?:\.\d+)?\s*[kMBT](?![a-z])/.test(el.textContent || ''))
+  const abbreviated = [...mount.querySelectorAll('[data-ru-value], [data-ru-item-value], [data-ru-target]:not([role=progressbar]), [data-ru-vs-target], [data-ru-readout], [data-ru-delta-line], [data-ru-counter]')]
+    .filter(el => /\d(?:[.,]\d+)?[kMBT]\b/.test(el.textContent || ''))
   assert.ok(abbreviated.length > 0, 'corpus exercises abbreviated faces')
   for (const el of abbreviated) {
     assert.ok(el.hasAttribute('data-ru-exact'), `abbreviated face "${el.textContent.trim()}" needs data-ru-exact`)

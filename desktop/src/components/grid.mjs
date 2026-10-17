@@ -1,5 +1,5 @@
 import { Fragment, jsx } from 'react/jsx-runtime'
-import { common, GAP, RowContext, gridTracks, kidList, classOf } from './_shared.mjs'
+import { common, GAP, RowContext, MixedRowContext, gridTracks, kidList, classOf, hasTitle } from './_shared.mjs'
 import { HOUSE } from './_house.mjs'
 import { fmtSet } from './fmt.mjs'
 import { RowFmtProvider, rowValuesFrom } from './rowfmt.mjs'
@@ -28,5 +28,10 @@ export const Grid = ({ element, children }) => {
     style: { display: 'grid', gridTemplateColumns: gridTracks(classes.length, cols, classes, colGap).template, columnGap: colGap, rowGap: gap },
     children: body
   })
-  return cols >= 2 ? jsx(RowContext.Provider, { value: true, children: grid }) : grid
+  if (cols < 2) return grid
+  // #39: a Grid row that mixes tiles and a titled block is a mixed row — one label line.
+  const kids = kidList(children)
+  const mixed = kids.some(k => classOf(k) === 'tile') && kids.some(k => classOf(k) === 'block' && hasTitle(k))
+  const row = jsx(RowContext.Provider, { value: true, children: grid })
+  return mixed ? jsx(MixedRowContext.Provider, { value: true, children: row }) : row
 }

@@ -44,16 +44,18 @@ export const CLIP_PROBE = `(() => {
 })()`
 
 export async function clipCensus({ widths = CLIP_WIDTHS, harvest } = {}) {
-  const gate = chromiumGate({ purpose: 'slice-16 clip pin' })
-  if (!gate.ok) return { skipped: gate.reason, widths }
-  if (typeof harvest !== 'function') return { skipped: 'no harvest function provided', widths }
+  const gate = chromiumGate()
+  if (!gate.run && gate.skip) return { skipped: gate.reason, widths }
+  if (!gate.run) throw new Error(gate.reason) // hard FAIL — the live lane must not false-green (#47 law)
+  if (typeof harvest !== 'function') throw new Error('clipCensus needs a harvest() function')
   const launched = await launchChromium(gate.bin)
   try {
     const clipped = []
     for (const width of widths) {
       const { html, css } = await harvest(width)
-      await launched.evalInPage(`document.head.innerHTML = '<style>${css.replace(/\n/g, '')}</style>'; document.body.innerHTML = ${JSON.stringify(html)}; void 0`)
-      const hits = await launched.evalInPage(CLIP_PROBE)
+      await launched.evaluate(
+        `document.body.style.width = ${JSON.stringify(width + 'px')}; document.head.innerHTML = '<style>' + ${JSON.stringify(css)} + '</style>'; document.body.innerHTML = ${JSON.stringify(html)}; void 0`)
+      const hits = await launched.evaluate(CLIP_PROBE)
       for (const h of hits) clipped.push({ width, ...h })
     }
     return { clipped, widths }

@@ -67,7 +67,7 @@ export const ImageGallery = ({ element }) => {
   const columns = galleryColumns(items.length, p.columns)
   // #36 (withCite): the title row is the head row — the marker joins it as the last
   // inline child; with no title it rides as a flex sibling after the tile grid.
-  const head = isNil(p.title) ? null : jsx('div', { style: { ...type('h3'), color: V.text }, children: String(p.title) }, 't')
+  const head = typeof p.title !== 'string' || !p.title.trim() ? null : jsx('div', { 'data-ru-head': '', style: { ...type('h3'), color: V.text }, children: String(p.title) }, 't')
   const body = items.length === 0
     ? jsx('div', { 'data-ru-empty': 'none', style: { ...type('small'), color: V.text3, fontStyle: 'italic' }, children: 'no images' }, 'e')
     : jsx('div', {

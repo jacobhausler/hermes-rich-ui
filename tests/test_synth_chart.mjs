@@ -442,14 +442,26 @@ test('waterfall #16 r2 multi-series: per-series bar colours match the legend, no
   }
   assert.deepEqual(plan.key, [], 'multi-series: the role key is NOT drawn (the legend is the key)')
   assert.ok(plan.labels.length > 0 && plan.connectors.length > 0, 'labels and connectors still draw in multi-series mode')
-  // Legend agreement: default uPlot markers (legendFill = s.fill) and s.fill === bar fill.
+  // Legend agreement #39 (slice 16): the multi-series legend no longer rides uPlot
+  // defaults — hue reservation makes markers token MIXES (bare accent is interactive
+  // state + heat ramp only). The swatch still speaks its own series token, so the
+  // marker fill string must carry COLORS.series[s]'s token through the mix.
   const o = buildOpts('waterfall', m, props, 400, COLORS)
-  assert.equal(o.legend.markers, undefined, 'multi-series keeps uPlot default legend markers')
+  const mk = o.legend.markers
+  assert.ok(mk && typeof mk.fill === 'function' && typeof mk.stroke === 'function',
+    'multi-series legend markers are explicit token-mix fns (#39 hue reservation)')
   for (let s = 0; s < 2; s++) {
+    // The marker speaks the position's token (uPlot idx), never the runtime hex.
+    const token = ['--ui-accent', '--ui-orange', '--ui-purple', '--ui-green'][s % 4]
+    const f = mk.fill(null, s + 1), k = mk.stroke(null, s + 1) // uPlot idx: 1 = first series
+    assert.ok(/color-mix\(in srgb/.test(f) && f.includes(token),
+      `legend fill for series ${s} is an srgb token mix of ${token}`)
+    assert.ok(/color-mix\(in srgb/.test(k) && k.includes(token),
+      `legend stroke for series ${s} is an srgb token mix of ${token}`)
     const bars = plan.bars.filter(b => seriesOf(b) === s)
     assert.ok(bars.length > 0)
     for (const b of bars) assert.equal(b.fill, o.series[s + 1].fill,
-      `legend swatch colour for series ${s} equals its bar fill`)
+      `bar fill for series ${s} still equals its series stroke (bars stay pure data ink)`)
   }
 })
 

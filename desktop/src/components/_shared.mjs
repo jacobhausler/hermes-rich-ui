@@ -53,6 +53,16 @@ const SHORT_ROWS = 8
 // Provided true by the three row providers (auto-row, Grid columns ≥ 2, horizontal Stack).
 export const RowContext = createContext(false)
 
+// #39 (slice 16): provided true when a row mixes tiles and titled blocks. One label line
+// per mixed row: the block's title takes the tiles' label face instead of its own head.
+export const MixedRowContext = createContext(false)
+// The mixed-row label face — exactly the tile label (caption step + caps, meta ink).
+export const labelFace = () => ({ ...type('caption', { caps: true }), color: INK.meta, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' })
+export const hasTitle = e => {
+  const t = e?.props?.element?.props?.title ?? e?.props?.title
+  return typeof t === 'string' && t.trim() !== ''
+}
+
 // n children into at most `max` columns: fewest rows, then balanced (5 → 3+2, never 4+1).
 export function balancedCols(n, max = MAX_COLS) {
   const m = Math.min(MAX_COLS, Math.max(1, max))
@@ -88,7 +98,15 @@ export function compose(children, { otherwise = 12, rhythm = true } = {}) {
   const items = []
   for (let i = 0; i < kids.length;) {
     let j = i
-    if (isTile(kids[i])) { while (j < kids.length && isTile(kids[j])) j++; if (j - i >= 2) { items.push({ row: 'tile', kids: kids.slice(i, j) }); i = j; continue } }
+    if (isTile(kids[i])) {
+      while (j < kids.length && isTile(kids[j])) j++
+      // #39: a tile run plus the ONE titled block that follows rides a single mixed row
+      // (one label line) when the row still fits the column maximum.
+      if (j - i >= 2 && j < kids.length && classOf(kids[j]) === 'block' && hasTitle(kids[j]) && j - i + 1 <= MAX_COLS) {
+        items.push({ row: 'mixed', kids: [...kids.slice(i, j), kids[j]] }); i = j + 1; continue
+      }
+      if (j - i >= 2) { items.push({ row: 'tile', kids: kids.slice(i, j) }); i = j; continue }
+    }
     j = i
     while (j < kids.length && isShort(kids[j])) j++
     if (j - i === 2) { items.push({ row: 'block', kids: kids.slice(i, j) }); i = j; continue }
@@ -102,12 +120,13 @@ export function compose(children, { otherwise = 12, rhythm = true } = {}) {
     const prev = items[n - 1]
     const marginTop = !rhythm || !prev ? 0 : head(it) ? 20 : head(prev) ? 6 : band(prev) ? 16 : otherwise
     if (!it.row) return jsx('div', { style: { display: 'flex', flexDirection: 'column', minWidth: 0, marginTop }, children: it.kid }, it.kid.key ?? n)
-    const { template } = gridTracks(it.kids.length, MAX_COLS, [it.row])
-    return jsx(RowContext.Provider, { value: true, children: jsx('div', {
+    const { template } = gridTracks(it.kids.length, MAX_COLS, [it.row === 'block' ? 'block' : 'tile'])
+    const body = jsx('div', {
       'data-ru-autorow': String(it.kids.length), 'data-ru-autorow-class': it.row,
       style: { display: 'grid', gridTemplateColumns: template, columnGap: 16, rowGap: 12, minWidth: 0, marginTop },
       children: it.kids
-    }) }, 'row:' + (it.kids[0].key ?? n))
+    })
+    return jsx(RowContext.Provider, { value: true, children: it.row === 'mixed' ? jsx(MixedRowContext.Provider, { value: true, children: body }) : body }, 'row:' + (it.kids[0].key ?? n))
   })
 }
 
@@ -306,25 +325,9 @@ export function withCite(head, body, ids, sources) {
 // a flex sibling after the body (withCite covers the head-row case).
 export const ownSources = (props, key = 'src') => citeMarker(props?.sourceIds, props?._sources)
 
-export function formatMetric(value, { format = 'number', precision, unit } = {}) {
-  if (isNil(value)) return null
-  const n = typeof value === 'number' ? value : Number(value)
-  if (!Number.isFinite(n)) return null
-  const p = Number.isInteger(precision) && precision >= 0 && precision <= 6 ? precision : undefined
-  const digits = p === undefined ? {} : { minimumFractionDigits: p, maximumFractionDigits: p }
-  let out
-  if (format === 'currency') {
-    // no explicit precision: whole-dollar for |n| >= 1000 ($18,234,500), cents below ($14.73) — C1 polish, measured on the metric gallery card
-    const auto = p === undefined ? (Math.abs(n) >= 1000 ? { minimumFractionDigits: 0, maximumFractionDigits: 0 } : {}) : {}
-    out = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', ...auto, ...digits }).format(n)
-  } else if (format === 'percent') {
-    out = new Intl.NumberFormat('en-US', { ...(p === undefined ? { maximumFractionDigits: 2 } : digits) }).format(n) + '%'
-  } else {
-    out = new Intl.NumberFormat('en-US', { ...(p === undefined ? { maximumFractionDigits: 6 } : digits) }).format(n)
-  }
-  if (unit && format !== 'currency' && format !== 'percent') out += ' ' + unit
-  return out
-}
+// #39 (slice 16): the printer itself moved to fmt.mjs (single source); the name stays
+// exported here so every L8 legacy call site keeps one import path, byte-for-byte faces.
+export { legacyFormatMetric as formatMetric } from './fmt.mjs'
 
 export const row = (style, ...kids) => jsxs('div', { style: { display: 'flex', alignItems: 'center', gap: 6, ...style }, children: kids })
 
@@ -357,7 +360,7 @@ export function ImageTile({ src, alt, caption, maxHeight, sourceIds, sources, ex
     style: { maxHeight: maxH, maxWidth: '100%', objectFit: 'contain', borderRadius: house ? R.box : 4, border: `1px solid ${V.stroke3}` } }
   const media = !shown
     ? jsx('div', { 'data-ru-image-blocked': https ? 'unreachable' : 'scheme',
-        style: { ...type('small'), color: V.text3, fontStyle: 'italic', border: B.absent, borderRadius: house ? R.box : 4, padding: '8px 10px',
+        style: { ...type('small'), color: V.text3, fontStyle: 'italic', border: B.absent, borderRadius: house ? R.box : 4, padding: '8px 12px',
           ...(house ? { width: '100%', boxSizing: 'border-box' } : {}) },
         children: (named || 'image') + (https ? ' — image unavailable' : ' — image blocked (https only)') }, 'i')
     : house

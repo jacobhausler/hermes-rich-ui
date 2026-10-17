@@ -48,7 +48,7 @@ const SAMPLES = {
   Checklist: { req: { items: [{ label: 'plan approved', done: true }, { label: 'sign-off' }] }, opt: { title: { title: 'Readiness' }, showTally: { showTally: true }, sourceIds: { sourceIds: [S] } } },
   ChipSet: { req: { labels: ['eu-west', 'beta'] }, opt: { tone: { tone: 'info' }, wrap: { wrap: true }, sourceIds: { sourceIds: [S] } } },
   CodeBlock: { req: { code: 'git push --force-with-lease' }, opt: { caption: { caption: 'ship log' }, language: { language: 'bash' }, showLines: { showLines: true }, sourceIds: { sourceIds: [S] } } },
-  DataTable: { req: { rows: [{ lane: 'ingest', score: 4.5 }, { lane: 'serve', score: 3 }] }, opt: { title: { title: 'Lanes' }, columns: { columns: [{ key: 'lane', label: 'Lane', type: 'text' }, { key: 'score', label: 'Score', type: 'bar' }] }, pageSize: { pageSize: 1 }, defaultSort: { defaultSort: { key: 'score', dir: 'desc' } }, aggregations: { aggregations: { score: 'mean' } }, totals: { totals: true }, sourceIds: { sourceIds: [S] } } },
+  DataTable: { req: { rows: [{ lane: 'ingest', score: 4.5 }, { lane: 'serve', score: 3 }] }, opt: { title: { title: 'Lanes' }, columns: { columns: [{ key: 'lane', label: 'Lane', type: 'text' }, { key: 'score', label: 'Score', type: 'bar' }] }, pageSize: { pageSize: 1 }, defaultSort: { defaultSort: { key: 'score', dir: 'desc' } }, aggregations: { aggregations: [{ agg: 'average', columns: ['score'] }] }, totals: { totals: true }, sourceIds: { sourceIds: [S] } } },
   Divider: { req: {}, opt: { label: { label: 'details' }, orientation: { orientation: 'vertical' }, sourceIds: { sourceIds: [S] } } },
   Grid: { req: { columns: 2, children: ['m1', 'm2'] }, extras: { m1: ['Metric', { label: 'A', value: 12345 }], m2: ['Metric', { label: 'B', value: 999 }] }, opt: { gap: { gap: 'sm' }, sourceIds: { sourceIds: [S] } } },
   Heading: { req: { text: 'Section' }, opt: { level: { level: 3 }, sourceIds: { sourceIds: [S] } } },
@@ -73,11 +73,15 @@ async function renderCase(type, props) {
   const elements = { r: { type, props: { ...props }, children: (fix && props.children) || props.tabs?.map(t => t.child) || props.items?.map(i => i.child).filter(Boolean) || [] } }
   for (const [id, [t, p]] of Object.entries(fix)) elements[id] = { type: t, props: p, children: [] }
   const spec = { root: 'r', elements }
+  // Force an unmount first: React reconciles same-type roots and carries component
+  // state (open lightboxes, toggled tabs) across cases rendered on the shared mount.
+  await act(async () => { renderSpec({ root: 'k', elements: { k: { type: 'Divider', props: {}, children: [] } } }, { data: {}, meta: { sources: [] } }) })
   await act(async () => { renderSpec(spec, { data: {}, meta: { sources: SOURCES } }) })
   return mount
 }
 
-const FACE_SELS = ['[data-ru-value]', '[data-ru-item-value]', '[data-ru-target]', '[data-ru-vs-target]', '[data-ru-readout]', '[data-ru-tally-text]', '[data-ru-time]', '[data-ru="AsOf"]', '[data-ru-delta-line]']
+// the Progress root re-carries its target as metadata — that attr is a carrier, not a face
+const FACE_SELS = ['[data-ru-value]', '[data-ru-item-value]', '[data-ru-target]:not([role=progressbar])', '[data-ru-vs-target]', '[data-ru-readout]', '[data-ru-tally-text]', '[data-ru-time]', '[data-ru="AsOf"]', '[data-ru-delta-line]']
 const CHROME_SELS = ['[data-ru-head]', '[data-ru-header]', '[data-ru-footer]']
 // Authored passthrough exemptions (content the author wrote is shown as written).
 const AUTHORED = ['[data-ru="Text"]', '[data-ru="CodeBlock"] pre', '[data-ru="Heading"]', '[data-ru="Card"] [data-ru-header]', '[data-ru="ChipSet"]']
@@ -123,8 +127,12 @@ for (const type of types) {
       // A2: no empty head; titled renders expose the head marker
       for (const head of el.querySelectorAll('[data-ru-head]'))
         assert.ok((head.textContent || '').trim().length > 0, `empty head in ${type} [${label}]`)
+      // Heads are censusable two ways: a [data-ru-head] element, or the KeyValueList
+      // root-attribute idiom ([data-ru-title="…"]) — both must be non-empty.
       if (props.title !== undefined && type !== 'Card')
-        assert.ok(el.querySelector('[data-ru-head]'), `${type} with a title exposes [data-ru-head] in [${label}]`)
+        assert.ok(el.querySelector('[data-ru-head], [data-ru-title]'), `${type} with a title exposes a [data-ru-head] (or [data-ru-title] root attr) in [${label}]`)
+      for (const h2 of el.querySelectorAll('[data-ru-title]'))
+        assert.ok(h2.getAttribute('data-ru-title').trim().length > 0, `empty title attr in ${type} [${label}]`)
       // A3: value faces and head/foot chrome carry no machine text
       // A3 scope: faces + head/foot chrome. The 'unavailable' word is the house
       // machine-text token itself (data-ru-null), and a source URL is authored
@@ -164,17 +172,36 @@ for (const type of types) {
       const faceAll = [...el.querySelectorAll(FACE_SELS.join(','))]
       for (const f of faceAll) {
         const t = (f.textContent || '').trim()
-        if (/\d(?:\.\d+)?\s*[kMBT](?![a-z])|×/.test(t) && !f.hasAttribute('data-ru-exact'))
+        // A face is abbreviated when a digit is immediately followed by a tier letter
+        // with a word boundary (0.999k, 12.3k) or carries the multiplication sign.
+        // An ISO stamp (AsOf's authored instant, printed verbatim by contract) ends in
+        // digits after the T — it is the exact value itself, never an abbreviation.
+        if (/\d(?:[.,]\d+)?[kMBT]\b|×/.test(t) && !f.hasAttribute('data-ru-exact'))
           assert.fail(`abbreviated face "${t}" in ${type} [${label}] carries no data-ru-exact marker`)
       }
       // A6: every button acts
-      for (const btn of el.querySelectorAll('button')) {
-        const before = [btn.getAttribute('aria-expanded'), btn.getAttribute('aria-selected'), btn.getAttribute('data-ru-open'), el.innerHTML]
-        btn.click()
+      const clicks = []
+      for (const btn of el.querySelectorAll('button')) clicks.push({ btn, changed: false })
+      // Sweep: one click per control; a control ALREADY showing its active state
+      // (aria-selected/aria-pressed true) is acting — its click would be a reselect.
+      for (const c of clicks) {
+        const stateful = c.btn.getAttribute('aria-selected') === 'true' || c.btn.getAttribute('aria-pressed') === 'true'
+        const before = [c.btn.getAttribute('aria-expanded'), c.btn.getAttribute('aria-selected'), c.btn.getAttribute('aria-pressed'), el.innerHTML]
+        c.btn.click()
         await act(async () => {})
-        const after = [btn.getAttribute('aria-expanded'), btn.getAttribute('aria-selected'), btn.getAttribute('data-ru-open'), el.innerHTML]
-        assert.ok(before.some((v, i) => v !== after[i]), `${type} [${label}]: a control cannot act`)
+        const after = [c.btn.getAttribute('aria-expanded'), c.btn.getAttribute('aria-selected'), c.btn.getAttribute('aria-pressed'), el.innerHTML]
+        c.changed = before.some((v, i) => v !== after[i]) || stateful
       }
+      // Second pass for toggles whose first click opened something closable.
+      for (const c of clicks) {
+        if (c.changed) continue
+        const before = el.innerHTML
+        c.btn.click()
+        await act(async () => {})
+        c.changed = before !== el.innerHTML
+      }
+      for (const c of clicks)
+        assert.ok(c.changed, `${type} [${label}]: a control cannot act — ${c.btn.outerHTML.slice(0, 160)}`)
     })
   }
 }

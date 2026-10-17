@@ -13,6 +13,7 @@ import { jsx, jsxs } from 'react/jsx-runtime'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import uPlot from 'uplot'
 import { formatMetric, citeMarker, type } from './_shared.mjs'
+import { isoDay, isoStamp } from './fmt.mjs'
 import { fmt, fmtTicks, axisTitle, unitSpec } from './fmt.mjs'
 import { HOUSE, SERIES, TYPE, B } from './_house.mjs'
 
@@ -30,6 +31,10 @@ const HEIGHT = HOUSE.CHART_PLOT_H          // default chart height (F1: `height`
 const HEIGHT_MIN = 120
 const HEIGHT_MAX = 480
 const AREA_FILL_ALPHA = 0.18
+// #39: legend-marker mixes — chrome never wears a bare full hue (hue reservation);
+// SERIES tokens resolve through the same theme-variable path as the tokens census.
+const markerMix = (tok, pct, withTok) => `color-mix(in srgb, var(${tok}) ${pct}%, var(${withTok}))`
+const mixSeries = (i, pct, withTok) => markerMix(SERIES_TOKENS[Math.max(0, (i || 1) - 1) % SERIES_TOKENS.length], pct, withTok)
 // F1: height?: number → clamp 120..480, non-number/NaN → default 180.
 export function clampHeight(v) {
   const n = typeof v === 'number' ? v : NaN
@@ -588,7 +593,7 @@ export function buildOpts(kind, model, props, width, colors, onReadout) {
   // C14: calendar dates use UTC splits and print as authored, never in the viewer zone.
   const calendar = xAxisIsTime && Object.values(model.xDates || {}).every(x => typeof x === 'string' && x.length === 10)
   const xAxis = { ...axisBase, label: props.xLabel || undefined }
-  if (calendar) xAxis.values = (u, ticks) => ticks.map(x => x == null ? '' : new Date(x * 1000).toISOString().slice(0, 10))
+  if (calendar) xAxis.values = (u, ticks) => ticks.map(x => x == null ? '' : isoDay(x))
   else if (!xAxisIsTime) xAxis.values = (u, ticks) => fmtTicks(ticks)
   const yValues = (u, ticks) => fmtTicks(ticks, { unit })
   // Canvas-free estimate (0.55ch + padding, floor 28); init installs real canvas measurement.
@@ -663,13 +668,20 @@ export function buildOpts(kind, model, props, width, colors, onReadout) {
     axes: [xAxis, yAxis],
     cursor: { show: true, x: true, y: true, drag: { x: false, y: false, setScale: false }, points: { show: true } },
     legend: { show: labels.length >= 2, live: false,
-      // F3 ruling: in single-series waterfall mode the bars carry role colours, so the
-      // uPlot series swatch must not show the (unused) SERIES_TOKENS colour — width 0
-      // drops the border, fill paints the neutral --ui-text-secondary the key/labels use.
-      // Multi-series keeps the default markers: legendFill = s.fill = the bar fill below.
-      ...(kind === 'waterfall' && labels.length === 1
-        ? { markers: { width: () => 0, dash: 'solid', stroke: 'transparent', fill: () => colors.text || FALLBACK['--ui-text-secondary'] } }
-        : {}) },
+      // #39 (slice 16): hue reservation reaches the legend — the chrome swatch is no
+      // longer a bare full-hue marker. Markers ride the series token through the two
+      // sanctioned paint shapes: an 18% fill mix over the elevated surface and a 72%
+      // stroke mix toward the primary ink (the TONE_TEXT idiom). Canvas ink keeps the
+      // pure tokens (data ink, not chrome). F3 ruling: in single-series waterfall mode
+      // the bars carry role colours, so the uPlot series swatch must not show the
+      // (unused) SERIES_TOKENS colour — width 0 drops the border, fill paints the
+      // neutral --ui-text-secondary the key/labels use.
+      markers: { width: () => 2, dash: 'solid',
+        stroke: (u, i) => mixSeries(i, 72, '--ui-text-primary'),
+        fill: (u, i) => mixSeries(i, 18, '--ui-bg-elevated'),
+        ...(kind === 'waterfall' && labels.length === 1
+          ? { width: () => 0, stroke: 'transparent', fill: () => colors.text || FALLBACK['--ui-text-secondary'] }
+          : {}) }},
     // #15: waterfall paints its role-coded bars, connectors, value labels and key here —
     // after uPlot's own draw pass, from the pure waterfallPlan(u, ...) layout.
     hooks: {
@@ -710,16 +722,16 @@ const S = {
   caveat: { color: 'var(--ui-text-tertiary)', ...type('small'), whiteSpace: 'pre-wrap' },
   readout: { ...type('small', { num: true }), color: 'var(--ui-text-primary)', minHeight: TYPE.small.lineHeight },
   nodata: { border: B.absent, borderRadius: 8, padding: 16, color: 'var(--ui-text-tertiary)', background: 'var(--ui-bg-tertiary)', textAlign: 'center' },
-  host: { width: '100%', minHeight: HEIGHT, overflow: 'hidden' },
+  host: { width: '100%', minHeight: HEIGHT, overflow: 'hidden', ...type('small') }, // #39: inline ramp pair so every uPlot DOM text resolves on the ladder
   table: { ...type('small'), borderCollapse: 'collapse', width: '100%' },
   th: { ...type('h4'), textAlign: 'left', padding: '4px 8px', borderBottom: '1px solid var(--ui-stroke-secondary)', color: 'var(--ui-text-secondary)' },
-  td: { padding: '3px 8px', borderBottom: '1px solid var(--ui-stroke-tertiary)', color: 'var(--ui-text-primary)', fontVariantNumeric: 'tabular-nums' },
+  td: { padding: '4px 8px', borderBottom: '1px solid var(--ui-stroke-tertiary)', color: 'var(--ui-text-primary)', fontVariantNumeric: 'tabular-nums' },
   unavailable: { color: 'var(--ui-text-tertiary)', fontStyle: 'italic' }
 }
 
 function fmtX(model, x) {
   if (x == null) return ''
-  if (model.xAxisIsTime) return model.xDates?.[x] || new Date(x * 1000).toISOString()
+  if (model.xAxisIsTime) return model.xDates?.[x] || isoStamp(x)
   return readout(x)
 }
 
@@ -827,11 +839,13 @@ export function Chart({ element }) {
 
   const children = [
     h('style', { href: UPLOT_CSS_HREF, precedence: 'default', 'data-richui-uplot-css': '1' }, UPLOT_CSS, 'css'),
+    // #39: the title span carries the data-ru-head marker only when a title exists —
+    // an unmarked empty title holder is layout, not a face (A2 scans marked heads).
     h('div', { style: S.head }, [
-      h('span', { style: S.title }, [title, citeMarker(props.sourceIds, props._sources)], 't'),
+      h('span', { ...(title ? { 'data-ru-head': '' } : null), style: S.title }, [title || '', title ? citeMarker(props.sourceIds, props._sources) : null], 't'),
       model.ok ? h('button', { type: 'button', 'aria-pressed': showData, style: S.toggle(showData), onClick: () => setShowData(v => !v) }, showData ? 'Chart' : 'Data', 'toggle') : null
     ], 'head')
-  ]
+  ].filter(Boolean)
   if (!model.ok) {
     children.push(h('div', { style: S.nodata, role: 'status' }, /^all .* values are null$/.test(model.reason || '') ? 'No data to chart: every value is missing.' : `No data to chart${model.reason ? ` (${model.reason})` : ''}.`, 'nodata'))
   } else if (showData) {

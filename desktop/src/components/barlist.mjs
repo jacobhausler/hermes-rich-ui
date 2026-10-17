@@ -9,7 +9,8 @@
 // test_synth_microviz_defaults names the replacement explicitly).
 import { jsx, jsxs } from 'react/jsx-runtime'
 import { useMemo } from 'react'
-import { common, unavailable, withCite, citeMarker, isNil, V, type } from './_shared.mjs'
+import { useContext } from 'react'
+import { common, unavailable, withCite, citeMarker, isNil, V, type, MixedRowContext, labelFace } from './_shared.mjs'
 import { HOUSE, MARK_FILL } from './_house.mjs'
 import { fmtSet } from './fmt.mjs'
 
@@ -107,14 +108,25 @@ export const BarList = ({ element }) => {
           value === null ? h('div', { style: S.hatch })
             : width === 0 ? null
               : h('div', { 'data-ru-item-fill': '', 'data-ru-fill-min': String(FILL_MIN_PX), style: { ...S.fill(width, negative ? 'left' : hasNeg ? 'mid' : 'base'), minWidth: FILL_MIN_PX } }), 't' + i),
-        jsxs('span', { 'data-ru-item-value': '', style: S.value, children: [
+        // #39: an abbreviated face carries its exact readout (title + aria-label), and
+        // the data-ru-exact marker makes the rule censusable.
+        jsxs('span', { 'data-ru-item-value': '', style: S.value,
+          'data-ru-exact': formatted !== null && value !== null && formatted !== String(value) ? String(value) : undefined,
+          title: formatted !== null && value !== null && formatted !== String(value) ? String(value) : undefined,
+          'aria-label': formatted !== null && value !== null && formatted !== String(value) ? `${formatted}: exactly ${value}` : undefined,
+          children: [
           formatted === null ? unavailable('v' + i) : formatted,
           citeMarker(it?.sourceIds, p._sources)
         ] }, 'v' + i)
       ]
     }, 'r' + i)
   })
-  const head = p.title ? h('div', { 'data-ru-itemlist-title': '', style: type('h4') }, String(p.title), 'title') : null
+  // #39: the title is a head (data-ru-head); on a mixed row it demotes to the shared
+  // label line (caption+caps) — one label line per mixed row.
+  const mixed = useContext(MixedRowContext)
+  const head = p.title && String(p.title).trim()
+    ? h('div', mixed ? { 'data-ru-label': '', 'data-ru-head': '', style: labelFace() } : { 'data-ru-itemlist-title': '', 'data-ru-head': '', style: type('h4') }, String(p.title), 'title')
+    : null
   return jsxs('div', {
     ...common(element, { 'data-ru-count': String(counted), 'data-ru-sort': sort }),
     style: { display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0, margin: 0 },

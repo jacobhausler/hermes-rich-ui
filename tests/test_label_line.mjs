@@ -26,8 +26,10 @@ const CAPTION_CAPS = [`${TYPE.caption.fontSize}px`, String(TYPE.caption.fontWeig
 assert.deepEqual(CAPTION_CAPS, ['11px', '400', '16px', '0em'], 'the label line is the caption step')
 const isCaps = el => el.style.textTransform === 'uppercase'
 
+// lower() eats the createSurface shape: props sit FLAT on the component descriptor.
 async function render(components) {
-  const { spec, initialState } = lower({ components, dataModel: { data: {}, meta: { sources: [] } } })
+  const flat = components.map(c => ({ id: c.id, component: c.component, ...(c.props || {}), ...(c.children ? { children: c.children } : {}) }))
+  const { spec, initialState } = lower({ components: flat, dataModel: { data: {}, meta: { sources: [] } } })
   await act(async () => { renderSpec(spec, initialState) })
   return mount
 }
@@ -98,6 +100,9 @@ test('one label line: no band shows a second text line below the tile label insi
   ])
   const row = el.querySelector('[data-ru-autorow="3"]')
   const bl = row.querySelector('[data-ru="BarList"]')
-  // Inside the mixed row the block renders headless: its rows start immediately under the shared label line.
-  assert.equal(bl.children[0].getAttribute('data-ru-item') !== null, true, 'block body starts at the first row')
+  // Inside the mixed row the block carries the label line as its only head — no second
+  // head line; the first labelled element is the demoted title, then the item rows.
+  assert.ok(bl.querySelector('[data-ru-head]'), 'the block title is on the shared label line')
+  assert.ok(bl.querySelector('[data-ru-item]'), 'the block body renders below the one label line')
+  assert.equal(bl.querySelectorAll('[data-ru-head], [data-ru-itemlist-title]').length, 1, 'exactly one head in the block')
 })
