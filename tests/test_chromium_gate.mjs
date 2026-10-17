@@ -1,6 +1,7 @@
 // Tests for the chromium gate (tests/helpers/chromium.mjs): env precedence,
-// playwright-cache discovery, and the honest skip/fail decision. The #47
-// host-border control is only as honest as this gate — a precedence bug here
+// the harness-cache pin (est-jqwuy), playwright-cache discovery, and the
+// honest skip/fail decision. The #47 host-border control is only as honest as
+// this gate — a precedence bug here
 // silently swaps the binary the control runs against, or turns a hard FAIL
 // into a skip. Mutant-proven per the test-teeth law (#45 round-2): flipping
 // env order or the skip branch must RED.
@@ -79,6 +80,36 @@ test('playwright caches are searched newest-build-first, env beats cache', () =>
   // env binary still beats every cache
   withEnv({ ...CLEAN, HOME: home, PLAYWRIGHT_BROWSERS_PATH: pw, RUI_CHROME_BIN: binA }, () => {
     assert.equal(locateChrome(), binA)
+  })
+})
+
+// est-jqwuy teeth: the harness-cache pin beats any ambient build. Suite run
+// 20261014-141041 lost the two live controls to an ambient chromium-1208
+// desktop build core-dumping ('chrome-headless-shell exited early (code
+// null)'); the fix is a deterministic default — the estate chrome cache's
+// chrome-headless-shell outranks the playwright caches, and env still
+// outranks the pin. Mutants this must kill: pin scanned AFTER the playwright
+// caches (RED), pin scanned BEFORE env (RED).
+test('harness cache pin beats ambient discovery; env still beats the pin (est-jqwuy)', () => {
+  const home = mkdtempSync(join(root, 'pin-home-'))
+  const pinned = fakeBin(join(home, '.hermes', 'cache', 'chromium', 'chrome-headless-shell-linux64'), 'chrome-headless-shell')
+  // the SAME fake home also carries a newer ambient playwright build — the pin must still win
+  fakeBin(join(home, '.cache', 'ms-playwright', 'chromium-1300', 'chrome-linux64'))
+  withEnv({ ...CLEAN, HOME: home }, () => {
+    assert.equal(locateChrome(), pinned)
+    assert.deepEqual(chromiumGate(), { run: true, bin: pinned })
+  })
+  // env pin (step 1) still outranks the harness-cache pin (step 2)
+  withEnv({ ...CLEAN, HOME: home, RUI_CHROME_BIN: binA }, () => {
+    assert.equal(locateChrome(), binA)
+  })
+  // estate home-shim layout: $HOME is a directory INSIDE the estate root, so the
+  // cache leaf lives one level above $HOME — the other arm of the probe
+  const estate = mkdtempSync(join(root, 'pin-estate-'))
+  const shimBin = fakeBin(join(estate, 'cache', 'chromium', 'chrome-headless-shell-linux64'), 'chrome-headless-shell')
+  mkdirSync(join(estate, 'home'))
+  withEnv({ ...CLEAN, HOME: join(estate, 'home') }, () => {
+    assert.equal(locateChrome(), shimBin)
   })
 })
 
