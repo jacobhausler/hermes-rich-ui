@@ -58,5 +58,19 @@ if m:
     check("every_row_has_purpose", all(purpose.strip() for _, _, purpose in rows),
           "rows with empty purpose cells fail")
 
+# Prose counts ("(26 component types)", "source of truth for the 18 types") drift
+# separately from the heading/table above; pin every one of them to the catalog.
+# Lines starting with '<img' are skipped: that alt text describes a fixed capture.
+PROSE = [re.compile(r"\b(\d+) (?:read-only )?component types\b")]
+stale = []
+for fname, extra in (("README.md", []), ("AGENTS.md", [re.compile(r"source of truth for the (\d+) types")])):
+    for lineno, line in enumerate((ROOT / fname).read_text(encoding="utf-8").splitlines(), 1):
+        if line.lstrip().startswith("<img"):
+            continue
+        for rx in PROSE + extra:
+            stale += ["%s:%d:%s" % (fname, lineno, n) for n in rx.findall(line) if int(n) != len(components)]
+check("readme_prose_counts_match_catalog", not stale,
+      "catalog=%d stale(file:line:found)=%s" % (len(components), stale))
+
 print("FAILURES:", FAILURES if FAILURES else "none")
 raise SystemExit(1 if FAILURES else 0)
