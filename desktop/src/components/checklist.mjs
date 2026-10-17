@@ -22,7 +22,7 @@ export const Checklist = ({ element }) => {
   const doneCount = items.filter((it) => it && it.done === true).length
   const tally = doneCount + '/' + items.length
   const showTally = (p.showTally ?? HOUSE.CHECKLIST_SHOW_TALLY) !== false
-  const head = (isNil(p.title) && !showTally) ? null : jsxs('div', { style: { display: 'flex', gap: 8, alignItems: 'baseline' }, children: [
+  const head = (isNil(p.title) && !showTally) ? null : jsxs('div', { 'data-ru-head': '', style: { display: 'flex', gap: 8, alignItems: 'baseline' }, children: [
     isNil(p.title) ? null : jsx('span', { style: { ...type('h3'), color: V.text }, children: String(p.title) }, 't'),
     showTally ? jsx('span', { 'data-ru-tally-text': tally, role: 'status', style: { ...type('caption'), color: V.text3, fontVariantNumeric: 'tabular-nums' }, children: tally }, 'c') : null
   ] }, 'h')

@@ -158,6 +158,32 @@ export const axisTitle = (ctx = {}) => { const s = unitSpec(ctx.format, ctx.unit
 export const ISO_RE = /^\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])(?:[T ](?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d{1,9})?)?(?:Z|[+-](?:[01]\d|2[0-3]):?[0-5]\d)?)?$/
 const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const daysIn = (year, month) => month === 2 ? ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28) : [4, 6, 9, 11].includes(month) ? 30 : 31
+// #39 (slice 16): the single-source census names fmt.mjs as the ONLY home of the number
+// printers. Legacy faces (the L8 byte-stable path) and the day faces live here too.
+export const clean15 = clean                                  // float-hygiene, not a face
+export const legacyNum = n => n.toLocaleString(LOCALE, { maximumFractionDigits: 2 })
+export const isoDay = ts => new Date(ts * 1000).toISOString().slice(0, 10)   // UTC calendar day (chart ticks)
+export const isoStamp = ts => new Date(ts * 1000).toISOString()              // full instant (readout fallback)
+export function legacyFormatMetric(value, { format = 'number', precision, unit } = {}) {
+  if (value === null || value === undefined) return null
+  const n = typeof value === 'number' ? value : Number(value)
+  if (!Number.isFinite(n)) return null
+  const p = Number.isInteger(precision) && precision >= 0 && precision <= 6 ? precision : undefined
+  const digits = p === undefined ? {} : { minimumFractionDigits: p, maximumFractionDigits: p }
+  let out
+  if (format === 'currency') {
+    // no explicit precision: whole-dollar for |n| >= 1000 ($18,234,500), cents below ($14.73) — C1 polish, measured on the metric gallery card
+    const auto = p === undefined ? (Math.abs(n) >= 1000 ? { minimumFractionDigits: 0, maximumFractionDigits: 0 } : {}) : {}
+    out = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', ...auto, ...digits }).format(n)
+  } else if (format === 'percent') {
+    out = new Intl.NumberFormat('en-US', { ...(p === undefined ? { maximumFractionDigits: 2 } : digits) }).format(n) + '%'
+  } else {
+    out = new Intl.NumberFormat('en-US', { ...(p === undefined ? { maximumFractionDigits: 6 } : digits) }).format(n)
+  }
+  if (unit && format !== 'currency' && format !== 'percent') out += ' ' + unit
+  return out
+}
+
 export function fmtDate(v, { timeZone, level = 'face' } = {}) {
   if (v === null || v === undefined || v === '') return null
   if (typeof v !== 'string' || !ISO_RE.test(v) || level === 'exact') return String(v)

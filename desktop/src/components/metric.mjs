@@ -3,7 +3,7 @@ import { Fragment, jsx, jsxs } from 'react/jsx-runtime'
 import { Tip } from '@hermes/plugin-sdk'
 import { common, isNil, unavailable, citeMarker, V, type, formatMetric, RowContext } from './_shared.mjs'
 import { HOUSE, TONE_TEXT, INK } from './_house.mjs'
-import { num } from './fmt.mjs'
+import { num, clean15, legacyNum } from './fmt.mjs'
 import { useRowFmt, useVintage } from './rowfmt.mjs'
 const NBSP = '\u00a0'
 
@@ -26,7 +26,7 @@ export function computeDelta(value, previous, invertTone) {
   return { dir, delta: n - pv, percent, color }
 }
 
-const clean = (n) => Number(n.toPrecision(15))
+const clean = clean15 // #39: the printer census keeps toPrecision inside fmt.mjs only
 
 // L8 saved-card vintage (rowfmt.mjs useVintage): the pre-#29 Metric, byte-for-byte the
 // component the four saved showcase cards were stamped against (formatMetric faces,
@@ -54,7 +54,7 @@ export const LegacyMetric = ({ element }) => {
     ]
   })
 }
-const fmtNumLegacy = (n) => n.toLocaleString('en-US', { maximumFractionDigits: 2 })
+const fmtNumLegacy = legacyNum
 
 // #29 (slice 3+6): the value→text path is fmt.num — the same face tables and
 // bar-lists print (no more legacy formatMetric tiers). The label is ONE line with
@@ -75,6 +75,10 @@ const HouseMetric = ({ element }) => {
   // row — or any authored format/unit/precision — formats alone (L8: unchanged).
   const ri = row && n.face !== null ? row.values.indexOf(Number(p.value)) : -1
   const face = ri >= 0 ? row.faces[ri] : n.face
+  // #39: the exact readout follows the face actually printed — a KPI-row face differs
+  // from the standalone n, and the readout law binds on the visible bytes.
+  const readout = ri >= 0 && face !== n.exact ? n.exact : n.exact
+  const readoutDiffers = Boolean(n.aria) || (ri >= 0 && face !== n.exact && face !== null)
   const hasUnit = typeof p.unit === 'string' && p.unit.trim() && !isRate
   const delta = computeDelta(p.value, p.previous, (p.invertTone ?? HOUSE.METRIC_INVERT_TONE) === true)
   const tn = HOUSE.NUMBER_TILES
@@ -94,8 +98,14 @@ const HouseMetric = ({ element }) => {
     const pct = delta.percent === null ? ' \u00b7 percent unavailable'
       : delta.dir === 'flat' || mult !== null ? ''
       : ` \u00b7 ${delta.percent < 0 ? '-' : '+'}${Math.round(Math.abs(delta.percent) * 10) / 10}%`
+    const dExact = mult !== null ? String(clean(p.value / p.previous)) : num(abs).exact
+    const dDiffers = mult !== null ? true : dface !== dExact && dface !== String(abs)
     deltaNode = jsxs('div', {
       'data-ru-delta-line': delta.dir,
+      // #39: the delta face is a value face — an abbreviated one carries its exact readout.
+      'data-ru-exact': dDiffers ? dExact : undefined,
+      title: dDiffers ? `delta exactly ${dExact}` : undefined,
+      'aria-label': dDiffers ? `change ${dface}: exactly ${dExact}` : undefined,
       'data-ru-delta-percent': delta.percent === null ? 'unavailable' : String(Math.round(delta.percent * 10) / 10),
       style: { ...type('caption', { num: true }), color: tone },
       children: [`${arrow} ${mult ?? dface}${suffix}${pct}`]
@@ -113,7 +123,9 @@ const HouseMetric = ({ element }) => {
       }, 'l'),
       jsxs('div', {
         'data-ru-value': face ?? 'unavailable',
-        title: n.exact ?? undefined, 'aria-label': n.aria ?? undefined,
+        'data-ru-exact': readoutDiffers ? readout : undefined, // #39: the marker rides only where the face differs
+        title: readoutDiffers ? readout : undefined,
+        'aria-label': readoutDiffers ? (ri >= 0 ? n.exact : n.aria) : undefined,
         style: { ...type(inRow ? 'kpi' : 'title', { num: true }), color: V.text },
         children: [face === null
           ? jsx('span', { 'data-ru-null': '', style: { ...type('body'), fontStyle: 'italic', color: V.text2 }, children: 'unavailable' }, 'n')

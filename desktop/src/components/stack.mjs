@@ -1,5 +1,5 @@
 import { jsx } from 'react/jsx-runtime'
-import { common, compose, GAP, RowContext, kidList, classOf } from './_shared.mjs'
+import { common, compose, GAP, RowContext, MixedRowContext, kidList, classOf, hasTitle } from './_shared.mjs'
 import { HOUSE } from './_house.mjs'
 
 // E2 align?: cross-axis override; ABSENT keeps the pre-E2 defaults exactly (L8).
@@ -20,5 +20,10 @@ export const Stack = ({ element, children }) => {
     style: { display: 'flex', flexDirection: horizontal ? 'row' : 'column', flexWrap: horizontal ? 'wrap' : 'nowrap', columnGap: horizontal ? Math.max(gap, 20) : undefined, rowGap: horizontal ? gap : 0, alignItems: align ?? (horizontal ? 'flex-start' : 'stretch') },
     children: horizontal ? children : compose(children, { otherwise: gap, rhythm: p.gap !== 'none' })
   })
-  return horizontal ? jsx(RowContext.Provider, { value: true, children: stack }) : stack
+  if (!horizontal) return stack
+  // #39: a horizontal Stack mixing tiles and a titled block is a mixed row — one label line.
+  const kids = kidList(children)
+  const mixed = kids.some(k => classOf(k) === 'tile') && kids.some(k => classOf(k) === 'block' && hasTitle(k))
+  const row = jsx(RowContext.Provider, { value: true, children: stack })
+  return mixed ? jsx(MixedRowContext.Provider, { value: true, children: row }) : row
 }

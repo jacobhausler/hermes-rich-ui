@@ -3,6 +3,10 @@ import { common, isNil, unavailable, citeMarker, V, type, formatMetric } from '.
 import { MARK_FILL } from './_house.mjs'
 import { num, fmtPair, fmtSet, unitSpec } from './fmt.mjs'
 import { useVintage } from './rowfmt.mjs'
+
+// #39 readout law: a face carrying an abbreviated digit (12.3k, $7.4k) must ship its
+// exact value beside it. One detector, shared by the marker triple.
+const _abbrev = (face) => Boolean(face) && /\d(?:[.,]\d+)?[kMBT]\b/.test(String(face))
 const NBSP = '\u00a0'
 
 // #29 (slice 4+6): the counter line is the pair face — ONE tier for current and
@@ -53,7 +57,11 @@ const HouseProgress = ({ element }) => {
           jsx('div', { 'data-ru-label': '',
             style: { ...type('caption', { caps: true }), color: V.text2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 260 },
             children: [String(p.label ?? ''), citeMarker(p.sourceIds, p._sources)] }, 'a'),
+          // #39: the counter is a value face — abbreviated bytes carry the exact readout.
           jsx('div', { 'data-ru-counter': counter ?? 'unavailable',
+            // #39 readout law: abbreviated counter bytes carry the exact value beside them.
+            ...(_abbrev(counter) && hasCur ? { 'data-ru-exact': num(cur).exact } : null),
+            ...(_abbrev(counter) && hasCur ? { title: `exactly ${num(cur).exact}`, 'aria-label': num(cur).exact } : null),
             style: { ...type('body', { num: true }), color: V.text, whiteSpace: 'nowrap' },
             children: hasCur ? [counter, indeterminate && tot === null ? ' \u00b7 total unavailable' : null] : unavailable()
           }, 'b')
@@ -71,7 +79,7 @@ const HouseProgress = ({ element }) => {
         style: { position: 'relative', height: 0 },
         children: jsx('div', { style: { position: 'absolute', left: `${tickPct}%`, top: -6, width: 2, height: 6, background: V.text3 } })
       }, 'tick') : null,
-      tgtOk ? jsx('div', { 'data-ru-vs-target': targetExceedsTotal ? 'unavailable:target_exceeds_total' : 'ok',
+      tgtOk ? jsx('div', { 'data-ru-vs-target': targetExceedsTotal ? 'unavailable:target_exceeds_total' : 'ok', 'data-ru-foot': '', // #39: one foot grammar per band — this line is caption
         style: { ...type('caption'), color: V.text3, fontVariantNumeric: 'tabular-nums' },
         children: targetExceedsTotal
           ? `vs target: unavailable — target (${tgt}) is greater than total (${tot}); relation: target must be <= total`
@@ -125,7 +133,7 @@ export const LegacyProgress = ({ element }) => {
         style: { position: 'relative', height: 0 },
         children: jsx('div', { style: { position: 'absolute', left: `${tickPct}%`, top: -6, width: 2, height: 6, background: V.text3 } })
       }, 'tick') : null,
-      tgtOk ? jsx('div', { 'data-ru-vs-target': targetExceedsTotal ? 'unavailable:target_exceeds_total' : 'ok',
+      tgtOk ? jsx('div', { 'data-ru-vs-target': targetExceedsTotal ? 'unavailable:target_exceeds_total' : 'ok', 'data-ru-foot': '', // #39: one foot grammar per band — this line is caption
         style: { ...type('caption'), color: V.text3, fontVariantNumeric: 'tabular-nums' },
         children: targetExceedsTotal
           ? `vs target: unavailable — target (${tgt}) is greater than total (${tot}); relation: target must be <= total`

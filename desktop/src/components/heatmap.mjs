@@ -81,9 +81,9 @@ const S = {
   // #33: overflow-x scroll on the grid host so wide matrices never squeeze cells below
   // their 40px floor (display:block makes the overflow box actually scroll).
   table: { borderCollapse: 'collapse', width: '100%', display: 'block', overflowX: 'scroll' },
-  corner: { ...type('small'), padding: '3px 6px' },
-  th: { ...type('h4'), padding: '3px 6px', color: V.text2, textAlign: 'left', whiteSpace: 'nowrap' },
-  rowHead: { ...type('h4'), padding: '3px 6px', color: V.text2, textAlign: 'left', whiteSpace: 'nowrap' },
+  corner: { ...type('small'), padding: '2px 6px' },
+  th: { ...type('h4'), padding: '2px 6px', color: V.text2, textAlign: 'left', whiteSpace: 'nowrap' },
+  rowHead: { ...type('h4'), padding: '2px 6px', color: V.text2, textAlign: 'left', whiteSpace: 'nowrap' },
   // #33 (S17/C24): cells at the small-12 step, primary ink at every rank, min-width 40.
   cell: (t, signed) => ({ ...type('small'), padding: '4px 6px', textAlign: 'right', fontVariantNumeric: 'tabular-nums', minWidth: 40, background: cellBg(t, signed), color: V.text, border: '1px solid ' + V.stroke3 }),
   // L1: null/missing = hatched neutral '—', never a guessed color.
@@ -131,7 +131,7 @@ export const HeatMap = ({ element }) => {
     ? 'no values observed — all cells unavailable'
     : `observed ${fmtPair(model.min, model.max, { ...fmtCtx, surface: 'readout' }).replace(/\u00a0/g, ' ')} · ${model.points} values`
 
-  const titleRow = p.title ? h('div', { 'data-ru-heatmap-title': '', style: type('h4') }, String(p.title), 'title') : null
+  const titleRow = String(p.title ?? '').trim() ? h('div', { 'data-ru-heatmap-title': '', 'data-ru-head': '', style: type('h4') }, String(p.title), 'title') : null
   return jsxs('div', {
     ...common(element, { 'data-ru-cells': String(model.points) }),
     style: S.box,

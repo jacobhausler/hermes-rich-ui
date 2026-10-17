@@ -33,10 +33,10 @@ export function CardHeader({ p, depth = 0, titleShown = !isNil(p.title), subtitl
 export function AutoSources({ sources }) {
   const list = (Array.isArray(sources) ? sources : []).filter(s => s && typeof s === 'object')
   if (!list.length) return null
-  return jsxs('div', { 'data-ru-sources-block': '', style: { display: 'flex', flexDirection: 'column', gap: 3, ...type('small'), color: V.text },
+  return jsxs('div', { 'data-ru-sources-block': '', style: { display: 'flex', flexDirection: 'column', gap: 4, ...type('small'), color: V.text },
     children: [
       jsx('div', { style: { ...type('h4'), color: V.text }, children: 'Sources' }, 'h'),
-      jsx('ol', { style: { margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 3 },
+      jsx('ol', { style: { margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 },
         children: list.map((s, i) => sourceRow(s, i + 1)) }, 'ol')
     ]
   })

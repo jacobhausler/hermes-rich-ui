@@ -59,10 +59,10 @@ export const SourceList = ({ element }) => {
     ...common(element),
     style: { display: 'flex', flexDirection: 'column', gap: 4 },
     children: [
-      isNil(p.title) ? null : jsx('div', { style: { ...type('h3'), color: V.text }, children: String(p.title) }, 't'),
+      isNil(p.title) ? null : jsx('div', { 'data-ru-head': '', style: { ...type('h3'), color: V.text }, children: String(p.title) }, 't'),
       shown.length === 0
         ? jsx('div', { 'data-ru-empty': explicitEmpty ? 'cited' : 'none', style: { ...type('small'), color: V.text3, fontStyle: 'italic' }, children: explicitEmpty ? 'No sources cited' : 'no sources' }, 'e')
-        : jsx('ol', { style: { margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 3, ...type('small') },
+        : jsx('ol', { style: { margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4, ...type('small') },
           children: shown.map((s, i) => sourceRow(s, i + 1))
         }, 'ol')
     ]

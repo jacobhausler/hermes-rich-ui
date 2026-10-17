@@ -257,7 +257,7 @@ const S = {
   wrap: { overflowX: 'auto' },
   table: { ...type('small'), borderCollapse: 'collapse', width: '100%' },
   th: (numeric) => ({ padding: 0, borderBottom: '1px solid var(--ui-stroke-secondary)', textAlign: numeric ? 'right' : 'left' }), // header alignment = cell alignment
-  thBtn: (active) => ({ font: 'inherit', ...type('h4'), width: '100%', textAlign: 'inherit', padding: '5px 8px', border: 0, background: 'transparent', cursor: 'pointer', color: active ? 'var(--ui-accent)' : 'var(--ui-text-secondary)', whiteSpace: 'nowrap' }),
+  thBtn: (active) => ({ font: 'inherit', ...type('h4'), width: '100%', textAlign: 'inherit', padding: '4px 8px', border: 0, background: 'transparent', cursor: 'pointer', color: active ? 'var(--ui-accent)' : 'var(--ui-text-secondary)', whiteSpace: 'nowrap' }),
   td: (numeric) => ({ padding: '4px 8px', borderBottom: '1px solid var(--ui-stroke-tertiary)', textAlign: numeric ? 'right' : 'left', fontVariantNumeric: numeric ? 'tabular-nums' : 'normal', verticalAlign: 'top' }),
   unavailable: { color: 'var(--ui-text-tertiary)', fontStyle: 'italic' },
   foot: { ...type('caption'), display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, color: 'var(--ui-text-tertiary)' },
@@ -286,11 +286,11 @@ function BarCell({ col, row, maxAbs, face }) {
   if (!isNum(v) || !(maxAbs > 0)) return h('span', { 'data-ru-bar': 'absent', style: { display: 'inline-flex', alignItems: 'center', gap: 6, width: '100%', justifyContent: 'flex-end' } }, label, 'lb')
   const frac = Math.abs(v) / maxAbs
   const wPct = Math.max(2, Math.round(frac * 100))
-  const barStyle = { height: 6, borderRadius: 2, background: MARK_FILL(), position: 'absolute', ...(v < 0 ? { right: '50%' } : { left: '50%' }), width: `${wPct / 2}%` }
+  const barStyle = { height: 6, borderRadius: 3, background: MARK_FILL(), position: 'absolute', ...(v < 0 ? { right: '50%' } : { left: '50%' }), width: `${wPct / 2}%` }
   return h('span', { 'data-ru-bar': String(wPct), 'data-ru-bar-sign': v < 0 ? 'neg' : 'pos',
     style: { display: 'inline-flex', alignItems: 'center', gap: 6, width: '100%', justifyContent: 'flex-end' } },
     [h('span', {}, label, 'l'),
-     h('span', { 'data-ru-bar-track': '', style: { position: 'relative', display: 'inline-block', width: 64, height: 6, background: 'var(--ui-bg-tertiary)', borderRadius: 2 } },
+     h('span', { 'data-ru-bar-track': '', style: { position: 'relative', display: 'inline-block', width: 64, height: 6, background: 'var(--ui-bg-tertiary)', borderRadius: 3 } },
        [h('span', { 'aria-hidden': 'true', style: { position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: 'var(--ui-stroke-secondary)' } }, undefined, 'zero'),
         h('span', { 'aria-hidden': 'true', style: barStyle }, undefined, 'b')], 'tr')]
     , 'bar')
@@ -398,11 +398,14 @@ export function DataTable({ element }) {
     return h('tr', { 'data-ru-agg': ar.agg }, cells, `a${i}`)
   }), 'tfoot')
 
+  // #39: an empty head box is a violation — the head renders only when it has content
+  // (a title, a citation marker, or the filter control).
+  const cites = ownSources(props)
   return h('div', { style: S.box, 'data-richui': 'table', 'data-ru': 'DataTable', role: 'region', 'aria-label': accLabel || title || 'data table' }, [
-    h('div', { style: S.head }, [
-      h('span', { style: S.title }, [title, ownSources(props)], 'title'),
+    (title || cites || chromeShown) ? h('div', { style: S.head }, [
+      title || cites ? h('span', { 'data-ru-head': '', style: S.title }, [title, cites], 'title') : null,
       chromeShown ? h('input', { type: 'search', placeholder: 'Filter rows', 'aria-label': 'Filter rows', value: query, onChange: onFilter, style: S.input, 'data-richui': 'table-filter' }, undefined, 'filter') : null
-    ], 'head'),
+    ], 'head') : null,
     h('div', { style: S.wrap }, h('table', { style: S.table }, [authored || cols.length ? h('thead', {}, header, 'thead') : null, h('tbody', {}, body, 'tbody'), tfoot]), 'wrap'),
     chromeShown ? h('div', { style: S.foot }, [
       h('span', { 'data-richui': 'table-counter' }, counter, 'counter'),

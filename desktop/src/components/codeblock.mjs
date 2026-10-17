@@ -13,12 +13,12 @@ const headerRow = { flexWrap: 'wrap' }
 const captionStyle = { ...type('caption'), color: V.text3 }
 // Same pill idiom as table.mjs:108 (badge style), ui-monospace carried through.
 const langStyle = {
-  display: 'inline-block', ...type('micro', { mono: true }), padding: '0 5px',
-  borderRadius: 999, border: '1px solid ' + V.stroke3, background: V.bg3,
+  display: 'inline-block', ...type('micro', { mono: true }), padding: '0 4px',
+  borderRadius: 6, border: '1px solid ' + V.stroke3, background: V.bg3,
   color: V.text2, fontFamily: MONO
 }
 const preStyle = {
-  margin: 0, padding: '8px 10px', ...type('small', { mono: true }), color: V.text,
+  margin: 0, padding: '8px 12px', ...type('small', { mono: true }), color: V.text,
   background: V.bg3, border: '1px solid ' + V.stroke3, borderRadius: 6,
   whiteSpace: 'pre-wrap', wordBreak: 'break-all', overflow: 'auto',
   minWidth: 0, fontFamily: MONO

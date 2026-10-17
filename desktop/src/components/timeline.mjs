@@ -37,7 +37,7 @@ export const Timeline = ({ element }) => {
   const anyDate = items.some(it => !isNil(it?.date) && String(it.date) !== '')
   // #36 (withCite): the title row is the head row — the marker joins it as the last
   // inline child; with no title the marker rides as a flex sibling after the body.
-  const head = isNil(p.title) ? null : jsx('div', { style: { ...type('h3'), color: V.text }, children: String(p.title) }, 't')
+  const head = !p.title || !String(p.title).trim() ? null : jsx('div', { 'data-ru-head': '', style: { ...type('h3'), color: V.text }, children: String(p.title) }, 't')
   const body = jsx('ol', { style: { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column' },
         children: items.map((it, i) => {
           // E17/L1: absent/unknown status renders NEUTRAL unclassified — never an invented 'pending'.
@@ -49,7 +49,7 @@ export const Timeline = ({ element }) => {
               MARKED[status]
                 ? jsx('span', { style: { width: 12, marginTop: S.hair, display: 'inline-flex', flexShrink: 0 }, children: StatusMark(MARKED[status], DOT[status], 'k') }, 'd')
                 : jsx('span', { style: { width: 8, height: 8, marginTop: 4, borderRadius: 4, background: DOT[status], display: 'inline-block' } }, 'd'),
-              jsxs('div', { style: { display: 'flex', flexDirection: 'column', gap: 1, ...type('small') },
+              jsxs('div', { style: { display: 'flex', flexDirection: 'column', gap: 2, ...type('small') },
                 children: [
                   jsxs('div', { style: { display: 'flex', gap: 8, alignItems: 'baseline', color: V.text }, children: [
                     it?.date ? jsx('span', { 'data-ru-date': String(it.date), style: { color: V.text3, ...type('caption', { num: true }) }, children: formatTimelineDate(it.date, { timeZone: p.timeZone }) }, 'dt') : null,
