@@ -226,7 +226,7 @@ export function CardBody({ record, registry }) {
                     })
                   })
                 })
-                }),
+                }, 'bnd'),
                 // Fade at the cut ONLY when capped — a whole or expanded card has no edge to soften.
                 mode === 'capped' ? jsx('div', { 'data-ru-fade': '', 'aria-hidden': 'true',
                   style: { position: 'absolute', bottom: 0, left: 0, right: 0, height: FADE, pointerEvents: 'none',
