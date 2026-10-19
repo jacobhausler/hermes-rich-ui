@@ -9,7 +9,7 @@
     "test": "node --test tests/*.mjs && for t in tests/test_*.py; do python3 $t || exit 1; done"
   },
   "dependencies": {
-    "@json-render/react": "0.21.0",
+    "@json-render/react": "0.21.1",
     "@json-render/core": "0.21.0",
     "uplot": "1.6.32"
   },
