@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@json-render/react": "0.21.0",
-    "@json-render/core": "0.21.0",
+    "@json-render/core": "0.21.1",
     "uplot": "1.6.32"
   },
   "devDependencies": {
