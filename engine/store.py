@@ -6,12 +6,16 @@ Ids are validated BEFORE any disk access; nothing here ever deletes.
 """
 from __future__ import annotations
 
-import fcntl
 import json
 import os
 import re
 from pathlib import Path
 from typing import Optional
+
+try:  # POSIX store lock; Windows has no flock, see _lock_exclusive
+    import fcntl
+except ImportError:  # pragma: no cover - Windows only, CI runs the POSIX lane
+    fcntl = None
 
 # REVIEW-C0 E7: matched with fullmatch — `$` would accept a trailing newline.
 CARD_ID_RE = re.compile(r"ru-[0-9a-f]{12}")
@@ -106,14 +110,37 @@ def _lockfile_path() -> Path:
     return root() / "cards.lock"
 
 
+def _lock_exclusive(fd: int) -> None:
+    """Block until THIS process holds the exclusive store lock, on any OS.
+
+    `fcntl.flock` does not exist on Windows, where the same exclusion comes
+    from a one-byte `msvcrt.locking` region lock. `LK_LOCK` gives up after
+    about ten seconds and raises instead of waiting forever, so the wait is a
+    loop; it ends only when the region is held, which is what flock does on
+    its own. Closing `fd` releases either kind.
+    """
+    if fcntl is not None:
+        fcntl.flock(fd, fcntl.LOCK_EX)
+        return
+    import msvcrt  # Windows-only; a POSIX host never reaches this line
+
+    os.lseek(fd, 0, os.SEEK_SET)
+    while True:
+        try:
+            msvcrt.locking(fd, msvcrt.LK_LOCK, 1)
+            return
+        except OSError:
+            continue
+
+
 def _acquire_store_lock():
     """Exclusive cross-process lock around the quota check + commit (#54).
-    Returns the open fd; closing it releases the flock. stdlib-only (law 2)."""
+    Returns the open fd; closing it releases the lock. stdlib-only (law 2)."""
     lock_path = _lockfile_path()
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     fd = os.open(str(lock_path), os.O_RDWR | os.O_CREAT, 0o644)
     try:
-        fcntl.flock(fd, fcntl.LOCK_EX)
+        _lock_exclusive(fd)
     except BaseException:
         os.close(fd)
         raise
