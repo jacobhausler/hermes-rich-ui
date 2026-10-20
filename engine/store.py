@@ -6,6 +6,7 @@ Ids are validated BEFORE any disk access; nothing here ever deletes.
 """
 from __future__ import annotations
 
+import errno
 import json
 import os
 import re
@@ -110,14 +111,24 @@ def _lockfile_path() -> Path:
     return root() / "cards.lock"
 
 
+# The ONLY errno the Windows lock loop waits out: `LK_LOCK` reports contention
+# (the region is held by someone else and may free) as EDEADLOCK after its own
+# ~10 s internal wait. Every other errno is a hard error that cannot clear by
+# waiting — EBADF on a bad fd, EACCES on a sharing violation — and retrying it
+# turns a raise flock would deliver at once into an unbounded hang.
+_LOCK_WAIT_ERRNOS = frozenset((errno.EDEADLOCK,))
+
+
 def _lock_exclusive(fd: int) -> None:
-    """Block until THIS process holds the exclusive store lock, on any OS.
+    """Block until THIS process holds the exclusive store lock.
 
     `fcntl.flock` does not exist on Windows, where the same exclusion comes
     from a one-byte `msvcrt.locking` region lock. `LK_LOCK` gives up after
-    about ten seconds and raises instead of waiting forever, so the wait is a
-    loop; it ends only when the region is held, which is what flock does on
-    its own. Closing `fd` releases either kind.
+    about ten seconds and raises EDEADLOCK instead of waiting forever, so
+    contention is retried in a loop until the region is held, which is what
+    flock does on its own. A hard OSError (bad fd EBADF, sharing violation)
+    is raised at once, matching flock: waiting on an error that cannot clear
+    is a hang, not a wait. Closing `fd` releases either kind.
     """
     if fcntl is not None:
         fcntl.flock(fd, fcntl.LOCK_EX)
@@ -129,8 +140,9 @@ def _lock_exclusive(fd: int) -> None:
         try:
             msvcrt.locking(fd, msvcrt.LK_LOCK, 1)
             return
-        except OSError:
-            continue
+        except OSError as err:
+            if getattr(err, "errno", None) not in _LOCK_WAIT_ERRNOS:
+                raise
 
 
 def _acquire_store_lock():
