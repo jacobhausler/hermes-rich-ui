@@ -1,0 +1,184 @@
+{
+  "schema": "estate-ci/registry-v0",
+  "mode": "observe",
+  "law": "row iff burn token in path or header (S3b); tier/after/order_group census-owned, null until P2 census",
+  "generator": "python3 scripts/gen_registry.py",
+  "rows": [
+    {
+      "case": "tests/test_admission_fraction_title.py",
+      "burn": "#29",
+      "origin": "48091bd5ac625aa5a34b369200201c3ec60dce63",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_error_fixes.py",
+      "burn": "#38",
+      "origin": "517632b158c0219727b85913d60af859e2ea8600",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_release_check.py",
+      "burn": "#43",
+      "origin": "d7e8cc2c44450c7b07b9f31fe9d521740ae9e539",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_store_lock_harderr.py",
+      "burn": "#166",
+      "origin": "02602ffd1c13dcd656ef1ece7fc9cdb8463e7567",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_suite_gate.py",
+      "burn": "#53",
+      "origin": "b9c531e00b735aeadd1fa71a1bf98b32b1688327",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_tool_description.py",
+      "burn": "#9",
+      "origin": "49bd1b08cdff4544048a1ad8923298b9efc8afb7",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_chart_defaults.mjs",
+      "burn": "#35",
+      "origin": "5f77d1f9e5f5a246ae79e4ffdc9d3230d16a0417",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_chart_defaults_live.mjs",
+      "burn": "#35",
+      "origin": "5f77d1f9e5f5a246ae79e4ffdc9d3230d16a0417",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_cite_marker.mjs",
+      "burn": "#26",
+      "origin": "0aa3550c74dd6e130386b48630d9d07cab85b5b8",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_evidence_primitives.mjs",
+      "burn": "#36",
+      "origin": "0fa1b57ae026eb7e3038bb7e7fe33fc1a964abc6",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_fmt_corpus.mjs",
+      "burn": "#34",
+      "origin": "3f60d679c35f6b9fa55719e12573e0de2e5fcd3c",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_fmt_single_source.mjs",
+      "burn": "#39",
+      "origin": "e522c6a366483413724acae1c404475b4776dd0a",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_host_border_chromium.mjs",
+      "burn": "#47",
+      "origin": "53315cb73e6c85f141c0f281a03d9d0dab72e5a9",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_label_line.mjs",
+      "burn": "#39",
+      "origin": "e522c6a366483413724acae1c404475b4776dd0a",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_layout_flow.mjs",
+      "burn": "#28",
+      "origin": "a1103e39d779bc6c81a2d4014c6827ffc0638b1d",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_number_tiles.mjs",
+      "burn": "#29",
+      "origin": "48091bd5ac625aa5a34b369200201c3ec60dce63",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_registration_repro.mjs",
+      "burn": "#21",
+      "origin": "9a498f580af50e0570d2b276a81b7fdda179c6e6",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_subset_gate.mjs",
+      "burn": "#39",
+      "origin": "e522c6a366483413724acae1c404475b4776dd0a",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_table_aggs.mjs",
+      "burn": "#40",
+      "origin": "351e4926638f44524be5bef68dd7e77324de7f47",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_text_defaults.mjs",
+      "burn": "#32",
+      "origin": "9ec8c4d5811b06b2af0b40ebf6c44053769c43e1",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_tokens.mjs",
+      "burn": "#26",
+      "origin": "0aa3550c74dd6e130386b48630d9d07cab85b5b8",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    },
+    {
+      "case": "tests/test_type_ladder.mjs",
+      "burn": "#25",
+      "origin": "3beb89703b5baecd74bde3a75e322ed1a70691d7",
+      "tier": null,
+      "after": null,
+      "order_group": null
+    }
+  ]
+}

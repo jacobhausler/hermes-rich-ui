@@ -1,4 +1,9 @@
 name: ci
+# ci-contract: estate-ci@v1
+# P1 observe (NEXTGEN-CI (e)): this file declares the pin the P2 cutover PR will
+# call (tests/budget.json at the interim (b) numbers + the attempt-stamped ledger
+# upload below). The `uses:` of the reusable arrives with the cutover, at which
+# point preflight verifies this line agrees with the reusable ref, per law.
 
 on:
   push:
@@ -59,6 +64,21 @@ jobs:
 
       - name: Scrub audit — publish tree must build with 0 private-string hits
         run: python3 scripts/make_public.py /tmp/public-tree
+
+      # P1 observe (NEXTGEN-CI (e)): the suite ledger scripts/suite.py writes at
+      # out/exits.json (emitting step: 'Test suite (python + node, serial)') gains
+      # artifact identity carrying the attempt, per the contract naming law
+      # `<prefix>__<leg>__<run_id>-a<attempt>` — reruns can no longer be stitched
+      # across attempts. Observe-only teeth: `if: always()` keeps a red run's
+      # evidence, `continue-on-error` means the upload itself can never red gates.
+      - name: P1 observe — upload suite ledger (attempt-stamped)
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: ledger__gates__${{ github.run_id }}-a${{ github.run_attempt }}
+          path: out/
+          retention-days: 90
 
   # The only hermes-dependent gates are the validate steps above, and `gates`
   # already covers the floor under its protected check name. This companion
