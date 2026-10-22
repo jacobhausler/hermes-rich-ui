@@ -1,0 +1,8 @@
+{
+  "schema": "estate-ci/budget-v0",
+  "mode": "observe",
+  "pr_gate_wall_s": 210,
+  "runner_min_per_pr": 4,
+  "runner_min_wk": 205,
+  "basis": "NEXTGEN-CI (b) row hermes-rich-ui, cut-time interim: wall-min budget 3.5 (210 s) from measured 3.48 wall; runner-min/PR budget 4 (measured 3.6, +0.3 graph-merge drag; target ~2.7 full / ~2.1 machine-shape); weekly 205 per the D18/D17 table. Re-cut from the P1 observe week per budget basis law (S5): budget = measured p95 x 1.15 per component (provisioning p95 + suite p95)."
+}
