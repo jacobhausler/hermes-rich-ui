@@ -1,5 +1,35 @@
 # Changelog
 
+## v0.1.6 — 2026-10-26
+
+Clean-path patch cut, 26 merged PRs since v0.1.5: defaults-epic bundles (media & containers, design-language cohesion, Checklist S2-S4), store-lock hardening including the first external fix (@apoapostolov), and the CI observe instruments (P1). External-contributor lines carry the author handle; owner lines follow the house `(#n, date)` format so the public-string scrub stays clean. Merged since v0.1.5:
+
+- chore(graph): rebuild graphify knowledge graph (60f4c10) (#140, 2026-10-15)
+- feat(#37): media & containers bundle — wf s3 (#138, 2026-10-15)
+- chore(graph): rebuild graphify knowledge graph (ad9580a) (#142, 2026-10-15)
+- chore(pr-compliance): v0.3 C8 teeth mirror (#130, 2026-10-16)
+- fix(desktop): key every array child citeMarker/CardBody produce (#141, 2026-10-16)
+- fix(tests): pin harness chrome-headless-shell ahead of ambient discovery (est-jqwuy) (#144, 2026-10-16)
+- feat(#39): design-language cohesion — the composed system locked as gates (#145, 2026-10-16)
+- feat(#57 S2-S4): Checklist item state+note, PhaseTracker, hostile evidence (#143, 2026-10-16)
+- chore(graph): rebuild graphify knowledge graph (65d8e74) (#149, 2026-10-17)
+- test(readme): pin README prose type counts to the catalog; fix stale '26' → 27 (#150, 2026-10-17)
+- docs(manifest): refresh stale component-type counts 18/26 -> 27 (#152, 2026-10-17)
+- fix(ci): graph regen PR body carries the C2 pr-diagram exempt token (#151, 2026-10-17)
+- chore(graph): rebuild graphify knowledge graph (56df59e) (#154, 2026-10-17)
+- test(fixtures): surface-all-types subtitle 'all 26 types' -> 27 (#155, 2026-10-17)
+- chore(graph): rebuild graphify knowledge graph (00846af) (#153, 2026-10-17)
+- test(store): direct unit tests for engine/store.py view layer — list_views order/skip/no-mkdir, save_view rejects, hermes_home override (mutant-proven) (#156, 2026-10-18)
+- chore(graph): rebuild graphify knowledge graph (d05683e) (#157, 2026-10-18)
+- chore(deps): react 19.3.1 + @json-render 0.21.1 consolidated (supersedes #158 #160 #161 #162) (#163, 2026-10-19)
+- chore(graph): rebuild graphify knowledge graph (828bb68) (#164, 2026-10-19)
+- fix(store): exclusive store lock without fcntl (fixes #165) (#166, @apoapostolov, 2026-10-20)
+- chore(graph): rebuild graphify knowledge graph (a1aaf60) (#167, 2026-10-20)
+- fix(store): raise hard errors in the msvcrt lock loop instead of hanging (#168, 2026-10-20)
+- chore(graph): rebuild graphify knowledge graph (02602ff) (#169, 2026-10-20)
+- ci(P1): observe instruments — budget.json interim, estate-ci@v1 pin, attempt-stamped ledger, burn-token registry (#170, 2026-10-21)
+- chore(graph): rebuild graphify knowledge graph (0905b2d) (#171, 2026-10-22)
+- chore(ci): bump actions/upload-artifact from 4 to 7 (#172, @dependabot[bot], 2026-10-26)
 ## v0.1.5 — 2026-10-15
 
 Clean-path cut at the nirvana-7 cert merges; supersedes stale-conflicting #95. Merged since v0.1.4:
