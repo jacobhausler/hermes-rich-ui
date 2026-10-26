@@ -78,6 +78,19 @@ R10 **Migration safety** — persisted card shapes keep loading old data; migrat
 First PR from a fork: CI waits for a maintainer to approve the run (GitHub default).
 That happens on the same tick as the review.
 
+## Release merges are gated, not eyeballed
+
+The release lane never issues a merge by hand: it runs
+`python3 scripts/release_merge_gate.py --repo <owner/repo> --pr N --head <40-hex>`
+(peer-receipt-before-merge, est-clrlx law). It squash-merges only when the
+**newest** review marker carries `verdict=merge`, its `reviewed=` sha matches the
+current head, and its `reviewer=` is not the PR's author bot; any other state —
+missing/stale/superseded marker, `changes`/`pending` verdict, self-review,
+unknown author — refuses with exit 1 and ZERO write attempted (exit 2 = the
+predicate was unverifiable, also zero writes). Exit 0 means merged **and**
+read-back verified; `--receipt PATH` writes the proof. `tests/test_release_merge_gate.py`
+pins that behavior against a fake GitHub, so the gate itself is testable offline.
+
 ## Issues
 
 Bug reports need: Hermes version (`hermes --version`), OS, the exact command or
