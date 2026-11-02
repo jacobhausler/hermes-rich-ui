@@ -15,3 +15,5 @@ graphify-out/*
 !graphify-out/graph.json
 pub-scrub-check/
 __pycache__/
+# suite outdir variants: in-tree ledgers (out-nightly-1102/) stay untracked
+out-*/
