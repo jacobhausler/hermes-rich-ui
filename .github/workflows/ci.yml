@@ -109,8 +109,21 @@ jobs:
       # interpreter uv finds (setup-uv venv if activated, else setup-python's).
       - uses: astral-sh/setup-uv@v6
 
+      # uv honors [tool.uv].override-dependencies only for project operations
+      # (uv sync, uv pip install -r pyproject.toml); installing hermes-agent as
+      # an -e requirement IGNORES its overrides, so the Pillow==13.0.0 mask falls
+      # exactly like plain pip (attempt 3: unsatisfiable). Derive the override
+      # file from the upstream pyproject at runtime - self-healing as upstream
+      # edits its [tool.uv] block.
       - name: Install hermes (editable)
-        run: uv pip install --system -e /tmp/hermes-agent
+        run: |
+          python - <<'PY'
+          import tomllib
+          data = tomllib.load(open('/tmp/hermes-agent/pyproject.toml', 'rb'))
+          ovr = data.get('tool', {}).get('uv', {}).get('override-dependencies', [])
+          open('/tmp/hermes-overrides.txt', 'w').write(chr(10).join(ovr) + chr(10))
+          PY
+          uv pip install --system -e /tmp/hermes-agent --override /tmp/hermes-overrides.txt
 
       - name: Validate plugin
         run: hermes plugins validate .
