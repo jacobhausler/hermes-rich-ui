@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.1.7 — 2026-11-02
+
+Clean-path patch cut, 12 merged PRs since v0.1.6: the release-merge gate port (est-lafig), three direct boundary-test drops (unescape_token, vintageOf, dir_bytes), the SECURITY.md standards-parity close, and the @json-render 0.21.3 dependency bump. Owner lines follow the house `(#n, date)` format so the public-string scrub stays clean. Merged since v0.1.6:
+
+- chore(graph): rebuild graphify knowledge graph (16c526a) (#174, 2026-10-26)
+- feat(release): port release-merge gate from hermes-workflows #547 (est-lafig) (#175, 2026-10-26)
+- chore(graph): rebuild graphify knowledge graph (44d0fae) (#176, 2026-10-26)
+- test(admission): direct boundary tests for unescape_token (RFC 6901 strict decode) (#177, 2026-10-27)
+- chore(graph): rebuild graphify knowledge graph (53fcdbb) (#178, 2026-10-27)
+- test(desktop): direct boundary coverage for vintageOf — the legacy-vs-house saved-card gate (#179, 2026-10-29)
+- chore(graph): rebuild graphify knowledge graph (49df382) (#180, 2026-10-29)
+- test(store): direct boundary coverage for dir_bytes — the quota path's size oracle (#181, 2026-10-30)
+- chore(graph): rebuild graphify knowledge graph (9ac0133) (#183, 2026-10-30)
+- chore(standards): ship SECURITY.md — close the standards-parity MISSING finding (#184, 2026-11-01)
+- chore(graph): rebuild graphify knowledge graph (58b4d52) (#185, 2026-11-01)
+- chore(deps): bump @json-render/react from 0.21.1 to 0.21.3 (#186, @dependabot[bot], 2026-11-02)
+
 ## v0.1.6 — 2026-10-26
 
 Clean-path patch cut, 26 merged PRs since v0.1.5: defaults-epic bundles (media & containers, design-language cohesion, Checklist S2-S4), store-lock hardening including the first external fix (@apoapostolov), and the CI observe instruments (P1). External-contributor lines carry the author handle; owner lines follow the house `(#n, date)` format so the public-string scrub stays clean. Merged since v0.1.5:
