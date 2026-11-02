@@ -20,7 +20,7 @@ env:
   # is cut — no automation lane updates this value. Asymmetric with the floor
   # above on purpose: this end pins the release tag name, the floor pins a
   # commit sha. The compat-latest job below validates against this tag.
-  HERMES_LATEST: v0.21.7
+  HERMES_LATEST: v0.22.6
 
 jobs:
   gates:
@@ -105,7 +105,7 @@ jobs:
           git -C /tmp/hermes-agent checkout "$HERMES_LATEST"
 
       - name: Install hermes (editable)
-        run: pip install -e /tmp/hermes-agent
+        run: uv pip install -e /tmp/hermes-agent
 
       - name: Validate plugin
         run: hermes plugins validate .
