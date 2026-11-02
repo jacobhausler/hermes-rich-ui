@@ -104,8 +104,13 @@ jobs:
           git clone --filter=blob:none https://github.com/NousResearch/hermes-agent /tmp/hermes-agent
           git -C /tmp/hermes-agent checkout "$HERMES_LATEST"
 
+      # uv is not preinstalled on GH runners (attempt 2 died 127: uv: command
+      # not found); same action graph.yml pins. --system installs into the
+      # interpreter uv finds (setup-uv venv if activated, else setup-python's).
+      - uses: astral-sh/setup-uv@v6
+
       - name: Install hermes (editable)
-        run: uv pip install -e /tmp/hermes-agent
+        run: uv pip install --system -e /tmp/hermes-agent
 
       - name: Validate plugin
         run: hermes plugins validate .
