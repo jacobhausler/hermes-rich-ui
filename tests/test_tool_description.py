@@ -357,6 +357,62 @@ def test_validator_shapes_the_description_states_admit_cleanly():
     assert errors == [], errors
 
 
+# ---------------------------------------------------------------------------
+# est-jwlt2 (nightly sweep-c 2026-11-03): the module docstring (engine/
+# tool_description.py) promises this file pins the 5,000-char cap and the
+# one-defaults-sentence law, but every check above reads the door's
+# TOOL_SCHEMA strings — nothing imported the generator, so the constants
+# themselves could drift and no test would notice. Pin the generation
+# invariants ON engine/tool_description: constants ride in from the module
+# (no literals), signature lines appear exactly once per type IN CATALOG
+# ORDER, and the registry helper returns the wrapped {description,
+# parameters} shape (papercut 2026-09-22).
+
+from engine import tool_description as td  # noqa: E402
+
+
+def test_signature_lines_appear_exactly_once_in_catalog_order():
+    # One line per catalog type, no duplicates, in catalog["components"]
+    # order — derived from the catalog at assert time.
+    heads = []
+    for line in td.build_components_description(CATALOG).splitlines():
+        head = line.split(" ", 1)[0]
+        if head in COMPS:
+            heads.append(head)
+    assert heads == list(COMPS), (
+        "signature lines must be exactly one per catalog type, in catalog "
+        "order: got %s" % heads
+    )
+
+
+def test_defaults_sentence_constant_appears_exactly_once_in_the_union():
+    # The law the docstring states: DEFAULTS_SENTENCE once, in the components
+    # half only — never duplicated into the tool description itself.
+    assert DESCRIPTION.count(td.DEFAULTS_SENTENCE) == 1
+    assert td.build_tool_description(CATALOG).count(td.DEFAULTS_SENTENCE) == 0
+
+
+def test_agent_visible_union_pins_the_module_cap():
+    # Cap from the module constant, not a literal: if DESCRIPTION_CAP ever
+    # moves, the test tracks it and the docstring's 5,000 promise is checked
+    # once, here.
+    assert td.DESCRIPTION_CAP == 5000
+    union = td.build_tool_description(CATALOG) + "\n" + td.build_components_description(CATALOG)
+    assert union == DESCRIPTION, "agent-visible union is not what the builders generate"
+    assert len(union) <= td.DESCRIPTION_CAP, "union is %d chars" % len(union)
+
+
+def test_build_tool_schema_returns_the_wrapped_form():
+    # The registered registry shape {description, parameters}; the door's own
+    # TOOL_SCHEMA must agree with the generator (single provenance).
+    params = {"type": "object", "properties": {}}
+    schema = td.build_tool_schema(CATALOG, params)
+    assert set(schema) == {"description", "parameters"}
+    assert schema["description"] == td.build_tool_description(CATALOG)
+    assert schema["parameters"] is params
+    assert door.TOOL_SCHEMA["description"] == schema["description"]
+
+
 if __name__ == "__main__":
     r = Runner()
     for t in (test_every_catalog_component_type_named, test_chart_kind_enums,
@@ -378,6 +434,10 @@ if __name__ == "__main__":
               test_chart_series_and_timeline_label_are_stated,
               test_bounded_integer_props_state_their_range,
               test_grid_columns_cap_is_stated,
-              test_validator_shapes_the_description_states_admit_cleanly):
+              test_validator_shapes_the_description_states_admit_cleanly,
+              test_signature_lines_appear_exactly_once_in_catalog_order,
+              test_defaults_sentence_constant_appears_exactly_once_in_the_union,
+              test_agent_visible_union_pins_the_module_cap,
+              test_build_tool_schema_returns_the_wrapped_form):
         r.run(t)
     r.finish()
