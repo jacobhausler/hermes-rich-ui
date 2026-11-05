@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.1.8 — 2026-11-05
+
+Clean-path patch cut, 8 merged PRs since v0.1.7: the compat-latest CI instrument at
+HERMES_LATEST v0.22.6, the scrub-gate out-dir ignore, direct invariant tests for
+tool_description generation (#193, est-jwlt2) and the build_record §1 record-builder
+invariants (#196, est-m49z7), plus the routine graph rebuilds. Owner lines follow the
+house `(#n, date)` format so the public-string scrub stays clean. Merged since v0.1.7:
+
+- chore(graph): rebuild graphify knowledge graph (3461ee4) (#190, 2026-11-02)
+- Ignore suite-outdir variants (out-*/) so an in-tree ledger cannot redden the scrub gate (#189, 2026-11-02)
+- chore(graph): rebuild graphify knowledge graph (90196e8) (#191, 2026-11-02)
+- ci: compat-latest uv pip install + HERMES_LATEST v0.22.6 [est-kap83] (#192, 2026-11-02)
+- test(desc): pin tool_description generation invariants (est-jwlt2) (#193, 2026-11-03)
+- chore(graph): rebuild graphify knowledge graph (815e858) (#194, 2026-11-03)
+- test(build_record): pin §1 record-builder invariants (est-m49z7) (#196, 2026-11-05)
+- chore(graph): rebuild graphify knowledge graph (abf5242) (#197, 2026-11-05)
+
 ## v0.1.7 — 2026-11-02
 
 Clean-path patch cut, 12 merged PRs since v0.1.6: the release-merge gate port (est-lafig), three direct boundary-test drops (unescape_token, vintageOf, dir_bytes), the SECURITY.md standards-parity close, and the @json-render 0.21.3 dependency bump. Owner lines follow the house `(#n, date)` format so the public-string scrub stays clean. Merged since v0.1.6:
