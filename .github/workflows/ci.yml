@@ -16,11 +16,11 @@ env:
   # is the commit sha of that release and the manifest floor is its semver,
   # not the date tag.
   HERMES_PIN: f97608f178d1ffeca59860195ab7da295f7c8e5f
-  # Latest stable. Re-pinned by hand (owner/human) when a new hermes release
-  # is cut — no automation lane updates this value. Asymmetric with the floor
+  # Latest stable. Re-pinned by the nightly upstream-drift sweep (est-rsvba)
+  # when a new hermes release is cut. Asymmetric with the floor
   # above on purpose: this end pins the release tag name, the floor pins a
   # commit sha. The compat-latest job below validates against this tag.
-  HERMES_LATEST: v0.22.6
+  HERMES_LATEST: v0.23.0
 
 jobs:
   gates:
