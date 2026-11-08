@@ -15,7 +15,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 _TAG = hashlib.sha256(str(HERE).encode("utf-8")).hexdigest()[:16]
-VERSION = "0.1.8"
+VERSION = "0.1.9"
 
 
 def _load(relpath, name):

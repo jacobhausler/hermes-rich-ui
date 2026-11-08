@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.1.9 — 2026-11-08
+
+Clean-path patch cut, 2 merged PRs since v0.1.8: the routine graph rebuild and the
+compat-latest CI sentinel roll to HERMES_LATEST v0.23.0. Owner lines follow the house
+`(#n, date)` format so the public-string scrub stays clean. Merged since v0.1.8:
+
+- chore(graph): rebuild graphify knowledge graph (9ce3323) (#199, 2026-11-05)
+- ci: roll HERMES_LATEST compat sentinel v0.22.6 -> v0.23.0 [est-ac2b6] (#200, 2026-11-07)
+
 ## v0.1.8 — 2026-11-05
 
 Clean-path patch cut, 8 merged PRs since v0.1.7: the compat-latest CI instrument at
