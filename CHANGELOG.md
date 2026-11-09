@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- test(fmt): direct behavior pins for the clean15 float-hygiene export — closes the
+  0-direct-test-reference gap flagged by the #39 printer census [est-vgmex]
+
 ## v0.1.9 — 2026-11-08
 
 Clean-path patch cut, 2 merged PRs since v0.1.8: the routine graph rebuild and the
