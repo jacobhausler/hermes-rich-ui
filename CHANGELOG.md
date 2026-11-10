@@ -1,5 +1,7 @@
 # Changelog
 
+All notable changes to hermes-rich-ui are documented here.
+
 ## Unreleased
 
 - test(fmt): direct behavior pins for the clean15 float-hygiene export — closes the
@@ -152,21 +154,6 @@ Clean-path cut at the nirvana-7 cert merges; supersedes stale-conflicting #95. M
 - ci: state HERMES_LATEST is human/owner-maintained; deslop pin comments (N4/N5/N6) (#137, 2026-10-15)
 - chore(graph.yml): drop the [ -f ]-guarded GRAPH_REPORT.md git add (post-#122 dead-end) (#131, 2026-10-15)
 
-
-All notable changes to hermes-rich-ui are documented here.
-
-## Unreleased
-
-- **DataTable aggregations (#40, G6 generalized):** `aggregations?: AggSpec[]`
-  (`{agg: sum|mean|median|min|max|count, label?, columns?}`) — every value computed
-  by the RENDERER (contract L6); rows pin at the bottom, excluded from sort, filter
-  and the bar scale; caption-ink label with a top hairline. `aggregations: true`
-  (or sugar `totals: true`) renders ONE smart row: sum for additive number/currency/bar,
-  mean for percent/fraction (never guessed from values), row-count for text/sources,
-  date silent. nulls are skipped by every agg; an all-null column shows the
-  unavailable glyph, never 0; unknown `columns` reject names the valid columns.
-  `countDistinct` is a documented v1 non-goal. Old tables render byte-identically.
-
 ## v0.1.4 — 2026-09-29
 
 - **Waterfall balance walk (#15, #16):** sign-coded bars for single-series
@@ -186,6 +173,20 @@ All notable changes to hermes-rich-ui are documented here.
   per-series colours and the uPlot series legend, exactly as before #15.
 - Waterfall colour key is skipped entirely on charts too narrow to hold it (value
   labels and bar colours still carry the meaning).
+
+- **DataTable aggregations (#40, G6 generalized):** `aggregations?: AggSpec[]`
+  (`{agg: sum|mean|median|min|max|count, label?, columns?}`) — every value computed
+  by the RENDERER (contract L6); rows pin at the bottom, excluded from sort, filter
+  and the bar scale; caption-ink label with a top hairline. `aggregations: true`
+  (or sugar `totals: true`) renders ONE smart row: sum for additive number/currency/bar,
+  mean for percent/fraction (never guessed from values), row-count for text/sources,
+  date silent. nulls are skipped by every agg; an all-null column shows the
+  unavailable glyph, never 0; unknown `columns` reject names the valid columns.
+  `countDistinct` is a documented v1 non-goal. Old tables render byte-identically.
+  (Folded 2026-11-10, est-k8wya: this entry sat in a stale pre-restructure
+  `## Unreleased` section stranded mid-file above this heading; the feature
+  shipped in this release, so the entry belongs here. Text preserved verbatim,
+  fold-only — no contributor entry was changed.)
 
 ## v0.1.3 — 2026-09-28
 
