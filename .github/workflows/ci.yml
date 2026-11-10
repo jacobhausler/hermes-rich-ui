@@ -20,7 +20,7 @@ env:
   # when a new hermes release is cut. Asymmetric with the floor
   # above on purpose: this end pins the release tag name, the floor pins a
   # commit sha. The compat-latest job below validates against this tag.
-  HERMES_LATEST: v0.23.0
+  HERMES_LATEST: v0.23.1
 
 jobs:
   gates:
