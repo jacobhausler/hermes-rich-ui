@@ -14,6 +14,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { React, act, lower, renderSpec } from './helpers/render.mjs'
+import { autoFitTracks } from './helpers/css-calc.mjs'
 
 const { balancedCols, gridTracks, SIZE_CLASS, sizeClass } = await import('../desktop/src/components/_shared.mjs')
 const { PROSE_RESET_CSS, PROSE_RESET_HREF, CardBody } = await import('../desktop/src/card.mjs')
@@ -45,8 +46,9 @@ test('M1: [Metric×3] flat under a Card → one [data-ru-autorow="3"], values 20
   assert.equal(rows[0].style.display, 'grid')
   assert.equal(rows[0].style.columnGap, '16px')
   assert.equal(rows[0].style.rowGap, '12px')
-  // balanced c=3: the share divides by 3 with two 16px gutters, over the 140 tile floor (C3)
-  assert.match(rows[0].style.gridTemplateColumns, /^repeat\(auto-fit, minmax\(max\(140px, calc\(\(100% - 32px\) \/ 3\)\), 1fr\)\)$/)
+  // balanced c=3: the share divides by 3 with two 16px gutters, over the 140 tile floor (C3).
+  // Both spellings of the share are legal output (jsdom 29+ folds the calc — see helpers/css-calc.mjs).
+  assert.match(rows[0].style.gridTemplateColumns, autoFitTracks(140, 32, 3).re)
 })
 
 test('M1: a run broken by a non-tile does not auto-row; a trailing Chart is the row sibling', async () => {
@@ -85,7 +87,7 @@ test('M1: [Metric×5] → one auto-row with balanced 3+2 (c=3, ≤4 per row, nev
   const rows = $$('[data-ru-autorow]')
   assert.equal(rows.length, 1)
   assert.equal(rows[0].getAttribute('data-ru-autorow'), '5')
-  assert.match(rows[0].style.gridTemplateColumns, /calc\(\(100% - 32px\) \/ 3\)/, 'c=3 → rows 3+2')
+  assert.match(rows[0].style.gridTemplateColumns, autoFitTracks(140, 32, 3).re, 'c=3 → rows 3+2')
   // the balance table (M1 b): 2→2, 3→3, 4→4, 5→3+2, 6→3+3, 7→4+3, 8→4+4
   assert.deepEqual([2, 3, 4, 5, 6, 7, 8].map(n => balancedCols(n)), [2, 3, 4, 3, 3, 4, 4])
 })
@@ -170,8 +172,7 @@ test('M3: Grid columns:4 of 5 Metrics → auto-fit tracks with the 140 floor, c=
     metric('a', '1'), metric('b', '2'), metric('c', '3'), metric('d', '4'), metric('e', '5')
   ])
   const g = $('[data-ru="Grid"]')
-  assert.equal(g.style.gridTemplateColumns,
-    'repeat(auto-fit, minmax(max(140px, calc((100% - 32px) / 3)), 1fr))',
+  assert.match(g.style.gridTemplateColumns, autoFitTracks(140, 32, 3).re,
     'columns is a maximum: 5 into 4 balances to 3+2, the tile floor is 140 (C3), and an all-tile grid takes the 16px KPI gutters (M3 c)')
   // at 572 px the card content is ≈548 px: the authored share (548-32)/3 ≈ 172 ≥ 140,
   // so a 3-sig-fig face never breaks mid-glyph (M3 a / G2 a).

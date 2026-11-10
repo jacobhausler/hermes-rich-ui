@@ -50,44 +50,57 @@ async function renderSpec(spec, initialState) {
   })
 }
 
-// jsdom resolves inline border over a stylesheet's !important border (unlike
-// Chromium). Complete that computed-style observation with matched CSSOM priorities:
-// an important author rule beats a non-important inline edge in the real cascade.
-// Evaluate only rules matching this rendered cell, never a CSS-source snapshot.
-// Scan the full longhand+shorthand set (#45 round-3 dissent): a reset that zeroes
-// cell edges via an important longhand (border-top-width) must be visible too.
-function computedCellEdge(cell) {
-  const computed = getComputedStyle(cell)
-  const EDGE_PROPS = ['border', 'border-top', 'border-top-width', 'border-bottom-width']
-  const importantZeroIn = style => style &&
-    EDGE_PROPS.some(prop => style.getPropertyPriority(prop) === 'important' &&
-      /^(0|none)(?:px)?$/.test(style.getPropertyValue(prop).trim()))
-  const inlineImportant = importantZeroIn(cell.style)
-  const importantReset = [...document.styleSheets].some(sheet => [...(sheet.cssRules || [])].some(rule =>
-    rule.selectorText && cell.matches(rule.selectorText) && importantZeroIn(rule.style)))
-  // jsdom also leaves var(--ui-stroke-tertiary) unresolved in computed borders.
-  // Use the rendered declaration as its fallback only after the matching-rule
-  // priority check; Chromium resolves that variable before getComputedStyle.
-  const declared = cell.style.border.match(/^(\d+px)\s+(solid|dashed)\b/)
-  return !inlineImportant && importantReset ? { width: '0px', style: 'none' } :
-    { width: computed.borderTopWidth || declared?.[1], style: computed.borderTopStyle || declared?.[2] }
+// The app's theme tokens: the desktop supplies these on :root, and the heat-cell edge is
+// declared `1px solid var(--ui-stroke-tertiary)`. jsdom 29+'s CSSOM resolves the token when
+// it is defined and, when it is not, drops the declaration as invalid-at-computed-value-time
+// (0px/none) — the same answer Chromium gives. So a host-cascade test must carry the tokens.
+// Values and provenance match the live control's TOKEN_CSS in tests/test_host_border_chromium.mjs
+// (#47: --ui-stroke-tertiary #374151 -> rgb(55, 65, 81)).
+const APP_THEME_TOKEN_CSS = ':root{--ui-stroke-tertiary:#374151;--ui-stroke-secondary:#4b5563}'
+const HOST_ROW_BORDER = '.prose tr,.prose th{border-bottom:1px solid rgb(209, 213, 219)}'
+
+// React 19 hoists the prose reset into a BARE jsdom head, i.e. ahead of anything the test
+// appends by hand. In the shipped app the host prose stylesheets are already in <head> when a
+// card mounts, so the hoist lands AFTER them (observed in live Chromium, #47). The reset and a
+// host `.prose tr` rule are both specificity (0,1,1), so document order alone decides who paints.
+// Move the hoisted sheet to the end of <head> to test the SHIPPED cascade instead of jsdom 27's
+// order-blindness — that blindness is exactly the false-green #47 had to hire real Chromium to kill.
+function hoistResetLast() {
+  const reset = [...document.head.querySelectorAll('style')].find(s => (s.textContent || '').includes('[data-ru-card] :is(table'))
+  assert.ok(reset, 'the prose reset was hoisted into <head>')
+  document.head.append(reset)
+  return reset
+}
+
+// jsdom 29 replaced its CSSOM (cssstyle + rrweb-cssom dropped) and the rewrite obeys the real
+// cascade: an author !important beats a non-important inline declaration, and a width-only
+// important longhand zeroes the width while leaving the declared style. The #45 round-3
+// CSSOM-priority scan and the unresolved-var fallback existed because jsdom 27 could not see
+// either fact; getComputedStyle is now the observation, so they are gone.
+const cellEdge = (cell, prop = 'borderTop') => {
+  const c = getComputedStyle(cell)
+  return { width: c[`${prop}Width`], style: c[`${prop}Style`] }
 }
 
 test('saved 97cb HeatMap clears host row/header/corner borders, not heat-cell edges', async () => {
-  // The host prose border is deliberately loaded after our hoisted reset. This
-  // checks the rendered cascade (not a snapshot of the reset CSS string).
+  // The host prose border is loaded in the shipped position (before the hoisted reset), so this
+  // checks the rendered cascade (not a snapshot of the reset CSS string) — and the mis-order
+  // teeth below prove the host rule is live, so 0px cannot come back from an inert rule.
+  const tokens = document.createElement('style')
+  tokens.textContent = APP_THEME_TOKEN_CSS
   const host = document.createElement('style')
-  host.textContent = '.prose tr,.prose th{border-bottom:1px solid rgb(209, 213, 219)}'
+  host.textContent = HOST_ROW_BORDER
   const shell = document.createElement('div')
   shell.className = 'prose'
   shell.style.width = '720px'
   document.body.append(shell)
-  document.head.append(host)
+  document.head.append(tokens, host)
   const { createRoot } = await import('react-dom/client')
   const cardRoot = createRoot(shell)
   try {
     const record = JSON.parse(readFileSync(new URL('./fixtures/saved/ru-97cb020cd21b.json', import.meta.url), 'utf8'))
     await act(async () => { cardRoot.render(React.createElement(CardBody, { record, registry })) })
+    hoistResetLast()
     const heat = shell.querySelector('[data-ru="HeatMap"]')
     assert.ok(heat, 'saved 97cb HeatMap rendered')
     const rows = [...heat.querySelectorAll('tr')]
@@ -101,36 +114,48 @@ test('saved 97cb HeatMap clears host row/header/corner borders, not heat-cell ed
     }
     for (const cell of cells) {
       assert.match(cell.style.border, /^1px solid var\(--ui-stroke-tertiary\)$/, 'intentional cell edge declared')
-      const edge = computedCellEdge(cell)
+      const edge = cellEdge(cell)
       assert.equal(edge.width, '1px', 'rendered heat-cell edge survives host/reset cascade')
       assert.equal(edge.style, 'solid', 'rendered heat-cell edge remains solid')
     }
+    // Teeth: mis-order the host sheet (reset first, host last). Equal specificity + later rule
+    // = the host border paints. An order-blind engine says 0px here and cannot pass this.
+    document.head.append(host)
+    for (const el of [...rows, ...headers]) {
+      assert.equal(getComputedStyle(el).borderBottomWidth, '1px',
+        `${el.tagName} mis-ordered host rule DOES paint (the reset wins by order, not by being inert)`)
+    }
   } finally {
     host.remove()
+    tokens.remove()
     await act(async () => { cardRoot.unmount() })
     shell.remove()
   }
 })
 
 test('saved 97cb: an important author LONGHAND reset clears heat-cell edges (cascade-aware resolver)', async () => {
-  // The suite-FAIL-0-green mutant class from the #45 round-3 dissent: a reset that
-  // zeroes cell edges via an important longhand (border-top-width) instead of the
-  // shorthands. jsdom's getComputedStyle ignores it; only the CSSOM priority scan
-  // sees it. RED before the resolver scans longhands, GREEN after.
+  // The suite-FAIL-0-green mutant class from the #45 round-3 dissent: a reset that zeroes cell
+  // edges via an important longhand (border-top-width) instead of the shorthands. jsdom 27's
+  // getComputedStyle ignored it; the rewrite obeys author-!important-over-inline, so the mutant
+  // is visible in the computed style itself — the CSSOM check below stays as the provenance pin
+  // that the mutant really is live in a matching rule, never a source-text snapshot.
+  const tokens = document.createElement('style')
+  tokens.textContent = APP_THEME_TOKEN_CSS
   const host = document.createElement('style')
-  host.textContent = '.prose tr,.prose th{border-bottom:1px solid rgb(209, 213, 219)}'
+  host.textContent = HOST_ROW_BORDER
   const mutant = document.createElement('style')
   mutant.textContent = '[data-ru-card] td{border-top-width:0px !important}'
   const shell = document.createElement('div')
   shell.className = 'prose'
   shell.style.width = '720px'
   document.body.append(shell)
-  document.head.append(host)
+  document.head.append(tokens, host)
   const { createRoot } = await import('react-dom/client')
   const cardRoot = createRoot(shell)
   try {
     const record = JSON.parse(readFileSync(new URL('./fixtures/saved/ru-97cb020cd21b.json', import.meta.url), 'utf8'))
     await act(async () => { cardRoot.render(React.createElement(CardBody, { record, registry })) })
+    hoistResetLast()
     const heat = shell.querySelector('[data-ru="HeatMap"]')
     assert.ok(heat, 'saved 97cb HeatMap rendered')
     const cells = [...heat.querySelectorAll('td')]
@@ -142,25 +167,25 @@ test('saved 97cb: an important author LONGHAND reset clears heat-cell edges (cas
       rule.style?.getPropertyPriority('border-top-width') === 'important')),
       'longhand important mutant is live in the CSSOM')
     for (const cell of cells) {
-      const edge = computedCellEdge(cell)
+      const edge = cellEdge(cell)
       assert.equal(edge.width, '0px', 'important longhand reset zeroes the cell edge width')
-      assert.equal(edge.style, 'none', 'important longhand reset clears the cell edge style')
+      assert.equal(edge.style, 'solid', 'a width-only reset leaves the declared style: nothing paints at 0px')
     }
 
     mutant.remove()
     for (const cell of cells) {
-      const edge = computedCellEdge(cell)
+      const edge = cellEdge(cell)
       assert.equal(edge.width, '1px', 'edge returns to 1px once the mutant is removed')
       assert.equal(edge.style, 'solid', 'edge returns to solid once the mutant is removed')
     }
   } finally {
     mutant.remove()
     host.remove()
+    tokens.remove()
     await act(async () => { cardRoot.unmount() })
     shell.remove()
   }
 })
-
 test('every one of the 27 types renders its DOM marker through the real Renderer', async () => {
   const { spec, initialState } = lower(fixture)
   await renderSpec(spec, initialState)

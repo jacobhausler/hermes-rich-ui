@@ -9,7 +9,11 @@ test('E8 Text variant=mono is ui-monospace with tabular-nums', async () => {
   const t = $('[data-ru="Text"]')
   assert.equal(t.getAttribute('data-ru-variant'), 'mono')
   assert.ok(t.style.fontFamily.includes('ui-monospace'), t.style.fontFamily)
-  assert.equal(t.style.fontVariantNumeric, 'tabular-nums lining-nums')
+  // Pin the TOKEN SET, not the serialized order: jsdom 29+'s CSSOM parses the shorthand
+  // into longhands and re-serializes in canonical order ('lining-nums tabular-nums'),
+  // while a dropped/invalid declaration would serialize as ''. Which of the two tokens
+  // the engine prints first is not our behavior; that both are present is.
+  assert.deepEqual(t.style.fontVariantNumeric.split(' ').sort(), ['lining-nums', 'tabular-nums'])
   assert.equal(t.textContent, 'deadbeefcafe')
 })
 test('E8 Text body/caption render exactly as before (no mono styles leak, no marker)', async () => {
