@@ -6,6 +6,8 @@ All notable changes to hermes-rich-ui are documented here.
 
 - test(fmt): direct behavior pins for the clean15 float-hygiene export — closes the
   0-direct-test-reference gap flagged by the #39 printer census [est-vgmex]
+- test(rowfmt): direct behavior pins for the rowValuesFrom KPI-row export — closes the
+  0-direct-test-reference gap flagged by the 2026-11-11 nightly census [est-yehb8]
 
 ## v0.1.9 — 2026-11-08
 
