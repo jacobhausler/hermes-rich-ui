@@ -18,12 +18,14 @@ names the affected package; match it against the register below.
 - Found: 2026-10-08 by an independent PR review running `npm ci && npm audit`
   against an unchanged lockfile — i.e. pre-existing on `main`, not introduced
   by any PR.
-- Path: `source-map-js` 1.2.1 was a transitive **dev-only** dependency. Its
-  only reverse edge in `package-lock.json` is
+- Path: `source-map-js` 1.2.1 was a transitive **dev-only** dependency. At
+  discovery its only reverse edge in `package-lock.json` was
   `css-tree` (`^1.2.1`), itself dev-only via `jsdom 27.0.0`
   (`jsdom -> cssstyle -> css-tree -> source-map-js`, plus jsdom's own
   `@asamuzakjp/dom-selector -> css-tree` edge); every node on the chain
-  carries `"dev": true`. It never appears in the shipped artifact:
+  carried `"dev": true`. Historical note: at the jsdom 31.0.0 pin this
+  chain is absent from the lockfile entirely — jsdom 29+ generates its
+  CSSOM in-tree and dropped `cssstyle`/`css-tree`. It never appears in the shipped artifact:
   `desktop/plugin.js` is the esbuild bundle over `desktop/src/**` (react +
   `@json-render/react` + uPlot only) and contains zero `source-map`
   references, and the prod tree (`npm ls --omit=dev`, 6 packages) does not
