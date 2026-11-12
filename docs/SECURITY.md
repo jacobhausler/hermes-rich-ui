@@ -72,4 +72,4 @@ names the affected package; match it against the register below.
   `desktop/plugin.js` and `desktop/plugin.js.sha256` byte-identical
   (0-diff against the committed bundle); full serial suite
   (`python3 scripts/suite.py . out`) green; `node --test tests/*.mjs`
-  -> 736 pass / 0 fail.
+  -> 750 pass / 0 fail.

@@ -4,6 +4,10 @@ All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
 
+- test(fmt): direct behavior pins for the unitSpec export (AD-11 format x unit matrix) — closes the
+  0-direct-test-reference gap flagged by the 2026-11-12 nightly census sweep-c; the SECURITY.md
+  pass-count literal moves 736 -> 750 [est-yue73]
+
 ## v0.1.10 — 2026-11-12
 
 Clean-path patch cut, 18 merged PRs since v0.1.9: the zod 4.6.5 -> 4.6.7 security roll
