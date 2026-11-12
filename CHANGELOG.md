@@ -4,6 +4,9 @@ All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
 
+- fix(publish): list_files exported nested-repo dirs as files — a one-line blob
+  filter keeps lane worktrees out of the publish tree (IsADirectoryError repro,
+  nightly 2026-11-12) plus a red/green regression test for both shapes [est-g0dds]
 - test(fmt): direct behavior pins for the unitSpec export (AD-11 format x unit matrix) — closes the
   0-direct-test-reference gap flagged by the 2026-11-12 nightly census sweep-c; the SECURITY.md
   pass-count literal moves 736 -> 750 [est-yue73]

@@ -19,7 +19,7 @@ plants one nested repo and one plain untracked dir, and asserts:
   5. the nested repo is not copied    -> its marker file is absent from out
   6. the untracked file is copied     -> the new file is present in out
 
-Each check fails if the filter is dropped (1 and 4 are the red/green pair).
+Each check fails if the filter is dropped (checks 2, 4, 5 and 6 flip red without the filter, green with it).
 Stdlib only; python 3.9 safe (AGENTS.md law 2). Fixtures carry public
 placeholders only.
 
