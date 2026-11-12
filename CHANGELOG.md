@@ -4,6 +4,32 @@ All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
 
+## v0.1.10 — 2026-11-12
+
+Clean-path patch cut, 18 merged PRs since v0.1.9: the zod 4.6.5 -> 4.6.7 security roll
+(GHSA-mrhx-c7xc-m3w5), the compat-latest CI sentinel roll to HERMES_LATEST v0.23.1,
+the @json-render 0.22.0 dependency bumps, direct behavior pins for the clean15,
+rowValuesFrom and DynamicArray/NullableDynamicNumber admission surfaces, jsdom-29
+CSSOM pin adaptations, the changelog pre-restructure folds, and the routine graph
+rebuilds. Owner lines follow the house `(#n, date)` format so the public-string scrub
+stays clean. Merged since v0.1.9:
+
+- chore(graph): rebuild graphify knowledge graph (14cb637) (#202, 2026-11-08)
+- test(admission): direct admission-invariant pins for DynamicArray + NullableDynamicNumber (est-phtc7) (#203, 2026-11-08)
+- chore(graph): rebuild graphify knowledge graph (bb1ca87) (#204, 2026-11-08)
+- chore(deps): bump @json-render/core from 0.21.3 to 0.22.0 (#205, 2026-11-09, @dependabot)
+- chore(deps): bump @json-render/react from 0.21.3 to 0.22.0 (#207, 2026-11-09, @dependabot)
+- chore(graph): rebuild graphify knowledge graph (6bcf11f) (#209, 2026-11-09)
+- ci: roll HERMES_LATEST compat sentinel v0.23.0 -> v0.23.1 [est-lkjwf] (#210, 2026-11-10)
+- docs(changelog): fold pre-restructure duplicate Unreleased block into v0.1.4 [est-k8wya] (#211, 2026-11-10)
+- chore(graph): rebuild graphify knowledge graph (e9666f1) (#212, 2026-11-10)
+- docs(changelog): reland est-k8wya fold at its true release section (v0.1.5) (#213, 2026-11-10)
+- chore(graph): rebuild graphify knowledge graph (754a304) (#214, 2026-11-10)
+- test: adapt CSS-resolution pins to the jsdom 29 CSSOM rewrite; pin jsdom 31 [est-trz4b] (#215, 2026-11-11)
+- chore(graph): rebuild graphify knowledge graph (c254439) (#218, 2026-11-11)
+- chore(deps): roll zod 4.6.5 -> 4.6.7 (GHSA-mrhx-c7xc-m3w5) + docs/SECURITY.md register entry (#219, 2026-11-11)
+- chore(graph): rebuild graphify knowledge graph (dd20be5) (#220, 2026-11-11)
+- chore(graph): rebuild graphify knowledge graph (47a758e) (#221, 2026-11-11)
 - test(fmt): direct behavior pins for the clean15 float-hygiene export — closes the
   0-direct-test-reference gap flagged by the #39 printer census [est-vgmex]
 - test(rowfmt): direct behavior pins for the rowValuesFrom KPI-row export — closes the
