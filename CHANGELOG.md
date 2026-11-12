@@ -8,6 +8,8 @@ All notable changes to hermes-rich-ui are documented here.
   0-direct-test-reference gap flagged by the #39 printer census [est-vgmex]
 - test(rowfmt): direct behavior pins for the rowValuesFrom KPI-row export — closes the
   0-direct-test-reference gap flagged by the 2026-11-11 nightly census [est-yehb8]
+- test(fmt): direct behavior pins for the unitSpec format x unit export — closes the
+  0-direct-test-reference gap flagged by the 2026-11-12 nightly census [est-yue73]
 
 ## v0.1.9 — 2026-11-08
 
