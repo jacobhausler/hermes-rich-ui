@@ -77,7 +77,12 @@ def allow_reason(rel: str):
 
 def list_files(repo: Path):
     """Publishable rel-paths: tracked PLUS non-ignored untracked (git-less
-    fallback: full walk minus excluded dirs/globs)."""
+    fallback: full walk minus excluded dirs/globs).
+
+    Only files are returned. `git ls-files --others --exclude-standard`
+    reports a nested repo (a lane worktree, a vendored checkout) as ONE
+    directory entry, so an unfiltered listing hands the copy loop a
+    directory and it dies IsADirectoryError."""
     def _git(*args):
         return subprocess.run([GIT, "-C", str(repo)] + list(args),
                               capture_output=True, text=True, check=True
@@ -88,7 +93,7 @@ def list_files(repo: Path):
     except Exception:
         names = [str(p.relative_to(repo)) for p in sorted(repo.rglob("*"))
                  if p.is_file()]
-    return [rel for rel in names if not excluded(rel)]
+    return [rel for rel in names if not excluded(rel) and (repo / rel).is_file()]
 
 
 def scan(repo: Path, names=None):
