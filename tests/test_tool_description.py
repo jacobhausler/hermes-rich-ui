@@ -413,6 +413,62 @@ def test_build_tool_schema_returns_the_wrapped_form():
     assert door.TOOL_SCHEMA["description"] == schema["description"]
 
 
+# ---------------------------------------------------------------------------
+# est-odamo (nightly sweep-c 2026-11-13): `catalog or load_catalog()` inside
+# build_tool_schema is an OR, not `is None`: an EXPLICIT falsy catalog ({} or "")
+# must be replaced by the loaded one BEFORE the text is built, and an explicit
+# non-empty one never reaches disk. Pinned at the builder seam, because
+# build_tool_description repeats the `or` and hides which layer ran the fallback.
+
+def _builder_saw(catalog, params):
+    """(catalog handed to the description builder, resulting schema)."""
+    real, seen = td.build_tool_description, []
+    td.build_tool_description = lambda arg=None: (seen.append(arg), real(arg))[1]
+    try:
+        schema = td.build_tool_schema(catalog, params)
+    finally:
+        td.build_tool_description = real
+    assert len(seen) == 1, "the builder ran %d times" % len(seen)
+    return seen[0], schema
+
+
+def test_explicit_falsy_catalog_falls_back_to_the_loaded_catalog():
+    # No falsy argument may reach the builder — the expected value is the loaded
+    # catalog read from the module, never a literal.
+    loaded = td.load_catalog()
+    for empty in ({}, "", [], 0, None):
+        assert _builder_saw(empty, {})[0] == loaded, "falsy catalog %r reached the builder" % (empty,)
+
+
+def test_parameters_pass_through_verbatim_including_none():
+    # The door passes its own `parameters` and the helper adds no normalization:
+    # the value rides out IDENTICAL (identity, not equality) — None included.
+    sentinel = {"type": "object", "properties": {"components": {"type": "array"}}}
+    for params in (sentinel, {}, None, {"type": "string"}, [1, 2]):
+        out = td.build_tool_schema(CATALOG, params)
+        assert out["parameters"] is params, "parameters were rewritten: %r" % (params,)
+
+
+def test_explicit_non_empty_catalog_drives_the_description_without_disk():
+    # Synthetic catalog with a name no real catalog carries; load_catalog is
+    # swapped for a raiser, so a disk read would surface as a failure.
+    probe = {"components": {"PinProbe": {"properties": {"v": {"type": "integer"}}, "required": ["v"]}}}
+    real, calls = td.load_catalog, []
+
+    def boom(*args, **kwargs):
+        calls.append(args)
+        raise AssertionError("build_tool_schema read the catalog from disk")
+
+    td.load_catalog = boom
+    try:
+        handed, schema = _builder_saw(probe, None)
+    finally:
+        td.load_catalog = real
+    assert calls == [], "load_catalog ran despite an explicit catalog"
+    assert handed is probe, "the builder got %r, not the passed catalog" % (handed,)
+    assert "PinProbe" in schema["description"]
+
+
 if __name__ == "__main__":
     r = Runner()
     for t in (test_every_catalog_component_type_named, test_chart_kind_enums,
@@ -438,6 +494,9 @@ if __name__ == "__main__":
               test_signature_lines_appear_exactly_once_in_catalog_order,
               test_defaults_sentence_constant_appears_exactly_once_in_the_union,
               test_agent_visible_union_pins_the_module_cap,
-              test_build_tool_schema_returns_the_wrapped_form):
+              test_build_tool_schema_returns_the_wrapped_form,
+              test_explicit_falsy_catalog_falls_back_to_the_loaded_catalog,
+              test_parameters_pass_through_verbatim_including_none,
+              test_explicit_non_empty_catalog_drives_the_description_without_disk):
         r.run(t)
     r.finish()
