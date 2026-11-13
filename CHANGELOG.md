@@ -10,6 +10,11 @@ All notable changes to hermes-rich-ui are documented here.
 - test(fmt): direct behavior pins for the unitSpec export (AD-11 format x unit matrix) — closes the
   0-direct-test-reference gap flagged by the 2026-11-12 nightly census sweep-c; the SECURITY.md
   pass-count literal moves 736 -> 750 [est-yue73]
+- test(tool-description): behavior pins for `build_tool_schema` — an explicit falsy catalog must be
+  replaced by the loaded one before the description is built, the door's `parameters` ride out
+  verbatim (identity, `None` included), and an explicit non-empty catalog never touches disk;
+  60 lines of red/green pins, 6-red mutant battery, closes the thin-test gap flagged by the
+  2026-11-13 nightly census sweep-c [est-odamo]
 
 ## v0.1.10 — 2026-11-12
 
