@@ -15,6 +15,9 @@ All notable changes to hermes-rich-ui are documented here.
   verbatim (identity, `None` included), and an explicit non-empty catalog never touches disk;
   60 lines of red/green pins, 6-red mutant battery, closes the thin-test gap flagged by the
   2026-11-13 nightly census sweep-c [est-odamo]
+- test(tool-description): pin build_tool_schema's fallback law — falsy catalogs serve disk,
+  truthy-empty never fall back, explicit catalogs need no disk, door parameters ride the
+  wrapped shape verbatim (4 mutant-proven pins; suite rows unchanged) [est-odamo]
 
 ## v0.1.10 — 2026-11-12
 
