@@ -468,6 +468,55 @@ def test_explicit_non_empty_catalog_drives_the_description_without_disk():
     assert handed is probe, "the builder got %r, not the passed catalog" % (handed,)
     assert "PinProbe" in schema["description"]
 
+# est-odamo: pin build_tool_schema's fallback law directly — falsy catalogs
+# serve the disk catalog, truthy ones (even empty) never fall back, and the
+# door's `parameters` always ride the wrapped shape verbatim. Expectations are
+# derived at assert time (header law) — no catalog snapshot.
+
+def test_build_tool_schema_falsy_catalog_falls_back():
+    # None, {} and "" are the same falsy call: all three serve the disk
+    # catalog (the `or` edge, build_tool_schema -> build_tool_description).
+    params = {"type": "object", "properties": {}}
+    by_none = td.build_tool_schema(None, params)
+    assert td.build_tool_schema({}, params) == by_none
+    assert td.build_tool_schema("", params) == by_none
+    assert by_none["description"] == td.build_tool_description()
+
+
+def test_build_tool_schema_truthy_empty_components_does_not_fall_back():
+    # Fallback keys off FALSINESS, not None-ness: a truthy catalog with an
+    # empty components map renders its own (name-less) text — catches an
+    # `if catalog is None else` rewrite, whose single-site form the inner
+    # re-dispatch masks (the red-gate mutant replaces `or` at all three sites).
+    schema = td.build_tool_schema({"components": {}}, None)
+    assert schema["description"] != td.build_tool_description()
+
+
+def test_build_tool_schema_explicit_catalog_needs_no_disk():
+    # A non-empty explicit catalog drives the text ALONE: its type name
+    # appears and no name from the real catalog does (derived, not literal).
+    synthetic = {"components": {"ZzzProbe": {"type": "object", "properties": {}}}}
+    desc = td.build_tool_schema(synthetic, None)["description"]
+    assert "ZzzProbe" in desc
+    real = next(iter(CATALOG["components"]))
+    assert real not in desc, "disk catalog leaked past an explicit catalog"
+
+
+def test_build_tool_schema_params_verbatim_and_always_wrapped():
+    # Generalizes the single-shape wrapped-form pin above: across EVERY
+    # catalog form (falsy, empty-truthy, synthetic) and both parameters
+    # forms, the door's `parameters` is returned IDENTICALLY — None is never
+    # substituted — and the shape is always exactly {description, parameters}.
+    sentinel = {"type": "object", "properties": {}}
+    synthetic = {"components": {"ZzzProbe": {"type": "object", "properties": {}}}}
+    for catalog in (None, {}, "", {"components": {}}, synthetic):
+        for parameters in (None, sentinel):
+            schema = td.build_tool_schema(catalog, parameters)
+            assert set(schema) == {"description", "parameters"}
+            assert schema["parameters"] is parameters, (
+                "door parameters must win verbatim; None is never substituted"
+            )
+
 
 if __name__ == "__main__":
     r = Runner()
@@ -497,6 +546,10 @@ if __name__ == "__main__":
               test_build_tool_schema_returns_the_wrapped_form,
               test_explicit_falsy_catalog_falls_back_to_the_loaded_catalog,
               test_parameters_pass_through_verbatim_including_none,
-              test_explicit_non_empty_catalog_drives_the_description_without_disk):
+              test_explicit_non_empty_catalog_drives_the_description_without_disk,
+              test_build_tool_schema_falsy_catalog_falls_back,
+              test_build_tool_schema_truthy_empty_components_does_not_fall_back,
+              test_build_tool_schema_explicit_catalog_needs_no_disk,
+              test_build_tool_schema_params_verbatim_and_always_wrapped):
         r.run(t)
     r.finish()
