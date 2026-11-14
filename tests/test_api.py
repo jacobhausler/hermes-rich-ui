@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -13,6 +14,16 @@ api = load("dashboard/plugin_api.py", "api")
 door = load("__init__.py", "door")
 door._tool.admit = fake_admit_ok
 
+# The version health_view must report is read once from plugin.yaml — the repo
+# has no yaml dependency, so this is the same minimal line parse as
+# test_release_check.repo_version(); release_check pins VERSION == manifest.
+# No release-literal belongs in this file (est-ne1sl).
+def manifest_version():
+    text = (Path(__file__).resolve().parent.parent / "plugin.yaml").read_text(encoding="utf-8")
+    m = re.search(r"(?m)^version:[ \t]*(\S+)", text)
+    assert m, "plugin.yaml has no top-level version:"
+    return m.group(1)
+
 
 def publish():
     out = door.rich_present({"title": "t", "summary": "s", "components": COMPONENTS_OK, "data": {"n": 1}})
@@ -21,9 +32,9 @@ def publish():
 
 
 def test_health_counts_cards():
-    assert api.health_view() == {"ok": True, "cards": 0, "version": "0.1.10"}
+    assert api.health_view() == {"ok": True, "cards": 0, "version": manifest_version()}
     publish(); publish()
-    assert api.health_view() == {"ok": True, "cards": 2, "version": "0.1.10"}
+    assert api.health_view() == {"ok": True, "cards": 2, "version": manifest_version()}
 
 
 def test_get_card_found_and_not_found():
