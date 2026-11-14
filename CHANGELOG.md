@@ -3,6 +3,9 @@
 All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
+- test(api): health_view version pin now derived from plugin.yaml — removes the undeclared
+  10th version-literal surface so release trains never edit tests/test_api.py again;
+  mutant-proven (manifest-only bump goes red) [est-ne1sl]
 
 - fix(publish): list_files exported nested-repo dirs as files — a one-line blob
   filter keeps lane worktrees out of the publish tree (IsADirectoryError repro,
