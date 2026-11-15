@@ -18,8 +18,8 @@ by two shared artifacts: the record schema (CONTRACTS §1) and the catalog
 **Gateway half — Python, stdlib only.** Runs in the gateway process. It owns:
 
 - the tool door: `register(ctx)` registers exactly one tool, `rich_present`
-  (`__init__.py:126-129`), schema `{description, parameters}` at
-  `__init__.py:112-123`;
+  (`__init__.py:101-104`), schema `{description, parameters}` at
+  `__init__.py:95-98`;
 - the admission engine (`engine/admission.py`) — a stdlib mini-JSON-Schema
   interpreter plus structural rules, validating against the catalog;
 - the card/view store (`engine/store.py`) — files under
@@ -48,7 +48,7 @@ That indirection is the design: each half can be tested (and fails) alone.
 
 | File | Responsibility | Key lines |
 |---|---|---|
-| `__init__.py` | thin door: schema + handler registration; siblings bound by PATH via `_load` so no other plugin's `engine` package can shadow ours | `:21-36` `_load`, `:126-133` `register` |
+| `__init__.py` | thin door: schema + handler registration; siblings bound by PATH via `_load` so no other plugin's `engine` package can shadow ours | `:21-36` `_load`, `:101-109` `register` |
 | `engine/tool.py` | `rich_present` handler: triage → build §1 record → admit → persist → directive | `:59` `directive()`, `:63` `build_record`, `:108` `_present`, `:194` never-raises wrapper |
 | `engine/admission.py` | the security boundary: budgets → closed meta shapes → catalog schema (bindings resolved *inside* the interpreter) → graph rules → schema-inexpressible rules → normalized-bytes re-check | `admit` `:818-900`, budgets `:54-66`, `_Ctx.validate` `:237`, `_check_graph` `:494`, `_check_leaf_specifics` `:607` |
 | `engine/store.py` | atomic persistence, id validation before any disk access, quota that refuses and never deletes | `:57-71` `_atomic_write`, `:103-121` `write_card`, `QUOTA_BYTES` `:18` |
@@ -70,7 +70,7 @@ flowchart TD
     AG["AGENT (model seat)<br/>calls rich_present · pastes the directive line"]
 
     subgraph GW["GATEWAY HALF — Python, stdlib only"]
-        T1["① rich_present(args)<br/>__init__.py:126 → engine/tool.py:108"]
+        T1["① rich_present(args)<br/>__init__.py:101 → engine/tool.py:108"]
         T2["② build_record — §1 A2UI v1.0 record<br/>engine/tool.py:63 · dataModel{data,meta}"]
         T3{"③ ADMIT — admit(components, dataModel)<br/>engine/admission.py:818<br/>catalog schema + graph + budgets + URLs<br/>rejects, never truncates (CONTRACTS §3)"}
         REJ["REJECT → {ok:false, errors[]}<br/>nothing is written"]

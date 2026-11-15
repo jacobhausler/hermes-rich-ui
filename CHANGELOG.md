@@ -3,6 +3,11 @@
 All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
+- test(docs): citation-freshness gate for docs/*.md — every `path:line` citation must resolve
+  inside the cited file's bounds at HEAD (suffix/basename resolution, fail-closed citation floor,
+  any-candidate leniency for bare names documented in-file); red-on-base caught the 3 drifted
+  `__init__.py` anchors, re-anchored to the thin-door layout (101-104 register, 95-98 schema)
+  in both the markdown and its rendered twin [est-gyuq1]
 
 ## v0.1.11 — 2026-11-15
 
