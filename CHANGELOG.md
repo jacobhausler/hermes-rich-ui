@@ -3,6 +3,16 @@
 All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
+
+## v0.1.11 — 2026-11-15
+
+Clean-path patch cut, 12 merged PRs since v0.1.10: the publish list_files blob fix
+(nested-repo dir entries crashed --repo export), the version-pin derivation that
+removes the undeclared 10th version literal, and direct behavior pins for unitSpec
+and build_tool_schema, plus the routine graph rebuilds. Owner lines follow the house
+`(#n, date)` format so the public-string scrub stays clean. Prior Unreleased entries
+folded verbatim:
+
 - test(api): health_view version pin now derived from plugin.yaml — removes the undeclared
   10th version-literal surface so release trains never edit tests/test_api.py again;
   mutant-proven (manifest-only bump goes red) [est-ne1sl]
@@ -21,6 +31,14 @@ All notable changes to hermes-rich-ui are documented here.
 - test(tool-description): pin build_tool_schema's fallback law — falsy catalogs serve disk,
   truthy-empty never fall back, explicit catalogs need no disk, door parameters ride the
   wrapped shape verbatim (4 mutant-proven pins; suite rows unchanged) [est-odamo]
+
+- chore(graph): rebuild graphify knowledge graph (041fcb1) (#224, 2026-11-12)
+- chore(graph): rebuild graphify knowledge graph (2663591) (#228, 2026-11-12)
+- chore(graph): rebuild graphify knowledge graph (849560a) (#229, 2026-11-12)
+- chore(graph): rebuild graphify knowledge graph (29a62cf) (#232, 2026-11-13)
+- chore(graph): rebuild graphify knowledge graph (2feb69b) (#233, 2026-11-13)
+- chore(graph): rebuild graphify knowledge graph (c04580f) (#235, 2026-11-14)
+- chore(graph): rebuild graphify knowledge graph (5cae3c3) (#236, 2026-11-14)
 
 ## v0.1.10 — 2026-11-12
 
