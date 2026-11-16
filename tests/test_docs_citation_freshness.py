@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
-"""Docs citation freshness gate — every path:line cite in docs/*.md must land
-inside the cited file's bounds at HEAD.
+"""Docs citation freshness gate — every path:line cite in docs/*.md and in the
+tracked root docs (README.md, AGENTS.md, INSTALL.md, CONTRIBUTING.md,
+MANIFEST-L*.md; CHANGELOG.md excluded — its historical sections cite the
+release-time tree) must land inside the cited file's bounds at HEAD. The root
+leg derives from git ls-files, so an untracked draft (e.g. MANIFEST-L8-*.md)
+cannot redden the gate.
 
 ARCHITECTURE.md opens with the promise that "when this doc and the code
 disagree, the code wins and this doc is a bug" — but nothing enforced it, and
@@ -21,8 +25,9 @@ Resolution law (mirrors how the docs actually cite):
     intent stays the reviewer's.
 
 The gate fails closed on itself: zero candidates is red, an unparseable span
-is red, and CITATION_FLOOR asserts the scan is not vacuously green — if docs
-shrink below the floor, lower the constant deliberately in review.
+is red, and CITATION_FLOOR asserts the scan is not vacuously green — if the
+scanned doc set shrinks below the floor, lower the constant deliberately in
+review.
 
 Run: python3 tests/test_docs_citation_freshness.py (exit 0 = green).
 """
@@ -36,7 +41,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
-CITATION_FLOOR = 40  # measured 50 at gate birth; floor guards the regex, not the docs
+CITATION_FLOOR = 60  # measured 64 at root-set extension; floor guards the regex, not the docs
 
 PATH = r"[A-Za-z0-9_./-]+\.(?:py|mjs|js|json)"
 SPAN = r"\d+(?:-\d+)?"
@@ -49,12 +54,30 @@ def check(name, cond, detail=""):
     return bool(cond)
 
 
-def tracked_sources():
+def tracked_paths():
     proc = subprocess.run(["git", "-C", str(ROOT), "ls-files", "-z"],
                           capture_output=True, text=True)
     if proc.returncode != 0:
         raise RuntimeError(f"git ls-files failed: {proc.stderr.strip()}")
-    return [p for p in proc.stdout.split("\0") if Path(p).suffix in LINE_EXT]
+    return [p for p in proc.stdout.split("\0") if p]
+
+
+def tracked_sources():
+    return [p for p in tracked_paths() if Path(p).suffix in LINE_EXT]
+
+
+# Historical sections cite the release-time tree, so CHANGELOG stays out.
+ROOT_DOC_EXCLUDE = {"CHANGELOG.md"}
+
+
+def scan_docs():
+    # docs/ keeps its direct-glob semantics; the root leg is tracked-only
+    # (git ls-files), so an untracked draft cannot redden the gate.
+    docs = sorted(DOCS.glob("*.md"))
+    root = sorted(ROOT / p for p in tracked_paths()
+                  if "/" not in p and p.endswith(".md")
+                  and p not in ROOT_DOC_EXCLUDE)
+    return docs + root
 
 
 def parse_spans(linespec):
@@ -84,7 +107,7 @@ def main():
 
     total = 0
     failures = []
-    for doc in sorted(DOCS.glob("*.md")):
+    for doc in scan_docs():
         for lineno, line in enumerate(doc.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
             for m in CITE.finditer(line):
                 total += 1
@@ -107,7 +130,7 @@ def main():
 
     # fail-closed self-guard: a silent regex/doc drift must not leave this green
     if total < CITATION_FLOOR:
-        failures.append(("docs/*.md scan", f"only {total} citations found, floor is {CITATION_FLOOR} — gate went blind"))
+        failures.append(("scanned doc set", f"only {total} citations found, floor is {CITATION_FLOOR} — gate went blind"))
 
     for loc, why in failures:
         check(loc, False, why)
