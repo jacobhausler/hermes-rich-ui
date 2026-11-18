@@ -3,11 +3,32 @@
 All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
+
+## v0.1.12 — 2026-11-18
+
+Clean-path patch cut, 6 merged PRs since v0.1.11: the citation-freshness gate pair
+is the substantive change — the docs/*.md `path:line` gate itself (#239, entry
+below) and the scan-set extension raising CITATION_FLOOR to 60 (#242). The jsdom
+31.0.0 -> 31.0.1 dependency bump and three routine graph rebuilds are chores.
+External-author lines carry the author handle; owner lines follow the house
+`(#n, date)` format so the public-string scrub stays clean — the owner handle
+trips the scrub guard, so no owner line carries a literal handle. The v0.1.11
+release-cut record (#237, the tag commit itself) is listed with the batch.
+Prior Unreleased entry folded verbatim:
+
 - test(docs): citation-freshness gate for docs/*.md — every `path:line` citation must resolve
   inside the cited file's bounds at HEAD (suffix/basename resolution, fail-closed citation floor,
   any-candidate leniency for bare names documented in-file); red-on-base caught the 3 drifted
   `__init__.py` anchors, re-anchored to the thin-door layout (101-104 register, 95-98 schema)
   in both the markdown and its rendered twin [est-gyuq1]
+
+- test(docs): citation-freshness gate for docs/*.md path:line cites (#239, 2026-11-15)
+- test(docs): extend citation-freshness scan set to tracked root docs, raise CITATION_FLOOR to 60 (#242, 2026-11-16)
+- chore(deps): bump jsdom from 31.0.0 to 31.0.1 (#241, @dependabot[bot], 2026-11-16)
+- chore(graph): rebuild graphify knowledge graph (7524087) (#238, 2026-11-15)
+- chore(graph): rebuild graphify knowledge graph (cd0882f) (#240, 2026-11-15)
+- chore(graph): rebuild graphify knowledge graph (4c9f215) (#243, 2026-11-16)
+- release: v0.1.11 cut, catalog pin hermes-agent#156092 (#237, 2026-11-15)
 
 ## v0.1.11 — 2026-11-15
 
