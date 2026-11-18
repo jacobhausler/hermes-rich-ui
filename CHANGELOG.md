@@ -3,6 +3,7 @@
 All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
+- ci: roll HERMES_LATEST compat sentinel v0.23.1 -> v0.23.2 [est-lhzix] (#245, 2026-11-18)
 
 ## v0.1.12 — 2026-11-18
 
