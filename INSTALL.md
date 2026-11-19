@@ -37,7 +37,9 @@ Mounted plugin API routes: /api/plugins/hermes-rich-ui/
 Then `curl -s http://<gateway>/api/plugins/hermes-rich-ui/health` should return
 `{ok:true, cards:..., version:...}`, and
 `curl -s http://<gateway>/api/plugins/hermes-rich-ui/views` should return the
-saved-views list `{ok:true, views:[{view_id,title}]}`.
+saved-views list `{ok:true, views:[{view_id,title}]}` (sorted by `view_id`;
+non-string stored titles as JSON `null`). The read-only REST surface is exactly
+`/health`, `/views` and `/cards/{card_id}` (docs/CONTRACTS.md §5).
 
 ## Half 2 — desktop (the APP machine, where the Hermes desktop runs)
 
