@@ -204,6 +204,7 @@ Source registrations live in config `plugins.entries.hermes-rich-ui.settings.sou
 |---|---|
 | `GET /cards/{card_id}` | the record above (`{ok:true, card}`) or `{ok:false, error}` |
 | `GET /health` | `{ok:true, cards:<count>, version}` |
+| `GET /views` | the saved-views list `{ok:true, views:[{view_id,title}]}` |
 | `POST /cards/{card_id}/refresh` (C2, manual) | new bundle or `{ok:false, error}` keeping the old data |
 | `GET /cards/{card_id}/poll?rev=<n>` (C2) | `{changed:false}` or the new bundle |
 

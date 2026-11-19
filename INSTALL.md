@@ -35,7 +35,9 @@ Mounted plugin API routes: /api/plugins/hermes-rich-ui/
 ```
 
 Then `curl -s http://<gateway>/api/plugins/hermes-rich-ui/health` should return
-`{ok:true, cards:..., version:...}`.
+`{ok:true, cards:..., version:...}`, and
+`curl -s http://<gateway>/api/plugins/hermes-rich-ui/views` should return the
+saved-views list `{ok:true, views:[{view_id,title}]}`.
 
 ## Half 2 — desktop (the APP machine, where the Hermes desktop runs)
 
