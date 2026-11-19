@@ -26,8 +26,9 @@ by two shared artifacts: the record schema (CONTRACTS §1) and the catalog
   `$HERMES_HOME/rich-ui/{cards,views}/`, paths resolved at CALL time
   (`store.py:29-42`) so tests and multi-profile hosts never bind a stale home;
 - a read-only REST projection (`dashboard/plugin_api.py`) mounted by the host at
-  `/api/plugins/hermes-rich-ui` (CONTRACTS §5): `GET /health` (`:47,:60`),
-  `GET /cards/{card_id}` (`:51,:64`). The FastAPI router only exists when
+  `/api/plugins/hermes-rich-ui` (CONTRACTS §5): `GET /health` (`:47,:68`),
+  `GET /cards/{card_id}` (`:51,:72`) and `GET /views` (`:59,:64`). The FastAPI
+  router only exists when
   FastAPI is importable (`plugin_api.py:38-44`); the route bodies are plain
   functions, which is why they are testable without a server.
 
@@ -77,7 +78,7 @@ flowchart TD
         CAT[("FROZEN CATALOG<br/>catalog/hermes-rich-ui.catalog.json<br/>18 types · functions{} — single source of truth")]
         ST[("④ card store<br/>$HERMES_HOME/rich-ui/cards/card_id.json<br/>atomic tmp+rename · quota refuses, never deletes")]
         T5["⑤ return {ok, card_id, directive}<br/>engine/tool.py:187 · tool.py:59"]
-        API["REST (read-only)<br/>GET /api/plugins/hermes-rich-ui/cards/{card_id} · /health<br/>dashboard/plugin_api.py:51,64"]
+        API["REST (read-only)<br/>GET /api/plugins/hermes-rich-ui/cards/{card_id} · /health · /views<br/>dashboard/plugin_api.py:64,68,72"]
     end
 
     subgraph DT["DESKTOP HALF — one committed ESM bundle"]
