@@ -61,7 +61,9 @@ hermes serve
 The serve log must print
 `Mounted plugin API routes: /api/plugins/hermes-rich-ui/`, and
 `curl -s http://<gateway>/api/plugins/hermes-rich-ui/health` must return
-`{ok:true, ...}`.
+`{ok:true, ...}`. Saved views are listed by
+`curl -s http://<gateway>/api/plugins/hermes-rich-ui/views` →
+`{ok:true, views:[{view_id,title}]}`.
 
 Half 2 — desktop (on the machine running the Hermes desktop app):
 
