@@ -3,6 +3,7 @@
 All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
+- ci: roll HERMES_LATEST compat sentinel v0.23.2 -> v0.23.3 [est-fb0e5] (#252, 2026-11-20)
 - docs(gate): document the GET /views saved-views route and drift-gate the dashboard route surface — source-parsed `tests/test_docs_endpoint_surface.py`, §5/README/INSTALL/ARCHITECTURE enumeration [est-d3wra] (#248)
 - ci: roll HERMES_LATEST compat sentinel v0.23.1 -> v0.23.2 [est-lhzix] (#245, 2026-11-18)
 
