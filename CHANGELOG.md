@@ -3,6 +3,7 @@
 All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
+- fix(scrub): gitignore the make_public export target `/scratch/` + regression test `tests/test_scratch_export_guard.py` — a nightly scratch export can no longer foul the publishable-file scan [est-v3phb] (#255, 2026-11-21)
 
 ## v0.1.13 — 2026-11-21
 
