@@ -17,3 +17,5 @@ pub-scrub-check/
 __pycache__/
 # suite outdir variants: in-tree ledgers (out-nightly-1102/) stay untracked
 out-*/
+# Nightly make_public exports land here; keep them out of the publishable-file scan.
+/scratch/
