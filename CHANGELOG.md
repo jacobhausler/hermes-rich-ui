@@ -3,9 +3,28 @@
 All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
+
+## v0.1.13 — 2026-11-21
+
+Clean-path patch cut, 9 merged PRs since v0.1.12: two HERMES_LATEST compat-sentinel
+rolls (v0.23.2, v0.23.3) and the est-d3wra dashboard route-surface documentation +
+drift-gate pair (#248 + #250); five routine graph rebuilds are chores. No P0/P1
+fixes ride this train. Owner lines follow the house `(#n, date)` format so the
+public-string scrub stays clean. Prior Unreleased entries folded verbatim:
+
 - ci: roll HERMES_LATEST compat sentinel v0.23.2 -> v0.23.3 [est-fb0e5] (#252, 2026-11-20)
 - docs(gate): document the GET /views saved-views route and drift-gate the dashboard route surface — source-parsed `tests/test_docs_endpoint_surface.py`, §5/README/INSTALL/ARCHITECTURE enumeration [est-d3wra] (#248)
 - ci: roll HERMES_LATEST compat sentinel v0.23.1 -> v0.23.2 [est-lhzix] (#245, 2026-11-18)
+
+- chore(graph): rebuild graphify knowledge graph (8c5ab34) (#246, 2026-11-18)
+- ci: roll HERMES_LATEST compat sentinel v0.23.1 -> v0.23.2 (#245, 2026-11-18)
+- chore(graph): rebuild graphify knowledge graph (17beb98) (#247, 2026-11-18)
+- docs(gate): document + drift-gate the dashboard route surface — GET /views (#248, 2026-11-19)
+- chore(graph): rebuild graphify knowledge graph (9c7aa3d) (#249, 2026-11-19)
+- docs(gate): spec-complete the est-d3wra route-surface drift gate + doc sweep (#250, 2026-11-19)
+- chore(graph): rebuild graphify knowledge graph (66d8bab) (#251, 2026-11-19)
+- ci: roll HERMES_LATEST compat sentinel v0.23.2 -> v0.23.3 (#252, 2026-11-20)
+- chore(graph): rebuild graphify knowledge graph (ffe26db) (#253, 2026-11-20)
 
 ## v0.1.12 — 2026-11-18
 
