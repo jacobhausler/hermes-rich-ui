@@ -3,6 +3,7 @@
 All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
+- test(registry): pin the `scripts/gen_registry.py` burn_token census laws — pure-filesystem law battery `tests/test_gen_registry_burn_token.py` (name-token-wins, fifteen-line header window, earliest-line and title-beats-keyword precedence, comment-mark lstrip, keyword digit range, no-token None) [est-c8e9q] (#258, 2026-11-22)
 - fix(scrub): gitignore the make_public export target `/scratch/` + regression test `tests/test_scratch_export_guard.py` — a nightly scratch export can no longer foul the publishable-file scan [est-v3phb] (#255, 2026-11-21)
 
 ## v0.1.13 — 2026-11-21
