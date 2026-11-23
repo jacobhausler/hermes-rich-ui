@@ -52,7 +52,7 @@ names the affected package; match it against the register below.
   it re-confirmed red at tip `c254439`. The "expected exit code 0"
   baseline above was genuinely broken until this entry's roll landed.
 - Path: `zod` 4.6.5 was a transitive **prod** dependency. Its sole
-  reverse edge in `package-lock.json` is `@json-render/core 0.22.0`
+  reverse edge in `package-lock.json` is `@json-render/core 0.23.2`
   (requires `zod ^4.3.6`); `package.json` carries no `zod` line and the
   lock entry has no `"dev": true`, so the advisory was red under
   `npm audit --omit=dev` too — the opposite of source-map-js above, which

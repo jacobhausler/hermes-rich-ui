@@ -6,7 +6,7 @@ metrics, a dated sequence, cited sources — into an A2UI v1.0 `createSurface`
 record against the read-only `hermes-rich-ui/1` catalog (27 component types).
 The agent's reply carries a `::richui{id="<card_id>"}` directive that the Hermes
 desktop transcript expands into an inline card, rendered by the zod-stubbed
-`Renderer` from `@json-render/react` 0.21.0 with uPlot 1.6.32 charts. Nothing
+`Renderer` from `@json-render/react` with uPlot 1.6.32 charts (versions per `package.json`). Nothing
 renders until a stdlib-only admission engine has validated the record against
 the frozen `docs/CONTRACTS.md` budgets — a rejected card is rejected before a
 byte is written to the card store.
