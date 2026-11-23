@@ -4,7 +4,7 @@
 (tools + admission + card store + REST) and a bundled-ESM desktop half (a
 `TRANSCRIPT_DIRECTIVE_AREA` renderer). Cards are A2UI v1.0 `createSurface` records
 from catalog `hermes-rich-ui/1`, rendered by the zod-stubbed `Renderer` from
-`@json-render/react` 0.21.0 with uPlot 1.6.32 charts.
+`@json-render/react` with uPlot 1.6.32 charts (library versions per `package.json`).
 
 ## Layout
 
