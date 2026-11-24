@@ -3,9 +3,25 @@
 All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
+
+## v0.1.14 — 2026-11-24
+
+Clean-path patch cut, 10 merged PRs since v0.1.13: the HERMES_LATEST compat-sentinel
+re-pin to v0.23.4, the gen_registry burn_token census-law battery, the publish-scrub
+hardening (#255), two @json-render dependency bumps (0.22.0 -> 0.23.2) and one
+doc-literal de-versioning pass; four routine graph rebuilds are chores. No P0/P1
+fixes ride this train. Prior Unreleased entries folded verbatim:
+
 - ci: roll `HERMES_LATEST` compat sentinel v0.23.3 -> v0.23.4 — upstream-drift sweep found the new stable; consumed-surface census at the tag is green, additive-only SDK diff [est-19stb] (#263)
 - test(registry): pin the `scripts/gen_registry.py` burn_token census laws — pure-filesystem law battery `tests/test_gen_registry_burn_token.py` (name-token-wins, fifteen-line header window, earliest-line and title-beats-keyword precedence, comment-mark lstrip, keyword digit range, no-token None) [est-c8e9q] (#258, 2026-11-22)
 - fix(scrub): gitignore the make_public export target `/scratch/` + regression test `tests/test_scratch_export_guard.py` — a nightly scratch export can no longer foul the publishable-file scan [est-v3phb] (#255, 2026-11-21)
+- chore(deps): bump @json-render/core from 0.22.0 to 0.23.2 (#260, 2026-11-23)
+- chore(deps): bump @json-render/react from 0.22.0 to 0.23.2 (#261, 2026-11-23)
+- docs: de-version the @json-render doc literals, sync the SECURITY reverse-edge (#262, 2026-11-23)
+- chore(graph): rebuild graphify knowledge graph (f5ec851) (#256, 2026-11-21)
+- chore(graph): rebuild graphify knowledge graph (75feb00) (#257, 2026-11-21)
+- chore(graph): rebuild graphify knowledge graph (a49bbd4) (#259, 2026-11-22)
+- chore(graph): rebuild graphify knowledge graph (09ab079) (#264, 2026-11-24)
 
 ## v0.1.13 — 2026-11-21
 
