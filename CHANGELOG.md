@@ -4,6 +4,8 @@ All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
 
+- test(store): pin the corrupt-record contract — valid-named unparseable/non-object card and view files read None from read_card/load_view, count in card_count, skip in list_views [est-0mxpr] (#267, 2026-11-25)
+
 ## v0.1.14 — 2026-11-24
 
 Clean-path patch cut, 10 merged PRs since v0.1.13: the HERMES_LATEST compat-sentinel
