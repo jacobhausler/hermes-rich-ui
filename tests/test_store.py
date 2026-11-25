@@ -112,10 +112,37 @@ def test_views_roundtrip_and_ids():
     assert store.load_view("absent") is None
 
 
+def test_read_card_corrupt_bytes_is_not_found():
+    cid = store.new_card_id()
+    store.cards_dir().mkdir(parents=True)
+    path = store.cards_dir() / (cid + ".json")
+    for garbage in ("{", "null", '"str"'):
+        path.write_text(garbage)
+        assert store.read_card(cid) is None, garbage
+        assert store.card_count() == 1  # valid stem counts regardless of bytes
+    path.write_text(json.dumps(record(cid)))
+    assert store.read_card(cid) == record(cid)  # recovery once the bytes are a real record
+
+
+def test_load_view_corrupt_record_is_none():
+    store.views_dir().mkdir(parents=True)
+    vp = store.views_dir() / "ok-view.json"
+    vp.write_text("{")
+    assert store.load_view("ok-view") is None
+    assert store.list_views() == []
+    vp.write_text(json.dumps({"view_id": "ok-view", "title": "T", "components": "x"}))
+    assert store.load_view("ok-view") is None  # components must be a list
+    assert store.list_views() == []
+    vp.write_text(json.dumps({"view_id": "ok-view", "title": "T", "components": []}))
+    assert store.load_view("ok-view") == {"view_id": "ok-view", "title": "T", "components": []}
+    assert store.list_views() == [{"view_id": "ok-view", "title": "T"}]
+
+
 if __name__ == "__main__":
     r = Runner()
     for t in (test_new_card_id_shape, test_write_then_read_roundtrip_atomic,
               test_atomic_write_failure_leaves_no_partial, test_read_rejects_bad_ids_before_disk,
-              test_write_rejects_bad_ids, test_quota_refuses_never_deletes, test_views_roundtrip_and_ids):
+              test_write_rejects_bad_ids, test_quota_refuses_never_deletes, test_views_roundtrip_and_ids,
+              test_read_card_corrupt_bytes_is_not_found, test_load_view_corrupt_record_is_none):
         r.run(t)
     r.finish()
