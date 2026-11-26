@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# suite-timeout: 300
 """release_check gate (issue #43): version parity across the 9 declared
 literals + publish-scrub relay.
 

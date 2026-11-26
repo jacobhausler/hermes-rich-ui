@@ -3,16 +3,37 @@
 
 Usage: python3 scripts/suite.py <plugin-root> <out-dir>
 Runs tests/test_*.py under the current python and tests/test_*.mjs under node,
-one at a time, 90 s wall each, HERMES_HOME pointed at a throwaway suite home so
-no test touches the real ~/.hermes. Prints `<name>: <exit>` per case and
-`TOTAL N FAIL M`; exit 1 if any case failed. This IS the merge gate — run it in
-the background from the integrator, never inside a lane.
+one at a time, 90 s wall each unless the test declares its own budget with
+`# suite-timeout: N` in its first five lines (clamped 1-600 s), HERMES_HOME
+pointed at a throwaway suite home so no test touches the real ~/.hermes.
+Prints `<name>: <exit>` per case and `TOTAL N FAIL M`; exit 1 if any case
+failed. This IS the merge gate — run it in the background from the integrator,
+never inside a lane.
 """
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
+
+DEFAULT_TIMEOUT = 90
+
+
+def case_timeout(path):
+    """Per-case wall: an intentional slow gate declares its budget instead of
+    trading on the fixed default (test_release_check.py runs five release-check
+    subprocesses, ~65 s idle, and timed out rc=124 at 90 s on loaded hosts).
+    First five lines only; malformed or absent marker keeps the default."""
+    try:
+        head = path.read_text(encoding="utf-8", errors="replace").splitlines()[:5]
+    except OSError:
+        return DEFAULT_TIMEOUT
+    for line in head:
+        m = re.match(r"\s*#\s*suite-timeout:\s*(\d+)\b", line)
+        if m:
+            return max(1, min(600, int(m.group(1))))
+    return DEFAULT_TIMEOUT
 
 root = Path(sys.argv[1]).resolve()
 out = Path(sys.argv[2]).resolve()
@@ -45,7 +66,8 @@ for argv in cases:
         with log.open('w') as fh:
             result = subprocess.run(argv, cwd=root,
                                     env={**os.environ, 'HERMES_HOME': str(root / 'tests' / '.suite-home')},
-                                    stdout=fh, stderr=subprocess.STDOUT, timeout=90)
+                                    stdout=fh, stderr=subprocess.STDOUT,
+                                    timeout=case_timeout(Path(argv[-1])))
         rc = result.returncode
     except subprocess.TimeoutExpired:
         rc = 124
