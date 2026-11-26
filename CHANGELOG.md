@@ -4,6 +4,7 @@ All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
 
+- test(suite): declarative per-test suite wall — `# suite-timeout: N` header marker (first five lines, clamped 1-600 s, default 90 s unchanged) ends the recurring `test_release_check.py` rc=124 load flake; the gate declares 300 s [est-fj5os] (#269, 2026-11-26)
 - test(store): pin the corrupt-record contract — valid-named unparseable/non-object card and view files read None from read_card/load_view, count in card_count, skip in list_views [est-0mxpr] (#267, 2026-11-25)
 
 ## v0.1.14 — 2026-11-24

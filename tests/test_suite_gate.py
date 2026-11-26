@@ -126,6 +126,33 @@ def test_one_failing_case_exits_one_with_exit_code():
     assert rows[0]["exit"] == 3
 
 
+def test_suite_timeout_marker_replaces_the_default_wall():
+    # A test declares its own wall with '# suite-timeout: N' in the first five
+    # lines (est-fj5os: test_release_check.py measures ~65 s idle against the
+    # fixed 90 s wall and timed out rc=124 on loaded nightly hosts).
+    # Clamped to [1, 600]; N below the sleep must kill the case at the marker.
+    slow = scratch_root(py_body=(
+        "#!/usr/bin/env python3\n# suite-timeout: 2\n"
+        "import time\ntime.sleep(8)\nprint('ok')\n"))
+    out = slow / "out"
+    result = run_suite(slow, out)
+    rows = read_ledger(out)
+    assert len(rows) == 1 and rows[0]["exit"] == 124, \
+        f"marker 2 s must kill an 8 s sleep: {rows}"
+    assert result.returncode == 1, f"timed-out case must fail the suite: {result.returncode}"
+
+    # The same test under a generous marker passes — the marker never inverts
+    # the verdict, it only sizes the wall.
+    ok = scratch_root(py_body=(
+        "#!/usr/bin/env python3\n# suite-timeout: 60\n"
+        "import time\ntime.sleep(1)\nprint('ok')\n"))
+    out2 = ok / "out"
+    result2 = run_suite(ok, out2)
+    rows2 = read_ledger(out2)
+    assert result2.returncode == 0 and rows2[0]["exit"] == 0, \
+        f"generous marker must pass: {rows2}"
+
+
 if __name__ == "__main__":
     failures = 0
     for name, fn in sorted(globals().items()):
