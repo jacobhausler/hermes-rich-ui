@@ -4,9 +4,20 @@ All notable changes to hermes-rich-ui are documented here.
 
 ## Unreleased
 
+## v0.1.15 — 2026-11-28
+
+Clean-path patch cut, 7 merged PRs since v0.1.14: the HERMES_LATEST compat-sentinel
+roll to v0.23.5, the declarative per-test suite wall, and the corrupt-record
+contract pins; four routine graph rebuilds are chores. No P0/P1 fixes ride this
+train. Prior Unreleased entries folded verbatim:
+
 - ci: roll `HERMES_LATEST` compat sentinel v0.23.4 -> v0.23.5 — upstream-drift sweep found the new stable; consumed-surface census at the tag is green (hermes_state.py byte-identical, SDK exports 1:1, python symbols present; the `sdk/index.ts` delta is an `openWorkspace` signature refactor + additive `approvalScope`, neither consumed here) [est-k8uuh] (#271)
 - test(suite): declarative per-test suite wall — `# suite-timeout: N` header marker (first five lines, clamped 1-600 s, default 90 s unchanged) ends the recurring `test_release_check.py` rc=124 load flake; the gate declares 300 s [est-fj5os] (#269, 2026-11-26)
 - test(store): pin the corrupt-record contract — valid-named unparseable/non-object card and view files read None from read_card/load_view, count in card_count, skip in list_views [est-0mxpr] (#267, 2026-11-25)
+- chore(graph): rebuild graphify knowledge graph (5c7ca2c) (#266, 2026-11-24)
+- chore(graph): rebuild graphify knowledge graph (459ebb2) (#268, 2026-11-25)
+- chore(graph): rebuild graphify knowledge graph (ae4da20) (#270, 2026-11-26)
+- chore(graph): rebuild graphify knowledge graph (6772922) (#272, 2026-11-28)
 
 ## v0.1.14 — 2026-11-24
 
